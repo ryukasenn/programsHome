@@ -1,0 +1,18 @@
+
+// 部门管理:规划地区下辖市区县
+extends ./layouts/0302
+
+block contents
+    .row.placeholders
+        .col-xs-12.col-sm-12.placeholder
+            .panel.panel-default
+                .panel-heading 划分列表
+                table.table
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 市
+                        th.col-xs-2.col-sm-2 县
+                        
+                            
+block pageId
+    p(style="display:none") 03020501
