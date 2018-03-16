@@ -130,10 +130,10 @@ public class HttpUtil {
 		ModelAndView mv = new ModelAndView(path);
 		// 定义静态资源路径
 		mv.addObject("myPath", GlobalParams.BASE_URL);
+		mv.addObject("baseUrl", GlobalParams.BASE_URL);
 		if(title.length != 0) {
 
 			mv.addObject("title", title[0]);
-			mv.addObject("baseUrl", GlobalParams.BASE_URL);
 		}
 		return mv;
 	}
