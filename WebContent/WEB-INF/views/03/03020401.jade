@@ -3,6 +3,10 @@
 extends ./layouts/0302
     
 
+block extraButtons
+    .form-group
+        button(type="button").btn.btn-default#checkXzqxs 规划下辖市区县
+
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
@@ -31,12 +35,20 @@ block contents
                     .col-xs-4.col-sm-4
                         input.form-control(name="regionNote")
                 .form-group
+                    label.col-xs-1.col-sm-1.control-label 所属省份
+                    .col-xs-2.col-sm-2
+                        select.form-control(name="regionProvince")#provinceSelect
+                            each item in provinces
+                                option(id="#{item.NBPT_COMMON_XZQXHF_ID}",value="#{item.NBPT_COMMON_XZQXHF_ID}") #{item.NBPT_COMMON_XZQXHF_NAME}
+                .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
                         button(type="button").btn.btn-primary 提交
 block modal
     include includes/0302Modal
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03020401.js")
+    script(language='javascript')
+        $("#provinceSelect").val('#{currentProvince.XZQX_ID}');
     
 block pageId
     p(style="display:none") 03020401

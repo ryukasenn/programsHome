@@ -21,4 +21,8 @@ public interface RegionManageService {
 
 	public String receiveRegionReper(String personType, String searchName) throws Exception;
 
+	public String receiveProvinceSelect() throws Exception;
+
+	public ModelAndView getCheckXzqxs(RegionsPojo in);
+
 }

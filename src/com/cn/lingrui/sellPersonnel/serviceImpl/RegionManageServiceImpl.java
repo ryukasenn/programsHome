@@ -1,19 +1,24 @@
 package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.RegionManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 import com.cn.lingrui.sellPersonnel.service.RegionManageService;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
@@ -170,8 +175,27 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				
 			}else if(6 == pojo.getRegionId().length()) {
 
-				// 如果是地区区,获取地区信息及配置处理页面
+				// 如果是地区,获取地区信息及配置处理页面
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030204", this.getRole()));
+				
+				// 获取省份信息下拉框列表
+				List<NBPT_COMMON_XZQXHF> provinces = regionManageDao.receiveProvinceSelect(this.getConnection());
+				
+				provinces.add(new NBPT_COMMON_XZQXHF());
+				mv.addObject("provinces", provinces);
+				
+				// 获取本地区所属省份
+				List<Area_Xzqx_Info> currentXzqxs = regionManageDao.receiveCurrentXzqxs(pojo.getRegionId(), this.getConnection());
+				
+				for(Area_Xzqx_Info currentXzqx : currentXzqxs) {
+					
+					if("21".equals(currentXzqx.getXZQX_TYPE())) {
+						
+						mv.addObject("currentProvince", currentXzqx);
+						currentXzqxs.remove(currentXzqxs.indexOf(currentXzqx));
+						break;
+					}
+				}
 			}
 			
 			mv.addObject("regionInfo", regionInfo);
@@ -184,6 +208,53 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			log.error("修改部门出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
+	}
+	
+	/** 
+	 * 获取省份信息下拉框
+	 * @throws Exception 
+	 */
+	@Override
+	public String receiveProvinceSelect() throws Exception {
+
+		try {
+			
+			this.before();
+				
+				List<NBPT_COMMON_XZQXHF> provinces = regionManageDao.receiveProvinceSelect(this.getConnection());
+				
+				JSONArray ja = JSONArray.fromObject(provinces);
+		
+				return this.after(ja.toString());
+			
+		} catch (Exception e) {
+			
+			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+	/**
+	 * 获取地区下辖区县划分页面
+	 */
+	@Override
+	public ModelAndView getCheckXzqxs(RegionsPojo in) {
+		
+		try {
+			
+			this.before();
+				
+				List<NBPT_COMMON_XZQXHF> provinces = regionManageDao.receiveProvinceSelect(this.getConnection());
+				
+				JSONArray ja = JSONArray.fromObject(provinces);
+		
+				return null;
+			
+		} catch (Exception e) {
+			
+			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}	
 	}
 	
 

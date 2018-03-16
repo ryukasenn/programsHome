@@ -66,6 +66,15 @@ public class RegionManageController {
 		return mv;
 	}
 	
+
+	@RequestMapping(value = "/checkXzqxs", method = RequestMethod.POST)
+	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
+
+		ModelAndView mv = regionManageService.getCheckXzqxs(in);
+
+		return mv;
+	}
+	
 	
 
 	/**
@@ -96,6 +105,22 @@ public class RegionManageController {
 		
 		return jsonData;
 	}
+	
+	/**
+	 * 获取省份信息下拉框
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveProvinceSelect")
+	public String receiveProvinceSelect() throws Exception {
+		
+		String jsonData = regionManageService.receiveProvinceSelect();
+		
+		return jsonData;
+	}
+	
 }
 
 

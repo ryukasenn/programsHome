@@ -18,6 +18,7 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 
 import jxl.Sheet;
 import jxl.Workbook;
@@ -43,7 +44,7 @@ public class XZQX_create {
 		//this.addRegins_XZQXHF();
 		
 		// 添加地区与行政区县关系
-		this.addArea_Xzqxhf();
+		//this.addArea_Xzqxhf();
 		
 		//System.out.println(CommonUtil.getUUID_32());
 		
@@ -56,8 +57,116 @@ public class XZQX_create {
 		
 		// 添加终端
 		//this.addTerminals();
+		
+		// 添加人员配置
+		//this.addNeed();
+		
+		// 添加地区省份对应关系
+		this.addArea_Province();
 	}
 	
+	private void addArea_Province() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT DISTINCT NBPT_SP_REGION_XZQX_REGIONID FROM NBPT_SP_REGION_XZQX");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询河南区县划分
+		List<NBPT_SP_REGION_XZQX> resultList = this.rsToBean(NBPT_SP_REGION_XZQX.class, rs1);
+		
+		List<String> sqls = new ArrayList<>();
+		for(NBPT_SP_REGION_XZQX xzqx : resultList) {
+			
+			String sql =  "INSERT NBPT_SP_REGION_XZQX VALUES ("
+						+ "'" + CommonUtil.getUUID_32() + "',"
+						+ "'" + xzqx.getNBPT_SP_REGION_XZQX_REGIONID()+ "',"
+						+ "'" + xzqx.getNBPT_SP_REGION_XZQX_REGIONID().substring(2, 4) + "0000',"
+						+ "'21')";
+			sqls.add(sql);
+		}
+		Statement stmt;
+		stmt = conn.createStatement();
+		for(String sql : sqls) {
+			stmt.addBatch(sql);
+		}
+
+		stmt.executeBatch();
+		
+	}
+	private void addNeed() throws SQLException, ClassNotFoundException {
+		String fileNameTemp = GlobalParams.FILE_PATH + "need.xls";
+		File targetFile = new File(fileNameTemp); 
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+
+//		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_COMMON_XZQXHF where NBPT_COMMON_XZQXHF_ID LIKE '41%'");
+//		ResultSet rs1 = ps1.executeQuery();
+//		
+//		// 查询河南区县划分
+//		List<NBPT_COMMON_XZQXHF> resultList = this.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
+//		
+//		PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION where NBPT_SP_REGION_ID LIKE '11%'");
+//		ResultSet rs2 = ps2.executeQuery();
+		
+		//List<NBPT_SP_REGION> regionList = this.rsToBean(NBPT_SP_REGION.class, rs2);
+
+		try {
+			
+			if(!targetFile.exists()) {
+				
+			} else {
+
+				List<String> sqls = new ArrayList<String>();
+				List<String> chekcItems = new ArrayList<String>();
+				// 如果存在,获取工作簿
+				Workbook book = null;
+				book = Workbook.getWorkbook(targetFile);
+				
+				// 获取sheet页
+				int maxSheet = book.getNumberOfSheets();
+				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
+					
+					// 获取sheet页
+					Sheet sheet = book.getSheet(sheeti); 
+					
+					// 获取行数
+					int realRows = sheet.getRows();
+					
+					// 初始化
+					for(int rowi = 1; rowi < realRows; rowi++) {
+						
+						if(chekcItems.contains(sheet.getCell(2,rowi).getContents())) {
+							
+						} else {
+							
+							chekcItems.add(sheet.getCell(2,rowi).getContents());
+							
+							String sql =  "INSERT NBPT_SP_REGION VALUES ('" + CommonUtil.getUUID_32() + "',"
+										+ "'" + sheet.getCell(5,rowi).getContents() + sheet.getCell(6,rowi).getContents().substring(0, 2) + sheet.getCell(7,rowi).getContents() + "',"
+										+ "'" + sheet.getCell(2,rowi).getContents() + "',"
+										+ "'" + sheet.getCell(4,rowi).getContents() + "',"
+										+ "'',"
+										+ "'2',"
+										+ "'')";
+							sqls.add(sql);
+						}
+					}
+					
+					Statement stmt;
+					stmt = conn.createStatement();
+					for(String sql : sqls) {
+						stmt.addBatch(sql);
+					}
+			
+					stmt.executeBatch();
+				}
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
 	private void addTerminals() throws SQLException, ClassNotFoundException {
 		String fileNameTemp = GlobalParams.FILE_PATH + "diquxzqx.xls";
 		File targetFile = new File(fileNameTemp); 
@@ -229,7 +338,7 @@ public class XZQX_create {
 		
 	}
 	private void checkResponseble() throws ClassNotFoundException, SQLException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "diquxzqx.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "need.xls";
 		File targetFile = new File(fileNameTemp);
 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -267,22 +376,24 @@ public class XZQX_create {
 					
 					// 初始化
 					for(int rowi = 1; rowi < realRows; rowi++) {
-						
-						for(NBPT_SP_PERSON pojo : resultList) {
 
-							String pid = "";
-							if(sheet.getCell(5,rowi).getContents().toString().trim().equals(pojo.getNBPT_SP_PERSON_NAME().trim())) {
-								pid = pojo.getNBPT_SP_PERSON_PID();
-								if(names.contains(sheet.getCell(5,rowi).getContents().toString().trim())) {
+						String pid = "";
+						if("待定".equals(sheet.getCell(3,rowi).getContents().toString().trim())) {
+							
+						}
+						else {
+							
+							for(NBPT_SP_PERSON person : resultList) {
+								
+								if(sheet.getCell(3,rowi).getContents().toString().trim().equals(person.getNBPT_SP_PERSON_NAME().trim())) {
 									
-								}else {
-									names.add(sheet.getCell(5,rowi).getContents().toString().trim());
-									String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents() + "' "
-												+ "WHERE NBPT_SP_PERSON_PID = '" + pid + "'";
-									sqls.add(sql);
+									pid = person.getNBPT_SP_PERSON_PID();
+									break;
 								}
-								continue;
 							}
+							String sql =  "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + pid + "' "
+										+ "WHERE NBPT_SP_REGION_ID = '" + sheet.getCell(5,rowi).getContents() + sheet.getCell(6,rowi).getContents().substring(0,2) + sheet.getCell(7,rowi).getContents() + "'";
+							sqls.add(sql);
 						}
 					}
 
@@ -298,7 +409,7 @@ public class XZQX_create {
 					stmt.executeBatch();
 				}
 			}
-		}catch (Exception e) {
+		} catch (Exception e) {
 			
 			e.printStackTrace();
 		}

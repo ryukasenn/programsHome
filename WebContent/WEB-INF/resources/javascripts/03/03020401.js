@@ -21,4 +21,11 @@ $(function(){
 		}
 	});
 	
+	$("#checkXzqxs").on('click', function(){
+		
+		$("input[name='regionId']")$("input[name='regionUid']").val();
+		
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/checkXzqxs").attr("method", "POST").submit();
+	})
+	
 })

@@ -263,7 +263,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			} 
 			
 			// 如果登录人员的JOB是2,则是地总,查询该地总下的所有人员
-			else if("2".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
+			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				
 				String sql =  "SELECT A.NBPT_SP_PERSON_NAME,C.NBPT_COMMON_DICTIONARY_KEY_NAME AS NBPT_SP_PERSON_TYPE,"
 							+ "A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB,"
@@ -286,7 +286,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			}
 			
 			// 最后大区总登录时,查询所有的地总信息
-			else{
+			else if("21".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB()) || "26".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				String sql = "SELECT A.*,DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE "
 							+ "FROM NBPT_SP_PERSON A "
 							+ "LEFT JOIN NBPT_SP_REGION B "
