@@ -32,7 +32,6 @@
 	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/*" />
 	<mvc:resources location="/WEB-INF/resources/javascripts/" mapping="/javascripts/**/*" />
 	<mvc:resources location="/WEB-INF/resources/stylesheets/" mapping="/stylesheets/**/*" />
-    <mvc:resources location="/WEB-INF/resources/fonts/" mapping="/fonts/*" />
   
 	<!-- jade viewResolver 视图解析 -->
 	<bean id="viewResolver" class="de.neuland.jade4j.spring.view.JadeViewResolver">
