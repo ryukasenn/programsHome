@@ -2,6 +2,7 @@ package com.cn.lingrui.sellPersonnel.pojos.region;
 
 public class Area_Xzqx_Info {
 
+	// 马哥比啊
 	private String XZQX_PID;
 	private String XZQX_LEVEL;
 	private String XZQX_NAME;
