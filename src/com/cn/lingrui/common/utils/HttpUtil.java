@@ -133,6 +133,7 @@ public class HttpUtil {
 		if(title.length != 0) {
 
 			mv.addObject("title", title[0]);
+			mv.addObject("baseUrl", GlobalParams.BASE_URL);
 		}
 		return mv;
 	}
