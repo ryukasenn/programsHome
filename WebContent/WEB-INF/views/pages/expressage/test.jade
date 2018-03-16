@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title= pageName
+    script(src="#{publicPath}/js/jquery-3.2.1.min.js")
+    script(src="#{publicPath}/js/qrcode.min.js")
+    script(src="#{publicPath}/js/bootstrap.min.js")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href='#{publicPath}/css/out/bootstrap.min.css')
+    script(src="#{publicPath}/js/test.js")
+  body
+    .container
+      .modal#mymodal
+        .modal-dialog
+          .modal-content
+            .modal-header
+            .modal-body
+              div(style="width:100px;height:100px;margin-top:15px;")#qrcode
+            .modal-footer

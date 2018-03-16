@@ -1,0 +1,16 @@
+
+div(role="dialog", aria-labelledby="020202ModalLabel", tabindex="-1").modal.fade#020202Modal
+    .modal-dialog(role="document")
+        .modal-content
+            .modal-header
+                button.close(data-dismiss="modal",type="button")
+                    span(aria-hidden="true") &times;
+                h4.modal-title
+            .modal-body
+                form(action="#{myPath}/report/batchUpdate", enctype="multipart/form-data", method="post")
+                    .form-group
+                        label(for='file').sr-only
+                        input(type='file', name='file')#file
+            .modal-footer
+                button(type="button", data-dismiss="modal").btn.btn-default 关闭
+                button(type="button").btn.btn-primary#020202ModalConfirm 确定

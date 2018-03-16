@@ -1,0 +1,48 @@
+
+// 人员管理,查看当前人员信息(大区总)
+extends ./layouts/0304
+
+
+block contents
+    .row.placeholders
+        .col-xs-9.col-sm-9.placeholder
+            .panel.panel-default
+                .panel-heading 名单列表
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 姓名
+                        th.col-xs-1.col-sm-1 销售类型
+                        th.col-xs-1.col-sm-1 联系电话
+                        th.col-xs-1.col-sm-1 紧急联系人
+                        th.col-xs-1.col-sm-1 年龄
+                        th.col-xs-1.col-sm-1 职务
+                    unless personInfos.length
+                        each person,i in personInfos
+                            tr(style="align:center") 
+                                th.col-xs-1.col-sm-1(scope="row")= i+1
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td.col-xs-1.col-sm-1
+                                    case person.NBPT_SP_PERSON_TYPE
+                                        when '1': 商务
+                                        when '2': OTC
+                                        when '3': 临床
+                                        when '4': 诊所
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB1
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB2
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_AGE
+                                td.col-xs-1.col-sm-1
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '1': 大区总
+                                        when '2': 地总
+                                        when '6': 大区总兼地总
+                                        when '3': 区县总
+                                        when '4': 预备区县总
+                                        when '5': 推广经理
+        
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040202.js")
+        
+block pageId
+    p(style="display:none") 03040203

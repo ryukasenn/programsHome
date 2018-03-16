@@ -1,0 +1,23 @@
+extends ../layout
+
+block header
+    link(rel='stylesheet', href='#{myPath}/stylesheets/loginstyle.css')
+
+block head
+block body
+    .container
+        .row
+            .col-md-6.col-md-offset-3
+                form(action="#{myPath}/login", method="POST").form-horizontal.header
+                    span.heading 用户登录
+                    .form-group.has-feedback
+                        span.glyphicon.glyphicon-user.form-control-feedback
+                        input(id="userName", name="userId", placeholder="用户名", type="text").form-control
+                    .form-group.has-feedback
+                        span.glyphicon.glyphicon-lock.form-control-feedback
+                        input(id="password", name="password", placeholder="密码", type="password").form-control
+                    .form-group
+                        button(type="submit").btn.btn-default 登录
+                        
+block scripts
+    script(src="#{myPath}/javascripts/login.js")

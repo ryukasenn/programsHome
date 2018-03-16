@@ -1,0 +1,29 @@
+extends ../reportLayout
+
+block reportContent
+    .row.placeholders
+        if checkData.checkItemsByAge.length
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 年龄构成&nbsp&nbsp&nbsp
+                        button(type="button", name="exoutFile").pull-right 导出
+                        form(action="#{myPath}/download", method="POST")
+                            input(type="hidden", name="fileName", value="证件有误.xls")
+                    table.table
+                        tr 
+                            td 编号
+                            td 姓名
+                            td 相关数据
+                        each item in checkData.checkItemsByAge
+                            tr
+                                td= item.PMBASE_ZGBH
+                                td= item.PMBASE_ZGXM
+                                td= item.PMBASE_CHECKITEM
+    if messages
+        .row
+            .col-xs-12.col-sm-12
+                .panel.panel-default
+                    .panel-heading 错误信息
+block scripts
+    script(src="#{myPath}/javascripts/checkItems.js")
+    script(src="#{myPath}/javascripts/sysManage.createReportMenu.js")

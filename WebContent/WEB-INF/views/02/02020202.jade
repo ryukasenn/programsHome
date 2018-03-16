@@ -1,0 +1,76 @@
+
+// 报表功能,生成报表(管理)
+extends ./layouts/020202
+
+block reportContent
+    .row.placeholders
+        if report.ageReport
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 年龄构成
+                    table.table
+                        tr 
+                            each item in report.ageReport.title
+                                th= item
+                        each item in report.ageReport.reportData
+                            tr
+                                for data in item
+                                    td= data
+        if report.xlReport
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 学历构成
+                    table.table
+                        tr 
+                            each item in report.xlReport.title
+                                th= item
+                        each item in report.xlReport.reportData
+                            tr
+                                for data in item
+                                    td= data
+        if report.sexReport
+            .col-xs-3.col-sm-3.placeholder
+                .panel.panel-default
+                    .panel-heading 性别构成
+                    table.table
+                        tr 
+                            each item in report.sexReport.title
+                                th= item
+                        each item in report.sexReport.reportData
+                            tr
+                                for data in item
+                                    td= data
+        if report.workLevelReport
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 职务级别构成
+                    table.table
+                        tr 
+                            each item in report.workLevelReport.title
+                                th= item
+                        each item in report.workLevelReport.reportData
+                            tr
+                                for data in item
+                                    td= data
+        if report.workAgeReport
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 工龄构成
+                    table.table
+                        tr 
+                            each item in report.workAgeReport.title
+                                th= item
+                        each item in report.workAgeReport.reportData
+                            tr
+                                for data in item
+                                    td= data
+    if messages
+        .row
+            .col-xs-12.col-sm-12
+                .panel.panel-default
+                    .panel-heading 错误信息
+                    table.table
+block scripts
+    script(src="#{myPath}/javascripts/02/020202.js")
+block pageId
+    p(style="display:none") 02020202

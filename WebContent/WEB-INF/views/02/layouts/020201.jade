@@ -1,0 +1,34 @@
+
+// 报表功能公共头部(普通)
+extends ../../reportLayout
+
+block main
+    h2.page-header 报表
+    form.form-inline(action="#{myPath}/report", method="POST")
+        .form-group
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByAge")
+                |年龄&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByXl")
+                |学历&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByZhicheng")
+                |职称&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByWorkAge")
+                |工龄&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportBySex")
+                |性别&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByWorkType")
+                |工作种类&nbsp&nbsp
+            label.checkbox-inline
+                input(type="checkbox",name="choses",value="reportByWorkLevel")
+                |职务级别&nbsp&nbsp
+        button(type = "submit").btn.btn-default 生成报表
+    .row.col-xs-6.col-sm-6
+        h2.page-header
+    .col-xs-12.col-sm-12
+        block reportContent

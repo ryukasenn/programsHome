@@ -1,0 +1,12 @@
+extends ./layout
+
+block sidebar
+    ul.nav.nav-sidebar
+        if rights.functionsRight
+            each item in rights.functionsRight
+                case item
+                    when "0101": li: a(href="#{myPath}/module?module=0101"): span 个人信息
+                    when "0102": li: a(href="#{myPath}/module?module=0102"): span 密码管理
+                    when "0103": li: a(href="#{myPath}/module?module=0103"): span 添加用户
+                    when "0104": li: a(href="#{myPath}/module?module=0104"): span 添加角色
+                    when "0105": li: a(href="#{myPath}/module?module=0105"): span 后台管理

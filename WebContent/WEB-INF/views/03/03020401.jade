@@ -1,0 +1,42 @@
+
+// 部门管理:修改地区
+extends ./layouts/0302
+    
+
+block contents
+    .row.placeholders
+        .col-xs-12.col-sm-12.placeholder
+            form.form-horizontal#updateRegion
+                input(type='hidden', name='regionUid', value='#{regionInfo.NBPT_SP_REGION_UID}')
+                input(type='hidden', name='regionResponsibler', value='#{regionInfo.NBPT_SP_REGION_RESPONSIBLER}')#ResperPid
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp地区名称
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', name="regionName")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 负责人
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{personInfo.NBPT_SP_PERSON_NAME}', readonly)#ResperName
+                    .col-md-1.col-sm-1 
+                        button.btn.btn-default(type="button").addResponsibler
+                            span.glyphicon.glyphicon-plus(aria-hidden="true")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 人员配额
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_ONAME}', name='regionNeed')
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 备注
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="regionNote")
+                .form-group
+                    .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
+                        button(type="button").btn.btn-primary 提交
+block modal
+    include includes/0302Modal
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/03020401.js")
+    
+block pageId
+    p(style="display:none") 03020401

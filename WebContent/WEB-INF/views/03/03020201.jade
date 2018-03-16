@@ -1,0 +1,55 @@
+
+
+// 地区管理,查看当前地区划分信息
+extends ./layouts/0302
+
+block contents
+    unless regions.length
+        .col-md-9.col-sm-9
+            .panel.panel-default
+                .panel-heading 划分列表
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 地区编号
+                        th.col-xs-2.col-sm-2 地区名称
+                        th.col-xs-1.col-sm-1 负责人
+                        th.col-xs-1.col-sm-1 级别
+                        th.col-xs-2.col-sm-2 操作
+                    each region,i in currentRegions
+                        case region.NBPT_SP_REGION_LEVEL
+                            when '1'
+                                tr(style="align:center").text-danger 
+                                    th.col-xs-1.col-sm-1(scope="row")= i+1
+                                    td.col-xs-1.col-sm-1= region.NBPT_SP_REGION_ID
+                                    td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
+                                    td.col-xs-2.col-sm-2
+                                        case region.NBPT_SP_PERSON_NAME
+                                            when 'null': 暂无
+                                            default: #{region.NBPT_SP_PERSON_NAME}
+                                    td.col-xs-1.col-sm-1 大区
+                                    td.col-xs-2.col-sm-2 
+                                        button(type="button").btn.btn-link.changeButton 修改
+                            when '2'
+                                tr(style="align:center")
+                                    th.col-xs-1.col-sm-1(scope="row")= i+1
+                                    td.col-xs-1.col-sm-1= region.NBPT_SP_REGION_ID
+                                    td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
+                                    td.col-xs-2.col-sm-2
+                                        case region.NBPT_SP_PERSON_NAME
+                                            when 'null': 暂无
+                                            default: #{region.NBPT_SP_PERSON_NAME}
+                                    td.col-xs-1.col-sm-1 地区
+                                    td.col-xs-2.col-sm-2 
+                                        button(type="button").btn.btn-link.changeButton 修改
+                            
+                                
+                                
+        
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0302.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03020201.js")
+        
+    
+block pageId
+    p(style="display:none") 03020201

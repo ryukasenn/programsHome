@@ -1,0 +1,78 @@
+extends ./layouts/0106
+    
+block contents
+    .row.placeholders
+        .col-xs-12.col-sm-12.placeholders
+            p &nbsp&nbsp&nbsp&nbsp所有页面信息如下
+            if modules
+                ul.nav.nav-tabs(role="tablist")#myTabs
+                    each module,i in modules
+                        if i == 0
+                            li(role="presentation").active: a(href="##{module.moduleId}")= module.moduleName
+                        else
+                            li(role="presentation" ): a(href="##{module.moduleId}")= module.moduleName
+                .tab-content
+                    each module,i in modules
+                        if i == 0
+                            div.tab-pane.fade.in.active(id= module.moduleId)
+                                each func in module.funcList
+                                    .col-xs-6.col-sm-6.placeholder
+                                        .panel.panel-default
+                                            .panel-heading= func.funcName
+                                            table.table
+                                                tr
+                                                    th.col-xs-1.col-sm-1 #
+                                                    th.col-xs-2.col-sm-2 页面ID
+                                                    th.col-xs-3.col-sm-3 页面名称
+                                                each page,i in func.pageList
+                                                    tr
+                                                        th.col-xs-1.col-sm-1(scope="row")= i+1
+                                                        td.col-xs-2.col-sm-2= page.NBPT_RSFZ_PAGE_ID
+                                                        td.col-xs-3.col-sm-3= page.NBPT_RSFZ_PAGE_NAME
+                        else
+                            div.tab-pane.fade(id= module.moduleId)
+                                each func in module.funcList
+                                    .col-xs-6.col-sm-6.placeholder
+                                        .panel.panel-default
+                                            .panel-heading= func.funcName
+                                            table.table
+                                                tr
+                                                    th.col-xs-1.col-sm-1 #
+                                                    th.col-xs-2.col-sm-2 页面ID
+                                                    th.col-xs-3.col-sm-3 页面名称
+                                                each page,i in func.pageList
+                                                    tr
+                                                        th.col-xs-1.col-sm-1(scope="row")= i+1
+                                                        td.col-xs-2.col-sm-2= page.NBPT_RSFZ_PAGE_ID
+                                                        td.col-xs-3.col-sm-3= page.NBPT_RSFZ_PAGE_NAME
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/0106.js")
+    script(language="javascript", src="#{myPath}/javascripts/01/01060101.js")
+block pageId
+    p(style="display:none") 01060101
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

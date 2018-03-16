@@ -1,0 +1,19 @@
+
+// 地区管理公共头部
+extends ../../personnelLayout
+
+block main
+    h2.page-header 地区管理
+    form.form-inline#controlForm
+        .form-group
+            button(type="button").btn.btn-default#receiveCurrents 查看当前分布
+            |&nbsp&nbsp
+        .form-group
+            button(type="button").btn.btn-default#addRegion 添加地区
+            |&nbsp&nbsp
+        .form-group
+            button(type="button").btn.btn-default#updateRegion 修改地区
+            |&nbsp&nbsp
+    .row.col-xs-6.col-sm-6
+        h2.page-header
+        block contents

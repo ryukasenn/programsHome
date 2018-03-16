@@ -1,0 +1,10 @@
+extends ../../templates/expressage/layout
+
+block link
+  script(src="#{publicPath}/js/newExpressageCheck.js")
+  
+block body
+  if page.include == '1'
+    include include/successMessage
+  else
+    include include/errorMessage

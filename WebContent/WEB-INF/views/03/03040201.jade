@@ -1,0 +1,55 @@
+
+// 人员管理,查看当前人员信息(地总)
+extends ./layouts/0304
+
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#addTerminal 添加下级人员
+        |&nbsp&nbsp
+block contents
+    .row.placeholders
+        .col-xs-11.col-sm-11.placeholder
+            .panel.panel-default
+                .panel-heading 名单列表
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 姓名
+                        th.col-xs-1.col-sm-1 性别
+                        th.col-xs-1.col-sm-1 职务
+                        th.col-xs-1.col-sm-1 文化程度
+                        th.col-xs-1.col-sm-1 入职日期
+                        th.col-xs-1.col-sm-1 工龄
+                        th.col-xs-1.col-sm-1 籍贯
+                        th.col-xs-1.col-sm-1 联系电话
+                        th.col-xs-1.col-sm-1 紧急联系人
+                        th.col-xs-1.col-sm-1 年龄
+                    unless personInfos.length
+                        each person,i in personInfos
+                            tr(style="align:center") 
+                                th.col-xs-1.col-sm-1(scope="row")= i+1
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MALE
+                                td.col-xs-1.col-sm-1
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '1': 大区总
+                                        when '2': 地总
+                                        when '3': 区县总
+                                        when '4': 预备区县总
+                                        when '5': 推广经理
+                                        when '6': 大区总兼地总
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_DEGREE
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_ENTRYDATA
+                                td.col-xs-1.col-sm-1 #{person.NBPT_SP_PERSON_WORKAGE}年
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_PLACE
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB1
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB2
+                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_AGE
+                                
+        
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040201.js")
+        
+block pageId
+    p(style="display:none") 03040201

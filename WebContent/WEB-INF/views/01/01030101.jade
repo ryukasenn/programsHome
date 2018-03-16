@@ -1,0 +1,39 @@
+
+extends ./layouts/0103
+
+block contents
+    .row.col-xs-6.col-sm-6
+        h2.page-header
+    form.form-inline(action="", method="GET")#controlForm
+        input(hidden="hidden", name="NBPT_RSFZ_USER_ID")
+        .row.placeholders
+            .col-xs-8.col-sm-8.placeholder
+                .panel.panel-default
+                    .panel-heading 
+                        |用户列表(
+                        |<button class="btn btn-link" name="add">添加</button>
+                        |)
+                    table.table-striped
+                        tr
+                            th.col-xs-1.col-sm-1 #
+                            th.col-xs-1.col-sm-1 用户ID
+                            th.col-xs-1.col-sm-1 用户名称
+                            th.col-xs-1.col-sm-1 电话
+                            th.col-xs-1.col-sm-1 邮箱
+                            th.col-xs-2.col-sm-2 备注描述
+                            th.col-xs-2.col-sm-2 操作
+                        each user,i in users
+                            tr(style="align:center") 
+                                th.col-xs-1.col-sm-1(scope="row")= i+1
+                                td.col-xs-1.col-sm-1= user.NBPT_RSFZ_USER_ID
+                                td.col-xs-1.col-sm-1= user.NBPT_RSFZ_USER_NAME
+                                td.col-xs-1.col-sm-1= user.NBPT_RSFZ_USER_PHONE
+                                td.col-xs-1.col-sm-1= user.NBPT_RSFZ_USER_EMALL
+                                td.col-xs-2.col-sm-2= user.NBPT_RSFZ_USER_BZ
+                                td.col-xs-2.col-sm-2 
+                                    button.btn.btn-link(name="update") 修改
+                                    button.btn.btn-link(name="delete") 删除
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/01030101.js")
+block pageId
+    p(style="display:none") 01030101

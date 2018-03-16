@@ -1,0 +1,15 @@
+extends ../reportLayout
+
+block main
+    h1.page-header 首页   
+        i.titleSmall 欢迎进入羚锐制药人事管理辅助系统
+    .row
+        .col-sm-12.col-md-12
+            p 当前登录用户为,
+                span(style='color:#56944e')#{niko}
+    .row
+        .col-sm-12.col-md-12
+            h3.sub-header 今日提醒
+            p #{caocao.title}
+block pageId
+    p(style="display:none") 02010101

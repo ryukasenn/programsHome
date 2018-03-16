@@ -1,0 +1,27 @@
+extends ../layout
+
+
+block header
+	link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-datetimepicker.min.css')
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	.row
+		form(role="form" action="/zdkh/handler_display" method="GET")
+			button(type="submit" style="margin-left: 10px;")#confirmIn.btn.btn-primary 开始处理
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在进行查询，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/typeahead.min.js")
+	script(src="/javascripts/bootstrap-datetimepicker.min.js")
+	script(src="/javascripts/search_uncheck.js")
+		

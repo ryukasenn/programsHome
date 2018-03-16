@@ -1,0 +1,50 @@
+extends ../../templates/expressage/jsCheckLayout
+
+block link
+  script(src="#{publicPath}/js/newEx.js")
+block body
+  input(type='hidden', value='#{page.tracking_company}')#hidden_select_val
+  .container
+    .row
+      .form-wrap
+        form(role='form', action='#{publicPath}/expressage/new', method='POST')
+          .weui_cells.weui_cells_form
+            .weui_cell
+              .col-xs-4
+                .weui_cell_hd
+                  .weui_label 快递单位:
+              .col-xs-8
+                .weui_cell.weui_cell_select
+                  .weui_cell_bd.weui_cell_primary
+                    select.weui_select(name='tracking_company' , value='#{page.tracking_company}')#select
+            .weui_cell
+              .col-xs-4
+                .weui_cell_hd
+                  .weui_label 快递单号:
+              .col-xs-8
+                  .weui_cell_bd.weui_cell_primary
+                      input(type="number" ,placeholder='点击此处填入快递单号' , name='tracking_number', value='#{page.tracking_number}').weui_input#tracking_number
+            .weui_cell
+              .col-xs-4
+                .weui_cell_hd
+                  .weui_label 收&nbsp&nbsp件&nbsp&nbsp人:
+              .col-xs-8
+                input(type="text" ,placeholder='收件人姓名', name='tracking_userName', value='#{page.tracking_userName}').weui_input#tracking_userName
+        p &nbsp
+    include include/newExButton
+  .modal#mymodal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          h4 输入单号或扫描二维码
+        .modal-body
+          .weui_cell
+            .weui_cell_bd.weui_cell_primary
+              input(type="number" ,placeholder='单号', name='poupp_tracking_number').weui_input#poupp_tracking_number
+            .weui_cell_ft
+              span.glyphicon.glyphicon-barcode#scan_bar_code
+        .modal-footer
+          button.btn.btn-default(data-dismiss='modal') 关闭
+          button.btn.btn-default#popup_confirm 确定
+          
+          

@@ -1,0 +1,35 @@
+extends ./layouts/0106
+
+block contents
+    .row.placeholders
+        .col-xs-8.col-sm-8.placeholder
+            .panel.panel-default
+                .panel-heading
+                    |模块列表(
+                    |<button class="btn btn-link" name="add">添加</button>
+                    |)
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 模块ID
+                        th.col-xs-1.col-sm-1 模块名称
+                        th.col-xs-3.col-sm-3 模块描述
+                        th.col-xs-2.col-sm-2 操作
+                    each module,i in modules
+                        tr(style="align:center") 
+                            th.col-xs-1.col-sm-1(scope="row")= i+1
+                            td.col-xs-1.col-sm-1= module.NBPT_RSFZ_PAGE_ID
+                            td.col-xs-1.col-sm-1= module.NBPT_RSFZ_PAGE_NAME
+                            td.col-xs-3.col-sm-3= module.NBPT_RSFZ_PAGE_BZ
+                            td.col-xs-2.col-sm-2 
+                                button.btn.btn-link(name="update") 修改
+                                button.btn.btn-link(name="delete") 删除
+block modal
+    include includes/0106Modal
+
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/0106.js")
+    script(language="javascript", src="#{myPath}/javascripts/01/01060201.js")
+block pageId
+    p(style="display:none") 01060201
+    

@@ -1,0 +1,9 @@
+extends ./layout
+
+block sidebar
+    ul.nav.nav-sidebar
+        if rights.functionsRight
+            each item in rights.functionsRight
+                case item
+                    when "0201": li: a(href="#{myPath}/module?module=0201"): span 首页
+                    when "0202": li: a(href="#{myPath}/module?module=0202"): span 报表

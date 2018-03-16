@@ -1,0 +1,39 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        title 人事管理辅助系统
+        link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/css/bootstrap.css')
+        link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/layout.css')
+        block header
+    body
+        script
+            var baseUrl = 'http://ekp.lingrui.com:9000/rsManage';
+        block head
+            nav.navbar.navbar-fixed-top.navbar-inverse
+                .container-fluid
+                    .navbar-header
+                        button.navbar-toggle.collapsed
+                        a.navbar-brand 羚锐集团内部平台
+                    .navbar-collapse.collapse
+                        ul.nav.navbar-nav.navbar-right
+                            li: a 你好，#{niko}
+                            li: a(href="#{myPath}/logout") 退出
+                        form.navbar-form.navbar-right
+                            input.form-control(type="text",placeholder='Search...' )
+        block body
+            .container-fluid
+                .row-fluid
+                    .col-sm-3.col-md-1.sidebar
+                        ul.nav.nav-sidebar
+                            li: a(href="#{myPath}/sys/pmHome"): span 页面管理
+                            li: a(href="#{myPath}/sys/ruHome"): span 用户管理
+                            li: a(href="#{myPath}/sys/rmHome"): span 角色管理
+                    .col-sm-9.col-sm-offset-3.col-md-11.col-md-offset-1.main
+                        block main
+    block modal
+    script(language="javascript", src="#{myPath}/javascripts/jquery.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/bootstrap.min.js")
+    block scripts
+    block pageId
+        p(style="display:none") adminLayout

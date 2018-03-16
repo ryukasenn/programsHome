@@ -1,0 +1,22 @@
+.row
+	form(role="form" action="/zdhx/search" method="POST")
+		div(style="height:40px;")
+		h1= title
+		.form-group
+			.input-group
+				if page.search_form.choseTitle
+					.input-group-addon
+						span= page.search_form.choseTitle
+					input(name="chose",  placeholder= page.search_form.placeholder , autocomplete="off" data-chose="typeahead", style="width:50%;", value= page.search_form.chose)#chose.form-control
+		if page.search_form.selectTime
+			.form-group
+				.input-group
+					.input-group-addon
+						span 开始时间
+					input(name="timeStart", readonly , placeholder="请选择要查询的开始时间，默认2017-01-06", style="width:50%;", value= page.search_form.timeStart)#timeStart.form-control
+			.form-group
+				.input-group
+					.input-group-addon
+						span 结束时间
+					input(name="timeEnd", readonly , placeholder="请选择要查询的结束时间，默认到现在", style="width:50%;", value= page.search_form.timeEnd)#timeEnd.form-control
+					button(type="submit" style="margin-left: 10px;")#confirmIn.btn.btn-primary 查询

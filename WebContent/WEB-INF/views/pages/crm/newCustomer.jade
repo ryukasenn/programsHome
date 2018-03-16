@@ -1,0 +1,34 @@
+extends ../../templates/apiLayout
+
+block link
+  link(rel='stylesheet', href='#{publicPath}/css/in/test.css')
+  link(rel='stylesheet', href='#{publicPath}/css/out/weui.min.css')
+
+block header
+  .container
+    .row
+      img(src='#{publicPath}/images/2.png').col-xs-12.img-thumbnail
+block body
+  .container
+    .row
+      .col-xs-12
+        .form-wrap
+          form(role='form', action='#{publicPath}/api/new', method='POST')
+            .weui_cells.weui_cells_form
+              .weui_cell
+                .col-xs-4
+                  .weui_label 姓名
+                .col-xs-8
+                  input(type="text" ,placeholder='请填入客户姓名', name='name').weui_input
+              .weui_cell
+                .col-xs-4
+                  .weui_label 电话
+                .col-xs-8
+                  input(type="text" ,placeholder='请填入客户电话', name='phone').weui_input
+              .weui_cell
+                .col-xs-4
+                  .weui_label 地址
+                .col-xs-8
+                  textarea(rows= '3' ,placeholder='请填入客户地址', name='address').weui_textarea
+              .button_sp_area
+                button(type='submit').weui_btn.weui_btn_plain_default 提交

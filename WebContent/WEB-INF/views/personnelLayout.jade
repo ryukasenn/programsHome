@@ -1,0 +1,10 @@
+extends ./layout
+
+block sidebar
+    ul.nav.nav-sidebar
+        if rights.functionsRight
+            each item in rights.functionsRight
+                case item
+                    when "0301": li: a(href="#{myPath}/module?module=0301"): span 首页
+                    when "0302": li: a(href="#{myPath}/module?module=0302"): span 部门管理
+                    when "0304": li: a(href="#{myPath}/module?module=0304"): span 人员管理

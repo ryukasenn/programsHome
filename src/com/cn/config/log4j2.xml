@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<configuration status="OFF" monitorInterval="600">
+	<properties>
+		<property name="LOG_HOME">D:/logs</property>
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout
+				pattern="%d{yyyy-MM-dd HH:mm:ss} - %-5level %logger{36} - %msg%n" />
+		</Console>
+        <!-- <Console name="sql" target="SYSTEM_OUT">
+            <PatternLayout
+                pattern="[%l] [%t] [%-4r] [%d{yyyy-MM-dd HH:mm:ss,SSS}] [%p] \: %m%n" />
+        </Console> -->
+		<RollingRandomAccessFile name="RollingFileInfo"
+			fileName="${LOG_HOME}/logs/rsfzManage/info.log"
+			filePattern="${LOG_HOME}/logs/rsfzManage/$${date:yyyy-MM}/info-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{DEFAULT}] [%p] - %l - %msg%n" />
+			<Filters>
+				<ThresholdFilter level="info" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="100 MB" />
+			</Policies>
+		</RollingRandomAccessFile>
+		<RollingFile name="DebugFile"
+			fileName="${LOG_HOME}/logs/rsfzManage/debuginfo.log"
+			filePattern="${LOG_HOME}/logs/rsfzManage/$${date:yyyy-MM}/debug-%d{yyyy-MM-dd}-%i.log">
+			<PatternLayout pattern="[%d{DEFAULT}] [%p] - %l - %msg%n" />
+			<Filters>
+				<ThresholdFilter level="info" onMatch="DENY"
+					onMismatch="NEUTRAL" />
+				<ThresholdFilter level="debug" onMatch="ACCEPT"
+					onMismatch="DENY" />
+			</Filters>
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="250 MB" />
+			</Policies>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<!-- <logger name="com.cn.lingrui" level="debug" additivity="false"> trace 
+			< debug < info < warn < error < fatal <appender-ref ref="Console"/> </logger> -->
+		<root level="debug">
+			<appender-ref ref="Console" />
+			<appender-ref ref="RollingFileInfo" />
+			<appender-ref ref="DebugFile" />
+		</root>
+		<!-- <logger name="com.cn.rs.db" level="debug" additivity="false">
+            <appender-ref ref="sql" />
+		</logger> -->
+	</loggers>
+</configuration>

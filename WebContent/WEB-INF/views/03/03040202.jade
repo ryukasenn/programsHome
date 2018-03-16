@@ -1,0 +1,42 @@
+
+// 人员管理,查看当前人员信息(后勤,总经理)
+extends ./layouts/0304
+
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#supportAdd 添加大区总地总
+        |&nbsp&nbsp
+block contents
+    .row.placeholders
+        .col-xs-9.col-sm-9.placeholder
+            .panel.panel-default
+                .panel-heading 合计列表
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 大区总
+                        th.col-xs-1.col-sm-1 地总
+                        th.col-xs-1.col-sm-1 区县总
+                        th.col-xs-1.col-sm-1 预备区县总
+                        th.col-xs-1.col-sm-1 推广经理
+                        th.col-xs-1.col-sm-1 合计
+                        th.col-xs-1.col-sm-1 应配
+                        th.col-xs-1.col-sm-1 差额
+                    unless personInfos.length
+                        each info,i in totalInfos
+                            tr(style="align:center") 
+                                td.col-xs-1.col-sm-1= info.name
+                                td.col-xs-1.col-sm-1= info.regionResper
+                                td.col-xs-1.col-sm-1= info.areaResper
+                                td.col-xs-1.col-sm-1= info.xzquResper
+                                td.col-xs-1.col-sm-1= info.xzquResper_preparatory
+                                td.col-xs-1.col-sm-1= info.promote
+                                td.col-xs-1.col-sm-1 0
+                                td.col-xs-1.col-sm-1 0
+                                td.col-xs-1.col-sm-1 0
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040202.js")
+        
+block pageId
+    p(style="display:none") 03040202

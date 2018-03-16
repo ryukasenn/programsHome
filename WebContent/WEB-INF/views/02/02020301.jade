@@ -1,0 +1,79 @@
+
+// 导出数据显示
+extends ./layouts/020202
+
+block reportContent
+    .row.placeholders
+        if checkData.checkItemsByAge
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 年龄构成&nbsp&nbsp&nbsp
+                        button(type="button", name="exoutFile").pull-right 导出
+                        form(action="#{myPath}/download", method="POST")
+                            input(type="hidden", name="fileName", value="证件有误.xls")
+                    table.table
+                        tr 
+                            td 编号
+                            td 姓名
+                            td 证件错误
+                        each item in checkData.checkItemsByAge
+                            tr
+                                td= item.PMBASE_ZGBH
+                                td= item.PMBASE_ZGXM
+                                td= item.PMBASE_CHECKITEM
+        if checkData.checkItemsByXl
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 学历构成&nbsp&nbsp&nbsp
+                        button(type="button", name="exoutFile").pull-right 导出
+                        form(action="#{myPath}/download", method="POST")
+                            input(type="hidden", name="fileName", value="学历有误.xls")
+                    table.table
+                        tr 
+                            td 编号
+                            td 姓名
+                            td 学历错误
+                        each item in checkData.checkItemsByXl
+                            tr
+                                td= item.PMBASE_ZGBH
+                                td= item.PMBASE_ZGXM
+                                td= item.PMBASE_CHECKITEM
+        if checkData.checkItemsByWorkAge
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 工龄构成&nbsp&nbsp&nbsp
+                        button(type="button", name="exoutFile").pull-right 导出
+                        form(action="#{myPath}/download", method="POST")
+                            input(type="hidden", name="fileName", value="入职日期有误.xls")
+                    table.table
+                        tr 
+                            td 编号
+                            td 姓名
+                            td 入职日期错误
+                        each item in checkData.checkItemsByWorkAge
+                            tr
+                                td= item.PMBASE_ZGBH
+                                td= item.PMBASE_ZGXM
+                                td= item.PMBASE_CHECKITEM
+        if checkData.checkItemsByWorkLevel
+            .col-xs-6.col-sm-6.placeholder
+                .panel.panel-default
+                    .panel-heading 工龄构成&nbsp&nbsp&nbsp
+                        button(type="button", name="exoutFile").pull-right 导出
+                        form(action="#{myPath}/download", method="POST")
+                            input(type="hidden", name="fileName", value="职务级别有误.xls")
+                    table.table
+                        tr 
+                            td 编号
+                            td 姓名
+                            td 职务级别错误
+                        each item in checkData.checkItemsByWorkLevel
+                            tr
+                                td= item.PMBASE_ZGBH
+                                td= item.PMBASE_ZGXM
+                                td= item.PMBASE_CHECKITEM
+block scripts
+    script(src="#{myPath}/javascripts/02/020202.js")
+    script(src="#{myPath}/javascripts/02/02020301.js")
+block pageId
+    p(style="display:none") 02020301

@@ -1,0 +1,50 @@
+extends ../../templates/layout
+
+block link
+  script(src="#{publicPath}/js/recordsReceiveCheck.js")
+block body
+  .container
+    if page.message == ''
+      .row
+        form
+          .col-xs-12
+            .form-wrap
+              .weui_cells.weui_cells_form
+                .weui_cell
+                  .weui_cell_hd
+                    h4
+                      p <em>请输入你的姓名:</em>
+                .weui_cell
+                  .col-xs-4
+                    .weui_cell_hd
+                      .weui_label 收&nbsp&nbsp件&nbsp&nbsp人:
+                  .col-xs-8
+                    input(type="text" ,placeholder='收件人姓名', name='tracking_userName').weui_input
+      .row
+        .col-xs-12
+          .form-wrap
+            if page.resultList
+              .panel.panel-default
+                .panel-heading
+                  h4.small 取件列表
+                .panel-body
+                  div
+                    span(style='text-align:center;padding-left:10px;width:18px;display:inline-block') #
+                    span(style='padding-left:10px;width:60px;display:inline-block') 收件人
+                    span(style='padding-left:10px;width:70px;display:inline-block') 快递单位
+                    span(style='padding-left:10px;width:140px;display:inline-block') 单号
+                    hr(style='border-top:2px solid')
+                  div(style='height:130px;overflow-y:scroll;')
+                    each item,i in page.resultList
+                      span(style='text-align:center;padding-left:10px;width:18px;display:inline-block') #{i+1}
+                      span(style='padding-left:10px;width:60px;display:inline-block') #{item.fd_name}
+                      span(style='padding-left:10px;width:70px;display:inline-block') #{item.expressage_name}
+                      span(style='padding-left:10px;width:140px;display:inline-block') #{item.record_tracking_number}
+                      hr
+                .panel-footer(style='text-align:center;')
+      .row
+        .col-xs-12
+          .bd.spacing
+            button.weui_btn.weui_btn_plain_primary 确定
+    else
+      p sb

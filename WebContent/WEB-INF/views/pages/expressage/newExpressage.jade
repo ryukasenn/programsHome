@@ -1,0 +1,21 @@
+extends ../../templates/expressage/layout
+
+block link
+  script(src="#{publicPath}/js/newExpressage.js")
+block body
+  input(type='hidden', value='#{page.tracking_company}')#hidden_select_val
+  .container
+    .row
+      .col-xs-12
+        .form-wrap
+          form(role='form', action='#{publicPath}/expressage/admin/newExpressage', method='POST')
+            .weui_cells.weui_cells_form
+              .weui_cell
+                .col-xs-5
+                  .weui_cell_hd
+                    .weui_label 添加单位:
+                .col-xs-7
+                  .weui_cell_bd.weui_cell_primary
+                    input(type="text" ,placeholder='新快递单位', name='expressage_name').weui_input#expressage_name
+          p &nbsp
+    include include/newExButton

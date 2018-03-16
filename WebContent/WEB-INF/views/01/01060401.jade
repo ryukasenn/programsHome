@@ -1,0 +1,36 @@
+extends ./layouts/0106
+
+block contents
+    .row.placeholders
+        .col-xs-10.col-sm-10.placeholder
+            .panel.panel-default
+                .panel-heading
+                    |页面列表(
+                    |<button class="btn btn-link" name="add">添加</button>
+                    |)
+                table.table-striped
+                    tr
+                        th.col-xs-1.col-sm-1 #
+                        th.col-xs-1.col-sm-1 功能ID
+                        th.col-xs-1.col-sm-1 页面ID
+                        th.col-xs-1.col-sm-1 页面名称
+                        th.col-xs-3.col-sm-3 页面描述
+                        th.col-xs-2.col-sm-2 操作
+                    each func,i in funcs
+                        tr
+                            th.col-xs-1.col-sm-1(scope="row")= i+1
+                            td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_PID
+                            td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_ID
+                            td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_NAME
+                            td.col-xs-3.col-sm-3= func.NBPT_RSFZ_PAGE_BZ
+                            td.col-xs-2.col-sm-2 
+                                button.btn.btn-link(name="update") 修改
+                                button.btn.btn-link(name="delete") 删除
+block modal
+    include includes/0106Modal
+
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/0106.js")
+    script(language="javascript", src="#{myPath}/javascripts/01/01060401.js")
+block pageId
+    p(style="display:none") 01060401

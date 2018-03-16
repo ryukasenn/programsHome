@@ -1,0 +1,11 @@
+extends ../layout
+
+block main
+    h2.page-header 下载测试
+    form.form-inline(action="#{myPath}/download", method="POST")
+        .form-group
+            label(for="fileName") 文件名
+            input(type="text", name="fileName").form-control#fileName
+            button(type="submit").btn 下载
+            
+        

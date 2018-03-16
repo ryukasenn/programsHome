@@ -1,0 +1,100 @@
+
+// 角色管理修改角色页面
+extends ./layouts/0104
+
+block contents
+    script
+        var modules = '#{pageContent.modules}';
+        var funcs = '#{pageContent.funcs}';
+        var pages = '#{pageContent.pages}';
+    .row
+        h4.page-header.col-md-6.col-sm-6 修改角色
+    .row
+        form(action="", method="POST")#controlForm
+            input(hidden="hidden", name="NBPT_RSFZ_ROLE_ID", value="#{pageContent.rsfzrole.NBPT_RSFZ_ROLE_ID}")
+            .row
+                .form-group.col-md-2.col-sm-2
+                    .input-group
+                        .input-group-addon
+                            span 角色名称
+                        label(for="NBPT_RSFZ_ROLE_NAME").sr-only
+                        input.form-control#NBPT_RSFZ_ROLE_NAME(type="text", value="#{pageContent.rsfzrole.NBPT_RSFZ_ROLE_NAME}", name="NBPT_RSFZ_ROLE_NAME")
+                .form-group.col-md-3.col-sm-3
+                    .input-group
+                        .input-group-addon
+                            span 角色描述
+                        label(for="NBPT_RSFZ_ROLE_BZ").sr-only
+                        input.form-control#NBPT_RSFZ_ROLE_BZ(type="text", value="#{pageContent.rsfzrole.NBPT_RSFZ_ROLE_BZ}", name="NBPT_RSFZ_ROLE_BZ")
+                .form-group.col-md-6.col-sm-6
+                    button.btn.btn-defult(type="button")#confirm 确认修改
+                    |&nbsp&nbsp
+                    button.btn.btn-primary(type="button",data-toggle="collapse",data-target="#moduleList", aria-expanded="false",aria-controls="moduleList") 添加模块
+                    |&nbsp&nbsp
+                    button.btn.btn-primary(type="button",data-toggle="collapse",data-target="#funcList", aria-expanded="false",aria-controls="funcList") 添加功能
+                    |&nbsp&nbsp
+                    button.btn.btn-primary(type="button",data-toggle="collapse",data-target="#pageList", aria-expanded="false",aria-controls="pageList") 添加页面
+            .row.placeholders.collapse#moduleList
+                .col-md-6.col-sm-6
+                    .panel.panel-default
+                        .panel-heading 模块列表
+                        table.table
+                            tr 
+                                th.col-md-1.col-sm-1(style="text-align:center") #
+                                th.col-md-2.col-sm-2 模块名称
+                                th.col-md-3.col-sm-3 模块描述
+                            each module in pageContent.moduleList
+                                tr 
+                                    th(style="text-align:center"): input(type="checkbox",name='modules',value="#{module.NBPT_RSFZ_PAGE_ID}",id="#{module.NBPT_RSFZ_PAGE_ID}")
+                                    td= module.NBPT_RSFZ_PAGE_NAME
+                                    td= module.NBPT_RSFZ_PAGE_BZ
+            .row.placeholders.collapse#funcList
+                .col-md-6.col-sm-6
+                    .panel.panel-default
+                        .panel-heading 功能列表
+                        table.table
+                            tr 
+                                th.col-md-1.col-sm-1(style="text-align:center") #
+                                td.col-md-2.col-sm-2 功能名称
+                                td.col-md-3.col-sm-3 功能描述
+                            each func in pageContent.funcList
+                                tr 
+                                    th(style="text-align:center"): input(type="checkbox",name='funcs',value="#{func.NBPT_RSFZ_PAGE_ID}",id="#{func.NBPT_RSFZ_PAGE_ID}")
+                                    td= func.NBPT_RSFZ_PAGE_NAME
+                                    td= func.NBPT_RSFZ_PAGE_BZ
+            .row.placeholders.collapse#pageList
+                .col-md-6.col-sm-6
+                    .panel.panel-default
+                        .panel-heading 页面列表
+                        table.table
+                            tr
+                                th.col-md-1.col-sm-1(style="text-align:center") #
+                                td.col-md-2.col-sm-2 页面名称
+                                td.col-md-3.col-sm-3 页面描述
+                            each page in pageContent.pageList
+                                tr 
+                                    th(style="text-align:center"): input(type="checkbox",name='pages',value="#{page.NBPT_RSFZ_PAGE_ID}",id="#{page.NBPT_RSFZ_PAGE_ID}")
+                                    td= page.NBPT_RSFZ_PAGE_NAME
+                                    td= page.NBPT_RSFZ_PAGE_BZ
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/01040301.js")
+block pageId
+    p(style="display:none") 01040301
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

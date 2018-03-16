@@ -1,0 +1,165 @@
+
+// 终端管理:添加地总和大区总(后勤)
+extends ./layouts/0304
+    
+
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#supportAdd 添加大区总地总
+        |&nbsp&nbsp
+block contents
+    .row.placeholders
+        .col-xs-12.col-sm-12.placeholder
+            form.form-horizontal#addPersonForm
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp姓名
+                    .col-xs-4.col-sm-2
+                        input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp性别
+                    .col-xs-4.col-sm-4
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_MALE",value="1") 
+                            |男
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_MALE",value="0") 
+                            |女
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp人员类型
+                    .col-xs-4.col-sm-4
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="1") 
+                            |商务
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="2") 
+                            |OTC
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="3") 
+                            |RX
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="4") 
+                            |诊所
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp职务
+                    .col-xs-4.col-sm-4
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="1", checked) 
+                            |大区总
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="2") 
+                            |地总
+                        label.radio-inline
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="6") 
+                            |混合
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp负责大区
+                    .col-xs-2.col-sm-2
+                        select.form-control.provinceSelect
+                            each item in regions
+                                option(value="#{item.NBPT_COMMON_XZQXHF_ID}") #{item.NBPT_SP_REGION_NAME}
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp身份证号码
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_IDNUM")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp个人手机
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_MOB1",placeholder="例:18518596989")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp紧急联络人
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_MOB2",placeholder="例:18518596989")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp入职时间
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_ENTRYDATA",placeholder="例:19981010")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp籍贯
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_PLACE",placeholder="例:张三")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp保单编号
+                    .col-xs-2.col-sm-2
+                        select.form-control(name="NBPT_SP_PERSON_POLICYTYPE")#policytypeSelect
+                            each item in policytypeSelects
+                                option(value="#{item.NBPT_COMMON_DICTIONARY_KEY_VALUE}") #{item.NBPT_COMMON_DICTIONARY_KEY_NAME}
+                    .col-xs-2.col-sm-2
+                        input.form-control(name="NBPT_SP_PERSON_POLICYNO",placeholder="例:NAN17AA06126A2")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp保单起始
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA1",placeholder="例:19981010")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp保单结束
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2",placeholder="例:20001010")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label QQ
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_QQ")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 微信
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_CHAT")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 邮箱
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_MAIL")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 学历
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_DEGREE")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 毕业学校
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_SCHOOL")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 专业
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_PROFESS")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 备注
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_NOTE")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 职称
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_TITLE")
+                .form-group
+                    .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
+                        button(type="button")#addPerson.btn.btn-primary 提交
+    
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/common.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040302.js")
+    
+block pageId
+    p(style="display:none") 03040302
+    

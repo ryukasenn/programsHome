@@ -1,0 +1,36 @@
+
+// 角色管理默认首页
+extends ./layouts/0104
+
+block contents
+    .row.col-xs-6.col-sm-6
+        h2.page-header
+    form.form-inline(method="GET")#controlForm
+        input(hidden="hidden", name="NBPT_RSFZ_ROLE_ID")#NBPT_RSFZ_ROLE_ID
+        .row.placeholders
+            .col-xs-8.col-sm-8.placeholder
+                .panel.panel-default
+                    .panel-heading 
+                        |角色列表(
+                        |<button class="btn btn-link" name="add">添加</button>
+                        |)
+                    table.table-striped
+                        tr
+                            th.col-xs-1.col-sm-1 #
+                            th.col-xs-1.col-sm-1 角色ID
+                            th.col-xs-1.col-sm-1 角色名称
+                            th.col-xs-3.col-sm-3 角色描述
+                            th.col-xs-2.col-sm-2 操作
+                        each role,i in roles
+                            tr(style="align:center") 
+                                th.col-xs-1.col-sm-1(scope="row")= i+1
+                                td.col-xs-1.col-sm-1= role.NBPT_RSFZ_ROLE_ID
+                                td.col-xs-1.col-sm-1= role.NBPT_RSFZ_ROLE_NAME
+                                td.col-xs-3.col-sm-3= role.NBPT_RSFZ_ROLE_BZ
+                                td.col-xs-2.col-sm-2 
+                                    button(type="button").btn.btn-link(name="update") 修改
+                                    button(type="button").btn.btn-link(name="delete") 删除
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/01/01040101.js")
+block pageId
+    p(style="display:none") 01040101

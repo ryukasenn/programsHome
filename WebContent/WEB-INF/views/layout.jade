@@ -1,0 +1,47 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        title 羚锐集团内部平台
+        link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/css/bootstrap.css')
+        link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/layout.css')
+        block header
+    body
+        script
+            var baseUrl = 'http://ekp.lingrui.com:9000/rsManage';
+        block head
+            nav.navbar.navbar-fixed-top.navbar-inverse
+                .container-fluid
+                    .navbar-header
+                        button.navbar-toggle.collapsed
+                        a.navbar-brand 羚锐集团内部平台
+                        ul.nav.navbar-nav
+                            if rights.modulesRight
+                                each item in rights.modulesRight
+                                    case item
+                                        when "01": li: a(href="#{myPath}/module?module=01"): span 个人信息
+                                        when "02": li: a(href="#{myPath}/module?module=02"): span 集团人事
+                                        when "03": li: a(href="#{myPath}/module?module=03"): span 销售人事
+                    .navbar-collapse.collapse
+                        ul.nav.navbar-nav.navbar-right
+                            li: a 你好，#{niko}
+                            li: a(href="#{myPath}/logout") 退出
+                        form.navbar-form.navbar-right
+                            input.form-control(type="text",placeholder='Search...' )
+        block body
+            .container-fluid
+                .row-fluid
+                    .col-sm-3.col-md-1.sidebar
+                        block sidebar
+                    .col-sm-9.col-sm-offset-3.col-md-11.col-md-offset-1.main
+                        if messages
+                            each item in messages
+                                p: font(color="red")= item 
+                        block main
+    block modal
+    script(src="#{myPath}/javascripts/jquery.min.js")
+    script(src="#{myPath}/javascripts/bootstrap.min.js")
+    block layoutScripts
+    block scripts
+    block pageId
+        p(style="display:none") layout

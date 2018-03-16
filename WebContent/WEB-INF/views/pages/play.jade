@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title 小畅骚基地
+    script(src="#{publicPath}/js/jquery-3.2.1.min.js")
+    script(src="#{publicPath}/js/qrcode.min.js")
+    script(src="#{publicPath}/js/play.js")
+    link(rel='stylesheet', href='#{publicPath}/css/out/bootstrap.min.css')
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+  body
+    .container
+      .row
+        div(style='height:100px')
+      .row
+        .col-xs-2
+        .col-xs-10
+          input#str(placeholder='输入你想说的话')
+          button#make 确定
+          .row
+            col-xs-4
+          div(style='text-align:center')
+          div(style='width:200px;height:200px;margin-top:15px;')#qrcode

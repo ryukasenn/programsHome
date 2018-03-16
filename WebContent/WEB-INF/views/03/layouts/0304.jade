@@ -1,0 +1,14 @@
+
+// 终端管理公共头部
+extends ../../personnelLayout
+
+block main
+    h2.page-header 人员管理
+    form.form-inline#controlForm
+        .form-group
+            button(type="button").btn.btn-default#receivePersons 查看当前人员信息
+            |&nbsp&nbsp
+        block buttons
+    .row.col-xs-6.col-sm-6
+        h2.page-header
+    block contents

@@ -1,0 +1,19 @@
+
+
+div(role="dialog", aria-labelledby="0302ModalLabel", tabindex="-1").modal.fade#0302Modal
+    .modal-dialog.modal-lg(role="document")
+        .modal-content
+            .modal-header
+                button.close(data-dismiss="modal",type="button")
+                    span(aria-hidden="true") &times;
+                h5.modal-title
+            .modal-body
+                .bodyForm
+                    form.form-inline                        
+                        input.form-control(type="text",placeholder='输入姓名查询')#searchName
+                        |&nbsp&nbsp
+                        button(type="button").btn.btn-primary#searchResper 搜索
+                .bodyTable
+            .modal-footer
+                button(type="button", data-dismiss="modal").btn.btn-default 关闭
+                button(type="button").btn.btn-primary#searchConfirm 确定

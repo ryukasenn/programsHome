@@ -1,0 +1,22 @@
+
+// 角色管理添加页面
+extends ./layouts/0104
+
+block contents
+    .row
+        h4.page-header.col-md-6.col-sm-6 添加角色
+    .row
+        form(action="#{myPath}/sys/rmAddRole", method="POST")#controlForm
+            .col-xs-2.col-sm-2
+                .form-group
+                    label(for="NBPT_RSFZ_ROLE_NAME").sr-only
+                    input.form-control#NBPT_RSFZ_ROLE_NAME(type="text", placeHolder="请输入角色名称",name="NBPT_RSFZ_ROLE_NAME")
+            .col-xs-3.col-sm-3
+                .form-group
+                    label(for="NBPT_RSFZ_ROLE_BZ").sr-only
+                    input.form-control#NBPT_RSFZ_ROLE_BZ(type="text", placeHolder="请输入角色描述",name="NBPT_RSFZ_ROLE_BZ")
+            .col-xs-1.col-sm-1
+                .form-group
+                    button.btn.btn-defult(type="submit") 添加
+block pageId
+    p(style="display:none") 01040201

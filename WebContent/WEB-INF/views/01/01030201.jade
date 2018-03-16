@@ -1,0 +1,51 @@
+
+extends ./layouts/0103
+
+block contents
+    .row
+        h4.page-header.col-md-6.col-sm-6 添加用户
+    .row
+        form(action="#{myPath}/sys/ruAddUser", method="POST")#controlForm
+            .row
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_NAME") 用户ID
+                        input.form-control#RSFZUSER_ID(type="text",name="newUserId")
+            .row
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 用户名称
+                        input.form-control#RSFZUSER_NAME(type="text", placeHolder="请输入用户名称",name="newUserName")
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 用户密码
+                        input.form-control#RSFZUSER_PASSWORD(type="password", placeHolder="请输入用户密码",name="newUserPassword")
+            .row
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 用户所属角色
+                        select.form-control(name="newUserRid")#newUserRid
+                            each role in roleSelects
+                                option(value="#{role.NBPT_RSFZ_ROLE_ID}")= role.NBPT_RSFZ_ROLE_NAME
+            .row
+                .col-md-1.col-sm-1 
+                    button.btn.btn-default(type="button",data-toggle="collapse",data-target="#extra", aria-expanded="false",aria-controls="extra")
+                        span.glyphicon.glyphicon-plus(aria-hidden="true")
+                .col-md-4.col-sm-4
+                    .form-group
+                        button.btn.btn-defult(type="submit") 添加
+            .row.collapse#extra
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 电话
+                        input.form-control#RSFZUSER_PHONE(type="text", placeHolder="请输入用户电话号码",name="newUserPhone")
+                .col-md-4.col-sm-4
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 邮件
+                        input.form-control#RSFZUSER_EMALL(type="text", placeHolder="请输入用户邮件地址",name="newUserEmall")
+                .col-md-12.col-sm-12
+                    .form-group
+                        label(for="NBPT_RSFZ_ROLE_BZ") 备注描述
+                        input.form-control#RSFZUSER_BZ(type="text", placeHolder="请输入备注描述",name="newUserBz")
+block pageId
+    p(style="display:none") 01030201

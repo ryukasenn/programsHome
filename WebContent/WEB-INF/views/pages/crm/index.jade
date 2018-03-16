@@ -1,0 +1,19 @@
+doctype html
+html
+  head
+    title= pageName
+    script(src="#{publicPath}/js/jquery-3.2.1.min.js")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel='stylesheet', href='#{publicPath}/css/out/bootstrap.min.css')
+  body
+    .container
+      .row
+        .col-xs-12.col-md-12
+          h1
+            p 功能目录
+          h3
+            a(href='#{publicPath}/api/new') 建立新客户
+          h3
+            a(href='#') 维护旧客户
+          h3
+            a(href='#{publicPath}/test') 测试页面

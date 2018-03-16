@@ -1,0 +1,14 @@
+
+// 人员管理首页(地总)
+extends ./layouts/0304
+    
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#addTerminal 添加下级人员
+        |&nbsp&nbsp
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    
+block pageId
+    p(style="display:none") 03040101
+    
