@@ -236,9 +236,10 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	
 	/**
 	 * 获取地区下辖区县划分页面
+	 * @throws Exception 
 	 */
 	@Override
-	public ModelAndView getCheckXzqxs(RegionsPojo in) {
+	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
 		
 		try {
 			
