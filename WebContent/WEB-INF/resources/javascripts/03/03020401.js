@@ -7,7 +7,7 @@ $(function(){
 		
 		$_this = $(this);		
 
-		createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '2'}, '地总名单');
+		createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '22'}, '地总名单');
 	});
 
 	
@@ -17,7 +17,7 @@ $(function(){
 			
 		} else {
 			
-			createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '2', searchName : $('#searchName').val().trim()}, '地总名单');
+			createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '22', searchName : $('#searchName').val().trim()}, '地总名单');
 		}
 	});
 	

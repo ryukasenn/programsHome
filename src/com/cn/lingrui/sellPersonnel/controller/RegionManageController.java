@@ -67,6 +67,12 @@ public class RegionManageController {
 	}
 	
 
+	/**
+	 * 获取地区划分页面
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/checkXzqxs", method = RequestMethod.POST)
 	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
 
