@@ -23,7 +23,7 @@ block contents
                         .panel.panel-default
                             .panel-heading 
                                 |下辖市区县列表(
-                                |<button class="btn btn-link" name="add">添加</button>
+                                |<button class="btn btn-link add">添加</button>
                                 |)
                             table.table
                                 tr
@@ -44,9 +44,12 @@ block contents
                                         th.col-xs-4.col-sm-4= item.NBPT_COMMON_XZQXHF_PNAME
                                         th.col-xs-4.col-sm-4= item.NBPT_COMMON_XZQXHF_NAME
                                         th.col-xs-3.col-sm-3 
-                                            |<button class="btn btn-link" name="add" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
-                                    
-                        
-                            
+                                            |<button class="btn btn-link delete"  value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/03020501.js")
+    
+block modal
+    include includes/030205Modal
+    
 block pageId
     p(style="display:none") 03020501

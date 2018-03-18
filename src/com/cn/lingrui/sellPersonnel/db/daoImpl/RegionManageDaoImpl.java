@@ -251,4 +251,23 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 		}
 	}
 
+	/**
+	 * 添加地区下辖区县时获取添加下拉表方法
+	 */
+	@Override
+	public List<NBPT_COMMON_XZQXHF> receiveAreaContainSelects(String parentId, Connection connection) throws SQLException {
+
+		try {
+			
+			List<NBPT_COMMON_XZQXHF> resultList = this.getXzqxhfs(parentId, connection);
+			
+			return resultList;
+			
+		} catch (SQLException e) {
+			
+			log.error("查询本地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
 }

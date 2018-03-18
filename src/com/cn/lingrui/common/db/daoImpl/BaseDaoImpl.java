@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.db.dao.BaseDao;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
+import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
 
@@ -201,6 +202,36 @@ public class BaseDaoImpl implements BaseDao{
 		} catch (Exception e) {
 			
 			log.info("获取字典表出错");
+			throw new SQLException();
+		}
+	}
+	
+	@Override
+	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer("SELECT * FROM NBPT_COMMON_XZQXHF ");
+		
+		// 如果是省份列表
+		if(null == parentId || "".equals(parentId)) {
+			
+			sql.append("WHERE NBPT_COMMON_XZQXHF_PID = '1' ");
+		} 
+		
+		// 非省份列表,要根据上级ID查询
+		else {
+			
+			sql.append("WHERE NBPT_COMMON_XZQXHF_PID = '" + parentId + "' ");
+		}
+		
+		sql.append("ORDER BY NBPT_COMMON_XZQXHF_ID ASC ");
+		try {
+			
+			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql.toString(), conn, NBPT_COMMON_XZQXHF.class);
+			
+			return resultList;
+		} catch (SQLException e) {
+			
+			log.info("查询行政区县划分出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}

@@ -293,4 +293,29 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	}
 	
 
+	/**
+	 * 添加地区下辖区县时获取添加下拉表方法
+	 */
+	@Override
+	public String receiveAreaContainSelects(String parentId) throws Exception {
+		
+		try {
+			
+			this.before();
+				
+				List<NBPT_COMMON_XZQXHF> resultList = regionManageDao.receiveAreaContainSelects(parentId, this.getConnection());
+				
+				resultList.add(0, new NBPT_COMMON_XZQXHF());
+				JSONArray ja = JSONArray.fromObject(resultList);
+		
+				return this.after(ja.toString());
+			
+		} catch (Exception e) {
+			
+			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+
 }

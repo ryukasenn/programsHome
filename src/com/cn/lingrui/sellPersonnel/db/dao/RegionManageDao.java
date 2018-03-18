@@ -33,4 +33,7 @@ public interface RegionManageDao {
 
 	public List<CurrentRegion> receiveRegion_Xzqxs(String regionUid, Connection connection) throws SQLException;
 
+	public List<NBPT_COMMON_XZQXHF> receiveAreaContainSelects(String parentId, Connection connection) throws SQLException;
+	
+
 }

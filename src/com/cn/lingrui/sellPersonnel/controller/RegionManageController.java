@@ -127,6 +127,21 @@ public class RegionManageController {
 		return jsonData;
 	}
 	
+	/**
+	 * 获取区县信息下拉框
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveAreaContainSelects")
+	public String receiveProvinceSelect(String parentId) throws Exception {
+		
+		String jsonData = regionManageService.receiveAreaContainSelects(parentId);
+		
+		return jsonData;
+	}
+	
 }
 
 
