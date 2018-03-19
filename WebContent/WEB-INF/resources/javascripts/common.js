@@ -58,7 +58,7 @@
 	 */
 	function necessaryCheck(inputNames, radioNames, selectNames){
 		
-		if(undefined == inputNames){
+		if(undefined == inputNames || null == inputNames){
 			
 		} else {
 			// 遍历必须check列表names
@@ -79,7 +79,7 @@
 			}
 		}
 		
-		if(undefined == radioNames){
+		if(undefined == radioNames || null == radioNames){
 			
 		} else {
 			
@@ -101,7 +101,7 @@
 			}
 		}
 		
-		if(undefined == selectNames){
+		if(undefined == selectNames || null == selectNames){
 			
 		} else {
 			

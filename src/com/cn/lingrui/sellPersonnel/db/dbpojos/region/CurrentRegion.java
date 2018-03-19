@@ -2,6 +2,7 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos.region;
 
 public class CurrentRegion {
 
+	// 当前部门划分
 	private String NBPT_SP_REGION_UID; // 自动生成
 	private String NBPT_SP_REGION_ID; // 部门ID
 	private String NBPT_SP_REGION_NAME; // 部门名称   
@@ -9,7 +10,7 @@ public class CurrentRegion {
 	private String NBPT_SP_REGION_RESPONSIBLER; // 部门负责人   
 	private String NBPT_SP_REGION_LEVEL; // 部门级别   
 	private String NBPT_SP_REGION_NOTE; // 备注
-	private String NBPT_SP_PERSON_NAME; // 人员名称
+	private String NBPT_SP_PERSON_NAME; // 负责人名称
 	
 	
 	// 地区管理,下辖市区县划分

@@ -5,12 +5,13 @@ import java.util.Map;
 
 import com.cn.lingrui.common.pojos.BasePojoOut;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public class SellPersonnelPojoOut extends BasePojoOut{
 
 	private String loginDeptId; // 登录人员所在部门
 	
-	private NBPT_SP_PERSON person; // 登录人员信息
+	private CurrentPerson person; // 登录人员信息
 	
 	private Map<String, List<NBPT_SP_PERSON>> resultMap; // 页面显示列表
 	
@@ -24,11 +25,11 @@ public class SellPersonnelPojoOut extends BasePojoOut{
 		this.loginDeptId = loginDeptId;
 	}
 
-	public NBPT_SP_PERSON getPerson() {
+	public CurrentPerson getPerson() {
 		return person;
 	}
 
-	public void setPerson(NBPT_SP_PERSON person) {
+	public void setPerson(CurrentPerson person) {
 		this.person = person;
 	}
 

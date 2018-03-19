@@ -2,7 +2,7 @@ extends ./layouts/0106
 
 block contents
     .row.placeholders
-        .col-xs-10.col-sm-10.placeholder
+        .col-xs-12.col-sm-12.placeholder
             .panel.panel-default
                 .panel-heading
                     |页面列表(
@@ -13,7 +13,7 @@ block contents
                         th.col-xs-1.col-sm-1 #
                         th.col-xs-1.col-sm-1 功能ID
                         th.col-xs-1.col-sm-1 页面ID
-                        th.col-xs-1.col-sm-1 页面名称
+                        th.col-xs-2.col-sm-2 页面名称
                         th.col-xs-3.col-sm-3 页面描述
                         th.col-xs-2.col-sm-2 操作
                     each func,i in funcs
@@ -21,7 +21,7 @@ block contents
                             th.col-xs-1.col-sm-1(scope="row")= i+1
                             td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_PID
                             td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_ID
-                            td.col-xs-1.col-sm-1= func.NBPT_RSFZ_PAGE_NAME
+                            td.col-xs-2.col-sm-2= func.NBPT_RSFZ_PAGE_NAME
                             td.col-xs-3.col-sm-3= func.NBPT_RSFZ_PAGE_BZ
                             td.col-xs-2.col-sm-2 
                                 button.btn.btn-link(name="update") 修改

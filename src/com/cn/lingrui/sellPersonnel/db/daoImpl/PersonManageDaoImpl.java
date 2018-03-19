@@ -25,13 +25,17 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	private static Logger log = LogManager.getLogger();	
 
 	@Override
-	public NBPT_SP_PERSON receiveCurrentPerson(String userId, Connection conn) throws SQLException {
+	public CurrentPerson receiveCurrentPerson(String userId, Connection conn) throws SQLException {
 		
-		String sql = "SELECT * FROM NBPT_SP_PERSON WHERE NBPT_SP_PERSON_LOGINID = '" + userId + "'";
+		String sql = "SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED "
+				+ "FROM NBPT_SP_PERSON A "
+				+ "LEFT JOIN NBPT_SP_REGION B "
+				+ "ON A.NBPT_SP_PERSON_PID = B.NBPT_SP_REGION_RESPONSIBLER "
+				+ "WHERE NBPT_SP_PERSON_LOGINID = '" + userId + "'";
 		
 		try {
 			
-			NBPT_SP_PERSON resultList = this.oneQuery(sql, conn, NBPT_SP_PERSON.class);
+			CurrentPerson resultList = this.oneQuery(sql, conn, CurrentPerson.class);
 			
 			return resultList;
 			
@@ -177,11 +181,6 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		
 	}
 
-	@Override
-	public List<CurrentPerson> receiveCurrentTerminals(String deptId, Connection conn) throws SQLException {
-		// TODO 自动生成的方法存根
-		return null;
-	}
 
 	@Override
 	public List<NBPT_SP_REGION> getRegions(Object object, Connection conn) throws SQLException {
@@ -217,7 +216,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	}
 
 	@Override
-	public List<CurrentPerson> receiveCurrentPersonInfos(NBPT_SP_PERSON nbpt_SP_PERSON, Connection connection) throws SQLException {
+	public List<CurrentPerson> receiveCurrentPersonInfos(CurrentPerson nbpt_SP_PERSON, Connection connection) throws SQLException {
 		
 		List<CurrentPerson> persons = new ArrayList<>();
 		
@@ -239,22 +238,21 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			// 如果登录人员的JOB是2,则是地总,查询该地总下的所有人员
 			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				
-				String sql =  "SELECT A.NBPT_SP_PERSON_NAME,C.NBPT_COMMON_DICTIONARY_KEY_NAME AS NBPT_SP_PERSON_TYPE,"
-							+ "A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB,"
-							+ "CASE A.NBPT_SP_PERSON_MALE "
-							+ "    WHEN '0' THEN '女' "
-							+ "    WHEN '1' THEN '男' "
-							+ "    END AS NBPT_SP_PERSON_MALE,"
-							+ "A.NBPT_SP_PERSON_ENTRYDATA,A.NBPT_SP_PERSON_PLACE,A.NBPT_SP_PERSON_DEGREE,"
-							+ "DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE,"
-							+ "DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE "
-							+ "FROM NBPT_SP_PERSON A "
-							+ "LEFT JOIN NBPT_SP_REGION B "
-							+ "ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID "
-							+ "LEFT JOIN NBPT_COMMON_DICTIONARY C "
-							+ "ON A.NBPT_SP_PERSON_TYPE = C.NBPT_COMMON_DICTIONARY_KEY_VALUE "
-							+ "WHERE B.NBPT_SP_REGION_RESPONSIBLER = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "' "
-							+ "AND C.NBPT_COMMON_DICTIONARY_KEY = 'SAILTYPE'";
+				String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE," + 
+							"  A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB," + 
+							"  CASE A.NBPT_SP_PERSON_MALE     " + 
+							"	WHEN '0' THEN '女'     " + 
+							"	WHEN '1' THEN '男'     " + 
+							"	END AS NBPT_SP_PERSON_MALE," + 
+							"  A.NBPT_SP_PERSON_ENTRYDATA," + 
+							"  A.NBPT_SP_PERSON_PLACE," + 
+							"  A.NBPT_SP_PERSON_DEGREE," + 
+							"  A.NBPT_SP_PERSON_PID," + 
+							"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE," + 
+							"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
+							"  FROM NBPT_SP_PERSON A " + 
+							"  WHERE A.NBPT_SP_PERSON_DEPT_ID = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_DEPT_ID() + "' " + 
+							"  AND A.NBPT_SP_PERSON_PID <> '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "'";
 	
 				persons = this.query(sql, connection, CurrentPerson.class);
 			}
@@ -284,13 +282,17 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 
 		try {
 	
-			String sql =  "SELECT A.NBPT_SP_REGION_NAME AS AREANAME, A.NBPT_SP_REGION_ID AS AREAID "
-						+ "FROM NBPT_SP_REGION A "
-						+ "LEFT JOIN NBPT_SP_PERSON_REGION B "
-						+ "ON B.NBPT_SP_PERSON_REGION_RID = A.NBPT_SP_REGION_UID "
-						+ "LEFT JOIN NBPT_SP_PERSON C "
-						+ "ON B.NBPT_SP_PERSON_REGION_PID = C.NBPT_SP_PERSON_PID "
-						+ "WHERE C.NBPT_SP_PERSON_LOGINID = '" + loginId + "'";
+			String sql ="  SELECT D.*" + 
+						"  FROM NBPT_SP_REGION_XZQX A" + 
+						"  LEFT JOIN NBPT_SP_REGION B" + 
+						"  ON A.NBPT_SP_REGION_XZQX_REGIONID = B.NBPT_SP_REGION_ID" + 
+						"  LEFT JOIN NBPT_SP_PERSON C" + 
+						"  ON B.NBPT_SP_REGION_RESPONSIBLER = C.NBPT_SP_PERSON_PID" + 
+						"  LEFT JOIN NBPT_COMMON_XZQXHF D" + 
+						"  ON A.NBPT_SP_REGION_XZQX_XZQXID = D.NBPT_COMMON_XZQXHF_ID" + 
+						"  WHERE C.NBPT_SP_PERSON_LOGINID = '" + loginId + "'" + 
+						"  AND A.NBPT_SP_REGION_XZQX_TYPE = '22'";
+			
 			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return resultList;
 		} catch (SQLException e) {
@@ -298,45 +300,6 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			log.info("添加管理区域出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
-		
-	}
-
-	@Override
-	public String receiveTerminalDeptId(List<NBPT_SP_PERSON_XZQX> reposAreas, Connection connection) throws SQLException {
-
-		try {
-			StringBuffer sql = new StringBuffer(  "SELECT DISTINCT NBPT_SP_REGION_XZQX_REGIONID "
-												+ "FROM NBPT_SP_REGION_XZQX "
-												+ "WHERE NBPT_SP_REGION_XZQX_XZQXID IN (");
-			for(int i = 0; i < reposAreas.size(); i++){
-				if(i == reposAreas.size() - 1) {
-	
-					sql.append(reposAreas.get(i).getNBPT_SP_PERSON_XZQX_XID() + ")");
-				}else {
-	
-					sql.append(reposAreas.get(i).getNBPT_SP_PERSON_XZQX_XID() + ",");
-				}
-			}
-			
-			List<CurrentPerson> TerminalDeptId = this.query(sql.toString(), connection, CurrentPerson.class);
-			
-			if(TerminalDeptId.size() == 1) {
-
-				return TerminalDeptId.get(0).getNBPT_SP_REGION_XZQX_REGIONID();
-			} else {
-				
-				return "";
-			}
-		} catch (SQLException e) {
-			
-			log.info("添加管理区域出错" + CommonUtil.getTrace(e));
-			throw new SQLException();
-		}
-	}
-
-	@Override
-	public void addPersonRegion(String nbpt_SP_PERSON_REGION, Connection connection) {
-		// TODO 自动生成的方法存根
 		
 	}
 
@@ -356,6 +319,89 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		} catch (SQLException e) {
 			
 			log.info("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_COMMON_XZQXHF> getTerminalResponsXzqx(String terminalId, Connection connection) throws SQLException {
+
+
+		try {
+			String sql =  "  SELECT A.*" + 
+							"  FROM NBPT_COMMON_XZQXHF A" + 
+							"  LEFT JOIN NBPT_SP_PERSON_XZQX B" + 
+							"  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_PERSON_XZQX_XID" + 
+							"  LEFT JOIN NBPT_SP_PERSON C" + 
+							"  ON B.NBPT_SP_PERSON_XZQX_PID = C.NBPT_SP_PERSON_ID" + 
+							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'";
+			
+			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+		
+			return resultList;
+		} catch (SQLException e) {
+			
+			log.info("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void addTerminalDeptId(String pid, String regionId, Connection connection) throws SQLException {
+
+		try {
+			String sql =  "INSERT NBPT_SP_PERSON_REGION VALUES ("
+						+ "'" + CommonUtil.getUUID_32() + "',"
+						+ "'" + pid + "',"
+						+ "'" + regionId + "',"
+						+ "'2')";
+			
+			this.excuteUpdate(sql, connection);
+		
+		} catch (SQLException e) {
+			
+			log.info("添加终端人员的部门信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+		
+	}
+
+	@Override
+	public NBPT_SP_REGION getTerminalDeptInfo(String terminalId, Connection connection) throws SQLException {
+
+		try {
+			String sql =  "  SELECT A.*" + 
+							"  FROM NBPT_COMMON_XZQXHF A" + 
+							"  LEFT JOIN NBPT_SP_PERSON_XZQX B" + 
+							"  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_PERSON_XZQX_XID" + 
+							"  LEFT JOIN NBPT_SP_PERSON C" + 
+							"  ON B.NBPT_SP_PERSON_XZQX_PID = C.NBPT_SP_PERSON_ID" + 
+							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'";
+			
+			NBPT_SP_REGION resultList = this.oneQuery(sql, connection, NBPT_SP_REGION.class);
+		
+			return resultList;
+		} catch (SQLException e) {
+			
+			log.info("获取终端人员的部门信息" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public CurrentPerson receiveCurrentTerminal(String changePersonPid, Connection connection) throws SQLException {
+
+		try {
+			String sql =  "  SELECT * "
+						+ "  FROM NBPT_SP_PERSON "
+						+ "  WHERE NBPT_SP_PERSON_PID = '" + changePersonPid + "'";
+			
+			CurrentPerson person;
+			person = this.oneQuery(sql, connection, CurrentPerson.class);
+			return person;
+		} catch (SQLException e) {
+			
+			log.info("获取终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}

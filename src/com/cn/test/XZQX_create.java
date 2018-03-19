@@ -17,6 +17,7 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 
@@ -62,9 +63,37 @@ public class XZQX_create {
 		//this.addNeed();
 		
 		// 添加地区省份对应关系
-		this.addArea_Province();
+		//this.addArea_Province();
+		
+		// 添加负责人和部门关系列表
+		this.addResponseble();
 	}
 	
+	private void addResponseble() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_RESPONSIBLER <> ''");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询河南区县划分
+		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs1);
+		
+		List<String> sqls = new ArrayList<>();
+		for(NBPT_SP_REGION personRegion : resultList) {
+			
+			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
+						  "WHERE NBPT_SP_PERSON_PID = '" + personRegion.getNBPT_SP_REGION_RESPONSIBLER() + "'";
+			sqls.add(sql);			
+		}
+		Statement stmt;
+		stmt = conn.createStatement();
+		for(String sql : sqls) {
+			stmt.addBatch(sql);
+		}
+
+		stmt.executeBatch();
+	}
 	private void addArea_Province() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
@@ -73,7 +102,7 @@ public class XZQX_create {
 		ResultSet rs1 = ps1.executeQuery();
 		
 		// 查询河南区县划分
-		List<NBPT_SP_REGION_XZQX> resultList = this.rsToBean(NBPT_SP_REGION_XZQX.class, rs1);
+		List<NBPT_SP_REGION_XZQX> resultList = XZQX_create.rsToBean(NBPT_SP_REGION_XZQX.class, rs1);
 		
 		List<String> sqls = new ArrayList<>();
 		for(NBPT_SP_REGION_XZQX xzqx : resultList) {
@@ -105,12 +134,12 @@ public class XZQX_create {
 //		ResultSet rs1 = ps1.executeQuery();
 //		
 //		// 查询河南区县划分
-//		List<NBPT_COMMON_XZQXHF> resultList = this.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
+//		List<NBPT_COMMON_XZQXHF> resultList = XZQX_create.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
 //		
 //		PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION where NBPT_SP_REGION_ID LIKE '11%'");
 //		ResultSet rs2 = ps2.executeQuery();
 		
-		//List<NBPT_SP_REGION> regionList = this.rsToBean(NBPT_SP_REGION.class, rs2);
+		//List<NBPT_SP_REGION> regionList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs2);
 
 		try {
 			
@@ -178,12 +207,12 @@ public class XZQX_create {
 		ResultSet rs1 = ps1.executeQuery();
 		
 		// 查询河南区县划分
-		List<NBPT_COMMON_XZQXHF> resultList = this.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
+		List<NBPT_COMMON_XZQXHF> resultList = XZQX_create.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
 		
 		PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION where NBPT_SP_REGION_ID LIKE '11%'");
 		ResultSet rs2 = ps2.executeQuery();
 		
-		//List<NBPT_SP_REGION> regionList = this.rsToBean(NBPT_SP_REGION.class, rs2);
+		//List<NBPT_SP_REGION> regionList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs2);
 
 		try {
 			
@@ -227,7 +256,7 @@ public class XZQX_create {
 		ResultSet rs = null;
 		ps = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION where NBPT_SP_REGION_RESPONSIBLER <> '' ");
 		rs = ps.executeQuery();
-		List<NBPT_SP_REGION> resultList = this.rsToBean(NBPT_SP_REGION.class, rs);
+		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs);
 		
 		try {
 			
@@ -265,7 +294,7 @@ public class XZQX_create {
 		ResultSet rs = null;
 		ps = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON where DATALENGTH(NBPT_SP_PERSON_DEPT_ID) = 6 ORDER BY NBPT_SP_PERSON_ID");
 		rs = ps.executeQuery();
-		List<NBPT_SP_PERSON> resultList = this.rsToBean(NBPT_SP_PERSON.class, rs);
+		List<NBPT_SP_PERSON> resultList = XZQX_create.rsToBean(NBPT_SP_PERSON.class, rs);
 
 		try {
 			
@@ -350,7 +379,7 @@ public class XZQX_create {
 				ResultSet rs = null;
 		ps = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON ORDER BY NBPT_SP_PERSON_ID");
 		rs = ps.executeQuery();
-		List<NBPT_SP_PERSON> resultList = this.rsToBean(NBPT_SP_PERSON.class, rs);
+		List<NBPT_SP_PERSON> resultList = XZQX_create.rsToBean(NBPT_SP_PERSON.class, rs);
 		
 		try {
 			
@@ -428,7 +457,7 @@ public class XZQX_create {
 				ResultSet rs = null;
 		ps = conn.prepareStatement("SELECT * FROM NBPT_COMMON_XZQXHF ORDER BY NBPT_COMMON_XZQXHF_ID");
 		rs = ps.executeQuery();
-		List<XZQXPOJO> resultList = this.rsToBean(XZQXPOJO.class, rs);
+		List<XZQXPOJO> resultList = XZQX_create.rsToBean(XZQXPOJO.class, rs);
 		try {
 			
 			if(!targetFile.exists()) {

@@ -36,6 +36,7 @@ public class CurrentPerson {
 	private String NBPT_SP_REGION_XZQX_REGIONID; // 部门ID
 	private String NBPT_SP_PERSON_WORKAGE; // 工龄
 	private String NBPT_SP_REGION_NAME; // 大区名称
+	private String NBPT_SP_REGION_NEED; // 人员配额
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
 	}
@@ -239,6 +240,12 @@ public class CurrentPerson {
 	}
 	public void setNBPT_SP_REGION_NAME(String nBPT_SP_REGION_NAME) {
 		NBPT_SP_REGION_NAME = nBPT_SP_REGION_NAME;
+	}
+	public String getNBPT_SP_REGION_NEED() {
+		return NBPT_SP_REGION_NEED;
+	}
+	public void setNBPT_SP_REGION_NEED(String nBPT_SP_REGION_NEED) {
+		NBPT_SP_REGION_NEED = nBPT_SP_REGION_NEED;
 	}
 	
 }

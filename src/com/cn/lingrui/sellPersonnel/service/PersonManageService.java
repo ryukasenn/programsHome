@@ -20,4 +20,8 @@ public interface PersonManageService {
 
 	public String receiveAreasSelect(String areaId) throws Exception;
 
+	public ModelAndView getChangePerson(String changePersonPid) throws Exception;
+
+	public String receiveTerminalXzqx(String areaId) throws Exception;
+
 }

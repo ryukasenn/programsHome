@@ -34,7 +34,7 @@ $(function(){
 	})
 	
 	/**
-	 * 查看当前终端点击事件
+	 * 查看部门划分点击事件
 	 */
 	$("#receiveRegions").on("click", function(){
 		
@@ -73,26 +73,13 @@ function createModal(url, data, title){
 		}else {
 			$('.bodyTable').empty();
 			$('.modal-title').html(title);
-			var $_table = $("<div>" +
-								"<table class='table'>" +
-									"<colgroup>" +
-										"<col class='col-xs-1 col-sm-1'/>" +
-										"<col class='col-xs-2 col-sm-2'/>" +
-									"</colgroup>" +
-									"<tr style='text-align:center'>" +
-										"<td>#</td>" +
-										"<td>姓名</td>" +
-									"</tr>" +
-								"</table>" +
-							"</div>" +
-							"<div style='overflow-x: auto; overflow-y: auto; height: 300px;' >" +
+			var $_table = $(
 								"<table class='table tableBody'>" +
 									"<colgroup>" +
 										"<col class='col-xs-1 col-sm-1'/>" +
 										"<col class='col-xs-2 col-sm-2'/>" +
 									"</colgroup>" +
-								"</table>" +
-							"</div>").appendTo($('.bodyTable'));
+								"</table>").appendTo($('.bodyTable'));
 			
 			for(var i = 0; i < jsonData.length; i++){
 				

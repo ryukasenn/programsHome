@@ -26,7 +26,7 @@ public class AddPersonPojoIn {
 	private String NBPT_SP_PERSON_NOTE; // 备注
 	private String NBPT_SP_PERSON_TITLE; // 职称
 	private String NBPT_SP_PERSON_LOGINID; // 登录名
-	private String NBPT_SP_PERSON_DEPT_ID; // 区域编号
+	private String NBPT_SP_PERSON_DEPT_ID; // 部门编号
 	private String NBPT_SP_PERSON_AREA_ID; // 区域编号
 	private String NBPT_SP_PERSON_REGION; // 所属部门
 	public String getNBPT_SP_PERSON_NAME() {

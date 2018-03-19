@@ -51,9 +51,11 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 
 			List<CurrentRegion> resultList = null;
 
-			String sql = "SELECT R.*,P.NBPT_SP_PERSON_NAME " + "FROM NBPT_SP_REGION R " + "LEFT JOIN NBPT_SP_PERSON P "
-					+ "ON R.NBPT_SP_REGION_RESPONSIBLER = P.NBPT_SP_PERSON_PID ";
-			sql += " WHERE 1=1 ";
+			StringBuffer sql = new StringBuffer("  SELECT A.* , B.NBPT_SP_PERSON_NAME" + 
+												"  FROM NBPT_SP_REGION A" + 
+												"  LEFT JOIN NBPT_SP_PERSON B" + 
+												"  ON A.NBPT_SP_REGION_RESPONSIBLER = B.NBPT_SP_PERSON_PID" + 
+												"  WHERE 1 = 1");
 
 			if ("".equals(pojo.getRegionName())) {
 
@@ -61,18 +63,18 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 
 				String regionName = pojo.getRegionName();
 				String regionId = regionName.substring(0, 2);
-				sql += " AND NBPT_SP_REGION_ID LIKE '" + regionId + "%' ";
+				sql.append("  AND NBPT_SP_REGION_ID LIKE '" + regionId + "%'");
 			}
 
 			if ("1".equals(pojo.getTypeRadio())) {
 
-				sql += " AND NBPT_SP_REGION_LEVEL = '1' ";
+				sql.append("  AND NBPT_SP_REGION_LEVEL = '1'");
 
 			} else if ("2".equals(pojo.getTypeRadio())) {
 
 			}
 
-			resultList = this.query(sql + " ORDER BY NBPT_SP_REGION_ID ASC ", conn, CurrentRegion.class);
+			resultList = this.query(sql.toString() + " ORDER BY NBPT_SP_REGION_ID ASC ", conn, CurrentRegion.class);
 
 			return resultList;
 		} catch (SQLException e) {

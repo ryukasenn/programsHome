@@ -58,6 +58,47 @@ public class PersonManageController {
 	}
 	
 	/**
+	 * 修改终端页面获取
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/changePerson", method = RequestMethod.POST)
+	public ModelAndView getChangePerson(String changePersonPid) throws Exception {
+
+		ModelAndView mv = personManageService.getChangePerson(changePersonPid);
+
+		return mv;
+	}
+	
+//	/**
+//	 * 添加终端负责区域页面获取
+//	 * @param in
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	@RequestMapping(value = "/addTerminalRespons", method = RequestMethod.GET)
+//	public ModelAndView getAddTerminalRespons(String parentId, String terminalId) throws Exception {
+//
+//		ModelAndView mv = personManageService.getAddTerminalRespons(parentId, terminalId);
+//
+//		return mv;
+//	}
+//	
+//	/**
+//	 * 添加终端负责区域页面获取
+//	 * @param in
+//	 * @return
+//	 * @throws Exception
+//	 */
+//	@RequestMapping(value = "/addTerminalRespons", method = RequestMethod.POST)
+//	public ModelAndView postAddTerminalRespons(AddPersonPojoIn in) throws Exception {
+//
+//		ModelAndView mv = personManageService.postAddTerminalRespons(in);
+//
+//		return mv;
+//	}
+	/**
 	 * 获取负责区域下拉框
 	 * @param parentId
 	 * @return
@@ -87,11 +128,18 @@ public class PersonManageController {
 		return jsonData;
 	}
 	
-	
-	@RequestMapping(value = "/supportAdd", method = RequestMethod.GET)
-	public ModelAndView getSupportAdd() throws Exception {
-
-		ModelAndView mv = personManageService.getSupportAdd();
-		return mv;
+	/**
+	 * 获取终端负责区域列表
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveTerminalXzqx")
+	public String receiveTerminalXzqx(String TerminalId) throws Exception {
+		
+		String jsonData = personManageService.receiveTerminalXzqx(TerminalId);
+		
+		return jsonData;
 	}
 }

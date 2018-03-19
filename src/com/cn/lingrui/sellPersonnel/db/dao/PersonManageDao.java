@@ -13,9 +13,7 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public interface PersonManageDao extends BaseDao{
 
-	public NBPT_SP_PERSON receiveCurrentPerson(String userId, Connection conn) throws SQLException ;
-
-	public List<CurrentPerson> receiveCurrentTerminals(String deptId, Connection conn) throws SQLException ;
+	public CurrentPerson receiveCurrentPerson(String userId, Connection conn) throws SQLException ;
 
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection connection) throws SQLException ;
 
@@ -27,14 +25,18 @@ public interface PersonManageDao extends BaseDao{
 	
 	public void addReposeAreas(List<NBPT_SP_PERSON_XZQX> reponseAreas, Connection conn) throws SQLException;
 
-	public List<CurrentPerson> receiveCurrentPersonInfos(NBPT_SP_PERSON nbpt_SP_PERSON, Connection connection) throws SQLException;
+	public List<CurrentPerson> receiveCurrentPersonInfos(CurrentPerson nbpt_SP_PERSON, Connection connection) throws SQLException;
 
 	public List<NBPT_COMMON_XZQXHF> getAreaSelects(String loginId, Connection connection) throws SQLException;
 
-	public String receiveTerminalDeptId(List<NBPT_SP_PERSON_XZQX> reposAreas, Connection connection) throws SQLException;
-
-	public void addPersonRegion(String nbpt_SP_PERSON_REGION, Connection connection);
-
 	public List<NBPT_COMMON_XZQXHF> getAreasSelect(String areaId, Connection connection) throws SQLException;
+
+	public List<NBPT_COMMON_XZQXHF> getTerminalResponsXzqx(String terminalId, Connection connection) throws SQLException;
+
+	public void addTerminalDeptId(String pid, String regionId, Connection connection) throws SQLException;
+
+	public NBPT_SP_REGION getTerminalDeptInfo(String terminalId, Connection connection) throws SQLException;
+
+	public CurrentPerson receiveCurrentTerminal(String changePersonPid, Connection connection) throws SQLException;
 
 }

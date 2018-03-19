@@ -9,6 +9,18 @@ block buttons
 block contents
     .row.placeholders
         .col-xs-11.col-sm-11.placeholder
+            form#changePersonForm
+                input(type='hidden', name='changePersonPid')#changePersonPid
+            .form-horizontal
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 公司配额
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{thisNeed}', readOnly)
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 当前人员
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{thisInfact}', readOnly)
+        .col-xs-11.col-sm-11.placeholder
             .panel.panel-default
                 .panel-heading 名单列表
                 table.table-striped
@@ -28,7 +40,9 @@ block contents
                         each person,i in personInfos
                             tr(style="align:center") 
                                 th.col-xs-1.col-sm-1(scope="row")= i+1
-                                td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td.col-xs-1.col-sm-1
+                                    button.btn.btn-link.changePerson(value='#{person.NBPT_SP_PERSON_PID}')
+                                        #{person.NBPT_SP_PERSON_NAME}
                                 td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MALE
                                 td.col-xs-1.col-sm-1
                                     case person.NBPT_SP_PERSON_JOB

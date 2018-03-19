@@ -1,17 +1,41 @@
 $(function(){
 
+	if("" == $("#NBPT_SP_PERSON_PID").val()){
+
+	} else {
+		// 负责区域的单选框点击事件
+		AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalXzqx", {TerminalId : $("#NBPT_SP_PERSON_PID").val()},function(jsonData){
+						
+			$_copyParent = $(".reponseAreas");
+			
+			for(var i = 0; i < jsonData.length; i++){
+				
+				alert(jsonData[i].NBPT_COMMON_XZQXHF_ID);
+				if(0 == i){
+					$_copyParent.val(jsonData[i].NBPT_COMMON_XZQXHF_ID);
+				}
+				
+				else {
+					 $_copy = $_copyParent.clone().insertAfter($_copyParent);
+					 $_copy.find("select").val(jsonData[i].NBPT_COMMON_XZQXHF_ID);
+				}
+			}
+			
+		})
+	}
+	
+	
 	// 需要验证的输入框
-	var inputItems = new Array("NBPT_SP_PERSON_NAME",
-							   "NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_MOB1",
-							   "NBPT_SP_PERSON_MOB2","NBPT_SP_PERSON_ENTRYDATA",
-							   "NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_POLICYNO",
-							   "NBPT_SP_PERSON_POLICY_DATA1","NBPT_SP_PERSON_POLICY_DATA2");
+	var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_MOB1");
+//							   "NBPT_SP_PERSON_MOB2","NBPT_SP_PERSON_ENTRYDATA",
+//							   "NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_POLICYNO",
+//							   "NBPT_SP_PERSON_POLICY_DATA1","NBPT_SP_PERSON_POLICY_DATA2");
 	
 	// 需要验证的单选框
 	var radioItems = new Array("NBPT_SP_PERSON_MALE", "NBPT_SP_PERSON_JOB");
 	
 	// 需要验证的下拉框
-	var selectItems = new Array("NBPT_SP_PERSON_AREANO_PROVINCE","NBPT_SP_PERSON_AREANO_CITY","NBPT_SP_PERSON_AREANO_CONTY");
+	var selectItems = new Array("NBPT_SP_PERSON_DEPT_ID");//,"NBPT_SP_PERSON_AREANO_PROVINCE","NBPT_SP_PERSON_AREANO_CITY","NBPT_SP_PERSON_AREANO_CONTY");
 	
 	// 时间格式验证
 	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA", "NBPT_SP_PERSON_POLICY_DATA1", "NBPT_SP_PERSON_POLICY_DATA2");
@@ -32,21 +56,18 @@ $(function(){
 			if(null != selectValue && "" != selectValue ){
 				
 				areanos += selectValue + "&" ;
-			} else {
-				$(".reponseAreas").eq(i).addClass("has-error")
-				confirm("有必选项没有选择");
-				return ;
-			}
+			} 
 		}
 		
 		$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
-		$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
-//		if(necessaryCheck(inputItems,radioItems,selectItems)){
-//			
-//			$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
-//		} else {
-//			return;
-//		}
+		
+		// 输入框统一为空检验
+		if(necessaryCheck(inputItems,radioItems,null)){
+			
+			$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
+		} else {
+			return;
+		}
 	})
 
 	/**
@@ -60,7 +81,7 @@ $(function(){
 	})
 	
 	/**
-	 * 输入框的统一验证
+	 * 输入框统一去除错误提示
 	 */
 	$("input").on("focusout", function(){
 		
@@ -68,26 +89,37 @@ $(function(){
 		$_thisParent = $_this.parents(".form-group");
 		
 		if(-1 != inputItems.indexOf($_this.attr('name'))){
-			// 判断是否为空
+			
+			// 如果不为空
 			if("" != $_this.val().trim()){
 
 				// 身份证验证
-				if (idNumCheck($_this, $_thisParent)){
-					$_thisParent.removeClass("has-error");
+				if ("NBPT_SP_PERSON_IDNUM" == $_this.attr('name')){
+					
+					if(idNumCheck($_this, $_thisParent)){
+						$_thisParent.removeClass("has-error");
+					}
 				}
 				
+				// 时间格式验证
 				if(-1 != timeItems.indexOf($_this.attr('name'))){
 					
 					if($_this.val().length != 8){
 
 						$_thisParent.addClass("has-error");
+						
 					} else {
 
 						$_thisParent.removeClass("has-error");
 					}
 				}
 				
-			} else {
+				$_thisParent.removeClass("has-error");
+				
+			} 
+			
+			// 如果为空
+			else {
 				$_thisParent.addClass("has-error");
 			}
 			
@@ -193,64 +225,60 @@ $(function(){
 	 */
 	function idNumCheck($_this, $_thisParent){
 		
-		if($_this.attr("name") == 'NBPT_SP_PERSON_IDNUM'){
+		// 判断身份证是否合法
+		if(isIdCard($_this.val())){
+			
+			$_thisParent.removeClass("has-error");
+			$(".errorMessage").empty();
+		} else {
 
-			// 判断身份证是否合法
-			if(isIdCard($_this.val())){
-				
+			$_thisParent.addClass("has-error");
+			$(".errorMessage").empty();	
+			$(".errorMessage").append($("<font color='red' ><p>请输入正确的身份证信息</p></font>"))
+			return false;
+		}
+		
+		// 判断年龄是否符合要求
+		if(null == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
+			
+			// 如果没有选择职位
+			$_thisParent.addClass("has-error");
+			$(".errorMessage").empty();	
+			$(".errorMessage").append($("<font color='red' ><p>请选择职务后再确认身份证</p></font>"))
+			return false;
+			
+		} else if("5" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
+			
+			// 如果是推广经理,要求55以下
+			if($_this.val().substr(6,4) < 1963){
+				alert($_this.val().substr(6,4));
+				$_thisParent.addClass("has-error");
+				$(".errorMessage").empty();	
+				$(".errorMessage").append($("<font color='red' ><p>推广经理要求55岁以下</p></font>"))
+				return false;
+			} else {
+
 				$_thisParent.removeClass("has-error");
 				$(".errorMessage").empty();
-			} else {
-
-				$_thisParent.addClass("has-error");
-				$(".errorMessage").empty();	
-				$(".errorMessage").append($("<font color='red' ><p>请输入正确的身份证信息</p></font>"))
-				return false;
-			}
-			
-			// 判断年龄是否符合要求
-			if(null == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
-				
-				// 如果没有选择职位
-				$_thisParent.addClass("has-error");
-				$(".errorMessage").empty();	
-				$(".errorMessage").append($("<font color='red' ><p>请选择职务后再确认身份证</p></font>"))
-				return false;
-				
-			} else if("5" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
-				
-				// 如果是推广经理,要求55以下
-				if($_this.val().substr(6,4) < 1963){
-					alert($_this.val().substr(6,4));
-					$_thisParent.addClass("has-error");
-					$(".errorMessage").empty();	
-					$(".errorMessage").append($("<font color='red' ><p>推广经理要求55岁以下</p></font>"))
-					return false;
-				} else {
-
-					$_thisParent.removeClass("has-error");
-					$(".errorMessage").empty();
-					return true;
-				}
-			} else {
-				
-				// 如果不是推广经理,要求35以下
-				if($_this.val().substr(6,4) < 1983){
-
-					$_thisParent.addClass("has-error");
-					$(".errorMessage").empty();	
-					$(".errorMessage").append($("<font color='red' ><p>非推广经理要求35岁以下</p></font>"))
-					return false;
-				} else {
-
-					$_thisParent.removeClass("has-error");
-					$(".errorMessage").empty();
-					return true;
-				}
+				return true;
 			}
 		} else {
-			return true;
+			
+			// 如果不是推广经理,要求35以下
+			if($_this.val().substr(6,4) < 1983){
+
+				$_thisParent.addClass("has-error");
+				$(".errorMessage").empty();	
+				$(".errorMessage").append($("<font color='red' ><p>非推广经理要求35岁以下</p></font>"))
+				return false;
+			} else {
+
+				$_thisParent.removeClass("has-error");
+				$(".errorMessage").empty();
+				return true;
+			}
 		}
+		
 	}
 	
 
