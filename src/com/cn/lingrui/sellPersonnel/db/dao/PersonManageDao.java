@@ -39,4 +39,6 @@ public interface PersonManageDao extends BaseDao{
 
 	public CurrentPerson receiveCurrentTerminal(String changePersonPid, Connection connection) throws SQLException;
 
+	void updateTerminal(NBPT_SP_PERSON person, Connection connection) throws SQLException;
+
 }

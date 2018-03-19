@@ -61,7 +61,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			return this.after(mv);
 			
 		} catch (SQLException e) {
-			
+
+			this.closeException();
 			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
@@ -110,7 +111,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			return this.after(ja.toString());
 			
 		} catch (SQLException e) {
-			
+
+			this.closeException();
 			log.error("获取大区信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
@@ -143,7 +145,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			}
 			
 		} catch (SQLException e) {
-			
+
+			this.closeException();
 			log.error("获取分配负责人列表出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
@@ -203,8 +206,9 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			return this.after(mv);
 			
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+
+			this.closeException();
 			log.error("修改部门出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
@@ -227,8 +231,9 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		
 				return this.after(ja.toString());
 			
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+
+			this.closeException();
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
@@ -285,8 +290,9 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			mv.addObject("citys", citys);
 			mv.addObject("contys", contys);
 			return this.after(mv);			
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+
+			this.closeException();
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}	
@@ -310,8 +316,9 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		
 				return this.after(ja.toString());
 			
-		} catch (Exception e) {
-			
+		} catch (SQLException e) {
+
+			this.closeException();
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}

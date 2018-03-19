@@ -6,13 +6,12 @@ $(function(){
 		// 负责区域的单选框点击事件
 		AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalXzqx", {TerminalId : $("#NBPT_SP_PERSON_PID").val()},function(jsonData){
 						
-			$_copyParent = $(".reponseAreas");
-			
+			$_copyParent = $(".reponseAreas").eq(0);
+
 			for(var i = 0; i < jsonData.length; i++){
 				
-				alert(jsonData[i].NBPT_COMMON_XZQXHF_ID);
 				if(0 == i){
-					$_copyParent.val(jsonData[i].NBPT_COMMON_XZQXHF_ID);
+					$_copyParent.find("select").val(jsonData[i].NBPT_COMMON_XZQXHF_ID);
 				}
 				
 				else {

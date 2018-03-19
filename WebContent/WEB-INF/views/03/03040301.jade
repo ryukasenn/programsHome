@@ -12,7 +12,8 @@ block contents
         .col-xs-12.col-sm-12.placeholder
             form.form-horizontal#addPersonForm
                 input(type="hidden", name="NBPT_SP_PERSON_AREANO")
-                input(type="hidden", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
+                input(type="hidden", name="NBPT_SP_PERSON_PID", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
+                input(type="hidden", name="NBPT_SP_PERSON_ID", value='#{person.NBPT_SP_PERSON_ID}')#NBPT_SP_PERSON_ID
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *

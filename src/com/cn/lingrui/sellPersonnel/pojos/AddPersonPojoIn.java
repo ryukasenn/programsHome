@@ -2,7 +2,8 @@ package com.cn.lingrui.sellPersonnel.pojos;
 
 public class AddPersonPojoIn {
 
-
+	private String NBPT_SP_PERSON_PID; // 32位随机ID
+	private String NBPT_SP_PERSON_ID; // 人员ID
 	private String NBPT_SP_PERSON_NAME; // 姓名
 	private String NBPT_SP_PERSON_MALE; // 性别
 	private String NBPT_SP_PERSON_TYPE; // 人员类型,RX,OTC,混合
@@ -184,6 +185,18 @@ public class AddPersonPojoIn {
 	}
 	public void setNBPT_SP_PERSON_REGION(String nBPT_SP_PERSON_REGION) {
 		NBPT_SP_PERSON_REGION = nBPT_SP_PERSON_REGION;
+	}
+	public String getNBPT_SP_PERSON_PID() {
+		return NBPT_SP_PERSON_PID;
+	}
+	public void setNBPT_SP_PERSON_PID(String nBPT_SP_PERSON_PID) {
+		NBPT_SP_PERSON_PID = nBPT_SP_PERSON_PID;
+	}
+	public String getNBPT_SP_PERSON_ID() {
+		return NBPT_SP_PERSON_ID;
+	}
+	public void setNBPT_SP_PERSON_ID(String nBPT_SP_PERSON_ID) {
+		NBPT_SP_PERSON_ID = nBPT_SP_PERSON_ID;
 	}
 	
 }

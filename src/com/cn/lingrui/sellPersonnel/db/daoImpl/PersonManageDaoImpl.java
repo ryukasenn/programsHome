@@ -405,6 +405,29 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			throw new SQLException();
 		}
 	}
+
+	@Override
+	public void updateTerminal(NBPT_SP_PERSON person, Connection connection) throws SQLException {
+
+		try {
+			
+			
+			// 更新人员信息
+			String updateSql = DBUtils.beanToSql(NBPT_SP_PERSON.class, "update", "NBPT_SP_PERSON", person);
+			this.excuteUpdate(updateSql + " WHERE NBPT_SP_PERSON_PID = '" + person.getNBPT_SP_PERSON_PID() + "'", connection);
+			
+			// 删除原有负责区域
+			String deleteSql = "DELETE FROM NBPT_SP_PERSON_XZQX WHERE NBPT_SP_PERSON_XZQX_PID = '" + person.getNBPT_SP_PERSON_ID() + "'";
+			this.excuteUpdate(deleteSql, connection);	
+				
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.info("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+		
+	}
 	
 	
 }

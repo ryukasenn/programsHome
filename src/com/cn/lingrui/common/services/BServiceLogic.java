@@ -77,7 +77,7 @@ public abstract class BServiceLogic extends BaseService {
 	 * @param user 用于区分管理员和普通用户
 	 * @return
 	 */
-	protected String after(String result, String... user) {
+	protected String after(String result) {
 
 
 		if (dbc == null) {

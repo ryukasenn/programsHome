@@ -71,12 +71,12 @@ public class GlobalParams {
 	/**
 	 * 数据库基础url
 	 */
-	public static String DBBASE_URL = "jdbc:sqlserver://10.0.9.63:1433; DatabaseName=";
+	public static String DBBASE_URL = "jdbc:sqlserver://127.0.0.1:1433; DatabaseName=";
 	
 	/**
 	 * 应用所在地址
 	 */
-	public static String COMMON_IP = "10.0.9.63";
+	public static String COMMON_IP = "127.0.0.1";
 	
 	public static List<Integer> ageCondition = new ArrayList<Integer>();
 	
@@ -96,7 +96,7 @@ public class GlobalParams {
 	/**
 	 * 主页路径
 	 */
-	public static String LOGIN_URL = "http://ekp.lingrui.com:9000/rsManage/login";
+	public static String LOGIN_URL = "http://127.0.0.1:8080/rsManage/login";
 	
-	public static final String BASE_URL = "http://ekp.lingrui.com:9000/rsManage";
+	public static final String BASE_URL = "http://127.0.0.1:8080/rsManage";
 }

@@ -37,7 +37,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 	@Override
 	protected String getFunNum() {
-		// TODO 自动生成的方法存根
 		return null;
 	}
 	
@@ -107,6 +106,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 		} catch (SQLException e) {
 
+			this.closeException();
 			log.info("查询当前所有人员出错");
 			throw new Exception();
 
@@ -353,6 +353,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			return this.after(mv);
 		} catch (SQLException e) {
 
+			this.closeException();
 			log.info("获取添加终端人员页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
@@ -375,33 +376,54 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		// 获取登录人员信息
 		String loginId = this.getRequest().getAttribute("userID").toString();
 		try {
+
 			SellPersonnelPojoOut out = new SellPersonnelPojoOut();
-			
+
 			// 当前登录人员
 			CurrentPerson loginPerson = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
 			out.setPerson(loginPerson);
 			
-			// 最大人员ID
-			String maxId = personManageDao.receiveMaxId("RECEIVEMAXID", this.getConnection(), "NBPT_SP_PERSON");
-			out.setMaxId(maxId);
+			if(null == in.getNBPT_SP_PERSON_PID() || "".equals(in.getNBPT_SP_PERSON_PID()) ) {
+
+				// 最大人员ID
+				String maxId = personManageDao.receiveMaxId("RECEIVEMAXID", this.getConnection(), "NBPT_SP_PERSON");
+				out.setMaxId(maxId);
+				
+				// 管理区县
+				List<NBPT_SP_PERSON_XZQX> reposAreas = new ArrayList<NBPT_SP_PERSON_XZQX>();
+				
+				// 生成数据
+				checkInData(in, person, reposAreas, out);
+				
+				// 存储新的人员信息
+				personManageDao.addTerminal(person, this.getConnection());
+				
+				personManageDao.addReposeAreas(reposAreas, this.getConnection());
+			} 
 			
-			// 管理区县
-			List<NBPT_SP_PERSON_XZQX> reposAreas = new ArrayList<NBPT_SP_PERSON_XZQX>();
+			// 如果PID不为空
+			else {
+				
+				// 修改操作
+				
+				// 管理区县
+				List<NBPT_SP_PERSON_XZQX> reposAreas = new ArrayList<NBPT_SP_PERSON_XZQX>();
+				
+				// 新数据导入
+				checkInData(in, person, reposAreas, out);
+				
+				// 存储新的人员信息
+				personManageDao.updateTerminal(person, this.getConnection());
+				personManageDao.addReposeAreas(reposAreas, this.getConnection());
+			}
 			
-			// 生成数据
-			checkInData(in, person, reposAreas, out);
-			
-			// 存储新的人员信息
-			personManageDao.addTerminal(person, this.getConnection());
-			
-			personManageDao.addReposeAreas(reposAreas, this.getConnection());
-			
-			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
-						
+
+			mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/persons");
 			return this.after(mv);
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 
+			this.closeException();
 			log.info("添加终端人员错" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
@@ -469,6 +491,26 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	 */
 	private void checkInData(AddPersonPojoIn in, NBPT_SP_PERSON person, List<NBPT_SP_PERSON_XZQX> reposAreas, SellPersonnelPojoOut out) {
 		
+		if(null != in.getNBPT_SP_PERSON_PID() || !"".equals(in.getNBPT_SP_PERSON_PID())) {
+
+			// 注入原PID
+			person.setNBPT_SP_PERSON_PID(in.getNBPT_SP_PERSON_PID());
+		} else {
+
+			// 生成随机ID码
+			person.setNBPT_SP_PERSON_PID(CommonUtil.getUUID_32());
+		}
+
+		if(null != in.getNBPT_SP_PERSON_ID() || !"".equals(in.getNBPT_SP_PERSON_ID())) {
+
+			// 注入原ID
+			person.setNBPT_SP_PERSON_ID(in.getNBPT_SP_PERSON_ID());
+		} else {
+
+			// 最大编号
+			person.setNBPT_SP_PERSON_ID(out.getMaxId());
+		}
+
 		// 管理区域添加
 		String[] areas = in.getNBPT_SP_PERSON_AREANO().split("&");
 		List<String> checkItems = new ArrayList<>();
@@ -483,13 +525,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				reposAreas.add(new NBPT_SP_PERSON_XZQX(person.getNBPT_SP_PERSON_ID(), areas[i]));				
 			}
 		}
-		
-		// 生成随机ID码
-		person.setNBPT_SP_PERSON_PID(CommonUtil.getUUID_32());
-		
-		// 最大编号
-		person.setNBPT_SP_PERSON_ID(out.getMaxId());
-
+				
 		// 添加部门
 		person.setNBPT_SP_PERSON_DEPT_ID(out.getPerson().getNBPT_SP_PERSON_DEPT_ID());
 		
@@ -616,7 +652,8 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			return after(mv);
 		} catch (SQLException e) {
-
+			
+			this.closeException();
 			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
@@ -642,11 +679,15 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			return this.after(ja.toString());
 		}catch (SQLException e) {
 
+			this.closeException();
 			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
 
+	/**
+	 * 获取修改终端页面
+	 */
 	@Override
 	public ModelAndView getChangePerson(String changePersonPid) throws Exception {
 
@@ -675,21 +716,23 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 1.查询人员信息
 			CurrentPerson person = personManageDao.receiveCurrentTerminal(changePersonPid, this.getConnection());
 			
-			
-
 			mv.addObject("controllAreas", controllAreas);
 			mv.addObject("policytypeSelects", dictionarys);
 			mv.addObject("person", person);
 
 			return after(mv);
 		} catch (SQLException e) {
-
+			
+			this.closeException();
 			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 
 	}
 
+	/**
+	 * 获取终端负责区县ajax
+	 */
 	@Override
 	public String receiveTerminalXzqx(String changePersonPid) throws Exception {
 
@@ -705,6 +748,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			return this.after(ja.toString());
 		}catch (SQLException e) {
 
+			this.closeException();
 			log.info("获取终端负责区县失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
