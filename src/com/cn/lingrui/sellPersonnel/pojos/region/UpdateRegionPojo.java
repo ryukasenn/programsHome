@@ -6,7 +6,7 @@ public class UpdateRegionPojo {
 	private String regionName;
 	private String regionNote;
 	private String regionNeed;
-	private String regionResponsibler;
+	private String regionResponsibler;  
 	public String getRegionUid() {
 		return regionUid;
 	}
