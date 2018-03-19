@@ -39,7 +39,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		return "";
 	}
 	/**
-	 * 查看当前大区分布
+	 * 查看当前大区及地区分布分布
 	 * @throws Exception 
 	 * @throws SQLException 
 	 */
@@ -51,7 +51,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		// 初始化返回页面
 		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030202"));
 		
-		// 查询所有大区信息
+		// 查询所有区域划分信息
 		try {
 
 			List<CurrentRegion> currentRegions = regionManageDao.receiveCurrentRegions(pojo, this.getConnection());
@@ -62,7 +62,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 		} catch (SQLException e) {
 			
-			log.error("获取大区信息出错" + CommonUtil.getTraceInfo());
+			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}
@@ -244,18 +244,77 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		try {
 			
 			this.before();
-				
-				List<NBPT_COMMON_XZQXHF> provinces = regionManageDao.receiveProvinceSelect(this.getConnection());
-				
-				JSONArray ja = JSONArray.fromObject(provinces);
-		
-				return null;
 			
+			// 初始化返回結果
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030205"));
+			// 获取要设置的地区编号
+			String regionUid = in.getRegionId();
+			
+			// 1.根据编号，查询地区当前的划分情况
+			List<CurrentRegion> region_xzqxs = regionManageDao.receiveRegion_Xzqxs(regionUid, this.getConnection());
+		
+			// 2.处理查询到的数据
+			
+			// 2.1分离出省份信息
+			for(CurrentRegion currentRegion : region_xzqxs) {
+				
+				if("21".equals(currentRegion.getNBPT_SP_REGION_XZQX_TYPE()) && "1".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
+					
+					mv.addObject("currentProvince", currentRegion.getNBPT_COMMON_XZQXHF_NAME());
+					mv.addObject("currentProvinceId", currentRegion.getNBPT_COMMON_XZQXHF_ID());
+					mv.addObject("currentAreaName", currentRegion.getNBPT_SP_REGION_NAME());
+					break;
+				}
+			}
+			
+			// 2.2分离出下辖市,区和县
+			List<CurrentRegion> citys = new ArrayList<>();
+			List<CurrentRegion> contys = new ArrayList<>();
+			for(CurrentRegion currentRegion : region_xzqxs) {
+				
+				if("2".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
+					
+					citys.add(currentRegion);
+				}
+				if("3".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
+
+					contys.add(currentRegion);
+				}
+			}
+			
+			mv.addObject("citys", citys);
+			mv.addObject("contys", contys);
+			return this.after(mv);			
 		} catch (Exception e) {
 			
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}	
+	}
+	
+
+	/**
+	 * 添加地区下辖区县时获取添加下拉表方法
+	 */
+	@Override
+	public String receiveAreaContainSelects(String parentId) throws Exception {
+		
+		try {
+			
+			this.before();
+				
+				List<NBPT_COMMON_XZQXHF> resultList = regionManageDao.receiveAreaContainSelects(parentId, this.getConnection());
+				
+				resultList.add(0, new NBPT_COMMON_XZQXHF());
+				JSONArray ja = JSONArray.fromObject(resultList);
+		
+				return this.after(ja.toString());
+			
+		} catch (Exception e) {
+			
+			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
 	}
 	
 

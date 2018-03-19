@@ -162,32 +162,6 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	}
 
 	@Override
-	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException {
-		
-		StringBuffer sql = new StringBuffer("SELECT * FROM NBPT_COMMON_XZQXHF ");
-		
-		if(null == parentId || "".equals(parentId)) {
-			
-			sql.append("WHERE NBPT_COMMON_XZQXHF_PID = '1' ");
-		} else {
-			
-			sql.append("WHERE NBPT_COMMON_XZQXHF_PID = '" + parentId + "' ");
-		}
-		
-		sql.append("ORDER BY NBPT_COMMON_XZQXHF_ID ASC ");
-		try {
-			
-			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql.toString(), conn, NBPT_COMMON_XZQXHF.class);
-			
-			return resultList;
-		} catch (SQLException e) {
-			
-			log.info("查询行政区县划分出错" + CommonUtil.getTrace(e));
-			throw new SQLException();
-		}
-	}
-
-	@Override
 	public void addTerminal(NBPT_SP_PERSON person, Connection conn) throws SQLException {
 
 		String sql = DBUtils.beanToSql(NBPT_SP_PERSON.class, "INSERT", "NBPT_SP_PERSON", person);

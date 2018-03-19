@@ -67,6 +67,12 @@ public class RegionManageController {
 	}
 	
 
+	/**
+	 * 获取地区划分页面
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/checkXzqxs", method = RequestMethod.POST)
 	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
 
@@ -117,6 +123,21 @@ public class RegionManageController {
 	public String receiveProvinceSelect() throws Exception {
 		
 		String jsonData = regionManageService.receiveProvinceSelect();
+		
+		return jsonData;
+	}
+	
+	/**
+	 * 获取区县信息下拉框
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveAreaContainSelects")
+	public String receiveProvinceSelect(String parentId) throws Exception {
+		
+		String jsonData = regionManageService.receiveAreaContainSelects(parentId);
 		
 		return jsonData;
 	}

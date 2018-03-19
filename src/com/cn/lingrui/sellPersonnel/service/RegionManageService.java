@@ -25,4 +25,6 @@ public interface RegionManageService {
 
 	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception;
 
+	public String receiveAreaContainSelects(String parentId) throws Exception;
+
 }
