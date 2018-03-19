@@ -4,7 +4,7 @@ public class Area {
 
 	private String PROVINCE_ID;
 	private String AREA_ID;
-	private String AREA_NAME;
+	private String AREA_NAME;  
 	public String getPROVINCE_ID() {
 		return PROVINCE_ID;
 	}
