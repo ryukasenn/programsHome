@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
+import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 import com.cn.lingrui.sellPersonnel.service.RegionManageService;
 
 
@@ -36,6 +37,20 @@ public class RegionManageController {
 	}
 	
 	/**
+	 * 查看部门划分情况
+	 * @param pojo
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/regions", method = RequestMethod.GET)
+	public ModelAndView getReceiveCurrentRegions(RegionsPojo pojo) throws Exception {
+
+		ModelAndView mv = regionManageService.receiveCurrentRegions(pojo);
+
+		return mv;
+	}
+	
+	/**
 	 * 获取修改部门信息页面
 	 * @param pojo
 	 * @return
@@ -45,6 +60,20 @@ public class RegionManageController {
 	public ModelAndView getChangeRegion(RegionsPojo pojo) throws Exception {
 
 		ModelAndView mv = regionManageService.getChangeRegion(pojo);
+
+		return mv;
+	}
+	
+	/**
+	 * 提交修改部门信息页面
+	 * @param pojo
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/postChangeRegion", method = RequestMethod.POST)
+	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) throws Exception {
+
+		ModelAndView mv = regionManageService.postChangeRegion(pojo);
 
 		return mv;
 	}

@@ -14,7 +14,6 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
@@ -65,8 +64,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 处理当前登陆人员信息
 			this.dealCurrentPerson(person, out);
 
-			// 查询所有下级人员信息
-			List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
 			
 //			List<CurrentPerson> terminals = personManageDao.receiveCurrentTerminals(out.getPerson(),
 //					this.getConnection());
@@ -75,6 +72,9 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
 
 			if(null == person) {
+
+				// 查询所有下级人员信息
+				List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
 				
 				// 后勤人员查询合计信息处理
 				List<CurrentPerson_statistics> infos = this.dealCurrentPerson_total(personInfos);
@@ -86,20 +86,33 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				mv.addObject("totalInfos", infos);
 				
 				// OTC统计信息
-				mv.addObject("OTCInfos", otcInfos);
+				mv.addObject("OTCInfos", otcInfos);				
 			} else {
-				
-				// 如果是地总
-				if("22".equals(person.getNBPT_SP_PERSON_JOB())) {
+
+				if("null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {
 					
-					// 1.查询该地总配额
-					mv.addObject("thisNeed", person.getNBPT_SP_REGION_NEED());
+					String message = "您没有被分配管理地区,请联系后勤人员或管理员";
+					mv.addObject("message", message);
 					
-					// 2.该地总手下人数
-					mv.addObject("thisInfact", personInfos.size());
+					return this.after(mv);
+				}else {
+					
+					// 如果是地总
+					if("22".equals(person.getNBPT_SP_PERSON_JOB())) {
+						
+						// 查询所有下级人员信息
+						List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
+						
+						// 1.查询该地总配额
+						mv.addObject("thisNeed", person.getNBPT_SP_REGION_NEED());
+						
+						// 2.该地总手下人数
+						mv.addObject("thisInfact", personInfos.size());
+						
+						// 返回数据
+						mv.addObject("personInfos", personInfos);
+					}
 				}
-				// 处理返回数据
-				mv.addObject("personInfos", personInfos);
 			}
 			
 			return this.after(mv);
@@ -246,28 +259,35 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	 */
 	private List<CurrentPerson_statistics> dealCurrentPerson_region(List<CurrentPerson> personInfos){
 		
+		// 校验list
 		List<String> checkItems = new ArrayList<>();
 		List<CurrentPerson_statistics> resultList = new ArrayList<>(); 
+		
 		for(CurrentPerson person : personInfos) {
 			
-			String region = person.getNBPT_SP_PERSON_DEPT_ID();
 			
-			// 按大区添加信息
-			if(checkItems.contains(region)) {
-				
-				CurrentPerson_statistics thisInfo = resultList.get(checkItems.indexOf(region));
-				addPerson_otc(thisInfo, person);
-			} else {
+			if("2".equals(person.getNBPT_SP_PERSON_TYPE())) {
 
-				// 加入检查列表
-				checkItems.add(region);
-				
-				// 新增当前信息
-				CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
-				thisInfo.setName(person.getNBPT_SP_REGION_NAME());
-				
-				addPerson_otc(thisInfo, person);
-				resultList.add(thisInfo);
+				String regionId = person.getNBPT_SP_REGION_ID().substring(0, 2);
+				// 按大区添加信息
+				if(checkItems.contains(regionId)) {
+					
+					CurrentPerson_statistics thisInfo = resultList.get(checkItems.indexOf(regionId));
+					
+					addPerson_otc(thisInfo, person);
+				} else {
+
+					// 加入检查列表
+					checkItems.add(regionId);
+					
+					// 新增当前信息
+					CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
+
+					thisInfo.setName(person.getREGION_NAME());
+					thisInfo.setNeed(person.getREGION_ONAME());
+					addPerson_otc(thisInfo, person);
+					resultList.add(thisInfo);
+				}
 			}
 		}
 		return resultList;
@@ -340,16 +360,26 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 			// 获取登录人员信息
 			String loginId = this.getRequest().getAttribute("userID").toString();
-			
-			// 获取地总管理地区
-			controllAreas = personManageDao.getAreaSelects(loginId, this.getConnection());
-			controllAreas.add(0, new NBPT_COMMON_XZQXHF());
-			
-			dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
 
-			mv.addObject("controllAreas", controllAreas);
-			mv.addObject("policytypeSelects", dictionarys);
+			// 获取当前登录人员信息
+			CurrentPerson person = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
 			
+			if("null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {
+				
+				String message = "您没有被分配管理地区,请联系后勤人员或管理员";
+				mv.addObject("message", message);
+			}else {
+				// 获取地总管理地区
+				controllAreas = personManageDao.getAreaSelects(loginId, this.getConnection());
+				controllAreas.add(0, new NBPT_COMMON_XZQXHF());
+				
+				dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
+	
+				mv.addObject("controllAreas", controllAreas);
+				mv.addObject("policytypeSelects", dictionarys);
+				
+			}
+
 			return this.after(mv);
 		} catch (SQLException e) {
 
@@ -382,6 +412,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 当前登录人员
 			CurrentPerson loginPerson = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
 			out.setPerson(loginPerson);
+
 			
 			if(null == in.getNBPT_SP_PERSON_PID() || "".equals(in.getNBPT_SP_PERSON_PID()) ) {
 
@@ -403,8 +434,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			// 如果PID不为空
 			else {
-				
-				// 修改操作
 				
 				// 管理区县
 				List<NBPT_SP_PERSON_XZQX> reposAreas = new ArrayList<NBPT_SP_PERSON_XZQX>();
@@ -491,7 +520,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	 */
 	private void checkInData(AddPersonPojoIn in, NBPT_SP_PERSON person, List<NBPT_SP_PERSON_XZQX> reposAreas, SellPersonnelPojoOut out) {
 		
-		if(null != in.getNBPT_SP_PERSON_PID() || !"".equals(in.getNBPT_SP_PERSON_PID())) {
+		if(null != in.getNBPT_SP_PERSON_PID() && !"".equals(in.getNBPT_SP_PERSON_PID())) {
 
 			// 注入原PID
 			person.setNBPT_SP_PERSON_PID(in.getNBPT_SP_PERSON_PID());
@@ -501,7 +530,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			person.setNBPT_SP_PERSON_PID(CommonUtil.getUUID_32());
 		}
 
-		if(null != in.getNBPT_SP_PERSON_ID() || !"".equals(in.getNBPT_SP_PERSON_ID())) {
+		if(null != in.getNBPT_SP_PERSON_ID() && !"".equals(in.getNBPT_SP_PERSON_ID())) {
 
 			// 注入原ID
 			person.setNBPT_SP_PERSON_ID(in.getNBPT_SP_PERSON_ID());
@@ -744,6 +773,28 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			List<NBPT_COMMON_XZQXHF> terminalResponsXzqx = personManageDao.getTerminalResponsXzqx(changePersonPid, this.getConnection());
 			
 			JSONArray ja = JSONArray.fromObject(terminalResponsXzqx);
+			
+			return this.after(ja.toString());
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.info("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+
+	@Override
+	public String receiveTerminalPlace(String idNum) throws Exception {
+
+		try {
+			
+			this.before();
+		
+
+			// 获取国家行政区县划分
+			List<NBPT_COMMON_XZQXHF> personIdqx = personManageDao.checkPlace(idNum.substring(0, 6), this.getConnection());
+			
+			JSONArray ja = JSONArray.fromObject(personIdqx);
 			
 			return this.after(ja.toString());
 		}catch (SQLException e) {

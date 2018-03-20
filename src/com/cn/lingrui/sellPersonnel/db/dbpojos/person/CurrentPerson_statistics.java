@@ -2,7 +2,8 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos.person;
 
 public class CurrentPerson_statistics {
 
-	private String name = "";
+	private String name = ""; // 大区名称
+	private String need = ""; // 大区配额
 	private Integer regionResper = 0; // 大区总
 	private Integer areaResper = 0; // 地区总
 	private Integer xzquResper = 0; // 区县总
@@ -43,6 +44,12 @@ public class CurrentPerson_statistics {
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getNeed() {
+		return need;
+	}
+	public void setNeed(String need) {
+		this.need = need;
 	}
 	
 

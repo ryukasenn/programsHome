@@ -4,6 +4,7 @@ public class DQHFPOJO {
 
 	private String name;
 	private String id;
+	private String need;
 	public String getName() {
 		return name;
 	}
@@ -15,6 +16,12 @@ public class DQHFPOJO {
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public String getNeed() {
+		return need;
+	}
+	public void setNeed(String need) {
+		this.need = need;
 	}
 	
 }

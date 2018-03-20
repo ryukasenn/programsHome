@@ -17,10 +17,11 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 
+import jxl.CellType;
+import jxl.DateCell;
 import jxl.Sheet;
 import jxl.Workbook;
 
@@ -73,7 +74,7 @@ public class XZQX_create {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
 		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
-		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_RESPONSIBLER <> ''");
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
 		
 		// 查询河南区县划分
@@ -83,7 +84,7 @@ public class XZQX_create {
 		for(NBPT_SP_REGION personRegion : resultList) {
 			
 			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
-						  "WHERE NBPT_SP_PERSON_PID = '" + personRegion.getNBPT_SP_REGION_RESPONSIBLER() + "'";
+						  "WHERE NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_ID() + "'";
 			sqls.add(sql);			
 		}
 		Statement stmt;
@@ -611,7 +612,7 @@ public class XZQX_create {
 	}
 	
 	private void addDiZong() throws ClassNotFoundException, SQLException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "dzxx.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "need.xls";
 		File targetFile = new File(fileNameTemp);
 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -641,22 +642,23 @@ public class XZQX_create {
 					int realRows = sheet.getRows();
 					
 					// 初始化
-					for(int rowi = 1; rowi < 2; rowi++) {
+					for(int rowi = 2; rowi < realRows; rowi++) {
 						
-						if("管理人员".equals(sheet.getCell(12,rowi).getContents())) {
+						if("".equals(sheet.getCell(3,rowi).getContents().replaceAll(" ", ""))) {
 							
 							continue;
 						}
+						
 						NBPT_SP_PERSON person = new NBPT_SP_PERSON();
 						
 						// NBPT_SP_PERSON_PID,32位ID
 						person.setNBPT_SP_PERSON_PID(CommonUtil.getUUID_32());
 						
 						// NBPT_SP_PERSON_ID
-						person.setNBPT_SP_PERSON_ID(String.valueOf(100000 + rowi));
+						person.setNBPT_SP_PERSON_ID(String.valueOf(100000 + rowi - 2));
 						
 						// NBPT_SP_PERSON_DEPT_ID 部门ID
-						person.setNBPT_SP_PERSON_DEPT_ID(sheet.getCell(4,rowi).getContents() + sheet.getCell(25,rowi).getContents() + sheet.getCell(5,rowi).getContents());
+						person.setNBPT_SP_PERSON_DEPT_ID(sheet.getCell(5,rowi).getContents() + sheet.getCell(6,rowi).getContents().substring(0, 2) + sheet.getCell(7,rowi).getContents());
 						
 						// NBPT_SP_PERSON_TYPE 销售类别,这里统一OTC
 						person.setNBPT_SP_PERSON_TYPE("2");
@@ -665,10 +667,10 @@ public class XZQX_create {
 						person.setNBPT_SP_PERSON_NAME(sheet.getCell(3,rowi).getContents().replaceAll(" ", ""));
 						
 						// NBPT_SP_PERSON_MALE 性别
-						person.setNBPT_SP_PERSON_MALE(sheet.getCell(7,rowi).getContents().equals("男") ? "1" : "0");
+						person.setNBPT_SP_PERSON_MALE(sheet.getCell(9,rowi).getContents().equals("男") ? "1" : "0");
 						
 						// 身份证号码
-						String idnum = sheet.getCell(19,rowi).getContents();
+						String idnum = sheet.getCell(23,rowi).getContents();
 						
 						// NBPT_SP_PERSON_BIRS 生日
 						person.setNBPT_SP_PERSON_BIRS(idnum.length() == 18 ? idnum.substring(6, 14) : "19" + idnum.substring(6, 12));
@@ -677,38 +679,49 @@ public class XZQX_create {
 						person.setNBPT_SP_PERSON_IDNUM(idnum);
 						
 						// NBPT_SP_PERSON_MOB1 联系电话
-						person.setNBPT_SP_PERSON_MOB1(sheet.getCell(20,rowi).getContents());
+						person.setNBPT_SP_PERSON_MOB1(sheet.getCell(24,rowi).getContents());
 						
 						// NBPT_SP_PERSON_MOB2 紧急电话
-						person.setNBPT_SP_PERSON_MOB2(sheet.getCell(24,rowi).getContents());
+						person.setNBPT_SP_PERSON_MOB2(sheet.getCell(28,rowi).getContents());
 						
 						// NBPT_SP_PERSON_ENTRYDATA 入职时间
-						person.setNBPT_SP_PERSON_ENTRYDATA(sheet.getCell(16,rowi).getContents());
+						
+						
+						if (sheet.getCell(20,rowi).getType() == CellType.DATE) { 
+					         DateCell dc = (DateCell) sheet.getCell(20,rowi);
+					         person.setNBPT_SP_PERSON_ENTRYDATA(CommonUtil.dateToYYYYMMDD(dc.getDate())); 
+						}
 						
 						// NBPT_SP_PERSON_DEGREE 学历
-						person.setNBPT_SP_PERSON_DEGREE(sheet.getCell(10,rowi).getContents());
+						person.setNBPT_SP_PERSON_DEGREE(sheet.getCell(14,rowi).getContents());
 						
 						// NBPT_SP_PERSON_PLACE 籍贯
-						person.setNBPT_SP_PERSON_PLACE(sheet.getCell(18,rowi).getContents());
+						person.setNBPT_SP_PERSON_PLACE(sheet.getCell(22,rowi).getContents());
 						
 						// NBPT_SP_PERSON_SCHOOL 毕业学校
-						person.setNBPT_SP_PERSON_SCHOOL(sheet.getCell(11,rowi).getContents());
+						person.setNBPT_SP_PERSON_SCHOOL(sheet.getCell(15,rowi).getContents());
 						
 						// NBPT_SP_PERSON_PROFESS 专业
-						person.setNBPT_SP_PERSON_PROFESS(sheet.getCell(12,rowi).getContents());
+						person.setNBPT_SP_PERSON_PROFESS(sheet.getCell(16,rowi).getContents());
 						
 						// NBPT_SP_PERSON_TITLE 职称
-						person.setNBPT_SP_PERSON_PROFESS(sheet.getCell(14,rowi).getContents());
-						
-						// NBPT_SP_PERSON_JOB 职务, 统一地总
-						person.setNBPT_SP_PERSON_JOB("2");
+						person.setNBPT_SP_PERSON_PROFESS(sheet.getCell(18,rowi).getContents());
+
+						if("管理人员".equals(sheet.getCell(13,rowi).getContents())) {
+							
+							person.setNBPT_SP_PERSON_JOB("26");
+						} else {
+
+							// NBPT_SP_PERSON_JOB 职务, 统一地总
+							person.setNBPT_SP_PERSON_JOB("22");
+						}
 						
 						// NBPT_SP_PERSON_POLICYNO 保单编号
 						// NBPT_SP_PERSON_POLICY_DATA1 保单起始时间
 						// NBPT_SP_PERSON_POLICY_DATA2 保单结束时间
 						// NBPT_SP_PERSON_AREANO 管理区域
 						// NBPT_SP_PERSON_LOGINID 登录ID
-						person.setNBPT_SP_PERSON_LOGINID(sheet.getCell(6,rowi).getContents());
+						person.setNBPT_SP_PERSON_LOGINID(sheet.getCell(8,rowi).getContents());
 						
 						// NBPT_SP_PERSON_NOTE备注
 						// NBPT_SP_PERSON_FLAG离职标志
@@ -735,7 +748,7 @@ public class XZQX_create {
 		List<String> sql2s = new ArrayList<String>();
 		for(NBPT_SP_PERSON person : persons) {
 			
-			String sql2 = "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + person.getNBPT_SP_PERSON_ID() + "' "
+			String sql2 = "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + person.getNBPT_SP_PERSON_PID() + "' "
 						+ "WHERE NBPT_SP_REGION_ID = '" + person.getNBPT_SP_PERSON_DEPT_ID() + "'";
 			sql2s.add(sql2);
 			String sql = 
@@ -816,13 +829,13 @@ public class XZQX_create {
 			stmt.addBatch(sql);
 		}
 
-		//stmt.executeBatch();
+		stmt.executeBatch();
 	}
 	
 	
 	
 	private void addAreas() throws ClassNotFoundException, SQLException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "diquxzqx.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "need.xls";
 		File targetFile = new File(fileNameTemp);
 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -856,15 +869,15 @@ public class XZQX_create {
 					// 初始化
 					for(int rowi = 1; rowi < realRows; rowi++) {
 						
-						if(checkItems.contains(sheet.getCell(2,rowi).getContents())) {
-							
+						if(checkItems.contains(sheet.getCell(3,rowi).getContents().trim())) {
 							
 						} else {
 
-							checkItems.add(sheet.getCell(2,rowi).getContents());
+							checkItems.add(sheet.getCell(2,rowi).getContents().trim());
 							DQHFPOJO dahfpojo = new DQHFPOJO();
-							dahfpojo.setId(sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents());
+							dahfpojo.setId(sheet.getCell(5,rowi).getContents() + sheet.getCell(6,rowi).getContents().substring(0,2) + sheet.getCell(7,rowi).getContents());
 							dahfpojo.setName(sheet.getCell(2,rowi).getContents());
+							dahfpojo.setNeed(sheet.getCell(4,rowi).getContents());
 							provinces.add(dahfpojo);
 						}
 					}
@@ -884,13 +897,13 @@ public class XZQX_create {
 		for(DQHFPOJO area : areas) {
 			
 			String sql = 
-					"INSERT INTO NBPT_SP_REGION (NBPT_SP_REGION_UID, NBPT_SP_REGION_ID, NBPT_SP_REGION_NAME, NBPT_SP_REGION_LEVEL)"
+					"INSERT NBPT_SP_REGION (NBPT_SP_REGION_UID, NBPT_SP_REGION_ID, NBPT_SP_REGION_NAME, NBPT_SP_REGION_LEVEL, NBPT_SP_REGION_ONAME)"
 					+ " VALUES ("
 							+ "'" + CommonUtil.getUUID_32() + "', "
 							+ "'" + area.getId() + "', "
 							+ "'" + area.getName() + "', "
-							+ "'2'"
-							+ ")";
+							+ "'2',"
+							+ "'" + area.getNeed() + "')";
 			sqls.add(sql);
 		}
 		

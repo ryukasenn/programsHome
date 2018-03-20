@@ -251,6 +251,17 @@ public class CommonUtil {
 		return df.format(new Date());
 	}
 	
+	/**
+	 * 日期转换YYYYMMDD格式
+	 * @param date
+	 * @return
+	 */
+	public static String dateToYYYYMMDD(Date date) {
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+		return df.format(date);
+	}
+	
 	
 	/**
 	 * 浪潮系统密码解析
@@ -334,5 +345,30 @@ public class CommonUtil {
 		rtnVal += UUID.randomUUID();
 		rtnVal = rtnVal.replaceAll("-", "");
 		return rtnVal.substring(0, 32);
+	}
+	
+	/**
+	 * 18位身份证真伪验证
+	 * @param idNum
+	 * @return
+	 */
+	public static Boolean idNumCheck(String idNum) {
+		// 分界身份证数字
+		String[] nums = idNum.split("");
+		String[] checkNums = new String[] {"7","9","10","5","8","4","2","1","6","3","7","9","10","5","8","4","2"};
+		String[] realNums = new String[] {"1","0","X","9","8","7","6","5","4","3","2"};
+		Integer addResult = 0;
+		for(int i = 0; i < nums.length - 1; i++){
+			
+			addResult += Integer.valueOf(nums[i]) * Integer.valueOf(checkNums[i]);
+		}
+		int result = addResult % 11;
+		
+		// 如果验证结果跟最后一位不匹配
+		if (Integer.valueOf(realNums[result]) != Integer.valueOf(nums[17])){
+			
+			return false;
+		}
+		return true;
 	}
 }

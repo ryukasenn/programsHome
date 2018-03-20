@@ -20,6 +20,7 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
+import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 import com.cn.lingrui.sellPersonnel.service.RegionManageService;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
 
@@ -166,17 +167,17 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			ModelAndView mv = null;
 			
 			// 返回地区信息
-			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo, this.getConnection());
+			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionId(), this.getConnection());
 			
 			// 获取负责人信息
 			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentPerson(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
 			
-			if(2 == pojo.getRegionId().length()) {
+			if("1".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 
 				// 如果是大区,获取大区信息及配置处理页面
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030203", this.getRole()));
 				
-			}else if(6 == pojo.getRegionId().length()) {
+			}else if("2".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 
 				// 如果是地区,获取地区信息及配置处理页面
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030204", this.getRole()));
@@ -188,7 +189,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				mv.addObject("provinces", provinces);
 				
 				// 获取本地区所属省份
-				List<Area_Xzqx_Info> currentXzqxs = regionManageDao.receiveCurrentXzqxs(pojo.getRegionId(), this.getConnection());
+				List<Area_Xzqx_Info> currentXzqxs = regionManageDao.receiveCurrentXzqxs(regionInfo.getNBPT_SP_REGION_ID(), this.getConnection());
 				
 				for(Area_Xzqx_Info currentXzqx : currentXzqxs) {
 					
@@ -322,6 +323,19 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
+	}
+	@Override
+	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) {
+
+		try {
+			
+			// 1.查询出部门相关信息
+			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionUid(), this.getConnection());
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 

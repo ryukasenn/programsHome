@@ -6,7 +6,7 @@ $(function(){
 	$('.changeButton').on('click', function(){
 		
 		$_this = $(this);		
-		var regionId = $_this.parent().parent().children().eq(1).html();
+		var regionId = $_this.parent().parent().children().eq(1).find("p").html();
 		$('#regionId').val(regionId);
 		$('#controlForm').attr("action", baseUrl + "/sellPersonnel/changeRegion").attr("method", "POST").submit();
 	});

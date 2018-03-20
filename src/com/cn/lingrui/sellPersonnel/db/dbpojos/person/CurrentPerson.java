@@ -35,8 +35,18 @@ public class CurrentPerson {
 	private String NBPT_SP_PERSON_AGE; // 年龄
 	private String NBPT_SP_REGION_XZQX_REGIONID; // 部门ID
 	private String NBPT_SP_PERSON_WORKAGE; // 工龄
-	private String NBPT_SP_REGION_NAME; // 大区名称
+	
+	
+	// 后勤人员统计
+	private String NBPT_SP_REGION_NAME; // 所在部门名称
 	private String NBPT_SP_REGION_NEED; // 人员配额
+	private String NBPT_SP_REGION_RESPONSIBLER; // 负责人
+	private String NBPT_SP_REGION_ID; // 人员所在部门ID
+	private String NBPT_SP_REGION_ONAME; // 部门配额
+	private String NBPT_SP_REGION_LEVEL; // 部门级别
+	private String REGION_NAME; // 大区名称
+	private String REGION_ONAME; // 大区配额
+	
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
 	}
@@ -246,6 +256,42 @@ public class CurrentPerson {
 	}
 	public void setNBPT_SP_REGION_NEED(String nBPT_SP_REGION_NEED) {
 		NBPT_SP_REGION_NEED = nBPT_SP_REGION_NEED;
+	}
+	public String getNBPT_SP_REGION_RESPONSIBLER() {
+		return NBPT_SP_REGION_RESPONSIBLER;
+	}
+	public void setNBPT_SP_REGION_RESPONSIBLER(String nBPT_SP_REGION_RESPONSIBLER) {
+		NBPT_SP_REGION_RESPONSIBLER = nBPT_SP_REGION_RESPONSIBLER;
+	}
+	public String getNBPT_SP_REGION_ID() {
+		return NBPT_SP_REGION_ID;
+	}
+	public void setNBPT_SP_REGION_ID(String nBPT_SP_REGION_ID) {
+		NBPT_SP_REGION_ID = nBPT_SP_REGION_ID;
+	}
+	public String getNBPT_SP_REGION_ONAME() {
+		return NBPT_SP_REGION_ONAME;
+	}
+	public void setNBPT_SP_REGION_ONAME(String nBPT_SP_REGION_ONAME) {
+		NBPT_SP_REGION_ONAME = nBPT_SP_REGION_ONAME;
+	}
+	public String getNBPT_SP_REGION_LEVEL() {
+		return NBPT_SP_REGION_LEVEL;
+	}
+	public void setNBPT_SP_REGION_LEVEL(String nBPT_SP_REGION_LEVEL) {
+		NBPT_SP_REGION_LEVEL = nBPT_SP_REGION_LEVEL;
+	}
+	public String getREGION_NAME() {
+		return REGION_NAME;
+	}
+	public void setREGION_NAME(String rEGION_NAME) {
+		REGION_NAME = rEGION_NAME;
+	}
+	public String getREGION_ONAME() {
+		return REGION_ONAME;
+	}
+	public void setREGION_ONAME(String rEGION_ONAME) {
+		REGION_ONAME = rEGION_ONAME;
 	}
 	
 }

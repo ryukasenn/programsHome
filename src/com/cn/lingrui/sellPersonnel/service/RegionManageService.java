@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
+import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 
 public interface RegionManageService {
 
@@ -26,5 +27,7 @@ public interface RegionManageService {
 	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception;
 
 	public String receiveAreaContainSelects(String parentId) throws Exception;
+
+	public ModelAndView postChangeRegion(UpdateRegionPojo pojo);
 
 }

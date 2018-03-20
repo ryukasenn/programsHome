@@ -24,4 +24,6 @@ public interface PersonManageService {
 
 	public String receiveTerminalXzqx(String areaId) throws Exception;
 
+	public String receiveTerminalPlace(String idNum) throws Exception;
+
 }

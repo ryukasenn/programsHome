@@ -142,4 +142,20 @@ public class PersonManageController {
 		
 		return jsonData;
 	}
+	
+
+	/**
+	 * 获取终端籍贯信息
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveTerminalPlace")
+	public String receiveTerminalPlace(String idNum) throws Exception {
+		
+		String jsonData = personManageService.receiveTerminalPlace(idNum);
+		
+		return jsonData;
+	}
 }

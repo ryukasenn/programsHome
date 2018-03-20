@@ -27,7 +27,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	@Override
 	public CurrentPerson receiveCurrentPerson(String userId, Connection conn) throws SQLException {
 		
-		String sql = "SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED "
+		String sql = "SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED, B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER "
 				+ "FROM NBPT_SP_PERSON A "
 				+ "LEFT JOIN NBPT_SP_REGION B "
 				+ "ON A.NBPT_SP_PERSON_PID = B.NBPT_SP_REGION_RESPONSIBLER "
@@ -227,15 +227,19 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			if(null == nbpt_SP_PERSON) {
 				
 				
-				String sql =  "SELECT A.*,B.NBPT_SP_REGION_NAME,"
-							+ "DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE "
-							+ "FROM NBPT_SP_PERSON A "
-							+ "LEFT JOIN NBPT_SP_REGION B "
-							+ "ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID ";
+				String sql =  "	SELECT A.NBPT_SP_PERSON_JOB,A.NBPT_SP_PERSON_TYPE," + 
+						"	B.NBPT_SP_REGION_NAME,B.NBPT_SP_REGION_ID,B.NBPT_SP_REGION_ONAME," + 
+						"	B.NBPT_SP_REGION_LEVEL,C.NBPT_SP_REGION_NAME AS REGION_NAME" + 
+						"	FROM NBPT_SP_PERSON A " + 
+						"	LEFT JOIN NBPT_SP_REGION B " + 
+						"	ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
+						"	LEFT JOIN NBPT_SP_REGION C " + 
+						"	ON SUBSTRING(B.NBPT_SP_REGION_ID,1 ,2) = C.NBPT_SP_REGION_ID" + 
+						"	WHERE A.NBPT_SP_PERSON_DEPT_ID IS NOT NULL AND A.NBPT_SP_PERSON_DEPT_ID <> ''";
 				persons = this.query(sql, connection, CurrentPerson.class);
 			} 
 			
-			// 如果登录人员的JOB是2,则是地总,查询该地总下的所有人员
+			// 如果登录人员的JOB是22,则是地总,查询该地总下的所有人员
 			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				
 				String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE," + 
@@ -422,11 +426,28 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 				
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			log.info("更新终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
+	}
+
+	@Override
+	public List<NBPT_COMMON_XZQXHF> checkPlace(String string, Connection connection) throws SQLException {
+
+		try {
+			String sql = "  SELECT B.*" + 
+						"  FROM NBPT_COMMON_XZQXHF A" + 
+						"  LEFT JOIN NBPT_COMMON_XZQXHF B" + 
+						"  ON A.NBPT_COMMON_XZQXHF_PID = B.NBPT_COMMON_XZQXHF_ID" + 
+						"  WHERE A.NBPT_COMMON_XZQXHF_ID = '" + string + "'";
+			List<NBPT_COMMON_XZQXHF> placeInfo = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			return placeInfo;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.info("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
 	}
 	
 	

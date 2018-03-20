@@ -21,7 +21,9 @@ block contents
                             when '1'
                                 tr(style="align:center").text-danger 
                                     th.col-xs-1.col-sm-1(scope="row")= i+1
-                                    td.col-xs-1.col-sm-1= region.NBPT_SP_REGION_ID
+                                    td.col-xs-1.col-sm-1
+                                        |#{region.NBPT_SP_REGION_ID}
+                                        p(style='display:none')= region.NBPT_SP_REGION_UID
                                     td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
                                     td.col-xs-2.col-sm-2
                                         case region.NBPT_SP_PERSON_NAME
@@ -33,7 +35,9 @@ block contents
                             when '2'
                                 tr(style="align:center")
                                     th.col-xs-1.col-sm-1(scope="row")= i+1
-                                    td.col-xs-1.col-sm-1= region.NBPT_SP_REGION_ID
+                                    td.col-xs-1.col-sm-1
+                                        |#{region.NBPT_SP_REGION_ID}
+                                        p(style='display:none')= region.NBPT_SP_REGION_UID
                                     td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
                                     td.col-xs-2.col-sm-2
                                         case region.NBPT_SP_PERSON_NAME

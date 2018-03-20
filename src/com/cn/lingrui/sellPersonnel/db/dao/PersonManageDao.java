@@ -41,4 +41,6 @@ public interface PersonManageDao extends BaseDao{
 
 	void updateTerminal(NBPT_SP_PERSON person, Connection connection) throws SQLException;
 
+	public List<NBPT_COMMON_XZQXHF> checkPlace(String string, Connection connection) throws SQLException;
+
 }

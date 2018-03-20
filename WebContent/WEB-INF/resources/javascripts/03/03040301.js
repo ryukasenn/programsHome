@@ -15,8 +15,11 @@ $(function(){
 				}
 				
 				else {
+					
+					
 					 $_copy = $_copyParent.clone().insertAfter($_copyParent);
 					 $_copy.find("select").val(jsonData[i].NBPT_COMMON_XZQXHF_ID);
+					 $_copy.children().find("button").remove();
 				}
 			}
 			
@@ -96,7 +99,21 @@ $(function(){
 				if ("NBPT_SP_PERSON_IDNUM" == $_this.attr('name')){
 					
 					if(idNumCheck($_this, $_thisParent)){
+						
 						$_thisParent.removeClass("has-error");
+						
+						// 验证通过后,同时如果能取到籍贯信息,添加籍贯信息
+						AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalPlace", {idNum : $_this.val().trim()},function(jsonData){
+							
+							if(0 == jsonData.length){
+								return;
+							}
+								
+							for(var i = 0; i < jsonData.length; i++){
+								$("input[name='NBPT_SP_PERSON_PLACE']").val("");
+								$("input[name='NBPT_SP_PERSON_PLACE']").val(jsonData[i].NBPT_COMMON_XZQXHF_NAME);
+							}
+						})
 					}
 				}
 				
@@ -129,7 +146,8 @@ $(function(){
 		
 		// 多地区管理的额外点击事件
 		var $_this = $(this);
-		$_this.parents(".form-group").clone(true).insertAfter($_this.parents(".form-group"));
+		$_copy = $_this.parents(".form-group").clone().insertAfter($_this.parents(".form-group"));
+		$_copy.children().find("button").remove();
 	})
 	
 	
@@ -246,7 +264,7 @@ $(function(){
 			$(".errorMessage").append($("<font color='red' ><p>请选择职务后再确认身份证</p></font>"))
 			return false;
 			
-		} else if("5" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
+		} else if("25" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
 			
 			// 如果是推广经理,要求55以下
 			if($_this.val().substr(6,4) < 1963){

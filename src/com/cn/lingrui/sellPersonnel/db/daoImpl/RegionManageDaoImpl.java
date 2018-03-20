@@ -57,9 +57,9 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 												"  ON A.NBPT_SP_REGION_RESPONSIBLER = B.NBPT_SP_PERSON_PID" + 
 												"  WHERE 1 = 1");
 
-			if ("".equals(pojo.getRegionName())) {
+			if (null == pojo.getRegionName() || "".equals(pojo.getRegionName())) {
 
-			} else if (!"".equals(pojo.getRegionName())) {
+			} else {
 
 				String regionName = pojo.getRegionName();
 				String regionId = regionName.substring(0, 2);
@@ -105,10 +105,10 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 	}
 
 	@Override
-	public NBPT_SP_REGION receiveCurrentRegion(RegionsPojo pojo, Connection connection) throws SQLException {
+	public NBPT_SP_REGION receiveCurrentRegion(String regionId, Connection connection) throws SQLException {
 
 		try {
-			String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_ID = '" + pojo.getRegionId() + "'";
+			String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_UID = '" + regionId + "'";
 
 			NBPT_SP_REGION regionInfo = this.oneQuery(sql, connection, NBPT_SP_REGION.class);
 
