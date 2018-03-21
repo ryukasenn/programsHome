@@ -18,7 +18,7 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 负责人
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{personInfo.NBPT_SP_PERSON_NAME}',readonly)#ResperName
+                        input.form-control(value='#{personInfo.NBPT_SP_PERSON_NAME}', readonly)#ResperName
                     .col-md-1.col-sm-1 
                         button.btn.btn-default(type="button").addResponsibler
                             span.glyphicon.glyphicon-plus(aria-hidden="true")
@@ -32,7 +32,7 @@ block contents
                         input.form-control(name="regionNote")
                 .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
-                        button(type="button").btn.btn-primary 提交
+                        button(type="button").btn.btn-primary#updateRegionConfirm 提交
 block modal
     include includes/0302Modal
 block scripts

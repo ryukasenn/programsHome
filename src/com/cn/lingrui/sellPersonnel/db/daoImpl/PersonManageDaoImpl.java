@@ -181,16 +181,24 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		
 	}
 
-
 	@Override
-	public List<NBPT_SP_REGION> getRegions(Object object, Connection conn) throws SQLException {
+	public List<NBPT_SP_REGION> getRegions(String level, Connection conn) throws SQLException {
 
-		String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1'";
+		StringBuffer sql = new StringBuffer();
+		
+		if("3".equals(level)) {
+			
+			sql.append("SELECT * FROM NBPT_SP_REGION");
+		} else {
+
+			sql.append("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '" + level + "'");
+		}
 		try {
-			List<NBPT_SP_REGION> resultList = this.query(sql, conn, NBPT_SP_REGION.class);
+			
+			List<NBPT_SP_REGION> resultList = this.query(sql.toString(), conn, NBPT_SP_REGION.class);
 			return resultList;
 		} catch (SQLException e) {
-			log.info("获取大区列表出错" + CommonUtil.getTrace(e));
+			log.info("获取部门列表出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -223,24 +231,29 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 
 		try {
 			
-			// 如果登录人员信息为空,为后勤人员,查询所有大区总
+			// 如果登录人员信息为空,为后勤人员,查询所有人员以供统计
 			if(null == nbpt_SP_PERSON) {
 				
 				
-				String sql =  "	SELECT A.NBPT_SP_PERSON_JOB,A.NBPT_SP_PERSON_TYPE," + 
-						"	B.NBPT_SP_REGION_NAME,B.NBPT_SP_REGION_ID,B.NBPT_SP_REGION_ONAME," + 
-						"	B.NBPT_SP_REGION_LEVEL,C.NBPT_SP_REGION_NAME AS REGION_NAME" + 
-						"	FROM NBPT_SP_PERSON A " + 
-						"	LEFT JOIN NBPT_SP_REGION B " + 
-						"	ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
-						"	LEFT JOIN NBPT_SP_REGION C " + 
-						"	ON SUBSTRING(B.NBPT_SP_REGION_ID,1 ,2) = C.NBPT_SP_REGION_ID" + 
-						"	WHERE A.NBPT_SP_PERSON_DEPT_ID IS NOT NULL AND A.NBPT_SP_PERSON_DEPT_ID <> ''";
+				String sql =    "	SELECT A.NBPT_SP_PERSON_JOB," + 
+								"	A.NBPT_SP_PERSON_TYPE," + 
+								"	B.NBPT_SP_REGION_NAME," + 
+								"	B.NBPT_SP_REGION_ID,B.NBPT_SP_REGION_ONAME," + 
+								"	B.NBPT_SP_REGION_LEVEL," + 
+								"	C.NBPT_SP_REGION_NAME AS REGION_NAME," + 
+								"	C.NBPT_SP_REGION_ONAME AS REGION_ONAME" + 
+								"	FROM NBPT_SP_PERSON A " + 
+								"	LEFT JOIN NBPT_SP_REGION B " + 
+								"	ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
+								"	LEFT JOIN NBPT_SP_REGION C " + 
+								"	ON SUBSTRING(B.NBPT_SP_REGION_ID,1 ,2) = C.NBPT_SP_REGION_ID " + 
+								"	WHERE A.NBPT_SP_PERSON_DEPT_ID IS NOT NULL AND A.NBPT_SP_PERSON_DEPT_ID <> '' " + 
+								"	AND (A.NBPT_SP_PERSON_FLAG = '3' OR A.NBPT_SP_PERSON_FLAG = '2')";
 				persons = this.query(sql, connection, CurrentPerson.class);
 			} 
 			
 			// 如果登录人员的JOB是22,则是地总,查询该地总下的所有人员
-			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
+			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB()) || "26".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				
 				String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE," + 
 							"  A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB," + 
@@ -256,7 +269,10 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
 							"  FROM NBPT_SP_PERSON A " + 
 							"  WHERE A.NBPT_SP_PERSON_DEPT_ID = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_DEPT_ID() + "' " + 
-							"  AND A.NBPT_SP_PERSON_PID <> '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "'";
+							"  AND A.NBPT_SP_PERSON_PID <> '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "' " + 
+							"  AND A.NBPT_SP_PERSON_FLAG <> '3'" +
+							
+							"  ORDER BY A.NBPT_SP_PERSON_ID ";
 	
 				persons = this.query(sql, connection, CurrentPerson.class);
 			}

@@ -26,6 +26,20 @@ block contents
                         .col-xs-4.col-sm-2
                             input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME", value='#{person.NBPT_SP_PERSON_NAME}')
                     .form-group
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp职务
+                        .col-xs-4.col-sm-4
+                            label.radio-inline
+                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="23") 
+                                |区县总
+                            label.radio-inline
+                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="24") 
+                                |预备区县总
+                            label.radio-inline
+                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="25") 
+                                |推广经理
+                    .form-group
                         label.col-xs-1.col-sm-1.control-label
                             font(color="red") *
                             |&nbsp&nbsp身份证号码
@@ -49,20 +63,6 @@ block contents
                             label.radio-inline
                                 input(type="radio",name="NBPT_SP_PERSON_MALE",value="0") 
                                 |女
-                    .form-group
-                        label.col-xs-1.col-sm-1.control-label 
-                            font(color="red") *
-                            |&nbsp&nbsp&nbsp&nbsp职务
-                        .col-xs-4.col-sm-4
-                            label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="23") 
-                                |区县总
-                            label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="24") 
-                                |预备区县总
-                            label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="25") 
-                                |推广经理
                     .form-group.reponseAreas
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -116,35 +116,58 @@ block contents
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2",placeholder="例:20001010", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label QQ
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbspQQ
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_QQ", value='#{person.NBPT_SP_PERSON_QQ}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 微信
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp微信
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_CHAT", value='#{person.NBPT_SP_PERSON_CHAT}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 邮箱
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp邮箱
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_MAIL", value='#{person.NBPT_SP_PERSON_MAIL}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 学历
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp学历
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_DEGREE", value='#{person.NBPT_SP_PERSON_DEGREE}')
+                            select(name="NBPT_SP_PERSON_DEGREE", value='#{person.NBPT_SP_PERSON_DEGREE}').form-control
+                                option 小学
+                                option 初中
+                                option 高中
+                                option 专科
+                                option 本科
+                                option 研究生
+                                option 博士
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 毕业学校
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp毕业学校
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_SCHOOL", value='#{person.NBPT_SP_PERSON_SCHOOL}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 专业
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp专业
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_PROFESS", value='#{person.NBPT_SP_PERSON_PROFESS}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 备注
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp备注
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_NOTE", value='#{person.NBPT_SP_PERSON_NOTE}')
                     .form-group
-                        label.col-xs-1.col-sm-1.control-label 职称
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp职称
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_TITLE", value='#{person.NBPT_SP_PERSON_TITLE}')
                     .form-group

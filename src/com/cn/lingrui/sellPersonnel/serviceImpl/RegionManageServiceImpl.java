@@ -120,7 +120,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	}
 	
 	/**
-	 * 获取负责人信息
+	 * AJAX获取负责人信息
 	 * @throws Exception 
 	 */
 	@Override
@@ -213,6 +213,49 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			log.error("修改部门出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
+	}
+
+	/**
+	 * 提交部门信息修改
+	 */
+	@Override
+	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) {
+
+		try {
+			
+			// 1.查询出部门相关信息
+			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionUid(), this.getConnection());
+			
+			// 2.设定修改信息
+			if("1".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
+				
+				// 2.1 如果是大区信息修改,初始化信息
+				NBPT_SP_REGION updateInfo = new NBPT_SP_REGION();
+				
+				// 2.2 设定Uid
+				updateInfo.setNBPT_SP_REGION_UID(regionInfo.getNBPT_SP_REGION_UID());
+				
+				// 2.3 设定其他信息
+				RegionManageServiceUtils.setUpdateRegionInfos(updateInfo, pojo, regionInfo);
+				
+				// 2.4 执行更新
+				// TODO
+			} else if("2".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
+				
+				// 2.1 如果是地区信息修改,初始化信息
+				NBPT_SP_REGION updateInfo = new NBPT_SP_REGION();
+				
+				// 2.2 设定Uid
+				updateInfo.setNBPT_SP_REGION_UID(regionInfo.getNBPT_SP_REGION_UID());
+				
+				// 2.3 设定其他信息
+				RegionManageServiceUtils.setUpdateRegionInfos(updateInfo, pojo, regionInfo);
+			}
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	/** 
@@ -323,19 +366,6 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
-	}
-	@Override
-	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) {
-
-		try {
-			
-			// 1.查询出部门相关信息
-			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionUid(), this.getConnection());
-		} catch (SQLException e) {
-			// TODO 自动生成的 catch 块
-			e.printStackTrace();
-		}
-		return null;
 	}
 	
 

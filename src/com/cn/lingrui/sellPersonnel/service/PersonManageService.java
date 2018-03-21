@@ -14,7 +14,7 @@ public interface PersonManageService {
 
 	public ModelAndView postAddTerminal(AddPersonPojoIn in) throws Exception;
 
-	public String receiveSelect(String parentId) throws SQLException;
+	public String receiveSelect(String parentId) throws Exception;
 
 	public ModelAndView getSupportAdd() throws Exception;
 

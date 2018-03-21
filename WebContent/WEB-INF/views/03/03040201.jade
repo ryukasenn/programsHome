@@ -25,31 +25,32 @@ block contents
                         label.col-xs-1.col-sm-1.control-label 当前人员
                         .col-xs-4.col-sm-4
                             input.form-control(value='#{thisInfact}', readOnly)
-            .col-xs-11.col-sm-11.placeholder
+            .col-xs-8.col-sm-8.placeholder
                 .panel.panel-default
                     .panel-heading 名单列表
                     table.table-striped
-                        tr
-                            th.col-xs-1.col-sm-1 #
-                            th.col-xs-1.col-sm-1 姓名
-                            th.col-xs-1.col-sm-1 性别
-                            th.col-xs-1.col-sm-1 职务
-                            th.col-xs-1.col-sm-1 文化程度
-                            th.col-xs-1.col-sm-1 入职日期
-                            th.col-xs-1.col-sm-1 工龄
-                            th.col-xs-1.col-sm-1 籍贯
-                            th.col-xs-1.col-sm-1 联系电话
-                            th.col-xs-1.col-sm-1 紧急联系人
-                            th.col-xs-1.col-sm-1 年龄
+                        tr 
+                            th(style="text-align: center") #
+                            th(style="text-align: center") 姓名
+                            th 性别
+                            th 职务
+                            th 文化程度
+                            th 入职日期
+                            th 工龄
+                            th 籍贯
+                            th 联系电话
+                            th 紧急联系人
+                            th 年龄
+                            th 当前状态
                         unless personInfos.length
                             each person,i in personInfos
                                 tr(style="align:center") 
-                                    th.col-xs-1.col-sm-1(scope="row")= i+1
+                                    th(scope="row")= i+1
                                     td.col-xs-1.col-sm-1
-                                        button.btn.btn-link.changePerson(value='#{person.NBPT_SP_PERSON_PID}')
+                                        button.btn.btn-link.changePerson(value='#{person.NBPT_SP_PERSON_PID}', align="left")
                                             #{person.NBPT_SP_PERSON_NAME}
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MALE
-                                    td.col-xs-1.col-sm-1
+                                    td= person.NBPT_SP_PERSON_MALE
+                                    td
                                         case person.NBPT_SP_PERSON_JOB
                                             when '21': 大区总
                                             when '22': 地总
@@ -57,13 +58,19 @@ block contents
                                             when '24': 预备区县总
                                             when '25': 推广经理
                                             when '26': 大区总兼地总
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_DEGREE
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_ENTRYDATA
-                                    td.col-xs-1.col-sm-1 #{person.NBPT_SP_PERSON_WORKAGE}年
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_PLACE
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB1
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_MOB2
-                                    td.col-xs-1.col-sm-1= person.NBPT_SP_PERSON_AGE
+                                    td= person.NBPT_SP_PERSON_DEGREE
+                                    td= person.NBPT_SP_PERSON_ENTRYDATA
+                                    td #{person.NBPT_SP_PERSON_WORKAGE}年
+                                    td= person.NBPT_SP_PERSON_PLACE
+                                    td= person.NBPT_SP_PERSON_MOB1
+                                    td= person.NBPT_SP_PERSON_MOB2
+                                    td= person.NBPT_SP_PERSON_AGE
+                                    td
+                                        case person.NBPT_SP_PERSON_FLAG
+                                            when '2': 在职
+                                            when '0': 等待信息专员审核
+                                            when '1': 等待大区总审核
+                                            when '3': 离职
                                 
         
 block scripts

@@ -3,12 +3,14 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos.person;
 public class CurrentPerson_statistics {
 
 	private String name = ""; // 大区名称
-	private String need = ""; // 大区配额
+	private Integer need = 0; // 大区配额
 	private Integer regionResper = 0; // 大区总
 	private Integer areaResper = 0; // 地区总
 	private Integer xzquResper = 0; // 区县总
 	private Integer xzquResper_preparatory = 0; // 预备区县总
 	private Integer promote = 0; // 推广经理
+	private Integer dismission = 0; // 离职数量
+	private Integer total = 0; // 离职数量
 	public Integer getRegionResper() {
 		return regionResper;
 	}
@@ -45,10 +47,22 @@ public class CurrentPerson_statistics {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getNeed() {
+	public Integer getDismission() {
+		return dismission;
+	}
+	public void setDismission(Integer dismission) {
+		this.dismission = dismission;
+	}
+	public Integer getTotal() {
+		return total;
+	}
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+	public Integer getNeed() {
 		return need;
 	}
-	public void setNeed(String need) {
+	public void setNeed(Integer need) {
 		this.need = need;
 	}
 	

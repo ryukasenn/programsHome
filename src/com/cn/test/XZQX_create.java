@@ -85,10 +85,12 @@ public class XZQX_create {
 			
 			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
 						  "WHERE NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_ID() + "'";
-			sqls.add(sql);			
+			sqls.add(sql);
 		}
+		
 		Statement stmt;
 		stmt = conn.createStatement();
+		
 		for(String sql : sqls) {
 			stmt.addBatch(sql);
 		}
@@ -869,8 +871,9 @@ public class XZQX_create {
 					// 初始化
 					for(int rowi = 1; rowi < realRows; rowi++) {
 						
-						if(checkItems.contains(sheet.getCell(3,rowi).getContents().trim())) {
+						if(checkItems.contains(sheet.getCell(2,rowi).getContents().trim())) {
 							
+							System.out.println(sheet.getCell(2,rowi).getContents().trim() + ":" + realRows);
 						} else {
 
 							checkItems.add(sheet.getCell(2,rowi).getContents().trim());

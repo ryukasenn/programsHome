@@ -6,7 +6,8 @@ public class UpdateRegionPojo {
 	private String regionName;
 	private String regionNote;
 	private String regionNeed;
-	private String regionResponsibler;  
+	private String regionResponsibler;
+	private String regionProvince;
 	public String getRegionUid() {
 		return regionUid;
 	}
@@ -36,6 +37,12 @@ public class UpdateRegionPojo {
 	}
 	public void setRegionResponsibler(String regionResponsibler) {
 		this.regionResponsibler = regionResponsibler;
+	}
+	public String getRegionProvince() {
+		return regionProvince;
+	}
+	public void setRegionProvince(String regionProvince) {
+		this.regionProvince = regionProvince;
 	}
 	
 	
