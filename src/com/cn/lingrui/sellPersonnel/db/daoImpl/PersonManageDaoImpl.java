@@ -248,7 +248,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 								"	LEFT JOIN NBPT_SP_REGION C " + 
 								"	ON SUBSTRING(B.NBPT_SP_REGION_ID,1 ,2) = C.NBPT_SP_REGION_ID " + 
 								"	WHERE A.NBPT_SP_PERSON_DEPT_ID IS NOT NULL AND A.NBPT_SP_PERSON_DEPT_ID <> '' " + 
-								"	AND (A.NBPT_SP_PERSON_FLAG = '3' OR A.NBPT_SP_PERSON_FLAG = '2')";
+								"	AND (A.NBPT_SP_PERSON_FLAG = '3' OR A.NBPT_SP_PERSON_FLAG = '2')" + 
+								"	AND A.NBPT_SP_PERSON_TYPE IS NOT NULL AND A.NBPT_SP_PERSON_TYPE <> '' ";
 				persons = this.query(sql, connection, CurrentPerson.class);
 			} 
 			
@@ -264,7 +265,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  A.NBPT_SP_PERSON_ENTRYDATA," + 
 							"  A.NBPT_SP_PERSON_PLACE," + 
 							"  A.NBPT_SP_PERSON_DEGREE," + 
-							"  A.NBPT_SP_PERSON_PID," + 
+							"  A.NBPT_SP_PERSON_PID," +  
+							"  A.NBPT_SP_PERSON_FLAG," + 
 							"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE," + 
 							"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
 							"  FROM NBPT_SP_PERSON A " + 

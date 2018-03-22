@@ -32,9 +32,9 @@ block contents
                                 td.col-xs-1.col-sm-1= info.xzquResper
                                 td.col-xs-1.col-sm-1= info.xzquResper_preparatory
                                 td.col-xs-1.col-sm-1= info.promote
-                                td.col-xs-1.col-sm-1 0
+                                td.col-xs-1.col-sm-1= info.total
                                 td.col-xs-1.col-sm-1= info.need
-                                td.col-xs-1.col-sm-1 0
+                                td.col-xs-1.col-sm-1= info.balance
         .col-xs-9.col-sm-9.placeholder
             .panel.panel-default
                 .panel-heading OTC统计信息 
@@ -61,7 +61,7 @@ block contents
                                 td.col-xs-1.col-sm-1.OTC_promote= info.promote
                                 td.col-xs-1.col-sm-1.OTC_heji= info.total
                                 td.col-xs-1.col-sm-1.OTC_need= info.need
-                                td.col-xs-1.col-sm-1.OTC_differ 0
+                                td.col-xs-1.col-sm-1= info.balance
                     tr(style="align:center") 
                         th.col-xs-1.col-sm-1 合计
                         th.col-xs-1.col-sm-1.OTC_regionResper_total
@@ -71,7 +71,7 @@ block contents
                         th.col-xs-1.col-sm-1.OTC_promote_total
                         th.col-xs-1.col-sm-1.OTC_heji_total
                         th.col-xs-1.col-sm-1.OTC_need_total
-                        th.col-xs-1.col-sm-1.OTC_differ_total
+                        th.col-xs-1.col-sm-1
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
     script(language="javascript", src="#{myPath}/javascripts/03/03040202.js")

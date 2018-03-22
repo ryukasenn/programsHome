@@ -1,7 +1,8 @@
-package com.cn.lingrui.sellPersonnel.pojos.area;
+package com.cn.lingrui.sellPersonnel.pojos.check;
 
 import java.util.List;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.area.Region;
+
+import com.cn.lingrui.sellPersonnel.db.dbpojos.check.Region;
 
 public class CurrentAreasPojo {
 

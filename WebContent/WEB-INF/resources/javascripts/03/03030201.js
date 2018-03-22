@@ -1,13 +1,11 @@
 $(function(){
 	
-	$('.province-collapse').on('show.bs.collapse', function () {
+	$('.checkOutPersonInfo').on('click', function () {
 
-		$(".collapse").collapse('hide');
-	})
-	
-	$('.area-collapse').on('show.bs.collapse', function () {
-
-		$(this).siblings(".collapse").collapse('hide');
+		$_this = $(this);
+		
+		$("input[name='UNCHECKPID']").val($_this.val());
+		$("#checkOutForm").attr('method', 'POST').attr('action', baseUrl + "/sellPersonnel/receiveUncheck").submit()
 	})
 	
 })

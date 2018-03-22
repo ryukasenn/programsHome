@@ -28,7 +28,7 @@ public class NBPT_SP_PERSON {
 	private String NBPT_SP_PERSON_AREANO = ""; // 区域编号
 	private String NBPT_SP_PERSON_LOGINID = ""; // 登录名
 	private String NBPT_SP_PERSON_NOTE = ""; // 备注
-	private String NBPT_SP_PERSON_FLAG = "0"; // 离职标志
+	private String NBPT_SP_PERSON_FLAG = ""; // 离职标志
 	private String NBPT_SP_PERSON_POLICYTYPE = ""; // 保单类型
 	public String getNBPT_SP_PERSON_ID() {
 		return NBPT_SP_PERSON_ID;

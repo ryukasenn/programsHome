@@ -1,35 +1,45 @@
 
-// 地区管理
+// 未审核列表查询
 extends ./layouts/0303
 
 block contents
-    unless currents.regions.length
-        .col-md-2.col-sm-2
-            each region in currents.regions
-                .radio
-                    label 
-                        input(type="radio",name="regions",data-toggle="collapse",id="region_#{region.REGION_ID}",data-target="#provinces_#{region.REGION_ID}",value="#{region.REGION_ID}")
-                        |#{region.REGION_NAME}
-        .col-md-3.col-sm-3
-            each province in currents.provinces
-                .col-md-12.col-sm-12.collapse.province-collapse(id="provinces_#{province.REGION_ID}")
-                    each p in province.provinces
-                        .radio
-                            label 
-                                input(type="radio",name="provinces",data-toggle="collapse",id="province_#{p.PROVINCE_ID}",data-target="#areas_#{p.PROVINCE_ID}",value="#{p.PROVINCE_ID}")
-                                |#{p.PROVINCE_NAME}
-        .col-md-3.col-sm-3
-            each area in currents.areas
-                .col-md-12.col-sm-12.collapse.area-collapse(id="areas_#{area.PROVINCE_ID}")
-                    each a in area.areas
-                        .radio
-                            label 
-                                input(type="radio",name="areas",id="area_#{a.AREA_ID}",value="#{a.AREA_ID}")
-                                |#{a.AREA_NAME}
+    form#checkOutForm
+        input(type='hidden', name='UNCHECKPID')
+        
+    if message
+        .row.placeholders
+            .col-xs-12.col-sm-12.placeholder
+                h3= message
+    else
+        .row.placeholders
+            .col-xs-12.col-sm-12.placeholder
+                .col-xs-4.col-sm-4
+                    .panel.panel-default
+                        .panel-heading 名单列表
+                        table.table-striped
+                            tr
+                                th(style='text-align:center') #
+                                th 名称
+                                th 所属地区
+                                th 所属地总
+                                th 操作
+                            unless uncheckList.length
+                                each item,i in uncheckList
+                                    tr
+                                        th.col-xs-1.col-sm-1= i + 1
+                                        td= item.UNCHECKNAME
+                                        td= item.UNCHECKDEPTNAME
+                                        td= item.UNCHECKAREABELONGTONAME
+                                        td 
+                                            button.btn.btn-link(value='#{item.UNCHECKPID}').checkOutPersonInfo 详细信息
+                                    
+                                    
+            
                     
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/0303.js")
     script(language="javascript", src="#{myPath}/javascripts/03/03030201.js")
+    
 block pageId
-    p(style="display:none") 03030101
+    p(style="display:none") 03030201
     

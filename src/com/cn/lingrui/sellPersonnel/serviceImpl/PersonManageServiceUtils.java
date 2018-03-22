@@ -6,6 +6,7 @@ import java.util.List;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson_statistics;
 import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
@@ -16,9 +17,10 @@ public class PersonManageServiceUtils {
 
 	/**
 	 *  后勤人员查询合计信息处理
+	 * @param regionList 
 	 * @return
 	 */
-	public static List<CurrentPerson_statistics> dealCurrentPerson_total(List<CurrentPerson> personInfos){
+	public static List<CurrentPerson_statistics> dealCurrentPerson_total(List<CurrentPerson> personInfos, List<NBPT_SP_REGION> regionList){
 		
 		List<String> checkItems = new ArrayList<>();
 		List<CurrentPerson_statistics> resultList = new ArrayList<>();
@@ -37,8 +39,36 @@ public class PersonManageServiceUtils {
 
 				// 新增当前信息
 				CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
+				
+				if("2".equals(type)) {
+					
+					Integer need = 0;
+					
+					// 计算OTC合计配额数
+					for(NBPT_SP_REGION region : regionList) {
+						
+						need += Integer.valueOf(region.getNBPT_SP_REGION_ONAME());
+					}				
+					thisInfo.setNeed(need);
+				}
 				addPerson_total(thisInfo, person);
 				resultList.add(thisInfo);
+			}
+		}
+
+		for(CurrentPerson_statistics info : resultList) {
+			
+			Integer balance = info.getNeed() - info.getTotal();
+			
+			if(0 < balance) {
+				
+				info.setBalance("差" + balance + "人");
+			} else if(0 == balance) {
+
+				info.setBalance("满配");
+			} else if(0 > balance) {
+				
+				info.setBalance("超出" + Math.abs(balance) + "人");
 			}
 		}
 		return resultList;
@@ -81,8 +111,23 @@ public class PersonManageServiceUtils {
 					resultList.add(thisInfo);
 				}
 			}
+		}
+
+		
+		for(CurrentPerson_statistics info : resultList) {
 			
-			// TODO 计算差额
+			Integer balance = info.getNeed() - info.getTotal();
+			
+			if(0 < balance) {
+				
+				info.setBalance("差" + balance + "人");
+			} else if(0 == balance) {
+
+				info.setBalance("满配");
+			} else if(0 > balance) {
+				
+				info.setBalance("超出" + Math.abs(balance) + "人");
+			}
 		}
 		return resultList;
 	}
@@ -136,12 +181,12 @@ public class PersonManageServiceUtils {
 			break;
 		}
 		
-		if("21".equals(job) || "22".equals(job) || "26".equals(job)) {
-
-		} else {
+		if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
 
 			// 添加合计数
 			thisInfo.setTotal(thisInfo.getTotal()+ 1);
+		} else {
+
 		}
 		
 		
@@ -220,8 +265,15 @@ public class PersonManageServiceUtils {
 			default:
 				break;			
 			}
-			
-			thisInfo.setTotal(thisInfo.getTotal() + 1);
+
+			// 如果是地总
+			if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
+
+				// 添加合计数
+				thisInfo.setTotal(thisInfo.getTotal()+ 1);
+			} else {
+
+			}
 			
 		}
 		
@@ -376,6 +428,9 @@ public class PersonManageServiceUtils {
 		
 		// 保单类型
 		person.setNBPT_SP_PERSON_POLICYTYPE(in.getNBPT_SP_PERSON_POLICYTYPE());
+		
+		// 人员状态标志
+		person.setNBPT_SP_PERSON_FLAG("2"); // TODO ,当前版本设为在职状态
 		
 	}
 	

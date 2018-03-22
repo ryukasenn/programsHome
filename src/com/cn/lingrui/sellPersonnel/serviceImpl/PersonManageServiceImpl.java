@@ -75,12 +75,15 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 				// 查询所有下级人员信息
 				List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
+
+				List<NBPT_SP_REGION> regionList = personManageDao.getRegions("1", this.getConnection());
 				
 				// 后勤人员查询合计信息处理
-				List<CurrentPerson_statistics> infos = PersonManageServiceUtils.dealCurrentPerson_total(personInfos);
+				List<CurrentPerson_statistics> infos = PersonManageServiceUtils.dealCurrentPerson_total(personInfos,regionList);
 				
 				// 后勤人员查询OTC统计信息处理
 				List<CurrentPerson_statistics> otcInfos = PersonManageServiceUtils.dealCurrentPerson_region(personInfos);
+				
 				
 				// 合计信息
 				mv.addObject("totalInfos", infos);

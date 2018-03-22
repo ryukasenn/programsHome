@@ -5,7 +5,7 @@ $(function(){
 	 */
 	$("#receiveCurrents").on("click", function(){
 		
-		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/areas").attr("method", "GET").submit();
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/receiveUnchecks").attr("method", "GET").submit();
 	})
 	
 })

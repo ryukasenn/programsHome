@@ -48,7 +48,7 @@ public class XZQX_create {
 		// 添加地区与行政区县关系
 		//this.addArea_Xzqxhf();
 		
-		//System.out.println(CommonUtil.getUUID_32());
+		System.out.println(CommonUtil.getUUID_32());
 		
 		// 地区负责人添加
 		//this.checkResponseble();
@@ -67,7 +67,7 @@ public class XZQX_create {
 		//this.addArea_Province();
 		
 		// 添加负责人和部门关系列表
-		this.addResponseble();
+		//this.addResponseble();
 	}
 	
 	private void addResponseble() throws ClassNotFoundException, SQLException {
@@ -84,7 +84,7 @@ public class XZQX_create {
 		for(NBPT_SP_REGION personRegion : resultList) {
 			
 			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
-						  "WHERE NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_ID() + "'";
+						  "WHERE NBPT_SP_PERSON_PID = '" + personRegion.getNBPT_SP_REGION_RESPONSIBLER() + "'";
 			sqls.add(sql);
 		}
 		

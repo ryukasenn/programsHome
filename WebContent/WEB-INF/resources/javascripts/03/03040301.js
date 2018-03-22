@@ -3,7 +3,7 @@ $(function(){
 	if("" == $("#NBPT_SP_PERSON_PID").val()){
 
 	} else {
-		// 负责区域的单选框点击事件
+		// 负责区域初始化选定事件
 		AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalXzqx", {TerminalId : $("#NBPT_SP_PERSON_PID").val()},function(jsonData){
 						
 			$_copyParent = $(".reponseAreas").eq(0);

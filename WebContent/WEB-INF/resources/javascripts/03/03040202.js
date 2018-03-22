@@ -8,8 +8,7 @@ $(function(){
 									"OTC_xzquResper_preparatory_total",
 									"OTC_promote_total",
 									"OTC_heji_total",
-									"OTC_need_total",
-									"OTC_differ_total");
+									"OTC_need_total");
 
 	/**
 	 * 初始化,合计列表统计

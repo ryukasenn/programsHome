@@ -4,6 +4,7 @@ public class CurrentPerson_statistics {
 
 	private String name = ""; // 大区名称
 	private Integer need = 0; // 大区配额
+	private String balance = ""; // 大区差额
 	private Integer regionResper = 0; // 大区总
 	private Integer areaResper = 0; // 地区总
 	private Integer xzquResper = 0; // 区县总
@@ -64,6 +65,12 @@ public class CurrentPerson_statistics {
 	}
 	public void setNeed(Integer need) {
 		this.need = need;
+	}
+	public String getBalance() {
+		return balance;
+	}
+	public void setBalance(String balance) {
+		this.balance = balance;
 	}
 	
 

@@ -1,4 +1,4 @@
-package com.cn.lingrui.sellPersonnel.db.dbpojos.area;
+package com.cn.lingrui.sellPersonnel.db.dbpojos.check;
 
 public class Region {
 
