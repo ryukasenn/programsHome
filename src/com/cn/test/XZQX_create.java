@@ -48,7 +48,7 @@ public class XZQX_create {
 		// 添加地区与行政区县关系
 		//this.addArea_Xzqxhf();
 		
-		System.out.println(CommonUtil.getUUID_32());
+		//System.out.println(CommonUtil.getUUID_32());
 		
 		// 地区负责人添加
 		//this.checkResponseble();
@@ -58,6 +58,7 @@ public class XZQX_create {
 		//this.test1();
 		
 		// 添加终端
+		// 1.添加人员
 		//this.addTerminals();
 		
 		// 添加人员配置
@@ -68,8 +69,52 @@ public class XZQX_create {
 		
 		// 添加负责人和部门关系列表
 		//this.addResponseble();
+		
+		// 添加用户名
+		this.addLoginId();
+		
+		
 	}
-	
+	private void addLoginId() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON WHERE NBPT_SP_PERSON_JOB = '22'");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询所有地总
+		List<NBPT_SP_PERSON> resultList = XZQX_create.rsToBean(NBPT_SP_PERSON.class, rs1);
+		
+		List<String> sqls = new ArrayList<>();
+//		for(NBPT_SP_PERSON person : resultList) {
+//			
+//			String sql =  "INSERT NBPT_RSFZ_USER VALUES ("
+//					+ "'" + person.getNBPT_SP_PERSON_LOGINID() + "',"
+//					+ "'" + person.getNBPT_SP_PERSON_NAME() + "',"
+//					+ "'',"
+//					+ "'',"
+//					+ "'',"
+//					+ "'lingrui123')";
+//			sqls.add(sql);
+//		}
+		
+		for(NBPT_SP_PERSON person : resultList) {
+		
+			String sql =  "INSERT NBPT_RSFZ_U_R VALUES ("
+					+ "'" + person.getNBPT_SP_PERSON_LOGINID() + "',"
+					+ "'600006')";
+			sqls.add(sql);
+		}
+		
+		Statement stmt;
+		stmt = conn.createStatement();
+		
+		for(String sql : sqls) {
+			stmt.addBatch(sql);
+		}
+
+		stmt.executeBatch();
+	}
 	private void addResponseble() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
@@ -200,23 +245,17 @@ public class XZQX_create {
 		}
 	}
 	private void addTerminals() throws SQLException, ClassNotFoundException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "diquxzqx.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "zhongduan.xls";
 		File targetFile = new File(fileNameTemp); 
-		//Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
 		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
-
-		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_COMMON_XZQXHF where NBPT_COMMON_XZQXHF_ID LIKE '41%'");
+		
+		PreparedStatement ps1 = conn.prepareStatement("SELECT A.* FROM NBPT_SP_REGION A WHERE A.NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
 		
 		// 查询河南区县划分
-		List<NBPT_COMMON_XZQXHF> resultList = XZQX_create.rsToBean(NBPT_COMMON_XZQXHF.class, rs1);
-		
-		PreparedStatement ps2 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION where NBPT_SP_REGION_ID LIKE '11%'");
-		ResultSet rs2 = ps2.executeQuery();
-		
-		//List<NBPT_SP_REGION> regionList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs2);
-
+		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs1);
 		try {
 			
 			if(!targetFile.exists()) {
@@ -240,11 +279,91 @@ public class XZQX_create {
 					int realRows = sheet.getRows();
 					
 					// 初始化
-					for(int rowi = 1; rowi < realRows; rowi++) {
+					for(int rowi = 2; rowi < realRows; rowi++) {
 						
-						//if(sheet.getCell(4,rowi).getContents())
+						// 如果已存在
+						if(chekcItems.contains(sheet.getCell(11,rowi).getContents())) {
+							
+							System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "数据属于重复数据,身份证重复");
+							continue;
+						} else {
+							
+							// 加入检查队列
+							chekcItems.add(sheet.getCell(11,rowi).getContents());
+							
+							String male = "男".equals(sheet.getCell(5,rowi).getContents())?"1":"0";
+							String birs = sheet.getCell(11,rowi).getContents().substring(6, 14);
+							String job = "区县总经理".equals(sheet.getCell(7,rowi).getContents()) ? "23" : "预备区县总".equals(sheet.getCell(7,rowi).getContents()) ? "24" : "25";
+							String entryDate = sheet.getCell(9,rowi).getContents();
+							
+							if(!(8 == entryDate.length())) {
+								System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "入职日期有误");
+								continue;
+							}
+							
+							String deptId = "";
+							
+							for(NBPT_SP_REGION region : resultList) {
+								
+								if(sheet.getCell(2,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
+									
+									deptId = region.getNBPT_SP_REGION_UID();
+									break;
+								}
+							}
+							if("".equals(deptId)) {
+
+								System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "地区信息有误");
+								continue;
+							}
+							String sql = "INSERT NBPT_SP_PERSON ("
+									+ "NBPT_SP_PERSON_PID,"
+									+ "NBPT_SP_PERSON_ID,"
+									+ "NBPT_SP_PERSON_DEPT_ID,"
+									+ "NBPT_SP_PERSON_TYPE,"
+									+ "NBPT_SP_PERSON_NAME,"
+									+ "NBPT_SP_PERSON_MALE,"
+									+ "NBPT_SP_PERSON_BIRS,"
+									+ "NBPT_SP_PERSON_IDNUM,"
+									+ "NBPT_SP_PERSON_MOB1,"
+									+ "NBPT_SP_PERSON_MOB2,"
+									+ "NBPT_SP_PERSON_PLACE,"
+									+ "NBPT_SP_PERSON_JOB,"
+									+ "NBPT_SP_PERSON_DEGREE,"
+									+ "NBPT_SP_PERSON_FLAG,"
+									+ "NBPT_SP_PERSON_ENTRYDATA"
+									+ ")"
+									+ " VALUES ("
+									+ "'" + CommonUtil.getUUID_32() + "',"
+									+ "'" + (100269 + rowi) + "',"
+									+ "'" + deptId + "',"
+									+ "'2',"
+									+ "'" + sheet.getCell(4,rowi).getContents() + "',"
+									+ "'" + male + "',"
+									+ "'" + birs + "',"
+									+ "'" + sheet.getCell(11,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(12,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(13,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(10,rowi).getContents() + "',"
+									+ "'" + job + "',"
+									+ "'" + sheet.getCell(8,rowi).getContents() + "',"
+									+ "'2',"
+									+ "'" + entryDate + "'"
+									+ ")";
+							sqls.add(sql);
+						}
 					}
 				}
+				
+				Statement stmt;
+				stmt = conn.createStatement();
+
+
+				for(String sql : sqls) {
+					stmt.addBatch(sql);
+				}
+		
+				stmt.executeBatch();
 			}
 		}catch (Exception e) {
 			// TODO: handle exception

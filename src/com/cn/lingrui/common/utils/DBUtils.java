@@ -71,7 +71,7 @@ public class DBUtils {
 						// 如果属性包含该属性,则添加
 						boolean flag = f.isAccessible();
 						f.setAccessible(true);
-						f.set(entity, String.valueOf(rs.getObject(f.getName())));
+						f.set(entity, String.valueOf(null == rs.getObject(f.getName())?"":rs.getObject(f.getName())));
 						f.setAccessible(flag);
 					}
 				}
