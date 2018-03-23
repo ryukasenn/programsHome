@@ -119,6 +119,8 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", out.getUserRole()));
 			}
+
+			log.info("用户 " + in.getUserId() + " 登录成功");
 			
 		} else {
 			mv = HttpUtil.getModelAndView("common/login");
@@ -171,7 +173,8 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 
 	@Override
 	public ModelAndView otherLogin(String username) throws Exception {
-		
+
+		log.info("用户 " + username + " 尝试从OA系统登录");
 		this.before();
 		
 		// 验证用户
@@ -186,6 +189,7 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 				// 获取用户角色
 				String role = loginDao.getRole(username, this.getConnection()).get(0).getNBPT_RSFZ_U_R_RID();
 
+				log.info("用户 " + username + " 登录成功");
 				ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", role));
 				return this.after(mv, "login", username, role);
 			}

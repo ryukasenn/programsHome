@@ -33,6 +33,7 @@ public class LoginController {
 		String username = req.getParameter("username");
 		if(null != url && GlobalParams.REFER.equals(url)) {
 			
+			
 			//String username = HttpUtil.decodeToken(token);
 			if(!"".equals(username)) {
 				
