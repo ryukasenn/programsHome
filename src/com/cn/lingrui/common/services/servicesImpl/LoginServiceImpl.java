@@ -125,6 +125,7 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 		} else {
 			mv = HttpUtil.getModelAndView("common/login");
 		}
+		mv.addObject("messages", out.getMessages());
 		return mv;
 
 	}
@@ -191,6 +192,18 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 
 				log.info("用户 " + username + " 登录成功");
 				ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", role));
+				
+
+				// 添加登录信息
+				// 添加用户登录session
+				getSession().setAttribute(username, role);
+
+				// 验证成功添加Cookie
+				Cookie cookieName = new Cookie("userName", users.get(0).getNBPT_RSFZ_USER_NAME());
+				Cookie cookieId = new Cookie("userID", username);
+				
+				getResponse().addCookie(cookieName);
+				getResponse().addCookie(cookieId);
 				return this.after(mv, "login", username, role);
 			}
 			

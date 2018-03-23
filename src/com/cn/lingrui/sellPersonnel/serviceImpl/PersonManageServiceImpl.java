@@ -123,7 +123,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.info("查询当前所有人员出错");
+			log.error("查询当前所有人员出错");
 			throw new Exception();
 
 		}
@@ -174,7 +174,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.info("获取添加终端人员页面失败" + CommonUtil.getTrace(e));
+			log.error("获取添加终端人员页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -243,7 +243,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.info("添加终端人员错" + CommonUtil.getTrace(e));
+			log.error("添加终端人员错" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -295,7 +295,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 //			return this.after(mv);
 //		} catch (SQLException e) {
 //
-//			log.info("获取添加终端人员负责区域页面失败" + CommonUtil.getTrace(e));
+//			log.error("获取添加终端人员负责区域页面失败" + CommonUtil.getTrace(e));
 //			throw new Exception();
 //		}
 //	}
@@ -320,7 +320,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 			
 			this.closeException();
-			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
+			log.error("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -357,7 +357,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 			
 			this.closeException();
-			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
+			log.error("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -383,7 +383,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		}catch (SQLException e) {
 
 			this.closeException();
-			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
+			log.error("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -427,7 +427,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		} catch (SQLException e) {
 			
 			this.closeException();
-			log.info("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
+			log.error("获取添加地总大区总页面失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 
@@ -452,7 +452,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		}catch (SQLException e) {
 
 			this.closeException();
-			log.info("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}
@@ -464,7 +464,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			this.before();
 		
-
 			// 获取国家行政区县划分
 			List<NBPT_COMMON_XZQXHF> personIdqx = personManageDao.checkPlace(idNum.substring(0, 6), this.getConnection());
 			
@@ -474,7 +473,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		}catch (SQLException e) {
 
 			this.closeException();
-			log.info("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}

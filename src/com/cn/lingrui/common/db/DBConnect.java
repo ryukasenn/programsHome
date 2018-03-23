@@ -32,17 +32,25 @@ public class DBConnect {
 		}
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+			
+			// 只传入用户名和密码
 			if (dbParams.length == 0) {
 
 				conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwmaster", "cw001" + userName, password);
-			} else if(dbParams.length == 1){
+			} 
+			
+			// 加数据库名
+			else if(dbParams.length == 1){
 
 				conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + dbParams[0], userName, password);
-			} else if(dbParams.length == 2){
+			} 
+			
+			// IP加数据库名
+			else if(dbParams.length == 2){
 
 				conn = DriverManager.getConnection(GlobalParams.DBBASE_URL.replace(GlobalParams.COMMON_IP, dbParams[0]) + dbParams[1], userName, password);
-			} else {
-				log.info("数据库指定错误" );
+			}else {
+				log.error("数据库指定错误" );
 				throw new SQLException();
 			}
 			conn.setAutoCommit(false);
@@ -54,10 +62,13 @@ public class DBConnect {
 			
 			if(dbParams.length == 0) {
 			
-				log.info("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库为:cwmaster" );
-			} else {
+				log.error("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库为:cwmaster" );
+			} else if(dbParams.length == 1){
 				
-				log.info("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库为:" + dbParams[0]);
+				log.error("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库为:" + dbParams[0]);
+			}else {
+				
+				log.error("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库IP为:" + dbParams[0] + ", 登录数据库为:" + dbParams[1]);
 			}
 		}
 	}
@@ -76,7 +87,7 @@ public class DBConnect {
 
 			if(null == conn) {
 				
-				log.info("连接获取异常");
+				log.error("连接获取异常");
 			} else {
 
 				conn.commit();
@@ -91,11 +102,11 @@ public class DBConnect {
 
 					conn.rollback();
 					conn.close();
-					log.info("数据库业务提交失败,正常回滚结束");
+					log.error("数据库业务提交失败,正常回滚结束");
 				}
 			} catch (Exception e1) {
 
-				log.info("数据库业务回滚失败");
+				log.error("数据库业务回滚失败");
 			}
 		}
 	}
@@ -106,10 +117,10 @@ public class DBConnect {
 			
 			conn.rollback();
 			conn.close();
-			log.info("数据库业务提交失败,正常回滚结束");
+			log.error("数据库业务提交失败,正常回滚结束");
 			
 		} catch (SQLException e) {
-			log.info("数据库业务回滚失败");
+			log.error("数据库业务回滚失败");
 		}
 	}
 }

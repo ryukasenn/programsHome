@@ -34,7 +34,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				resultList = this.query(sql + " order by NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_TYPE ASC,NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC", conn, NBPT_RSFZ_PAGE.class);				
 			} catch (SQLException e) {
 
-				log.info("查询所有页面出错" + e.getMessage());
+				log.error("查询所有页面出错" + e.getMessage());
 				throw new SQLException();
 				
 			}
@@ -54,7 +54,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '0' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);				
 			} catch (Exception e) {
 
-				log.info("查询模块出错" + e.getMessage());
+				log.error("查询模块出错" + e.getMessage());
 			}
 		}
 		return resultList;
@@ -72,7 +72,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("添加模块出错" + CommonUtil.getTrace(e));
+				log.error("添加模块出错" + CommonUtil.getTrace(e));
 			}
 		}
 	}
@@ -88,7 +88,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 			
 		}catch (Exception e) {
 
-			log.info("删除模块出错" + CommonUtil.getTrace(e));
+			log.error("删除模块出错" + CommonUtil.getTrace(e));
 		}
 		
 	}
@@ -106,7 +106,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("修改模块出错" + CommonUtil.getTrace(e));
+				log.error("修改模块出错" + CommonUtil.getTrace(e));
 			}
 		}
 		System.out.println(sql);
@@ -125,7 +125,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '1' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
 			} catch (Exception e) {
 
-				log.info("查询功能出错" + e.getMessage());
+				log.error("查询功能出错" + e.getMessage());
 			}
 		}
 		return resultList;
@@ -143,7 +143,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("添加功能出错" + CommonUtil.getTrace(e));
+				log.error("添加功能出错" + CommonUtil.getTrace(e));
 			}
 		}		
 	}
@@ -159,7 +159,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 			
 		}catch (Exception e) {
 
-			log.info("删除模块出错" + CommonUtil.getTrace(e));
+			log.error("删除模块出错" + CommonUtil.getTrace(e));
 		}
 		
 	}
@@ -177,7 +177,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("修改功能出错" + CommonUtil.getTrace(e));
+				log.error("修改功能出错" + CommonUtil.getTrace(e));
 			}
 		}
 		
@@ -195,7 +195,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '2' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
 			} catch (Exception e) {
 
-				log.info("查询页面出错" + e.getMessage());
+				log.error("查询页面出错" + e.getMessage());
 			}
 		}
 		return resultList;
@@ -213,7 +213,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("添加页面出错" + CommonUtil.getTrace(e));
+				log.error("添加页面出错" + CommonUtil.getTrace(e));
 			}
 		}		
 	}
@@ -231,7 +231,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 			
 		}catch (Exception e) {
 
-			log.info("删除页面出错" + CommonUtil.getTrace(e));
+			log.error("删除页面出错" + CommonUtil.getTrace(e));
 		}
 		
 	}
@@ -249,7 +249,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 				
 			}catch (Exception e) {
 
-				log.info("修改页面出错" + CommonUtil.getTrace(e));
+				log.error("修改页面出错" + CommonUtil.getTrace(e));
 			}
 		}
 	}

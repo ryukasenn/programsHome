@@ -18,6 +18,10 @@ block body
                         input(id="password", name="password", placeholder="密码", type="password").form-control
                     .form-group
                         button(type="submit").btn.btn-default 登录
+                    .form-group.has-error.has-feedback
+                        if messages
+                            each item in messages
+                                .errorMessage= item
                         
 block scripts
     script(src="#{myPath}/javascripts/login.js")

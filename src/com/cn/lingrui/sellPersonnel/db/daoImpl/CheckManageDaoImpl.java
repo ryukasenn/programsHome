@@ -53,7 +53,7 @@ public class CheckManageDaoImpl extends BaseDaoImpl implements CheckManageDao {
 			
 		} catch (SQLException e) {
 			
-			log.info("查询信息专员下未审核列表出错" + CommonUtil.getTraceInfo());
+			log.error("查询信息专员下未审核列表出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -74,7 +74,7 @@ public class CheckManageDaoImpl extends BaseDaoImpl implements CheckManageDao {
 			
 		} catch (SQLException e) {
 			
-			log.info("查询信息专员下未审核列表出错" + CommonUtil.getTraceInfo());
+			log.error("查询信息专员下未审核列表出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -97,7 +97,7 @@ public class CheckManageDaoImpl extends BaseDaoImpl implements CheckManageDao {
 			return respons;
 		} catch (SQLException e) {
 			
-			log.info("查询信息专员下未审核人员负责区域" + CommonUtil.getTraceInfo());
+			log.error("查询信息专员下未审核人员负责区域" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 		

@@ -262,8 +262,9 @@ public class DBUtils {
 	public static DBConnect getCommonDBC() {
 
 		try {
-			
-			return new DBConnect(GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD, GlobalParams.COMMON_DBNAME);
+
+			// 当前公共数据库设定在ekp数据库中
+			return new DBConnect(GlobalParams.SELLPERSONNEL_USERNAME, GlobalParams.SELLPERSONNEL_PASSWORD, GlobalParams.SELLPERSONNEL_IP, GlobalParams.SELLPERSONNEL_DBNAME);
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());
@@ -297,7 +298,7 @@ public class DBUtils {
 
 		try {
 			
-			return new DBConnect(GlobalParams.SELLPERSONNEL_USERNAME, GlobalParams.SELLPERSONNEL_PASSWORD, GlobalParams.SELLPERSONNEL_DBNAME);
+			return new DBConnect(GlobalParams.SELLPERSONNEL_USERNAME, GlobalParams.SELLPERSONNEL_PASSWORD, GlobalParams.SELLPERSONNEL_IP, GlobalParams.SELLPERSONNEL_DBNAME);
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());
@@ -306,7 +307,7 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 获取销售人事系统数据库连接 
+	 * 获取浪潮贴膏剂数据库连接 
 	 * 
 	 * @return
 	 */
@@ -468,6 +469,11 @@ public class DBUtils {
 			
 			return conditions;
 		}
+	}
+	
+	public static void receiveGlobalParam(String key) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		
+		System.out.println(GlobalParams.class.getField(key).get(GlobalParams.class));
 	}
 }
 

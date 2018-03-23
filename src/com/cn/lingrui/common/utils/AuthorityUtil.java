@@ -39,7 +39,7 @@ public class AuthorityUtil {
 
 			if(0 != type.length) {
 				
-				log.info("2次查询,查询出错");
+				log.debug("页面权限2次查询,查询出错");
 				return "";
 			}
 			// 如果缓存中不存在该角色的权限信息,重新查询数据库
@@ -79,7 +79,7 @@ public class AuthorityUtil {
 
 			if(0 != type.length) {
 				
-				log.info("2次查询,查询出错");
+				log.debug("模块权限2次查询,查询出错");
 				return null;
 			}
 			// 如果缓存中不存在该角色的权限信息,重新查询数据库
@@ -110,7 +110,7 @@ public class AuthorityUtil {
 
 			if(0 != type.length) {
 				
-				log.info("2次查询,查询出错");
+				log.debug("角色功能2次查询,查询出错");
 				return null;
 			}
 			// 如果缓存中不存在该角色的权限信息,重新查询数据库

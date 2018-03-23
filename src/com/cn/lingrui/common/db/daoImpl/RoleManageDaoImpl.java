@@ -34,7 +34,7 @@ public class RoleManageDaoImpl extends BaseDaoImpl implements RoleManageDao{
 						+ " order by NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_ID ASC,NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_LEVEL ASC", conn, NBPT_RSFZ_ROLE.class);
 			} catch (SQLException e) {
 
-				log.info("查询所有角色出错" + e.getMessage());
+				log.error("查询所有角色出错" + e.getMessage());
 				throw new SQLException();
 			}
 		}

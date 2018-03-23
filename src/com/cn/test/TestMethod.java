@@ -136,6 +136,12 @@ public class TestMethod {
 		list.add(xzqxhf3);
 		System.out.println(SelectsUtils.createXzqxhfSelects(list));
 	}
+	
+	@Test
+	public void test5() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+//		CommonUtil.class.getClassLoader().getResourceAsStream(CommonUtil.class.getResource("/").getPath() + "com/cn/config/base.properties");
+		DBUtils.receiveGlobalParam("ERPTGJ_PASSWORD");
+	}
 }
 
 

@@ -62,7 +62,7 @@ public class BaseDaoImpl implements BaseDao{
 			
 		} catch (SQLException e) {
 
-			log.info("执行单条插入,更新或删除出错" + CommonUtil.getTrace(e));
+			log.error("执行单条插入,更新或删除出错" + CommonUtil.getTrace(e));
 			throw new SQLException() ;
 		}
 	}
@@ -84,7 +84,7 @@ public class BaseDaoImpl implements BaseDao{
 				return DBUtils.rsToBean(classz, rs);
 			} catch (SQLException e) {
 
-				log.info("通用查询出错" + CommonUtil.getTraceInfo());
+				log.error("通用查询出错" + CommonUtil.getTraceInfo());
 				throw new SQLException();
 			}
 	}
@@ -106,7 +106,7 @@ public class BaseDaoImpl implements BaseDao{
 			return resultList.size() == 0 ? null : resultList.get(0);
 		} catch (Exception e) {
 	
-			log.info("通用查询出错" + CommonUtil.getTraceInfo());
+			log.error("通用查询出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		} 
 	}
@@ -157,7 +157,7 @@ public class BaseDaoImpl implements BaseDao{
 			return rs;
 		} catch (SQLException e) {
 			
-			log.info("调用存储过程: " + procName + "出错");
+			log.error("调用存储过程: " + procName + "出错");
 			throw new SQLException() ;
 		}	
 	}
@@ -176,7 +176,7 @@ public class BaseDaoImpl implements BaseDao{
 			return maxId;
 		} catch (Exception e) {
 			
-			log.info("获取" + tableName + "最大标号出错" + CommonUtil.getTrace(e));
+			log.error("获取" + tableName + "最大标号出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -201,7 +201,7 @@ public class BaseDaoImpl implements BaseDao{
 			return resultList;
 		} catch (Exception e) {
 			
-			log.info("获取字典表出错");
+			log.error("获取字典表出错");
 			throw new SQLException();
 		}
 	}
@@ -231,7 +231,7 @@ public class BaseDaoImpl implements BaseDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.info("查询行政区县划分出错" + CommonUtil.getTrace(e));
+			log.error("查询行政区县划分出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}

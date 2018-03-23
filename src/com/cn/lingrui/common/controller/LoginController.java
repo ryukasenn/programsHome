@@ -2,6 +2,10 @@ package com.cn.lingrui.common.controller;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.python.jline.internal.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +23,8 @@ public class LoginController {
 		
 	@Resource(name = "loginService")
 	private LoginService loginService;
-	
+
+	private static Logger log = LogManager.getLogger();
 	/**
 	 * 获取登录页面
 	 * @return
@@ -31,6 +36,7 @@ public class LoginController {
 		String url = req.getHeader("referer");
 		//String token = req.getParameter("LtpaToken");
 		String username = req.getParameter("username");
+		
 		if(null != url && GlobalParams.REFER.equals(url)) {
 			
 			

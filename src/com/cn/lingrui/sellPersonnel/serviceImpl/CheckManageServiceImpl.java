@@ -58,7 +58,7 @@ public class CheckManageServiceImpl extends SellPBaseService implements CheckMan
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.info("查询当前所有人员出错");
+			log.error("查询当前所有人员出错");
 			throw new Exception();
 
 		}
@@ -87,7 +87,7 @@ public class CheckManageServiceImpl extends SellPBaseService implements CheckMan
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.info("查询当前所有人员出错");
+			log.error("查询当前所有人员出错");
 			throw new Exception();
 
 		}

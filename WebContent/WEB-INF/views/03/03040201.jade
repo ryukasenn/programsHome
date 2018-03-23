@@ -25,24 +25,24 @@ block contents
                         label.col-xs-1.col-sm-1.control-label 当前人员
                         .col-xs-4.col-sm-4
                             input.form-control(value='#{thisInfact}', readOnly)
-            .col-xs-8.col-sm-8.placeholder
-                .panel.panel-default
-                    .panel-heading 名单列表
-                    table.table-striped
-                        tr 
-                            th(style="text-align: center") #
-                            th(style="text-align: center") 姓名
-                            th 性别
-                            th 职务
-                            th 文化程度
-                            th 入职日期
-                            th 工龄
-                            th 籍贯
-                            th 联系电话
-                            th 紧急联系人
-                            th 年龄
-                            th 当前状态
-                        unless personInfos.length
+            unless personInfos.length
+                .col-xs-8.col-sm-8.placeholder
+                    .panel.panel-default
+                        .panel-heading 名单列表
+                        table.table
+                            tr 
+                                th(style="text-align: center") #
+                                th(style="text-align: center") 姓名
+                                th 性别
+                                th 职务
+                                th 文化程度
+                                th 入职日期
+                                th 工龄
+                                th 籍贯
+                                th 联系电话
+                                th 紧急联系人
+                                th 年龄
+                                th 当前状态
                             each person,i in personInfos
                                 tr(style="align:center") 
                                     th(scope="row")= i+1

@@ -1,10 +1,15 @@
 package com.cn.lingrui.common.utils;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
 import java.util.UUID;
 
 
@@ -370,5 +375,21 @@ public class CommonUtil {
 			return false;
 		}
 		return true;
+	}
+	
+	public static String readProperties(String fileName, String key) {
+		
+        Properties pps = new Properties();
+        try {
+            InputStream in = new BufferedInputStream (new FileInputStream(fileName));  
+            pps.load(in);
+            String value = pps.getProperty(key);
+            System.out.println(key + " = " + value);
+            return value;
+            
+        }catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
 	}
 }

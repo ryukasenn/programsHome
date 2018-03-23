@@ -41,7 +41,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			
 		} catch (SQLException e) {
 			
-			log.info("查询当前登录用户出错" + CommonUtil.getTraceInfo());
+			log.error("查询当前登录用户出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -160,7 +160,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			
 		} catch (SQLException e) {
 			
-			log.info("查询当前登录用户下所有终端出错" + CommonUtil.getTraceInfo());
+			log.error("查询当前登录用户下所有终端出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -175,7 +175,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			this.excuteUpdate(sql.toString(), conn);
 		} catch (SQLException e) {
 			
-			log.info("插入终端人员出错" + CommonUtil.getTrace(e));
+			log.error("插入终端人员出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
@@ -198,7 +198,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			List<NBPT_SP_REGION> resultList = this.query(sql.toString(), conn, NBPT_SP_REGION.class);
 			return resultList;
 		} catch (SQLException e) {
-			log.info("获取部门列表出错" + CommonUtil.getTrace(e));
+			log.error("获取部门列表出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -218,7 +218,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			this.excuteUpdateGroups(sqls, conn);
 		} catch (SQLException e) {
 			
-			log.info("添加管理区域出错" + CommonUtil.getTrace(e));
+			log.error("添加管理区域出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -294,7 +294,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return persons;
 		} catch (SQLException e) {
 			
-			log.info("添加管理区域出错" + CommonUtil.getTrace(e));
+			log.error("添加管理区域出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -319,7 +319,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.info("添加管理区域出错" + CommonUtil.getTrace(e));
+			log.error("添加管理区域出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
@@ -340,7 +340,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.info("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
+			log.error("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -363,7 +363,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.info("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
+			log.error("AJAX获取管理区县出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -382,7 +382,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		
 		} catch (SQLException e) {
 			
-			log.info("添加终端人员的部门信息出错" + CommonUtil.getTrace(e));
+			log.error("添加终端人员的部门信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
@@ -405,7 +405,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.info("获取终端人员的部门信息" + CommonUtil.getTrace(e));
+			log.error("获取终端人员的部门信息" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -423,7 +423,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return person;
 		} catch (SQLException e) {
 			
-			log.info("获取终端人员信息出错" + CommonUtil.getTrace(e));
+			log.error("获取终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -444,7 +444,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 				
 			
 		} catch (SQLException e) {
-			log.info("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
@@ -463,7 +463,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return placeInfo;
 		} catch (SQLException e) {
 			e.printStackTrace();
-			log.info("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
