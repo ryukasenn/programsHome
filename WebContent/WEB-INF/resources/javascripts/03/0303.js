@@ -8,4 +8,5 @@ $(function(){
 		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/receiveUnchecks").attr("method", "GET").submit();
 	})
 	
+	
 })

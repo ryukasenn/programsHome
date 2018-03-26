@@ -26,12 +26,14 @@ $(function(){
 		})
 	}
 	
-	
-	// 需要验证的输入框
-	var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_MOB1");
-//							   "NBPT_SP_PERSON_MOB2","NBPT_SP_PERSON_ENTRYDATA",
-//							   "NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_POLICYNO",
-//							   "NBPT_SP_PERSON_POLICY_DATA1","NBPT_SP_PERSON_POLICY_DATA2");
+	// 必填项目列表
+	var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_PLACE",
+							   "NBPT_SP_PERSON_MOB1","NBPT_SP_PERSON_MOB2",
+							   "NBPT_SP_PERSON_ENTRYDATA","NBPT_SP_PERSON_POLICYNO",
+							   "NBPT_SP_PERSON_POLICY_DATA1","NBPT_SP_PERSON_POLICY_DATA2",
+							   "NBPT_SP_PERSON_QQ","NBPT_SP_PERSON_CHAT",
+							   "NBPT_SP_PERSON_MAIL","NBPT_SP_PERSON_SCHOOL",
+							   "NBPT_SP_PERSON_PROFESS","");
 	
 	// 需要验证的单选框
 	var radioItems = new Array("NBPT_SP_PERSON_MALE", "NBPT_SP_PERSON_JOB");
@@ -41,15 +43,12 @@ $(function(){
 	
 	// 时间格式验证
 	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA", "NBPT_SP_PERSON_POLICY_DATA1", "NBPT_SP_PERSON_POLICY_DATA2");
-	
+
 	/**
 	 * 点击提交事件
 	 */
 	$("#addPerson").on("click", function(){
 		
-		/**
-		 * 暂时放开条件限制
-		 */
 		var areanos = "";
 		for(var i = 0; i < $(".reponseAreas").length; i++){
 			
@@ -64,9 +63,14 @@ $(function(){
 		$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 		
 		// 输入框统一为空检验
-		if(necessaryCheck(inputItems,radioItems,null)){
+		if(necessaryCheck(inputItems,radioItems,selectItems)){
 			
-			$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
+			// 如果没有错误了,提交
+			if(0 == $(".has-error")){
+
+				$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
+			}
+			
 		} else {
 			return;
 		}

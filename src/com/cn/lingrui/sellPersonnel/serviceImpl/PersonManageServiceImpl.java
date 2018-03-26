@@ -217,9 +217,9 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				PersonManageServiceUtils.checkInData(in, person, reposAreas, out);
 				
 				// 存储新的人员信息
-				personManageDao.addTerminal(person, this.getConnection());
+				//personManageDao.addTerminal(person, this.getConnection());
 				
-				personManageDao.addReposeAreas(reposAreas, this.getConnection());
+				//personManageDao.addReposeAreas(reposAreas, this.getConnection());
 			} 
 			
 			// 如果PID不为空
@@ -232,8 +232,8 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				PersonManageServiceUtils.checkInData(in, person, reposAreas, out);
 				
 				// 存储新的人员信息
-				personManageDao.updateTerminal(person, this.getConnection());
-				personManageDao.addReposeAreas(reposAreas, this.getConnection());
+				//personManageDao.updateTerminal(person, this.getConnection());
+				//personManageDao.addReposeAreas(reposAreas, this.getConnection());
 			}
 			
 
@@ -394,8 +394,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	@Override
 	public ModelAndView getChangePerson(String changePersonPid) throws Exception {
 
-
-
 		// 1.生成管理地区单选框
 		List<NBPT_COMMON_XZQXHF> controllAreas = null;
 		// 2.生成保单类型下拉框
@@ -419,6 +417,8 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 1.查询人员信息
 			CurrentPerson person = personManageDao.receiveCurrentTerminal(changePersonPid, this.getConnection());
 			
+			// 2.处理数据
+			PersonManageServiceUtils.getChangePerson_dealCurrentPerson(person);
 			mv.addObject("controllAreas", controllAreas);
 			mv.addObject("policytypeSelects", dictionarys);
 			mv.addObject("person", person);

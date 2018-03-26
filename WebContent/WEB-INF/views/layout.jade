@@ -38,6 +38,8 @@ html(lang="en")
                             each item in messages
                                 p: font(color="red")= item 
                         block main
+    block layoutModal
+        include includes/waitModal
     block modal
     script(src="#{myPath}/javascripts/jquery.min.js")
     script(src="#{myPath}/javascripts/bootstrap.min.js")

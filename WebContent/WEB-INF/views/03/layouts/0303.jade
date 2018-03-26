@@ -2,6 +2,12 @@
 // 审核管理公共头部
 extends ../../personnelLayout
 
+
+block layoutScripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0303.js")
+    script(language="javascript", src="#{myPath}/javascripts/common.js")
+
+
 block main
     h2.page-header 审核管理
     form.form-inline#controlForm

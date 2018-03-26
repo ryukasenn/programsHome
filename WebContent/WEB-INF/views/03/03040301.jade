@@ -24,7 +24,7 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp姓名
                         .col-xs-4.col-sm-2
-                            input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME", value='#{person.NBPT_SP_PERSON_NAME}')
+                            input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME", value='#{person.NBPT_SP_PERSON_NAME}', maxlength="16")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -44,7 +44,7 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp身份证号码
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_IDNUM", value='#{person.NBPT_SP_PERSON_IDNUM}')
+                            input.form-control(name="NBPT_SP_PERSON_IDNUM", value='#{person.NBPT_SP_PERSON_IDNUM}', maxlength="18")
                         .col-xs-2.col-sm-2.errorMessage
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
@@ -68,7 +68,7 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp负责区县
                         .col-xs-2.col-sm-2
-                            select.form-control
+                            select.form-control(name='NBPT_COMMON_XZQXHF_NAME')
                                 each item in controllAreas
                                     option(value="#{item.NBPT_COMMON_XZQXHF_ID}")= item.NBPT_COMMON_XZQXHF_NAME
                         .col-xs-1.col-sm-1
@@ -79,19 +79,19 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp个人手机
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MOB1",placeholder="例:18518596989", value='#{person.NBPT_SP_PERSON_MOB1}')
+                            input.form-control(name="NBPT_SP_PERSON_MOB1",placeholder="例:18518596989", value='#{person.NBPT_SP_PERSON_MOB1}', maxlength="11", minlength='11')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp紧急联络人
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MOB2",placeholder="例:18518596989", value='#{person.NBPT_SP_PERSON_MOB2}')
+                            input.form-control(name="NBPT_SP_PERSON_MOB2",placeholder="例:18518596989", value='#{person.NBPT_SP_PERSON_MOB2}', maxlength="11")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp入职时间
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_ENTRYDATA",placeholder="例:19981010", value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
+                            input.form-control(type='date', name="NBPT_SP_PERSON_ENTRYDATA", required='true', value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
                     
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
@@ -102,37 +102,37 @@ block contents
                                 each item in policytypeSelects
                                     option(value="#{item.NBPT_COMMON_DICTIONARY_KEY_VALUE}") #{item.NBPT_COMMON_DICTIONARY_KEY_NAME}
                         .col-xs-2.col-sm-2
-                            input.form-control(name="NBPT_SP_PERSON_POLICYNO",placeholder="例:NAN17AA06126A2", value='#{person.NBPT_SP_PERSON_POLICYNO}')
+                            input.form-control(name="NBPT_SP_PERSON_POLICYNO",placeholder="例:NAN17AA06126A2", value='#{person.NBPT_SP_PERSON_POLICYNO}', maxlength="50")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单起始
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_POLICY_DATA1",placeholder="例:19981010", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}')
+                            input.form-control(type='date', name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单结束
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2",placeholder="例:20001010", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
+                            input.form-control(type='date', name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbspQQ
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_QQ", value='#{person.NBPT_SP_PERSON_QQ}')
+                            input.form-control(name="NBPT_SP_PERSON_QQ", value='#{person.NBPT_SP_PERSON_QQ}', maxlength="20")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp微信
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_CHAT", value='#{person.NBPT_SP_PERSON_CHAT}')
+                            input.form-control(name="NBPT_SP_PERSON_CHAT", value='#{person.NBPT_SP_PERSON_CHAT}', maxlength="20")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp邮箱
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MAIL", value='#{person.NBPT_SP_PERSON_MAIL}')
+                            input.form-control(name="NBPT_SP_PERSON_MAIL", value='#{person.NBPT_SP_PERSON_MAIL}', maxlength="50")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -161,15 +161,15 @@ block contents
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
-                            |&nbsp&nbsp&nbsp&nbsp备注
-                        .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_NOTE", value='#{person.NBPT_SP_PERSON_NOTE}')
-                    .form-group
-                        label.col-xs-1.col-sm-1.control-label 
-                            font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp职称
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_TITLE", value='#{person.NBPT_SP_PERSON_TITLE}')
+                    .form-group
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp备注
+                        .col-xs-4.col-sm-4
+                            textarea.form-control(type='textarea', rows='3', name="NBPT_SP_PERSON_NOTE", value='#{person.NBPT_SP_PERSON_NOTE}', maxlength="100")
                     .form-group
                         .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
                             button(type="button")#addPerson.btn.btn-primary 提交

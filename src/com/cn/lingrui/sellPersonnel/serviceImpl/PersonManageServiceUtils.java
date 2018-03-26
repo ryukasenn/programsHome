@@ -140,8 +140,9 @@ public class PersonManageServiceUtils {
 		
 		String job = person.getNBPT_SP_PERSON_JOB();
 		
-		if("1".equals(person.getNBPT_SP_PERSON_FLAG())) {
+		if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
 			
+			// 离职合计数
 			thisInfo.setDismission(thisInfo.getDismission() + 1);
 			
 			return;
@@ -391,7 +392,7 @@ public class PersonManageServiceUtils {
 		person.setNBPT_SP_PERSON_MAIL(in.getNBPT_SP_PERSON_MAIL());
 		
 		// 入职时间
-		person.setNBPT_SP_PERSON_ENTRYDATA(in.getNBPT_SP_PERSON_ENTRYDATA());
+		person.setNBPT_SP_PERSON_ENTRYDATA(in.getNBPT_SP_PERSON_ENTRYDATA().replaceAll("-", ""));
 		
 		// 学历
 		person.setNBPT_SP_PERSON_DEGREE(in.getNBPT_SP_PERSON_DEGREE());
@@ -456,5 +457,23 @@ public class PersonManageServiceUtils {
 			// 存储登录人员信息
 			out.setPerson(person);
 		}
+	}
+	
+	/**
+	 * 处理查询到的终端人员信息
+	 * @param person
+	 * @throws Exception
+	 */
+	public static void getChangePerson_dealCurrentPerson(CurrentPerson person){
+
+		
+		// 入职时间
+		person.setNBPT_SP_PERSON_ENTRYDATA(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_ENTRYDATA()));
+		
+		// 保单开始时间
+		person.setNBPT_SP_PERSON_POLICY_DATA1(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_POLICY_DATA1()));
+		
+		// 保单结束时间
+		person.setNBPT_SP_PERSON_POLICY_DATA2(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_POLICY_DATA2()));
 	}
 }

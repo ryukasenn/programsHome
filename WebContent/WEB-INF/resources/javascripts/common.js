@@ -1,5 +1,15 @@
 
 
+$(function(){
+
+	$("form").on('submit', function(){
+		
+		$("#waitModal").modal({
+			backdrop:'static'
+		})
+	})
+})
+
 
 	/**
 	 * 页面table信息导出方法
@@ -115,7 +125,7 @@
 				if(undefined == $_checkItem.val()){
 
 					// 如果没有选择
-					$("input[name='" + radioNames[nameI] + "']").parents(".form-group").addClass("has-error");
+					$_checkItem.parents(".form-group").addClass("has-error");
 					
 					confirm("有必填项没有填写");
 					return false;
@@ -136,16 +146,13 @@
 				for(var i = 0; i < $_checkItem.length; i ++){
 					
 					// 验证填写内容
-					if("block" == $_checkItem.eq(i).css("display")){
-						
-						if("" == $_checkItem.eq(i).val()){
+					if("" == $_checkItem.eq(i).val()){
 
-							// 如果没有选择
-							$_checkItem.eq(i).parents(".form-group").addClass("has-error");
-							
-							confirm("有必填项没有填写");
-							return false;
-						}
+						// 如果没有选择
+						$_checkItem.eq(i).parents(".form-group").addClass("has-error");
+						
+						confirm("有必填项没有填写");
+						return false;
 					}
 				}
 				
@@ -153,6 +160,47 @@
 		}
 		return true;
 	}
+	
+	/**
+	 * 长度验证
+	 * @param item 验证的项目
+	 * @param length 规定的长度
+	 * @returns
+	 */
+	function lengthCheck(item, length){
+		
+		// 如果项目的长度大于要求长度,
+		if(length < item.val().length){
+			
+			item.parents(".form-group").addClass("has-error");
+			return false;
+		}
+	}
+	
+	/**
+	 * 添加错误提示框
+	 * @param item 验证的项目
+	 * @param content 提示的内容
+	 * @returns
+	 */
+	function addMessage(item, content){
+		
+		$_messageBox = $("<div class='col-xs-2 col-sm-2 errorMessages'>" +
+						 "  <font color='red' ><p>" + content + "</p></font>" +
+						 "</div>").insertAfter(item.parents(".form-group"));
+	}
+	
+	/**
+	 * 删除错误提示框
+	 * @param item 验证的项目
+	 * @returns
+	 */
+	function removeMessage(item){
+		
+		$_parentItem = item.parents(".form-group");
+		$_messageBox = $_parentItem.nextAll(".errorMessages").remove();
+	}
+	
 	
 	
 	

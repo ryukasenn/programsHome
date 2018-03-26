@@ -54,23 +54,23 @@ public class GlobalParams {
 	/**
 	 * 销售人事辅助用户名
 	 */
-	public static String SELLPERSONNEL_USERNAME = "xsrs";
+	public static String SELLPERSONNEL_USERNAME = "lc0019999";
 
 
 	/**
 	 * 销售人事辅助用户密码
 	 */
-	public static String SELLPERSONNEL_PASSWORD = "Lrxsrs2018";
+	public static String SELLPERSONNEL_PASSWORD = "lrerp2012";
 
 	/**
 	 * 销售人事管理DB
 	 */
-	public static String SELLPERSONNEL_DBNAME = "ekptest";
+	public static String SELLPERSONNEL_DBNAME = "cwbase1";
 	
 	/**
-	 * 销售人事管理数据库url
+	 * 销售人事管理数据库IP
 	 */
-	public static String SELLPERSONNEL_IP = "10.0.1.1";	
+	public static String SELLPERSONNEL_IP = "10.0.9.63";	
 	
 	
 	/**
@@ -101,6 +101,9 @@ public class GlobalParams {
 	/**
 	 * 主页路径
 	 */
-	public static String LOGIN_URL = "http://ekp.lingrui.com:9001/rsManage/login";
+	public static String LOGIN_URL = "http://ekp.lingrui.com:9000/rsManage/login";
 	
-	public static final String BASE_URL = "http://ekp.lingrui.com:9001/rsManage";}
+	public static final String BASE_URL = "http://ekp.lingrui.com:9000/rsManage";
+
+	public static final String PROPERTIES_FILEPATH = "";
+	}

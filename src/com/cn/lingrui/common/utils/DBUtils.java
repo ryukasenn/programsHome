@@ -264,7 +264,10 @@ public class DBUtils {
 		try {
 
 			// 当前公共数据库设定在ekp数据库中
-			return new DBConnect(GlobalParams.SELLPERSONNEL_USERNAME, GlobalParams.SELLPERSONNEL_PASSWORD, GlobalParams.SELLPERSONNEL_IP, GlobalParams.SELLPERSONNEL_DBNAME);
+			return new DBConnect(CommonUtil.getBasePropertieValue("SELLPERSONNEL_USERNAME"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_PASSWORD"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_IP"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_DBNAME"));
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());
@@ -297,8 +300,11 @@ public class DBUtils {
 	public static DBConnect getSELLPERSONNELDBC() {
 
 		try {
-			
-			return new DBConnect(GlobalParams.SELLPERSONNEL_USERNAME, GlobalParams.SELLPERSONNEL_PASSWORD, GlobalParams.SELLPERSONNEL_IP, GlobalParams.SELLPERSONNEL_DBNAME);
+
+			return new DBConnect(CommonUtil.getBasePropertieValue("SELLPERSONNEL_USERNAME"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_PASSWORD"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_IP"),
+								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_DBNAME"));
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());

@@ -1,7 +1,5 @@
 package com.cn.lingrui.common.utils;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -248,6 +246,13 @@ public class CommonUtil {
 		return df.format(new Date());
 	}
 	
+	public static String getYYYY_MM_DD() {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+
+		return df.format(new Date());
+	}
+	
 
 	public static String getYYYYMMDDHHMMSS() {
 
@@ -266,6 +271,8 @@ public class CommonUtil {
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		return df.format(date);
 	}
+	
+	
 	
 	
 	/**
@@ -377,19 +384,58 @@ public class CommonUtil {
 		return true;
 	}
 	
+	/**
+	 * 读取Properties文件中的配置
+	 * @param fileName
+	 * @param key
+	 * @return
+	 */
 	public static String readProperties(String fileName, String key) {
 		
         Properties pps = new Properties();
         try {
-            InputStream in = new BufferedInputStream (new FileInputStream(fileName));  
+            InputStream in = CommonUtil.class.getClassLoader().getResourceAsStream("/com/cn/config/" + fileName);;
             pps.load(in);
             String value = pps.getProperty(key);
-            System.out.println(key + " = " + value);
+
+            in.close();
             return value;
             
         }catch (IOException e) {
             e.printStackTrace();
             return "";
         }
+	}
+	
+	/**
+	 * 获取base.Propertie 文件中的值
+	 * @param key
+	 * @return
+	 */
+	public static String getBasePropertieValue(String key) {
+		
+		return readProperties("base.properties", key);
+	}
+	
+	/**
+	 * 从数据库去除的数据传到页面
+	 * @param date
+	 * @return
+	 */
+	public static String formateTimeToPage(String date) {
+		
+		return "".equals(date)? getYYYY_MM_DD() :new StringBuffer().append(date.substring(0, 4)).append("-")
+																   .append(date.substring(4, 6)).append("-")
+																   .append(date.substring(6, 8)).toString();
+	}
+	
+	/**
+	 * 从页面传进的数据到数据库
+	 * @param date
+	 * @return
+	 */
+	public static String formateTiemToBasic(String date){
+		
+		return "".equals(date) || null == date? "" : date.replaceAll("-", "");
 	}
 }

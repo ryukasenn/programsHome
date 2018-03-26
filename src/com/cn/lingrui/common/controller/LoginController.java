@@ -37,8 +37,7 @@ public class LoginController {
 		//String token = req.getParameter("LtpaToken");
 		String username = req.getParameter("username");
 		
-		if(null != url && GlobalParams.REFER.equals(url)) {
-			
+		if(null != url && -1 != url.indexOf(GlobalParams.REFER)) {
 			
 			//String username = HttpUtil.decodeToken(token);
 			if(!"".equals(username)) {
