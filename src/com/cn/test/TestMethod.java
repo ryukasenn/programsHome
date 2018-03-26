@@ -142,10 +142,11 @@ public class TestMethod {
 //		CommonUtil.class.getClassLoader().getResourceAsStream(CommonUtil.class.getResource("/").getPath() + "com/cn/config/base.properties");
 		DBUtils.receiveGlobalParam("ERPTGJ_PASSWORD");
 	}
-	
+
+	@Test
 	public void test() {
 		
-		CommonUtil.re
+		CommonUtil.getBasePropertieValue("BASE_URL");
 	}
 }
 

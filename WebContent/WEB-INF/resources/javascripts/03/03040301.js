@@ -33,13 +33,13 @@ $(function(){
 							   "NBPT_SP_PERSON_POLICY_DATA1","NBPT_SP_PERSON_POLICY_DATA2",
 							   "NBPT_SP_PERSON_QQ","NBPT_SP_PERSON_CHAT",
 							   "NBPT_SP_PERSON_MAIL","NBPT_SP_PERSON_SCHOOL",
-							   "NBPT_SP_PERSON_PROFESS","");
+							   "NBPT_SP_PERSON_PROFESS");
 	
 	// 需要验证的单选框
 	var radioItems = new Array("NBPT_SP_PERSON_MALE", "NBPT_SP_PERSON_JOB");
 	
 	// 需要验证的下拉框
-	var selectItems = new Array("NBPT_SP_PERSON_DEPT_ID");//,"NBPT_SP_PERSON_AREANO_PROVINCE","NBPT_SP_PERSON_AREANO_CITY","NBPT_SP_PERSON_AREANO_CONTY");
+	var selectItems = new Array("NBPT_SP_PERSON_POLICYTYPE");
 	
 	// 时间格式验证
 	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA", "NBPT_SP_PERSON_POLICY_DATA1", "NBPT_SP_PERSON_POLICY_DATA2");
@@ -50,9 +50,17 @@ $(function(){
 	$("#addPerson").on("click", function(){
 		
 		var areanos = "";
+		
+
+		if(1 == $(".reponseAreas").length && "" == $(".reponseAreas").find("select").val()){
+			
+			$(".reponseAreas").addClass("has-error");
+			return;
+		}
+		
 		for(var i = 0; i < $(".reponseAreas").length; i++){
 			
-			var selectValue = $(".reponseAreas").eq(i).find("select:visible").last().val();
+			var selectValue = $(".reponseAreas").eq(i).find("select").val();
 			
 			if(null != selectValue && "" != selectValue ){
 				
@@ -60,13 +68,14 @@ $(function(){
 			} 
 		}
 		
+		
 		$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 		
 		// 输入框统一为空检验
 		if(necessaryCheck(inputItems,radioItems,selectItems)){
 			
 			// 如果没有错误了,提交
-			if(0 == $(".has-error")){
+			if(0 == $(".has-error").length){
 
 				$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
 			}
@@ -155,25 +164,14 @@ $(function(){
 	})
 	
 	
-	$(".form-group").on("click","input[name='NBPT_SP_PERSON_REGION']",function (){
+	$(".form-group").on("change","select",function (){
 		
-		// 获取点击的地区的id
-		$_thisRadio = $("input[name='NBPT_SP_PERSON_REGION']:checked")
-		
-		// 负责区域的单选框点击事件
-		AjaxForGet(baseUrl + "/sellPersonnel/receiveAreasSelect", {areaId : $_thisRadio.val()},function(jsonData){
+		if($(this).val != ''){
 			
-
-			var $_select = $("<select></select>").insertAfter($("input[name='NBPT_SP_PERSON_REGION']:last"));
-			for(var i = 0; i < jsonData.length; i++){
-				
-				$("<option value='" + jsonData[i].NBPT_COMMON_XZQXHF_ID + "'>" + jsonData[i].NBPT_COMMON_XZQXHF_NAME + "</option>").appendTo($_select);
-			}
-		})
+			$(this).parents(".form-group").removeClass("has-error");
+		}
 	})
 	
-	
-
 	/**
 	 * 三级行政区县
 	 */

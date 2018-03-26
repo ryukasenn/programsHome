@@ -142,18 +142,15 @@ $(function(){
 				
 				// 获取必填项
 				var $_checkItem = $("select[name='" + selectNames[nameI] + "']");
-				
-				for(var i = 0; i < $_checkItem.length; i ++){
 					
-					// 验证填写内容
-					if("" == $_checkItem.eq(i).val()){
+				// 验证选择内容
+				if("" == $_checkItem.val()){
 
-						// 如果没有选择
-						$_checkItem.eq(i).parents(".form-group").addClass("has-error");
-						
-						confirm("有必填项没有填写");
-						return false;
-					}
+					// 如果没有选择
+					$_checkItem.parents(".form-group").addClass("has-error");
+					
+					confirm("有必填项没有填写");
+					return false;
 				}
 				
 			}

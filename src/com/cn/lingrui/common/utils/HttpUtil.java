@@ -129,8 +129,8 @@ public class HttpUtil {
 	public static ModelAndView getModelAndView(String path, String... title) {
 		ModelAndView mv = new ModelAndView(path);
 		// 定义静态资源路径
-		mv.addObject("myPath", GlobalParams.BASE_URL);
-		mv.addObject("baseUrl", GlobalParams.BASE_URL);
+		mv.addObject("myPath", CommonUtil.getBasePropertieValue("BASE_URL"));
+		mv.addObject("baseUrl", CommonUtil.getBasePropertieValue("BASE_URL"));
 		if(title.length != 0) {
 
 			mv.addObject("title", title[0]);

@@ -217,9 +217,9 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				PersonManageServiceUtils.checkInData(in, person, reposAreas, out);
 				
 				// 存储新的人员信息
-				//personManageDao.addTerminal(person, this.getConnection());
+				personManageDao.addTerminal(person, this.getConnection());
 				
-				//personManageDao.addReposeAreas(reposAreas, this.getConnection());
+				personManageDao.addReposeAreas(reposAreas, this.getConnection());
 			} 
 			
 			// 如果PID不为空
@@ -232,8 +232,8 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				PersonManageServiceUtils.checkInData(in, person, reposAreas, out);
 				
 				// 存储新的人员信息
-				//personManageDao.updateTerminal(person, this.getConnection());
-				//personManageDao.addReposeAreas(reposAreas, this.getConnection());
+				personManageDao.updateTerminal(person, this.getConnection());
+				personManageDao.addReposeAreas(reposAreas, this.getConnection());
 			}
 			
 

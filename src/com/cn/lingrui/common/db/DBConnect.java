@@ -59,7 +59,7 @@ public class DBConnect {
 			e.printStackTrace();
 			// 正常情况不会出现这种异常
 		} catch (SQLException e) {
-			
+			 e.printStackTrace();
 			if(dbParams.length == 0) {
 			
 				log.error("获取数据库连接出错:登录账户为" + userName + ", 登录密码为:" + password + ", 登录数据库为:cwmaster" );
@@ -115,9 +115,13 @@ public class DBConnect {
 
 		try {
 			
-			conn.rollback();
-			conn.close();
-			log.error("数据库业务提交失败,正常回滚结束");
+			if(conn == null) {
+				
+			} else {
+				conn.rollback();
+				conn.close();
+				log.error("数据库业务提交失败,正常回滚结束");
+			}
 			
 		} catch (SQLException e) {
 			log.error("数据库业务回滚失败");

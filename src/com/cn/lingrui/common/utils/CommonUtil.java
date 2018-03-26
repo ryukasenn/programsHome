@@ -394,7 +394,7 @@ public class CommonUtil {
 		
         Properties pps = new Properties();
         try {
-            InputStream in = CommonUtil.class.getClassLoader().getResourceAsStream("/com/cn/config/" + fileName);;
+            InputStream in = CommonUtil.class.getClassLoader().getResourceAsStream("com/cn/config/" + fileName);;
             pps.load(in);
             String value = pps.getProperty(key);
 

@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.common.utils.HttpUtil;
 
@@ -49,7 +51,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 				
 				// 用户在服务器没有登录或者登录session过期
 				log.debug("验证失败,用户在服务器没有登录或者登录session过期");
-				resp.sendRedirect(GlobalParams.LOGIN_URL);
+				resp.sendRedirect(CommonUtil.getBasePropertieValue("LOGIN_URL"));
 				
 				return false;
 			}
@@ -57,7 +59,7 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
 			// 如果没有cookie,则直接返回到登录页面
 			log.debug("验证失败,用户没有登录");
-			resp.sendRedirect(GlobalParams.LOGIN_URL);
+			resp.sendRedirect(CommonUtil.getBasePropertieValue("LOGIN_URL"));
 			return false;
 		}
 				

@@ -51,26 +51,6 @@ public class GlobalParams {
 	 */
 	public static String RSFZ_DBNAME = "cwbase1";
 
-	/**
-	 * 销售人事辅助用户名
-	 */
-	public static String SELLPERSONNEL_USERNAME = "lc0019999";
-
-
-	/**
-	 * 销售人事辅助用户密码
-	 */
-	public static String SELLPERSONNEL_PASSWORD = "lrerp2012";
-
-	/**
-	 * 销售人事管理DB
-	 */
-	public static String SELLPERSONNEL_DBNAME = "cwbase1";
-	
-	/**
-	 * 销售人事管理数据库IP
-	 */
-	public static String SELLPERSONNEL_IP = "10.0.9.63";	
 	
 	
 	/**
@@ -97,13 +77,5 @@ public class GlobalParams {
 	 * 上传文件所在路径
 	 */
 	public static final String FILE_PATH_UP = "D:\\content\\upLoad\\";
-	
-	/**
-	 * 主页路径
-	 */
-	public static String LOGIN_URL = "http://ekp.lingrui.com:9000/rsManage/login";
-	
-	public static final String BASE_URL = "http://ekp.lingrui.com:9000/rsManage";
-
-	public static final String PROPERTIES_FILEPATH = "";
 	}
+	

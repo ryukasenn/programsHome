@@ -392,7 +392,7 @@ public class PersonManageServiceUtils {
 		person.setNBPT_SP_PERSON_MAIL(in.getNBPT_SP_PERSON_MAIL());
 		
 		// 入职时间
-		person.setNBPT_SP_PERSON_ENTRYDATA(in.getNBPT_SP_PERSON_ENTRYDATA().replaceAll("-", ""));
+		person.setNBPT_SP_PERSON_ENTRYDATA(CommonUtil.formateTiemToBasic(in.getNBPT_SP_PERSON_ENTRYDATA()));
 		
 		// 学历
 		person.setNBPT_SP_PERSON_DEGREE(in.getNBPT_SP_PERSON_DEGREE());
@@ -416,10 +416,10 @@ public class PersonManageServiceUtils {
 		person.setNBPT_SP_PERSON_POLICYNO(in.getNBPT_SP_PERSON_POLICYNO());
 		
 		// 保单开始时间
-		person.setNBPT_SP_PERSON_POLICY_DATA1(in.getNBPT_SP_PERSON_POLICY_DATA1());
+		person.setNBPT_SP_PERSON_POLICY_DATA1(CommonUtil.formateTiemToBasic(in.getNBPT_SP_PERSON_POLICY_DATA1()));
 		
 		// 保单结束时间
-		person.setNBPT_SP_PERSON_POLICY_DATA2(in.getNBPT_SP_PERSON_POLICY_DATA2());
+		person.setNBPT_SP_PERSON_POLICY_DATA2(CommonUtil.formateTiemToBasic(in.getNBPT_SP_PERSON_POLICY_DATA2()));
 		
 		// 登录名
 		person.setNBPT_SP_PERSON_LOGINID(in.getNBPT_SP_PERSON_LOGINID());

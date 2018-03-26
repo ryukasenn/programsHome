@@ -265,9 +265,9 @@ public class DBUtils {
 
 			// 当前公共数据库设定在ekp数据库中
 			return new DBConnect(CommonUtil.getBasePropertieValue("SELLPERSONNEL_USERNAME"),
-								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_PASSWORD"),
-								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_IP"),
-								 CommonUtil.getBasePropertieValue("SELLPERSONNEL_DBNAME"));
+					 CommonUtil.getBasePropertieValue("SELLPERSONNEL_PASSWORD"),
+					 CommonUtil.getBasePropertieValue("SELLPERSONNEL_IP"),
+					 CommonUtil.getBasePropertieValue("SELLPERSONNEL_DBNAME"));
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());
