@@ -64,11 +64,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 处理当前登陆人员信息
 			PersonManageServiceUtils.dealCurrentPerson(person, out);
 
-			
-//			List<CurrentPerson> terminals = personManageDao.receiveCurrentTerminals(out.getPerson(),
-//					this.getConnection());
-
-			
 			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
 
 			if(null == person) {
@@ -76,6 +71,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				// 查询所有下级人员信息
 				List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
 
+				// 查询所有的大区信息
 				List<NBPT_SP_REGION> regionList = personManageDao.getRegions("1", this.getConnection());
 				
 				// 后勤人员查询合计信息处理
@@ -83,7 +79,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				
 				// 后勤人员查询OTC统计信息处理
 				List<CurrentPerson_statistics> otcInfos = PersonManageServiceUtils.dealCurrentPerson_region(personInfos);
-				
 				
 				// 合计信息
 				mv.addObject("totalInfos", infos);
@@ -148,19 +143,17 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		List<NBPT_COMMON_DICTIONARY> dictionarys = null;
 		try {
 
-			// 获取登录人员信息
-			String loginId = this.getRequest().getAttribute("userID").toString();
-
 			// 获取当前登录人员信息
-			CurrentPerson person = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
+			CurrentPerson loginPerson = this.getLoginPerson();
 			
-			if("null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {
+			if("null".equals(loginPerson.getNBPT_SP_REGION_NEED()) || "".equals(loginPerson.getNBPT_SP_REGION_NEED())) {
 				
 				String message = "您没有被分配管理地区,请联系后勤人员或管理员";
 				mv.addObject("message", message);
 			}else {
+				
 				// 获取地总管理地区
-				controllAreas = personManageDao.getAreaSelects(loginId, this.getConnection());
+				controllAreas = personManageDao.getAreaSelects(loginPerson.getNBPT_SP_PERSON_ID(), this.getConnection());
 				controllAreas.add(0, new NBPT_COMMON_XZQXHF());
 				
 				dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
@@ -193,14 +186,12 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 		ModelAndView mv = null;
 		
-		// 获取登录人员信息
-		String loginId = this.getRequest().getAttribute("userID").toString();
 		try {
 
 			SellPersonnelPojoOut out = new SellPersonnelPojoOut();
 
 			// 当前登录人员
-			CurrentPerson loginPerson = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
+			CurrentPerson loginPerson = this.getLoginPerson();
 			out.setPerson(loginPerson);
 
 			
@@ -248,60 +239,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		}
 	}
 
-
-//	/**
-//	 * 获取添加终端人员负责区域
-//	 * @throws Exception 
-//	 */
-//	@Override
-//	public ModelAndView getAddTerminalRespons(String parentId, String terminalId) throws Exception {
-//		
-//		this.before();
-//		
-//		// 初始化返回
-//		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030404"));
-//		
-//		// 1.生成管理地区单选框
-//		List<NBPT_SP_REGION> controllAreas = null;
-//		
-//		try {
-//			
-//
-//			// 获取登录人员信息
-//			String loginId = this.getRequest().getAttribute("userID").toString();
-//			
-//			// 获取地总管理地区
-//			controllAreas = personManageDao.getAreaSelects(loginId, this.getConnection());			
-//			controllAreas.add(0, new NBPT_SP_REGION());
-//			
-//			// 获取人员的部门所属信息
-//			NBPT_SP_REGION deptInfo = personManageDao.getTerminalDeptInfo(terminalId, this.getConnection());
-//			
-//			// 1.如果是新添加人员
-//			if(null != parentId || !"".equals(parentId)) {}
-//			
-//			// 2.如果是修改
-//			else {
-//				
-//				// 获取原有负责区域
-//				List<NBPT_COMMON_XZQXHF> terminalResponsXzqxs = personManageDao.getTerminalResponsXzqx(terminalId, this.getConnection());
-//				
-//				mv.addObject("terminalResponsXzqxs", terminalResponsXzqxs);
-//			}
-//
-//			mv.addObject("deptInfo", deptInfo);
-//			mv.addObject("controllAreas", controllAreas);
-//			
-//			return this.after(mv);
-//		} catch (SQLException e) {
-//
-//			log.error("获取添加终端人员负责区域页面失败" + CommonUtil.getTrace(e));
-//			throw new Exception();
-//		}
-//	}
-
-	
-
 	@Override
 	public String receiveSelect(String parentId) throws Exception{
 
@@ -310,13 +247,10 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			// 获取省级划分
 			List<NBPT_COMMON_XZQXHF> xzqxhfs = personManageDao.getXzqxhfs(parentId, this.getConnection());
-			
-			// 获取市级划分,需要上级编号
+
 			xzqxhfs.add(0, new NBPT_COMMON_XZQXHF());
 			
-			JSONArray ja = JSONArray.fromObject(xzqxhfs);
-			
-			return this.after(ja.toString());
+			return this.after(JSONArray.fromObject(xzqxhfs).toString());
 		} catch (SQLException e) {
 			
 			this.closeException();
@@ -336,22 +270,16 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			this.before();
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030403"));
 			
-	
 			// 1.生成大区下拉框
 			List<NBPT_SP_REGION> regions = new ArrayList<NBPT_SP_REGION>();;
-			
-			// 2.生成保单类型下拉框
-			List<NBPT_COMMON_DICTIONARY> dictionarys = new ArrayList<NBPT_COMMON_DICTIONARY>();
-			
+						
 			regions = personManageDao.getRegions("1", this.getConnection());
 			regions.add(0, new NBPT_SP_REGION());
+						
+			mv.addObject("regions", regions);
 			
 			// 2.生成保单类型下拉框
-			dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
-
-			
-			mv.addObject("regions", regions);
-			mv.addObject("policytypeSelects", dictionarys);
+			mv.addObject("policytypeSelects", personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection()));
 			
 			return after(mv);
 		} catch (SQLException e) {
@@ -377,9 +305,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			List<NBPT_COMMON_XZQXHF> xzqxhfs = personManageDao.getAreasSelect(areaId, this.getConnection());
 			xzqxhfs.add(0, new NBPT_COMMON_XZQXHF());
 			
-			JSONArray ja = JSONArray.fromObject(xzqxhfs);
-			
-			return this.after(ja.toString());
+			return this.after(JSONArray.fromObject(xzqxhfs).toString());
 		}catch (SQLException e) {
 
 			this.closeException();
@@ -394,22 +320,20 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	@Override
 	public ModelAndView getChangePerson(String changePersonPid) throws Exception {
 
-		// 1.生成管理地区单选框
-		List<NBPT_COMMON_XZQXHF> controllAreas = null;
-		// 2.生成保单类型下拉框
-		List<NBPT_COMMON_DICTIONARY> dictionarys = null;
 		try {
 
+			this.before();
+			
+			// 1.生成管理地区单选框
+			List<NBPT_COMMON_XZQXHF> controllAreas = null;
+			// 2.生成保单类型下拉框
+			List<NBPT_COMMON_DICTIONARY> dictionarys = null;
+			
 			// 初始化返回数据
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030403"));
 			
-			this.before();
-
-			// 获取登录人员信息
-			String loginId = this.getRequest().getAttribute("userID").toString();
-			
 			// 获取地总管理地区
-			controllAreas = personManageDao.getAreaSelects(loginId, this.getConnection());
+			controllAreas = personManageDao.getAreaSelects(this.getLoginId(), this.getConnection());
 			controllAreas.add(0, new NBPT_COMMON_XZQXHF());
 
 			dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
@@ -442,13 +366,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		try {
 			
 			this.before();
-		
-			// 管理区县
-			List<NBPT_COMMON_XZQXHF> terminalResponsXzqx = personManageDao.getTerminalResponsXzqx(changePersonPid, this.getConnection());
-			
-			JSONArray ja = JSONArray.fromObject(terminalResponsXzqx);
-			
-			return this.after(ja.toString());
+			return this.after(JSONArray.fromObject(personManageDao.getTerminalResponsXzqx(changePersonPid, this.getConnection())).toString());
 		}catch (SQLException e) {
 
 			this.closeException();
@@ -461,21 +379,84 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	public String receiveTerminalPlace(String idNum) throws Exception {
 
 		try {
-			
 			this.before();
-		
-			// 获取国家行政区县划分
-			List<NBPT_COMMON_XZQXHF> personIdqx = personManageDao.checkPlace(idNum.substring(0, 6), this.getConnection());
-			
-			JSONArray ja = JSONArray.fromObject(personIdqx);
-			
-			return this.after(ja.toString());
+			return this.after(JSONArray.fromObject(personManageDao.checkPlace(idNum.substring(0, 6), this.getConnection())).toString());
 		}catch (SQLException e) {
 
 			this.closeException();
 			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
+	}
+
+	@Override
+	public ModelAndView getProvincePersons(String regionUid) throws Exception {
+
+
+		try {
+			
+			this.before();
+			
+			// 初始化大区下所有人员信息
+			List<CurrentPerson> personInfos = new ArrayList<>();
+			
+			// 如果为空,则是大区总登录
+			if(CommonUtil.isEmpty(regionUid)) {
+				
+				// 1.获取登录信息
+				CurrentPerson loginPerson = this.getLoginPerson();
+				
+				// 2.查询大区总下所有人员信息
+				personInfos = personManageDao.receiveCurrentProvincePersonInfos(loginPerson.getREGION_UID(), this.getConnection());
+			} 
+
+			// 如果不为空,则是后勤登录
+			else {
+
+				// 1.查询大区下所有人员信息
+				personInfos = personManageDao.receiveCurrentProvincePersonInfos(regionUid, this.getConnection());
+			}
+			
+			// 后勤人员查询合计信息处理
+			List<CurrentPerson_statistics> infos = PersonManageServiceUtils.provincePersons_check(personInfos);
+			
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030404"));
+			
+			mv.addObject("infos", infos);
+			
+			return this.after(mv);
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+	
+	
+
+	/**
+	 * 获取登录人员信息方法
+	 * @return
+	 * @throws SQLException
+	 */
+	private CurrentPerson getLoginPerson() throws SQLException {
+
+		String loginId = this.getLoginId();
+
+		// 当前登录人员
+		CurrentPerson loginPerson = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
+		
+		return loginPerson;
+	}
+	
+	/**
+	 * 获取登录人员的id
+	 * @return
+	 */
+	private String getLoginId() {
+		
+		return this.getRequest().getAttribute("userID").toString();
 	}
 }
 

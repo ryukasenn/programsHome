@@ -3,6 +3,9 @@ package com.cn.lingrui.sellPersonnel.serviceImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
@@ -14,6 +17,7 @@ import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
 
 public class PersonManageServiceUtils {
 
+	private static Logger log = LogManager.getLogger();
 
 	/**
 	 *  后勤人员查询合计信息处理
@@ -106,6 +110,7 @@ public class PersonManageServiceUtils {
 					CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
 
 					thisInfo.setName(person.getREGION_NAME());
+					thisInfo.setUid(person.getREGION_UID());
 					thisInfo.setNeed(Integer.valueOf(person.getREGION_ONAME() == null || "".equals(person.getREGION_ONAME()) ? "0" : person.getREGION_ONAME()));
 					addPerson_otc(thisInfo, person);
 					resultList.add(thisInfo);
@@ -113,7 +118,7 @@ public class PersonManageServiceUtils {
 			}
 		}
 
-		
+		// 差额计算
 		for(CurrentPerson_statistics info : resultList) {
 			
 			Integer balance = info.getNeed() - info.getTotal();
@@ -129,6 +134,13 @@ public class PersonManageServiceUtils {
 				info.setBalance("超出" + Math.abs(balance) + "人");
 			}
 		}
+		
+		// 离职率计算
+		for(CurrentPerson_statistics info : resultList) {
+			
+			info.setDismissionRate(CommonUtil.getPercenttage(info.getDismission(), info.getNeed()));
+		}
+		
 		return resultList;
 	}
 	/**
@@ -475,5 +487,144 @@ public class PersonManageServiceUtils {
 		
 		// 保单结束时间
 		person.setNBPT_SP_PERSON_POLICY_DATA2(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_POLICY_DATA2()));
+	}
+	
+	/**
+	 * 统计OTC大区下省份信息处理方法
+	 * @param personInfos
+	 * @return
+	 */
+	public static List<CurrentPerson_statistics> provincePersons_check(List<CurrentPerson> personInfos) {
+
+		List<CurrentPerson_statistics> infos = new ArrayList<>();
+		List<String> provinceCheck = new ArrayList<>();
+		
+		for(CurrentPerson person : personInfos) {
+
+			String areaId  = person.getNBPT_SP_PERSON_DEPT_ID();
+			if(provinceCheck.contains(areaId)) {
+				
+				// 1.获取当前行
+				CurrentPerson_statistics thisInfo = infos.get(provinceCheck.indexOf(areaId));
+				
+				// 2.封装当前行信息
+				provincePersons_check_addInfo(thisInfo, person);
+			} else {
+				
+				// 1.按省份划分
+				provinceCheck.add(areaId);
+				
+				// 2.获取当前行
+				CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
+				
+				// 3.添加行信息
+				thisInfo.setProvinceName(person.getNBPT_COMMON_XZQXHF_NAME());
+				thisInfo.setName(person.getNBPT_SP_REGION_NAME());
+				thisInfo.setUid(person.getNBPT_SP_REGION_UID());
+				
+				// 4.加入列表
+				infos.add(thisInfo);
+				
+				// 5.封装当前行信息
+				provincePersons_check_addInfo(thisInfo, person);
+			}
+		}
+		
+		// 差额计算
+		for(CurrentPerson_statistics info : infos) {
+			
+			Integer balance = info.getNeed() - info.getTotal();
+			
+			if(0 < balance) {
+				
+				info.setBalance("差" + balance + "人");
+			} else if(0 == balance) {
+
+				info.setBalance("满配");
+			} else if(0 > balance) {
+				
+				info.setBalance("超出" + Math.abs(balance) + "人");
+			}
+		}
+		
+		// 离职率计算
+
+		for(CurrentPerson_statistics info : infos) {
+			
+			info.setDismissionRate(CommonUtil.getPercenttage(info.getDismission(), info.getNeed()));
+		}
+		return infos;
+	}
+
+	private static void provincePersons_check_addInfo(CurrentPerson_statistics thisInfo, CurrentPerson person) {
+		
+		// 离职合计
+		if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
+			
+			// 离职合计数
+			thisInfo.setDismission(thisInfo.getDismission() + 1);
+			
+			return;
+		}
+
+		// 获取职位
+		String job = person.getNBPT_SP_PERSON_JOB();
+		
+		// 应配合计
+		if("22".equals(job) || "26".equals(job)) {
+			
+			thisInfo.setNeed(thisInfo.getNeed() + CommonUtil.objToInteger(person.getNBPT_SP_REGION_ONAME()));
+		}
+		
+		switch (job) {
+		
+			case "21":
+				
+				log.error("统计大区下省区信息有误, 不应该包含大区总信息");
+				break;
+		
+			case "22":
+				
+				// 如果是地总
+				thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
+				break;
+		
+			case "23":
+				
+				// 如果是区县总
+				thisInfo.setXzquResper(thisInfo.getXzquResper() + 1);
+				break;
+		
+			case "24":
+				
+				// 如果是预备区县总
+				thisInfo.setXzquResper_preparatory(thisInfo.getXzquResper_preparatory() + 1);
+				break;
+		
+			case "25":
+				
+				// 如果是推广经理
+				thisInfo.setPromote(thisInfo.getPromote() + 1);
+				break;
+		
+			case "26":
+				
+				// 如果是混合大区总
+				break;
+			default:
+				break;
+		}
+		
+
+		// 终端合计数
+		if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
+
+			// 添加合计数
+			thisInfo.setTotal(thisInfo.getTotal()+ 1);
+		} else {
+
+		}
+		
+		
 	}
 }

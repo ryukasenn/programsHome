@@ -27,11 +27,19 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	@Override
 	public CurrentPerson receiveCurrentPerson(String userId, Connection conn) throws SQLException {
 		
-		String sql = "SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED, B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER "
-				+ "FROM NBPT_SP_PERSON A "
-				+ "LEFT JOIN NBPT_SP_REGION B "
-				+ "ON A.NBPT_SP_PERSON_PID = B.NBPT_SP_REGION_RESPONSIBLER "
-				+ "WHERE NBPT_SP_PERSON_LOGINID = '" + userId + "'";
+		// userId获取的是辅助系统的登录ID,与人员信息LOGINID一致
+		
+		String sql =	"  SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED, " + 
+						"  B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER, " + 
+						"  C.NBPT_SP_REGION_UID AS REGION_UID, " + 
+						"  C.NBPT_SP_REGION_NAME AS REGION_NAME " + 
+						"  FROM NBPT_SP_PERSON A " + 
+						"  LEFT JOIN NBPT_SP_REGION B " + 
+						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
+						"  LEFT JOIN NBPT_SP_REGION C " + 
+						"  ON C.NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
+						"  AND C.NBPT_SP_REGION_UID <> B.NBPT_SP_REGION_UID" + 
+						"  WHERE NBPT_SP_PERSON_LOGINID = '" + userId + "'";
 		
 		try {
 			
@@ -228,7 +236,6 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		
 		List<CurrentPerson> persons = new ArrayList<>();
 		
-
 		try {
 			
 			// 如果登录人员信息为空,为后勤人员,查询所有人员以供统计
@@ -241,6 +248,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 								"	B.NBPT_SP_REGION_ID,B.NBPT_SP_REGION_ONAME," + 
 								"	B.NBPT_SP_REGION_LEVEL," + 
 								"	C.NBPT_SP_REGION_NAME AS REGION_NAME," + 
+								"	C.NBPT_SP_REGION_UID AS REGION_UID," + 
 								"	C.NBPT_SP_REGION_ONAME AS REGION_ONAME" + 
 								"	FROM NBPT_SP_PERSON A " + 
 								"	LEFT JOIN NBPT_SP_REGION B " + 
@@ -253,7 +261,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 				persons = this.query(sql, connection, CurrentPerson.class);
 			} 
 			
-			// 如果登录人员的JOB是22,则是地总,查询该地总下的所有人员
+			// 如果登录人员的JOB是22或者26,则是地总,查询该地总下的所有人员
 			else if("22".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB()) || "26".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
 				
 				String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE," + 
@@ -269,32 +277,19 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  A.NBPT_SP_PERSON_FLAG," + 
 							"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE," + 
 							"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
-							"  FROM NBPT_SP_PERSON A " + 
+							"  FROM NBPT_SP_PERSON A " +
 							"  WHERE A.NBPT_SP_PERSON_DEPT_ID = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_DEPT_ID() + "' " + 
 							"  AND A.NBPT_SP_PERSON_PID <> '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "' " + 
 							"  AND A.NBPT_SP_PERSON_FLAG <> '3'" +
-							
 							"  ORDER BY A.NBPT_SP_PERSON_ID ";
 	
 				persons = this.query(sql, connection, CurrentPerson.class);
 			}
 			
-			// 最后大区总登录时,查询所有的地总信息
-			else if("21".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB()) || "26".equals(nbpt_SP_PERSON.getNBPT_SP_PERSON_JOB())){
-				String sql = "SELECT A.*,DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE "
-							+ "FROM NBPT_SP_PERSON A "
-							+ "LEFT JOIN NBPT_SP_REGION B "
-							+ "ON A.NBPT_SP_PERSON_PID = B.NBPT_SP_REGION_RESPONSIBLER "
-							+ "WHERE NBPT_SP_REGION_ID LIKE "
-							+ "  ("
-							+ "    SELECT NBPT_SP_REGION_ID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_RESPONSIBLER = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "') + '%'"
-							+ "  )";
-				persons = this.query(sql, connection, CurrentPerson.class);
-			}
 			return persons;
 		} catch (SQLException e) {
 			
-			log.error("添加管理区域出错" + CommonUtil.getTrace(e));
+			log.error("获取当前人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}
@@ -319,7 +314,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			return resultList;
 		} catch (SQLException e) {
 			
-			log.error("添加管理区域出错" + CommonUtil.getTrace(e));
+			log.error("获取地总下辖行政区县出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 		
@@ -346,7 +341,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	}
 
 	@Override
-	public List<NBPT_COMMON_XZQXHF> getTerminalResponsXzqx(String terminalId, Connection connection) throws SQLException {
+	public List<NBPT_COMMON_XZQXHF> getTerminalResponsXzqx(String terminalPId, Connection connection) throws SQLException {
 
 
 		try {
@@ -356,7 +351,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_PERSON_XZQX_XID" + 
 							"  LEFT JOIN NBPT_SP_PERSON C" + 
 							"  ON B.NBPT_SP_PERSON_XZQX_PID = C.NBPT_SP_PERSON_ID" + 
-							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'";
+							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalPId +"'";
 			
 			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
 		
@@ -464,6 +459,34 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<CurrentPerson> receiveCurrentProvincePersonInfos(String region_UID, Connection connection) throws SQLException {
+
+
+		try {
+			String sql ="  SELECT A.*,D.NBPT_COMMON_XZQXHF_ID,D.NBPT_COMMON_XZQXHF_NAME,B.NBPT_SP_REGION_ONAME," + 
+						"  B.NBPT_SP_REGION_ONAME," +
+						"  B.NBPT_SP_REGION_NAME," +
+						"  B.NBPT_SP_REGION_UID" +
+						"  FROM NBPT_SP_PERSON A" + 
+						"  LEFT JOIN NBPT_SP_REGION B" + 
+						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID" + 
+						"  LEFT JOIN NBPT_SP_REGION C" + 
+						"  ON B.NBPT_SP_REGION_ID LIKE C.NBPT_SP_REGION_ID + '%'" + 
+						"  LEFT JOIN NBPT_COMMON_XZQXHF D" + 
+						"  ON SUBSTRING(B.NBPT_SP_REGION_ID,3,2)+'0000' = D.NBPT_COMMON_XZQXHF_ID " + 
+						"  WHERE C.NBPT_SP_REGION_UID = '" + region_UID + "'" + 
+						"  AND B.NBPT_SP_REGION_UID <> '" + region_UID + "'" + 
+						"  ORDER BY B.NBPT_SP_REGION_ID";
+			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
+			return personinfos;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.error("获取大区下人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}
 	}

@@ -70,34 +70,21 @@ public class PersonManageController {
 
 		return mv;
 	}
-	
-//	/**
-//	 * 添加终端负责区域页面获取
-//	 * @param in
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	@RequestMapping(value = "/addTerminalRespons", method = RequestMethod.GET)
-//	public ModelAndView getAddTerminalRespons(String parentId, String terminalId) throws Exception {
-//
-//		ModelAndView mv = personManageService.getAddTerminalRespons(parentId, terminalId);
-//
-//		return mv;
-//	}
-//	
-//	/**
-//	 * 添加终端负责区域页面获取
-//	 * @param in
-//	 * @return
-//	 * @throws Exception
-//	 */
-//	@RequestMapping(value = "/addTerminalRespons", method = RequestMethod.POST)
-//	public ModelAndView postAddTerminalRespons(AddPersonPojoIn in) throws Exception {
-//
-//		ModelAndView mv = personManageService.postAddTerminalRespons(in);
-//
-//		return mv;
-//	}
+
+	/**
+	 * 根据大区UID,生成省区人员信息列表
+	 * @param regionUid
+	 * @return
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/provincePersons", method = RequestMethod.GET)
+	public ModelAndView getProvincePersons(String regionUid) throws Exception {
+		
+
+		ModelAndView mv = personManageService.getProvincePersons(regionUid);
+		return mv;
+	}
+
 	/**
 	 * 获取负责区域下拉框
 	 * @param parentId

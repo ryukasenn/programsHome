@@ -1,0 +1,52 @@
+
+// 人员管理,查看大区人员信息(后勤,总经理)
+extends ./layouts/0304
+
+
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#supportAdd 添加大区总地总
+        |&nbsp&nbsp
+        
+block contents
+    .row.placeholders
+        .col-xs-9.col-sm-9.placeholder
+            .panel.panel-default
+                .panel-heading 大区人员信息统计
+                    button.btn.btn-link.checkOut(value='hejixinxi') 导出
+                table.table#hejixinxi
+                    tr
+                        th(style="text-align:center") 省份
+                        th(style="text-align:center") 地区
+                        th(style="text-align:center") 区县总
+                        th(style="text-align:center") 预备区县总
+                        th(style="text-align:center") 推广经理
+                        th(style="text-align:center") 合计
+                        th(style="text-align:center") 应配
+                        th(style="text-align:center") 差额
+                        th(style="text-align:center") 离职合计
+                        th(style="text-align:center") 离职率
+                    unless infos.length
+                        each info in infos
+                            tr(style="text-align:center;") 
+                                td(style="vertical-align:middle")= info.provinceName
+                                td(style="vertical-align:middle")
+                                    a.btn.btn-link.btn-xs.OTC_regionResper
+                                        #{info.name}
+                                td(style="vertical-align:middle").OTC_xzquResper= info.xzquResper
+                                td(style="vertical-align:middle").OTC_xzquResper_preparatory= info.xzquResper_preparatory
+                                td(style="vertical-align:middle").OTC_promote= info.promote
+                                td(style="vertical-align:middle").OTC_heji= info.total
+                                td(style="vertical-align:middle").OTC_need= info.need
+                                td(style="vertical-align:middle")= info.balance
+                                td(style="vertical-align:middle").OTC_dismission= info.dismission
+                                td(style="vertical-align:middle")= info.dismissionRate
+                            
+        
+
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040402.js")
+        
+block pageId
+    p(style="display:none") 03040402

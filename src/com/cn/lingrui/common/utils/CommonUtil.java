@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
@@ -29,10 +30,10 @@ public class CommonUtil {
 	}
 
 	/**
-	 * 判断字符串非空
+	 * 判断字符串为空
 	 * 
 	 * @param checkString
-	 * @return 如果为空返回false
+	 * @return 如果为空返回true
 	 */
 	public static Boolean isEmpty(String checkString) {
 
@@ -438,4 +439,43 @@ public class CommonUtil {
 		
 		return "".equals(date) || null == date? "" : date.replaceAll("-", "");
 	}
+	
+	/**
+	 * 获取两数百分比 befor/after
+	 * @param before
+	 * @param after
+	 * @return
+	 */
+	public static String getPercenttage(Float before, Float after) {
+
+		NumberFormat nt = NumberFormat.getPercentInstance();
+		nt.setMinimumFractionDigits(2);
+		Float result = before/after;
+		return nt.format(result);
+	}
+	
+	/**
+	 * 获取两数百分比 befor/after
+	 * @param before
+	 * @param after
+	 * @return
+	 */
+	public static String getPercenttage(Integer before, Integer after) {
+
+		NumberFormat nt = NumberFormat.getPercentInstance();
+		nt.setMinimumFractionDigits(2);
+		Float result = (float) before/after;
+		return nt.format(result);
+	}
+	
+	/**
+	 * 字符串转数字
+	 * @param obj
+	 * @return
+	 */
+	public static Integer objToInteger(String obj) {
+		
+		return Integer.valueOf(obj.trim());
+	}
+	
 }

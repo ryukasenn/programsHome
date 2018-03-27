@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
@@ -71,9 +72,9 @@ public class XZQX_create {
 		//this.addResponseble();
 		
 		// 添加用户名
-		this.addLoginId();
+		//this.addLoginId();
 		
-		
+		System.out.println(CommonUtil.getPercenttage(30, 70));
 	}
 	private void addLoginId() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -245,16 +246,16 @@ public class XZQX_create {
 		}
 	}
 	private void addTerminals() throws SQLException, ClassNotFoundException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "zhongduan.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "suoyouzhongduan.xls";
 		File targetFile = new File(fileNameTemp); 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
 		
 		PreparedStatement ps1 = conn.prepareStatement("SELECT A.* FROM NBPT_SP_REGION A WHERE A.NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
 		
-		// 查询河南区县划分
+		// 查询区县划分
 		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs1);
 		try {
 			
@@ -282,38 +283,57 @@ public class XZQX_create {
 					for(int rowi = 2; rowi < realRows; rowi++) {
 						
 						// 如果已存在
-						if(chekcItems.contains(sheet.getCell(11,rowi).getContents())) {
+						if(chekcItems.contains(sheet.getCell(12,rowi).getContents().trim())) {
 							
-							System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "数据属于重复数据,身份证重复");
+							System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "数据属于重复数据,身份证重复,位于:" + (rowi + 1) + "行");
 							continue;
 						} else {
 							
 							// 加入检查队列
-							chekcItems.add(sheet.getCell(11,rowi).getContents());
+							chekcItems.add(sheet.getCell(12,rowi).getContents().trim());
 							
-							String male = "男".equals(sheet.getCell(5,rowi).getContents())?"1":"0";
-							String birs = sheet.getCell(11,rowi).getContents().substring(6, 14);
-							String job = "区县总经理".equals(sheet.getCell(7,rowi).getContents()) ? "23" : "预备区县总".equals(sheet.getCell(7,rowi).getContents()) ? "24" : "25";
-							String entryDate = sheet.getCell(9,rowi).getContents();
+							String male = "男".equals(sheet.getCell(6,rowi).getContents())?"1":"0";
+							String birs = sheet.getCell(12,rowi).getContents().substring(6, 14);
+							String job = "区县总经理".equals(sheet.getCell(8,rowi).getContents()) ? "23" : "预备区县总".equals(sheet.getCell(8,rowi).getContents()) ? "24" : "25";
+							String entryDate = "";
 							
-							if(!(8 == entryDate.length())) {
-								System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "入职日期有误");
-								continue;
+							if (sheet.getCell(10,rowi).getType() == CellType.DATE) { 
+						         DateCell dc = (DateCell) sheet.getCell(10,rowi);
+						         entryDate = CommonUtil.dateToYYYYMMDD(dc.getDate()); 
+							} 
+
+							if("".equals(entryDate)){
+								
+
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "入职日期有误");
 							}
+							
+//							if(!(8 == entryDate.length())) {
+//								
+//								System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "入职日期有误");
+//								continue;
+//							}
 							
 							String deptId = "";
 							
 							for(NBPT_SP_REGION region : resultList) {
 								
-								if(sheet.getCell(2,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
+								if(sheet.getCell(3,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
 									
 									deptId = region.getNBPT_SP_REGION_UID();
 									break;
 								}
 							}
+							
 							if("".equals(deptId)) {
 
-								System.out.println("姓名为" + sheet.getCell(4,rowi).getContents() + "地区信息有误");
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "地区信息有误");
+								continue;
+							}
+							
+							if(sheet.getCell(14,rowi).getContents().length() > 11) {
+
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "紧急联系人有误");
 								continue;
 							}
 							String sql = "INSERT NBPT_SP_PERSON ("
@@ -335,18 +355,18 @@ public class XZQX_create {
 									+ ")"
 									+ " VALUES ("
 									+ "'" + CommonUtil.getUUID_32() + "',"
-									+ "'" + (100269 + rowi) + "',"
+									+ "'" + (100500 + rowi - 2) + "',"
 									+ "'" + deptId + "',"
 									+ "'2',"
-									+ "'" + sheet.getCell(4,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(5,rowi).getContents() + "',"
 									+ "'" + male + "',"
 									+ "'" + birs + "',"
-									+ "'" + sheet.getCell(11,rowi).getContents() + "',"
 									+ "'" + sheet.getCell(12,rowi).getContents() + "',"
 									+ "'" + sheet.getCell(13,rowi).getContents() + "',"
-									+ "'" + sheet.getCell(10,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(14,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(11,rowi).getContents() + "',"
 									+ "'" + job + "',"
-									+ "'" + sheet.getCell(8,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(9,rowi).getContents() + "',"
 									+ "'2',"
 									+ "'" + entryDate + "'"
 									+ ")";

@@ -2,6 +2,7 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos.person;
 
 public class CurrentPerson {
 
+	// 查询当前当前登录人员信息
 	private String NBPT_SP_PERSON_REGION = ""; // 所属大区
 	private String NBPT_SP_PERSON_BIRS = ""; // 生日
 	private String NBPT_SP_PERSON_QQ = ""; // 扣扣
@@ -37,15 +38,21 @@ public class CurrentPerson {
 	private String NBPT_SP_PERSON_WORKAGE; // 工龄
 	
 	
-	// 后勤人员统计
+	// 后勤人员统计OTC总体信息
 	private String NBPT_SP_REGION_NAME; // 所在部门名称
 	private String NBPT_SP_REGION_NEED; // 人员配额
 	private String NBPT_SP_REGION_RESPONSIBLER; // 负责人
 	private String NBPT_SP_REGION_ID; // 人员所在部门ID
 	private String NBPT_SP_REGION_ONAME; // 部门配额
 	private String NBPT_SP_REGION_LEVEL; // 部门级别
+	private String NBPT_SP_REGION_UID; // 地区UID
 	private String REGION_NAME; // 大区名称
 	private String REGION_ONAME; // 大区配额
+	private String REGION_UID; // 大区UID
+	
+	// 后勤统计省份下人员
+	private String NBPT_COMMON_XZQXHF_ID;
+	private String NBPT_COMMON_XZQXHF_NAME;
 	
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
@@ -292,6 +299,30 @@ public class CurrentPerson {
 	}
 	public void setREGION_ONAME(String rEGION_ONAME) {
 		REGION_ONAME = rEGION_ONAME;
+	}
+	public String getNBPT_SP_REGION_UID() {
+		return NBPT_SP_REGION_UID;
+	}
+	public void setNBPT_SP_REGION_UID(String nBPT_SP_REGION_UID) {
+		NBPT_SP_REGION_UID = nBPT_SP_REGION_UID;
+	}
+	public String getREGION_UID() {
+		return REGION_UID;
+	}
+	public void setREGION_UID(String rEGION_UID) {
+		REGION_UID = rEGION_UID;
+	}
+	public String getNBPT_COMMON_XZQXHF_ID() {
+		return NBPT_COMMON_XZQXHF_ID;
+	}
+	public void setNBPT_COMMON_XZQXHF_ID(String nBPT_COMMON_XZQXHF_ID) {
+		NBPT_COMMON_XZQXHF_ID = nBPT_COMMON_XZQXHF_ID;
+	}
+	public String getNBPT_COMMON_XZQXHF_NAME() {
+		return NBPT_COMMON_XZQXHF_NAME;
+	}
+	public void setNBPT_COMMON_XZQXHF_NAME(String nBPT_COMMON_XZQXHF_NAME) {
+		NBPT_COMMON_XZQXHF_NAME = nBPT_COMMON_XZQXHF_NAME;
 	}
 	
 }

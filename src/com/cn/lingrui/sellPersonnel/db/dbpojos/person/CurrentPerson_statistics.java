@@ -2,7 +2,9 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos.person;
 
 public class CurrentPerson_statistics {
 
+	// 统计OTC全部信息
 	private String name = ""; // 大区名称
+	private String uid = ""; // 大区UID
 	private Integer need = 0; // 大区配额
 	private String balance = ""; // 大区差额
 	private Integer regionResper = 0; // 大区总
@@ -12,6 +14,13 @@ public class CurrentPerson_statistics {
 	private Integer promote = 0; // 推广经理
 	private Integer dismission = 0; // 离职数量
 	private Integer total = 0; // 离职数量
+	private String dismissionRate = ""; // 离职数量
+	
+	// 统计OTC大区下省份人员信息
+	private String provinceId = ""; // 省份ID
+	private String provinceName = ""; // 省份名称
+	
+	
 	public Integer getRegionResper() {
 		return regionResper;
 	}
@@ -71,6 +80,30 @@ public class CurrentPerson_statistics {
 	}
 	public void setBalance(String balance) {
 		this.balance = balance;
+	}
+	public String getUid() {
+		return uid;
+	}
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	public String getProvinceId() {
+		return provinceId;
+	}
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
+	}
+	public String getProvinceName() {
+		return provinceName;
+	}
+	public void setProvinceName(String provinceName) {
+		this.provinceName = provinceName;
+	}
+	public String getDismissionRate() {
+		return dismissionRate;
+	}
+	public void setDismissionRate(String dismissionRate) {
+		this.dismissionRate = dismissionRate;
 	}
 	
 
