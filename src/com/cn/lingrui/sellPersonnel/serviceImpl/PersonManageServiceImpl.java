@@ -12,6 +12,7 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
+import com.cn.lingrui.sellPersonnel.db.dao.CheckManageDao;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
@@ -34,6 +35,9 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	@Resource(name = "personManageDao")
 	private PersonManageDao personManageDao;
 
+	@Resource(name="checkManageDao")
+	private CheckManageDao checkManageDao;
+	
 	@Override
 	protected String getFunNum() {
 		return null;
@@ -153,7 +157,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			}else {
 				
 				// 获取地总管理地区
-				controllAreas = personManageDao.getAreaSelects(loginPerson.getNBPT_SP_PERSON_ID(), this.getConnection());
+				controllAreas = personManageDao.getAreaSelects(loginPerson.getNBPT_SP_PERSON_LOGINID(), this.getConnection());
 				controllAreas.add(0, new NBPT_COMMON_XZQXHF());
 				
 				dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
@@ -423,6 +427,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030404"));
 			
 			mv.addObject("infos", infos);
+			mv.addObject("regionUid", regionUid);
 			
 			return this.after(mv);
 		}catch (SQLException e) {
@@ -433,8 +438,103 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		}
 	}
 	
-	
+	@Override
+	public ModelAndView getAreaPersons(String areaUid, String regionUid) throws Exception {
 
+		try {
+			
+			this.before();
+			
+			// 查询所有下级人员信息
+			List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(areaUid,this.getConnection());
+
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030405"));
+			
+			CurrentPerson areaResper = new CurrentPerson();
+			String resper = "";
+			for(CurrentPerson person : personInfos) {
+				
+				
+				if("22".equals(person.getNBPT_SP_PERSON_JOB())) {
+					
+					resper = person.getNBPT_SP_PERSON_NAME() + "(地总)";
+				} else if("26".equals(person.getNBPT_SP_PERSON_JOB())) {
+
+					resper = person.getNBPT_SP_PERSON_NAME() + "(大区总兼地总)";
+				}
+
+				if("".equals(resper)) {
+					
+				} else {
+
+					areaResper = person;
+					personInfos.remove(person);
+					break;
+				}
+			}
+			
+			// 1.查询该地总配额
+			mv.addObject("thisNeed", areaResper.getNBPT_SP_REGION_ONAME());
+			
+			// 2.该地总手下人数
+			mv.addObject("thisInfact", personInfos.size());
+
+			// 3.该地区负责人
+			mv.addObject("thisResper", resper);
+			
+			// 4.该地区名称
+			mv.addObject("thisArea", areaResper.getNBPT_SP_REGION_NAME());
+			
+			// 5.后退大区UID
+			mv.addObject("regionUid", regionUid);
+			
+			// 6.传递地区UID
+			mv.addObject("areaUid", areaUid);
+			
+			// 返回数据
+			mv.addObject("personInfos", personInfos);
+			
+			return this.after(mv);
+			
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+
+	@Override
+	public ModelAndView receivePerson(String areaUid, String regionUid, String personPid) throws Exception {
+		
+		this.before();
+
+		try {
+			
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030406"));
+			
+			// 查询该登录人员下未审核名单
+			NBPT_SP_PERSON person = checkManageDao.receiveUncheck(personPid, this.getConnection());
+			
+			// 获取该人员的负责区域
+			List<NBPT_COMMON_XZQXHF> responsAreas = checkManageDao.receiveUncheckResponsAreas(personPid, this.getConnection());
+			
+			mv.addObject("person", person);
+			mv.addObject("controllAreas", responsAreas);
+			mv.addObject("regionUid", regionUid);
+			mv.addObject("areaUid", areaUid);
+			
+			return this.after(mv);
+
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("查询当前所有人员出错");
+			throw new Exception();
+
+		}
+	}
+	
 	/**
 	 * 获取登录人员信息方法
 	 * @return
@@ -458,6 +558,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		
 		return this.getRequest().getAttribute("userID").toString();
 	}
+
 }
 
 

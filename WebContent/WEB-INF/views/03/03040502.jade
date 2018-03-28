@@ -4,8 +4,9 @@ extends ./layouts/0304
 
 block buttons
     .form-group
-        button(type="button").btn.btn-default#addTerminal 添加下级人员
+        button(type="button").btn.btn-default#supportAdd 添加大区总地总
         |&nbsp&nbsp
+        
 block contents
     if message
         .row.placeholders
@@ -21,16 +22,24 @@ block contents
                         label.col-xs-1.col-sm-1.control-label 公司配额
                         .col-xs-4.col-sm-4
                             input.form-control(value='#{thisNeed}', readOnly)
-                    .form-group
                         label.col-xs-1.col-sm-1.control-label 当前人员
                         .col-xs-4.col-sm-4
                             input.form-control(value='#{thisInfact}', readOnly)
+                    .form-group
+                        label.col-xs-1.col-sm-1.control-label 负责人
+                        .col-xs-4.col-sm-4
+                            input.form-control(value='#{thisResper}', readOnly)
+                        label.col-xs-1.col-sm-1.control-label 地区
+                        .col-xs-4.col-sm-4
+                            input.form-control(value='#{thisArea}', readOnly)
             unless personInfos.length
-                .col-xs-8.col-sm-8.placeholder
+                .col-xs-10.col-sm-10.placeholder
                     .panel.panel-default
                         .panel-heading 名单列表
+                            a.btn.btn-link(href = '#{baseUrl}/sellPersonnel/provincePersons?regionUid=#{regionUid}') 后退
+                            button.btn.btn-link.checkOut(value='hejixinxi') 导出
                         table.table
-                            tr 
+                            tr
                                 th(style="text-align:center") #
                                 th(style="text-align:center") 姓名
                                 th(style="text-align:center") 性别
@@ -44,17 +53,17 @@ block contents
                                 th(style="text-align:center") 年龄
                                 th(style="text-align:center") 当前状态
                             each person,i in personInfos
-                                tr(style="text-align:center;")
-                                    th(style="text-align:center",scope="row")= i+1
+                                tr(style="text-align:center;")  
+                                    th(style="vertical-align:middle",scope="row")= i+1
                                     td(style="vertical-align:middle").col-xs-1.col-sm-1
-                                        button.btn.btn-link.changePerson.btn-xs(value='#{person.NBPT_SP_PERSON_PID}', align="left")
+                                        a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/receivePerson?areaUid=#{areaUid}&regionUid=#{regionUid}&personPid=#{person.NBPT_SP_PERSON_PID}')
                                             #{person.NBPT_SP_PERSON_NAME}
                                     td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MALE
                                     td(style="vertical-align:middle")
                                         case person.NBPT_SP_PERSON_JOB
                                             when '21': 大区总
                                             when '22': 地总
-                                            when '23': 区县总
+                                            when '23': 正式区县总
                                             when '24': 预备区县总
                                             when '25': 推广经理
                                             when '26': 大区总兼地总
@@ -74,7 +83,7 @@ block contents
                                 
         
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040201.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js")
         
 block pageId
-    p(style="display:none") 03040201
+    p(style="display:none") 03040502

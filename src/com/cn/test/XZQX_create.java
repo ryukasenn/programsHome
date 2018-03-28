@@ -60,7 +60,7 @@ public class XZQX_create {
 		
 		// 添加终端
 		// 1.添加人员
-		//this.addTerminals();
+		this.addTerminals();
 		
 		// 添加人员配置
 		//this.addNeed();
@@ -74,7 +74,7 @@ public class XZQX_create {
 		// 添加用户名
 		//this.addLoginId();
 		
-		System.out.println(CommonUtil.getPercenttage(30, 70));
+		//System.out.println(String.valueOf(30-70));
 	}
 	private void addLoginId() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -246,11 +246,12 @@ public class XZQX_create {
 		}
 	}
 	private void addTerminals() throws SQLException, ClassNotFoundException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "suoyouzhongduan.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "dongbeizhongduan.xls";
 		File targetFile = new File(fileNameTemp); 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		//Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.9.63:1433; DatabaseName=cwbase1","lc0019999", "lrerp2012");
 		
 		PreparedStatement ps1 = conn.prepareStatement("SELECT A.* FROM NBPT_SP_REGION A WHERE A.NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
@@ -289,11 +290,20 @@ public class XZQX_create {
 							continue;
 						} else {
 							
+							if("".equals(sheet.getCell(5,rowi).getContents())) {
+								break;
+							}
 							// 加入检查队列
 							chekcItems.add(sheet.getCell(12,rowi).getContents().trim());
 							
 							String male = "男".equals(sheet.getCell(6,rowi).getContents())?"1":"0";
 							String birs = sheet.getCell(12,rowi).getContents().substring(6, 14);
+							
+							if("大区总经理".equals(sheet.getCell(8,rowi).getContents().trim()) || "地区总经理".equals(sheet.getCell(8,rowi).getContents().trim())) {
+								
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "非终端人员,位于:" + (rowi + 1) + "行");
+								continue;
+							}
 							String job = "区县总经理".equals(sheet.getCell(8,rowi).getContents()) ? "23" : "预备区县总".equals(sheet.getCell(8,rowi).getContents()) ? "24" : "25";
 							String entryDate = "";
 							
@@ -305,7 +315,7 @@ public class XZQX_create {
 							if("".equals(entryDate)){
 								
 
-								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "入职日期有误");
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "入职日期有误,位于:" + (rowi + 1) + "行");
 							}
 							
 //							if(!(8 == entryDate.length())) {
@@ -327,15 +337,25 @@ public class XZQX_create {
 							
 							if("".equals(deptId)) {
 
-								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "地区信息有误");
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "地区信息有误,位于:" + (rowi + 1) + "行");
 								continue;
 							}
 							
-							if(sheet.getCell(14,rowi).getContents().length() > 11) {
+							String mob1="", mob2 = "";
+							if(sheet.getCell(14,rowi).getContents().length() != 11) {
 
-								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "紧急联系人有误");
-								continue;
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "紧急联系人有误,位于:" + (rowi + 1) + "行");
+							} else {
+								mob2 = sheet.getCell(14,rowi).getContents();
 							}
+
+							if(sheet.getCell(13,rowi).getContents().length() != 11) {
+
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "联系人有误,位于:" + (rowi + 1) + "行");
+							} else {
+								mob1 = sheet.getCell(13,rowi).getContents();
+							}
+							
 							String sql = "INSERT NBPT_SP_PERSON ("
 									+ "NBPT_SP_PERSON_PID,"
 									+ "NBPT_SP_PERSON_ID,"
@@ -355,15 +375,15 @@ public class XZQX_create {
 									+ ")"
 									+ " VALUES ("
 									+ "'" + CommonUtil.getUUID_32() + "',"
-									+ "'" + (100500 + rowi - 2) + "',"
+									+ "'" + (102750 + rowi - 2) + "',"
 									+ "'" + deptId + "',"
 									+ "'2',"
 									+ "'" + sheet.getCell(5,rowi).getContents() + "',"
 									+ "'" + male + "',"
 									+ "'" + birs + "',"
 									+ "'" + sheet.getCell(12,rowi).getContents() + "',"
-									+ "'" + sheet.getCell(13,rowi).getContents() + "',"
-									+ "'" + sheet.getCell(14,rowi).getContents() + "',"
+									+ "'" + mob1 + "',"
+									+ "'" + mob2 + "',"
 									+ "'" + sheet.getCell(11,rowi).getContents() + "',"
 									+ "'" + job + "',"
 									+ "'" + sheet.getCell(9,rowi).getContents() + "',"
@@ -386,7 +406,7 @@ public class XZQX_create {
 				stmt.executeBatch();
 			}
 		}catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	private void test1() throws ClassNotFoundException, SQLException {

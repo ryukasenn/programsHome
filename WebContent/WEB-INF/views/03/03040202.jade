@@ -8,7 +8,7 @@ block buttons
         |&nbsp&nbsp
 block contents
     .row.placeholders
-        .col-xs-9.col-sm-9.placeholder
+        .col-xs-10.col-sm-10.placeholder
             .panel.panel-default
                 .panel-heading 合计列表
                     button.btn.btn-link.checkOut(value='hejixinxi') 导出
@@ -35,7 +35,7 @@ block contents
                                 td= info.total
                                 td= info.need
                                 td= info.balance
-        .col-xs-9.col-sm-9.placeholder
+        .col-xs-10.col-sm-10.placeholder
             .panel.panel-default
                 .panel-heading OTC统计信息 
                     button.btn.btn-link.checkOut(value='OTCinfo') 导出
@@ -44,7 +44,7 @@ block contents
                         th(style="text-align:center") #
                         th(style="text-align:center") 大区总
                         th(style="text-align:center; border-right-style:solid ; border-width: 1px") 地总
-                        th(style="text-align:center") 区县总
+                        th(style="text-align:center") 正式区县总
                         th(style="text-align:center") 预备区县总
                         th(style="text-align:center") 推广经理
                         th(style="text-align:center") 合计
@@ -82,7 +82,6 @@ block contents
                         th(style="text-align:center").OTC_dismission_total
                         th(style="text-align:center")
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
     script(language="javascript", src="#{myPath}/javascripts/03/03040202.js")
         
 block pageId

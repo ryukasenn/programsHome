@@ -490,6 +490,38 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 			throw new SQLException();
 		}
 	}
+
+	@Override
+	public List<CurrentPerson> receiveCurrentPersonInfos(String areaUid, Connection connection) throws SQLException {
+
+		try {
+			String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE, " + 
+						"  A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB, " + 
+						"  B.NBPT_SP_REGION_ONAME," +
+						"  B.NBPT_SP_REGION_NAME," +
+						"  CASE A.NBPT_SP_PERSON_MALE" + 
+						"	 WHEN '0' THEN '女'" + 
+						"	 WHEN '1' THEN '男'" + 
+						"	 END AS NBPT_SP_PERSON_MALE, " + 
+						"  A.NBPT_SP_PERSON_ENTRYDATA, " + 
+						"  A.NBPT_SP_PERSON_PLACE, " + 
+						"  A.NBPT_SP_PERSON_DEGREE, " + 
+						"  A.NBPT_SP_PERSON_PID,  " + 
+						"  A.NBPT_SP_PERSON_FLAG, " + 
+						"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE, " + 
+						"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
+						"  FROM NBPT_SP_PERSON A" + 
+						"  LEFT JOIN NBPT_SP_REGION B" + 
+						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID" + 
+						"  WHERE B.NBPT_SP_REGION_UID = '" + areaUid + "'" +
+						"  ORDER BY B.NBPT_SP_REGION_ID";
+			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
+			return personinfos;
+		} catch (SQLException e) {
+			log.error("获取地区下人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
 	
 	
 }

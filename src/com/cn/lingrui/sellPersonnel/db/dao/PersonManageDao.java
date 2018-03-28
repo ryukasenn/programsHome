@@ -100,4 +100,6 @@ public interface PersonManageDao extends BaseDao{
 	 */
 	public List<CurrentPerson> receiveCurrentProvincePersonInfos(String region_UID, Connection connection) throws SQLException;
 
+	public List<CurrentPerson> receiveCurrentPersonInfos(String areaUid, Connection connection) throws SQLException;
+
 }

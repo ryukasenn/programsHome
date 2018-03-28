@@ -62,18 +62,19 @@ public class PersonManageServiceUtils {
 
 		for(CurrentPerson_statistics info : resultList) {
 			
-			Integer balance = info.getNeed() - info.getTotal();
+			Integer balance = info.getTotal() - info.getNeed();
+			info.setBalance(String.valueOf(balance));
 			
-			if(0 < balance) {
-				
-				info.setBalance("差" + balance + "人");
-			} else if(0 == balance) {
-
-				info.setBalance("满配");
-			} else if(0 > balance) {
-				
-				info.setBalance("超出" + Math.abs(balance) + "人");
-			}
+//			if(0 < balance) {
+//				
+//				info.setBalance("差" + balance + "人");
+//			} else if(0 == balance) {
+//
+//				info.setBalance("满配");
+//			} else if(0 > balance) {
+//				
+//				info.setBalance("超出" + Math.abs(balance) + "人");
+//			}
 		}
 		return resultList;
 	}
@@ -121,18 +122,19 @@ public class PersonManageServiceUtils {
 		// 差额计算
 		for(CurrentPerson_statistics info : resultList) {
 			
-			Integer balance = info.getNeed() - info.getTotal();
-			
-			if(0 < balance) {
-				
-				info.setBalance("差" + balance + "人");
-			} else if(0 == balance) {
+			Integer balance = info.getTotal() - info.getNeed();
 
-				info.setBalance("满配");
-			} else if(0 > balance) {
-				
-				info.setBalance("超出" + Math.abs(balance) + "人");
-			}
+			info.setBalance(String.valueOf(balance));
+//			if(0 < balance) {
+//				
+//				info.setBalance("差" + balance + "人");
+//			} else if(0 == balance) {
+//
+//				info.setBalance("满配");
+//			} else if(0 > balance) {
+//				
+//				info.setBalance("超出" + Math.abs(balance) + "人");
+//			}
 		}
 		
 		// 离职率计算
@@ -533,18 +535,18 @@ public class PersonManageServiceUtils {
 		// 差额计算
 		for(CurrentPerson_statistics info : infos) {
 			
-			Integer balance = info.getNeed() - info.getTotal();
-			
-			if(0 < balance) {
-				
-				info.setBalance("差" + balance + "人");
-			} else if(0 == balance) {
-
-				info.setBalance("满配");
-			} else if(0 > balance) {
-				
-				info.setBalance("超出" + Math.abs(balance) + "人");
-			}
+			Integer balance = info.getTotal() - info.getNeed();
+			info.setBalance(String.valueOf(balance));
+//			if(0 < balance) {
+//				
+//				info.setBalance("差" + balance + "人");
+//			} else if(0 == balance) {
+//
+//				info.setBalance("满配");
+//			} else if(0 > balance) {
+//				
+//				info.setBalance("超出" + Math.abs(balance) + "人");
+//			}
 		}
 		
 		// 离职率计算
