@@ -196,10 +196,10 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		
 		if("3".equals(level)) {
 			
-			sql.append("SELECT * FROM NBPT_SP_REGION");
+			sql.append("SELECT * FROM NBPT_SP_REGION ORDER BY NBPT_SP_REGION_ID");
 		} else {
 
-			sql.append("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '" + level + "'");
+			sql.append("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '" + level + "' ORDER BY NBPT_SP_REGION_ID");
 		}
 		try {
 			
@@ -257,7 +257,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 								"	ON SUBSTRING(B.NBPT_SP_REGION_ID,1 ,2) = C.NBPT_SP_REGION_ID " + 
 								"	WHERE A.NBPT_SP_PERSON_DEPT_ID IS NOT NULL AND A.NBPT_SP_PERSON_DEPT_ID <> '' " + 
 								"	AND (A.NBPT_SP_PERSON_FLAG = '3' OR A.NBPT_SP_PERSON_FLAG = '2')" + 
-								"	AND A.NBPT_SP_PERSON_TYPE IS NOT NULL AND A.NBPT_SP_PERSON_TYPE <> '' ";
+								"	AND A.NBPT_SP_PERSON_TYPE IS NOT NULL AND A.NBPT_SP_PERSON_TYPE <> '' " +
+								"	ORDER BY B.NBPT_SP_REGION_ID";
 				persons = this.query(sql, connection, CurrentPerson.class);
 			} 
 			
@@ -275,8 +276,14 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  A.NBPT_SP_PERSON_DEGREE," + 
 							"  A.NBPT_SP_PERSON_PID," +  
 							"  A.NBPT_SP_PERSON_FLAG," + 
-							"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE," + 
-							"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
+							"  CASE ISDATE(SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8))" + 
+							"    WHEN 1 THEN DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE())" + 
+							"    WHEN 0 THEN 888" + 
+							"  END AS NBPT_SP_PERSON_AGE," + 
+							"  CASE ISDATE(A.NBPT_SP_PERSON_ENTRYDATA)" + 
+							"    WHEN 1 THEN DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE())" + 
+							"    WHEN 0 THEN 888" + 
+							"  END AS NBPT_SP_PERSON_WORKAGE " + 
 							"  FROM NBPT_SP_PERSON A " +
 							"  WHERE A.NBPT_SP_PERSON_DEPT_ID = '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_DEPT_ID() + "' " + 
 							"  AND A.NBPT_SP_PERSON_PID <> '" + nbpt_SP_PERSON.getNBPT_SP_PERSON_PID() + "' " + 
@@ -308,7 +315,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 						"  LEFT JOIN NBPT_COMMON_XZQXHF D" + 
 						"  ON A.NBPT_SP_REGION_XZQX_XZQXID = D.NBPT_COMMON_XZQXHF_ID" + 
 						"  WHERE C.NBPT_SP_PERSON_LOGINID = '" + loginId + "'" + 
-						"  AND A.NBPT_SP_REGION_XZQX_TYPE = '22'";
+						"  AND A.NBPT_SP_REGION_XZQX_TYPE = '22'" +
+						"  ORDER BY D.NBPT_COMMON_XZQXHF_ID";
 			
 			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return resultList;
@@ -351,7 +359,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_PERSON_XZQX_XID" + 
 							"  LEFT JOIN NBPT_SP_PERSON C" + 
 							"  ON B.NBPT_SP_PERSON_XZQX_PID = C.NBPT_SP_PERSON_ID" + 
-							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalPId +"'";
+							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalPId +"'" +
+							"  ORDER BY A.NBPT_COMMON_XZQXHF_ID";
 			
 			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
 		
@@ -393,7 +402,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 							"  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_PERSON_XZQX_XID" + 
 							"  LEFT JOIN NBPT_SP_PERSON C" + 
 							"  ON B.NBPT_SP_PERSON_XZQX_PID = C.NBPT_SP_PERSON_ID" + 
-							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'";
+							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'" +
+							"  ORDER BY A.NBPT_COMMON_XZQXHF_ID";
 			
 			NBPT_SP_REGION resultList = this.oneQuery(sql, connection, NBPT_SP_REGION.class);
 		
@@ -411,7 +421,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 		try {
 			String sql =  "  SELECT * "
 						+ "  FROM NBPT_SP_PERSON "
-						+ "  WHERE NBPT_SP_PERSON_PID = '" + changePersonPid + "'";
+						+ "  WHERE NBPT_SP_PERSON_PID = '" + changePersonPid + "'"
+						+ "  ORDER BY NBPT_SP_PERSON_ID";
 			
 			CurrentPerson person;
 			person = this.oneQuery(sql, connection, CurrentPerson.class);
@@ -449,11 +460,12 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	public List<NBPT_COMMON_XZQXHF> checkPlace(String string, Connection connection) throws SQLException {
 
 		try {
-			String sql = "  SELECT B.*" + 
+			String sql ="  SELECT B.*" + 
 						"  FROM NBPT_COMMON_XZQXHF A" + 
 						"  LEFT JOIN NBPT_COMMON_XZQXHF B" + 
 						"  ON A.NBPT_COMMON_XZQXHF_PID = B.NBPT_COMMON_XZQXHF_ID" + 
-						"  WHERE A.NBPT_COMMON_XZQXHF_ID = '" + string + "'";
+						"  WHERE A.NBPT_COMMON_XZQXHF_ID = '" + string + "'" +
+						"  ORDER BY B.NBPT_COMMON_XZQXHF_ID";
 			List<NBPT_COMMON_XZQXHF> placeInfo = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return placeInfo;
 		} catch (SQLException e) {
@@ -495,26 +507,29 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	public List<CurrentPerson> receiveCurrentPersonInfos(String areaUid, Connection connection) throws SQLException {
 
 		try {
-			String sql ="  SELECT A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE, " + 
-						"  A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB, " + 
-						"  B.NBPT_SP_REGION_ONAME," +
-						"  B.NBPT_SP_REGION_NAME," +
-						"  CASE A.NBPT_SP_PERSON_MALE" + 
-						"	 WHEN '0' THEN '女'" + 
-						"	 WHEN '1' THEN '男'" + 
-						"	 END AS NBPT_SP_PERSON_MALE, " + 
-						"  A.NBPT_SP_PERSON_ENTRYDATA, " + 
-						"  A.NBPT_SP_PERSON_PLACE, " + 
-						"  A.NBPT_SP_PERSON_DEGREE, " + 
-						"  A.NBPT_SP_PERSON_PID,  " + 
-						"  A.NBPT_SP_PERSON_FLAG, " + 
-						"  DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE()) AS NBPT_SP_PERSON_WORKAGE, " + 
-						"  DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS NBPT_SP_PERSON_AGE " + 
-						"  FROM NBPT_SP_PERSON A" + 
-						"  LEFT JOIN NBPT_SP_REGION B" + 
-						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID" + 
-						"  WHERE B.NBPT_SP_REGION_UID = '" + areaUid + "'" +
-						"  ORDER BY B.NBPT_SP_REGION_ID";
+			String sql ="  SELECT " + 
+						"  A.NBPT_SP_PERSON_NAME,A.NBPT_SP_PERSON_TYPE," +
+						"  A.NBPT_SP_PERSON_MOB1,A.NBPT_SP_PERSON_MOB2,A.NBPT_SP_PERSON_JOB," +
+						"  B.NBPT_SP_REGION_ONAME,  B.NBPT_SP_REGION_NAME," + 
+						"  CASE A.NBPT_SP_PERSON_MALE" +
+						"    WHEN '0' THEN '女'" +
+						"    WHEN '1' THEN '男'" +
+						"  END AS NBPT_SP_PERSON_MALE," +
+						"  A.NBPT_SP_PERSON_ENTRYDATA," +
+						"  A.NBPT_SP_PERSON_PLACE," +
+						"  A.NBPT_SP_PERSON_DEGREE," +
+						"  A.NBPT_SP_PERSON_PID," + 
+						"  A.NBPT_SP_PERSON_FLAG," + 
+						"  CASE ISDATE(SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8))" + 
+						"    WHEN 1 THEN DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE())" + 
+						"    WHEN 0 THEN 888" + 
+						"  END AS NBPT_SP_PERSON_AGE," + 
+						"  CASE ISDATE(A.NBPT_SP_PERSON_ENTRYDATA)" + 
+						"    WHEN 1 THEN DATEDIFF(yy,A.NBPT_SP_PERSON_ENTRYDATA,GETDATE())" + 
+						"    WHEN 0 THEN 888" + 
+						"  END AS NBPT_SP_PERSON_WORKAGE " + 
+						"  FROM NBPT_SP_PERSON A  LEFT JOIN NBPT_SP_REGION B  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID  " + 
+						"  WHERE B.NBPT_SP_REGION_UID = '" + areaUid + "'  ORDER BY B.NBPT_SP_REGION_ID";
 			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
 			return personinfos;
 		} catch (SQLException e) {

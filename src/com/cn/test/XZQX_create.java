@@ -246,12 +246,12 @@ public class XZQX_create {
 		}
 	}
 	private void addTerminals() throws SQLException, ClassNotFoundException {
-		String fileNameTemp = GlobalParams.FILE_PATH + "dongbeizhongduan.xls";
+		String fileNameTemp = GlobalParams.FILE_PATH + "suoyouzhongduan.xls";
 		File targetFile = new File(fileNameTemp); 
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		//Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
-		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.9.63:1433; DatabaseName=cwbase1","lc0019999", "lrerp2012");
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+//		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.9.63:1433; DatabaseName=cwbase1","lc0019999", "lrerp2012");
 		
 		PreparedStatement ps1 = conn.prepareStatement("SELECT A.* FROM NBPT_SP_REGION A WHERE A.NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
@@ -283,12 +283,7 @@ public class XZQX_create {
 					// 初始化
 					for(int rowi = 2; rowi < realRows; rowi++) {
 						
-						// 如果已存在
-						if(chekcItems.contains(sheet.getCell(12,rowi).getContents().trim())) {
-							
-							System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "数据属于重复数据,身份证重复,位于:" + (rowi + 1) + "行");
-							continue;
-						} else {
+						{
 							
 							if("".equals(sheet.getCell(5,rowi).getContents())) {
 								break;
@@ -297,7 +292,15 @@ public class XZQX_create {
 							chekcItems.add(sheet.getCell(12,rowi).getContents().trim());
 							
 							String male = "男".equals(sheet.getCell(6,rowi).getContents())?"1":"0";
-							String birs = sheet.getCell(12,rowi).getContents().substring(6, 14);
+							
+							String birs = "";
+							if(!"".equals(sheet.getCell(12,rowi).getContents().trim())) {
+
+								birs= sheet.getCell(12,rowi).getContents().substring(6, 14);
+							}else {
+
+								System.out.println("姓名为" + sheet.getCell(5,rowi).getContents() + "身份证号为空,位于:" + (rowi + 1) + "行");
+							}
 							
 							if("大区总经理".equals(sheet.getCell(8,rowi).getContents().trim()) || "地区总经理".equals(sheet.getCell(8,rowi).getContents().trim())) {
 								
@@ -328,7 +331,7 @@ public class XZQX_create {
 							
 							for(NBPT_SP_REGION region : resultList) {
 								
-								if(sheet.getCell(3,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
+								if(sheet.getCell(2,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
 									
 									deptId = region.getNBPT_SP_REGION_UID();
 									break;
@@ -375,7 +378,7 @@ public class XZQX_create {
 									+ ")"
 									+ " VALUES ("
 									+ "'" + CommonUtil.getUUID_32() + "',"
-									+ "'" + (102750 + rowi - 2) + "',"
+									+ "'" + (100271 + rowi - 2) + "',"
 									+ "'" + deptId + "',"
 									+ "'2',"
 									+ "'" + sheet.getCell(5,rowi).getContents() + "',"
