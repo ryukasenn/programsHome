@@ -1,11 +1,7 @@
 
-// 人员管理,查看当前人员信息(地总)
-extends ./layouts/0304
+// 大区信息,查看地区人员信息(大区总)
+extends ./layouts/0305
 
-block buttons
-    .form-group
-        button(type="button").btn.btn-default#supportAdd 添加大区总地总
-        |&nbsp&nbsp
         
 block contents
     if message
@@ -83,7 +79,7 @@ block contents
                                 
         
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03050201.js")
         
 block pageId
-    p(style="display:none") 03040502
+    p(style="display:none") 03050201

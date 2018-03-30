@@ -112,10 +112,21 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 
 			// 添加登录信息
 			addLoginInfo(in, out, null);
-			if("".equals(this.getCheckPage("030401", out.getUserRole()))) {
-				
+			
+			// 信息专员权限
+			if("600007".equals(out.getUserRole())) {
+
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030101", out.getUserRole()));
-			} else {
+			} 
+			
+			// 大区总权限
+			else if("600006".equals(out.getUserRole())){
+				
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030501", out.getUserRole()));
+			}
+			
+			// 默认人员管理页面
+			else {
 
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", out.getUserRole()));
 			}

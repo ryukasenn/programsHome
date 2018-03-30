@@ -1,6 +1,7 @@
 package com.cn.test;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,6 +26,7 @@ import jxl.CellType;
 import jxl.DateCell;
 import jxl.Sheet;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 
 public class XZQX_create {
 
@@ -60,7 +62,7 @@ public class XZQX_create {
 		
 		// 添加终端
 		// 1.添加人员
-		this.addTerminals();
+		//this.addTerminals();
 		
 		// 添加人员配置
 		//this.addNeed();
@@ -74,7 +76,95 @@ public class XZQX_create {
 		// 添加用户名
 		//this.addLoginId();
 		
-		//System.out.println(String.valueOf(30-70));
+		//System.out.println(CommonUtil.getUUID_32());
+		
+		// 删除离职人员
+		this.deleteOut();
+	}
+	private void deleteOut() throws ClassNotFoundException, SQLException {
+		
+		String fileNameTemp = GlobalParams.FILE_PATH + "lizhi3.xls";
+		File targetFile = new File(fileNameTemp);
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		//Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '2'");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询所有地总
+		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs1);	
+		if(!targetFile.exists()) {
+			
+		} else {
+
+			try {
+				List<String> sqls = new ArrayList<String>();
+				List<String> chekcItems = new ArrayList<String>();
+				// 如果存在,获取工作簿
+				Workbook book = null;
+				book = Workbook.getWorkbook(targetFile);
+			
+			
+				// 获取sheet页
+				int maxSheet = book.getNumberOfSheets();
+				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
+					
+					// 获取sheet页
+					Sheet sheet = book.getSheet(sheeti); 
+					
+					// 获取行数
+					int realRows = sheet.getRows();
+					
+					// 初始化
+					for(int rowi = 1; rowi < realRows; rowi++) {
+						
+						if("".equals(sheet.getCell(4,rowi).getContents())) {
+							
+							break;
+						} else {
+							
+							String dept_name = sheet.getCell(2,rowi).getContents();
+							String dept_UID = "";
+							String personName = sheet.getCell(4,rowi).getContents();
+							for(NBPT_SP_REGION region : resultList) {
+								
+								if(dept_name.trim().equals(region.getNBPT_SP_REGION_NAME().trim())) {
+									
+									dept_UID = region.getNBPT_SP_REGION_UID();
+								} 
+							}
+							
+							if("".equals(dept_UID)) {
+									
+								System.out.println(personName + "的地区有误");
+							}
+							
+							
+							String sql = "delete from nbpt_sp_person where nbpt_sp_person_name = '" + personName + "' and nbpt_sp_person_dept_id = '" + dept_UID + "'";
+							
+							sqls.add(sql);
+						}
+					}
+				}
+				Statement stmt;
+				stmt = conn.createStatement();
+
+
+				for(String sql : sqls) {
+					stmt.addBatch(sql);
+				}
+
+				stmt.executeBatch();
+			} catch (BiffException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+		}
+		
 	}
 	private void addLoginId() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -457,78 +547,98 @@ public class XZQX_create {
 		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		ps = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON where DATALENGTH(NBPT_SP_PERSON_DEPT_ID) = 6 ORDER BY NBPT_SP_PERSON_ID");
+		ps = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON where NBPT_SP_PERSON_JOB = '22' ORDER BY NBPT_SP_PERSON_ID");
+		
 		rs = ps.executeQuery();
 		List<NBPT_SP_PERSON> resultList = XZQX_create.rsToBean(NBPT_SP_PERSON.class, rs);
-
-		try {
-			
-			if(!targetFile.exists()) {
-				
-			} else {
-
-				List<String> sqls = new ArrayList<String>();
-				List<String> names = new ArrayList<String>();
-				// 如果存在,获取工作簿
-				Workbook book = null;
-				book = Workbook.getWorkbook(targetFile);
-				
-				// 获取sheet页
-				int maxSheet = book.getNumberOfSheets();
-				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
-					
-					// 获取sheet页
-					Sheet sheet = book.getSheet(sheeti); 
-					
-					// 获取行数
-					int realRows = sheet.getRows();
-					
-					// 初始化
-					for(int rowi = 1; rowi < realRows; rowi++) {
-
-
-						if(names.contains(sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents())) {
-							
-						}else {
-							
-
-							String pid = "";
-							for(NBPT_SP_PERSON pojo : resultList) {
-
-								if(sheet.getCell(5,rowi).getContents().toString().trim().equals(pojo.getNBPT_SP_PERSON_NAME().trim())) {
-									pid = pojo.getNBPT_SP_PERSON_PID();
-									
-									continue;
-								}
-							}
-							
-							if("".equals(pid)) {
-								
-							}else {
-								names.add(sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents());
-								String sql =  "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + pid + "' "
-											+ "WHERE NBPT_SP_REGION_ID = '" + sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents() + "'";
-								sqls.add(sql);
-								
-							}
-						}
-					}
-					
-					Statement stmt;
-					stmt = conn.createStatement();
 		
-		
-					for(String sql : sqls) {
-						stmt.addBatch(sql);
-					}
+
+		List<String> sqls = new ArrayList<String>();
+		for(NBPT_SP_PERSON pojo : resultList) {
 			
-					stmt.executeBatch();
-				}
-			}
-		}catch (Exception e) {
+			String sql =  "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + pojo.getNBPT_SP_PERSON_PID() + "' "
+					+ "WHERE NBPT_SP_REGION_UID = '" + pojo.getNBPT_SP_PERSON_DEPT_ID() + "'";
+			sqls.add(sql);
 			
-			e.printStackTrace();
 		}
+		Statement stmt;
+		stmt = conn.createStatement();
+
+
+		for(String sql : sqls) {
+			stmt.addBatch(sql);
+		}
+
+		stmt.executeBatch();
+
+//		try {
+//			
+//			if(!targetFile.exists()) {
+//				
+//			} else {
+//
+//				List<String> sqls = new ArrayList<String>();
+//				List<String> names = new ArrayList<String>();
+//				// 如果存在,获取工作簿
+//				Workbook book = null;
+//				book = Workbook.getWorkbook(targetFile);
+//				
+//				// 获取sheet页
+//				int maxSheet = book.getNumberOfSheets();
+//				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
+//					
+//					// 获取sheet页
+//					Sheet sheet = book.getSheet(sheeti); 
+//					
+//					// 获取行数
+//					int realRows = sheet.getRows();
+//					
+//					// 初始化
+//					for(int rowi = 1; rowi < realRows; rowi++) {
+//
+//
+//						if(names.contains(sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents())) {
+//							
+//						}else {
+//							
+//
+//							String pid = "";
+//							for(NBPT_SP_PERSON pojo : resultList) {
+//
+//								if(sheet.getCell(5,rowi).getContents().toString().trim().equals(pojo.getNBPT_SP_PERSON_NAME().trim())) {
+//									pid = pojo.getNBPT_SP_PERSON_PID();
+//									
+//									continue;
+//								}
+//							}
+//							
+//							if("".equals(pid)) {
+//								
+//							}else {
+//								names.add(sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents());
+//								String sql =  "UPDATE NBPT_SP_REGION SET NBPT_SP_REGION_RESPONSIBLER = '" + pid + "' "
+//											+ "WHERE NBPT_SP_REGION_ID = '" + sheet.getCell(7,rowi).getContents() + sheet.getCell(8,rowi).getContents().substring(0,2) + sheet.getCell(6,rowi).getContents() + "'";
+//								sqls.add(sql);
+//								
+//							}
+//						}
+//					}
+//					
+//					Statement stmt;
+//					stmt = conn.createStatement();
+//		
+//		
+//					for(String sql : sqls) {
+//						stmt.addBatch(sql);
+//					}
+//			
+//					stmt.executeBatch();
+//				}
+//			}
+//		}catch (Exception e) {
+//			
+//			e.printStackTrace();
+//		}
 		
 	}
 	private void checkResponseble() throws ClassNotFoundException, SQLException {

@@ -7,19 +7,24 @@ extends ./layouts/0302
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
-            .form-horizontal
+            .form-horizontal#changeRegion
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 地区名称
                     .col-xs-4.col-sm-4
                         input.form-control(value='#{currentAreaName}', readOnly)
+                        input(type="hidden", value='#{currentAreaId}')#changeRegion_regionId
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 所属大区
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{regionName}', readOnly)
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 所属省份
                     .col-xs-4.col-sm-4
                         input.form-control(value='#{currentProvince}', readOnly)
-                        input(type="hidden", value='#{currentProvinceId}')#provinceId
+                        input(type="hidden", value='#{currentProvinceId}')#changeRegion_provinceId
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 划分列表
-                    .col-xs-4.col-sm-4
+                    .col-xs-6.col-sm-6
                         .panel.panel-default
                             .panel-heading 
                                 |下辖市区县列表(
@@ -27,24 +32,24 @@ block contents
                                 |)
                             table.table
                                 tr
-                                    th.col-xs-1.col-sm-1
-                                    th.col-xs-4.col-sm-4 市
-                                    th.col-xs-4.col-sm-4 区县
-                                    th.col-xs-3.col-sm-3 操作
+                                    th(style="text-align:center")
+                                    th(style="text-align:center") 市
+                                    th(style="text-align:center") 区县
+                                    th(style="text-align:center") 操作
                                 each item in citys
-                                    tr
-                                        th.col-xs-1.col-sm-1
-                                        th.col-xs-4.col-sm-4= item.NBPT_COMMON_XZQXHF_NAME
-                                        th.col-xs-4.col-sm-4
-                                        th.col-xs-3.col-sm-3 
-                                            |<button class="btn btn-link" name="add" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
+                                    tr(style="text-align:center;")
+                                        td(style="vertical-align:middle")
+                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
+                                        td(style="vertical-align:middle")
+                                        td(style="vertical-align:middle") 
+                                            |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
                                 each item in contys
-                                    tr
-                                        th.col-xs-1.col-sm-1
-                                        th.col-xs-4.col-sm-4= item.NBPT_COMMON_XZQXHF_PNAME
-                                        th.col-xs-4.col-sm-4= item.NBPT_COMMON_XZQXHF_NAME
-                                        th.col-xs-3.col-sm-3 
-                                            |<button class="btn btn-link delete"  value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
+                                    tr(style="text-align:center;")  
+                                        td(style="vertical-align:middle")
+                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_PNAME
+                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
+                                        td(style="vertical-align:middle") 
+                                            |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03020501.js")
     

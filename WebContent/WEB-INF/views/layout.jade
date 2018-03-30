@@ -9,6 +9,7 @@ html(lang="en")
     body
         script
             var baseUrl = '#{myPath}';
+                
         block head
             nav.navbar.navbar-fixed-top.navbar-inverse
                 .container-fluid
@@ -25,7 +26,7 @@ html(lang="en")
                     .navbar-collapse.collapse
                         ul.nav.navbar-nav.navbar-right
                             li: a 你好，#{niko}
-                            li: a(href="#{myPath}/logout") 退出
+                            li: a(href="#{myPath}/login") 退出
                         form.navbar-form.navbar-right
                             input.form-control(type="text",placeholder='Search...' )
         block body

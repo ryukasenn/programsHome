@@ -51,7 +51,7 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp籍贯
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_PLACE",placeholder="例:信阳", value='#{person.NBPT_SP_PERSON_PLACE}')
+                            input.form-control(name="NBPT_SP_PERSON_PLACE",placeholder="例:信阳", value='#{person.NBPT_SP_PERSON_PLACE}', maxlength="10")
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -91,7 +91,7 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp入职时间
                         .col-xs-4.col-sm-4
-                            input.form-control(type='date', name="NBPT_SP_PERSON_ENTRYDATA", required='true', value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
+                            input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_ENTRYDATA", required='true', value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
                     
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
@@ -108,13 +108,13 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单起始
                         .col-xs-4.col-sm-4
-                            input.form-control(type='date', name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}')
+                            input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单结束
                         .col-xs-4.col-sm-4
-                            input.form-control(type='date', name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
+                            input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *

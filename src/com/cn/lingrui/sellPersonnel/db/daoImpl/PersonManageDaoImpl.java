@@ -25,21 +25,33 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 	private static Logger log = LogManager.getLogger();	
 
 	@Override
-	public CurrentPerson receiveCurrentPerson(String userId, Connection conn) throws SQLException {
+	public CurrentPerson receiveCurrentPerson(String loginId, Connection conn) throws SQLException {
 		
-		// userId获取的是辅助系统的登录ID,与人员信息LOGINID一致
+		// userId获取的是辅助系统的登录ID,与人员信息LOGINID一致,如果REGION_UID为空,则是地总,不为空则是大区总,REGION_UID为负责大区的UID
 		
-		String sql =	"  SELECT A.*,B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED, " + 
-						"  B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER, " + 
-						"  C.NBPT_SP_REGION_UID AS REGION_UID, " + 
-						"  C.NBPT_SP_REGION_NAME AS REGION_NAME " + 
-						"  FROM NBPT_SP_PERSON A " + 
-						"  LEFT JOIN NBPT_SP_REGION B " + 
-						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
-						"  LEFT JOIN NBPT_SP_REGION C " + 
-						"  ON C.NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
-						"  AND C.NBPT_SP_REGION_UID <> B.NBPT_SP_REGION_UID" + 
-						"  WHERE NBPT_SP_PERSON_LOGINID = '" + userId + "'";
+		String sql ="    SELECT A.*, " + 
+					"    B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED," + // 所在部门配额(22或26,获取的是地区,21获取的大区)
+					"    B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER, " + // 所在部门负责人
+					"    CASE A.NBPT_SP_PERSON_JOB " + 
+					"        WHEN '22'" + 
+					"            THEN (SELECT NBPT_SP_REGION_UID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_ID = SUBSTRING(B.NBPT_SP_REGION_ID,1,2))" + 
+					"        WHEN '21'" + 
+					"            THEN B.NBPT_SP_REGION_UID" + 
+					"        WHEN '26'" + 
+					"            THEN (SELECT NBPT_SP_REGION_UID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
+					"        END AS REGION_UID," + // 所在大区UID
+					"    CASE A.NBPT_SP_PERSON_JOB " + 
+					"        WHEN '22'" + 
+					"            THEN (SELECT NBPT_SP_REGION_NAME FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_ID = SUBSTRING(B.NBPT_SP_REGION_ID,1,2))" + 
+					"        WHEN '21'" + 
+					"            THEN B.NBPT_SP_REGION_NAME" + 
+					"        WHEN '26'" + 
+					"            THEN (SELECT NBPT_SP_REGION_NAME FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
+					"        END AS REGION_NAME" + // 所在大区NAME
+					"    FROM NBPT_SP_PERSON A " + 
+					"    LEFT JOIN NBPT_SP_REGION B " + 
+					"    ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
+					"    WHERE NBPT_SP_PERSON_LOGINID = '" + loginId + "'";
 		
 		try {
 			

@@ -1,19 +1,12 @@
 
-// 人员管理,查看大区人员信息(后勤,总经理)
-extends ./layouts/0304
-
-
-block buttons
-    .form-group
-        button(type="button").btn.btn-default#supportAdd 添加大区总地总
-        |&nbsp&nbsp
+// 人员管理,查看大区人员信息(大区总)
+extends ./layouts/0305
         
 block contents
     .row.placeholders
         .col-xs-9.col-sm-9.placeholder
             .panel.panel-default
                 .panel-heading 大区人员信息统计
-                    a.btn.btn-link(href = '#{baseUrl}/sellPersonnel/persons') 后退
                     button.btn.btn-link.downLoadCheckOut(value='hejixinxi') 导出
                 table.table#hejixinxi
                     tr
@@ -57,7 +50,7 @@ block contents
         
 
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040402.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03050201.js")
         
 block pageId
-    p(style="display:none") 03040402
+    p(style="display:none") 03050201

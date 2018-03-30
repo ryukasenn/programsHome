@@ -425,7 +425,7 @@ public class CommonUtil {
 	 */
 	public static String formateTimeToPage(String date) {
 		
-		return "".equals(date)? getYYYY_MM_DD() :new StringBuffer().append(date.substring(0, 4)).append("-")
+		return "".equals(date)? getYYYY_MM_DD() : new StringBuffer().append(date.substring(0, 4)).append("-")
 																   .append(date.substring(4, 6)).append("-")
 																   .append(date.substring(6, 8)).toString();
 	}

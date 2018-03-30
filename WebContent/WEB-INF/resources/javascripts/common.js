@@ -8,6 +8,14 @@ $(function(){
 			backdrop:'static'
 		})
 	})
+	
+	$("a").on('click', function(){
+
+		$("#waitModal").modal({
+			backdrop:'static'
+		})
+	})
+	
 })
 
 

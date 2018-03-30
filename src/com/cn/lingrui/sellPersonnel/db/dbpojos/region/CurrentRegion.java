@@ -19,6 +19,8 @@ public class CurrentRegion {
 	private String NBPT_SP_REGION_XZQX_TYPE;
 	private String NBPT_COMMON_XZQXHF_LEVEL;
 	private String NBPT_COMMON_XZQXHF_PNAME;
+	private String REGION_NAME;
+	private String REGION_ID;
 	
 	public String getNBPT_COMMON_XZQXHF_ID() {
 		return NBPT_COMMON_XZQXHF_ID;
@@ -97,6 +99,18 @@ public class CurrentRegion {
 	}
 	public void setNBPT_COMMON_XZQXHF_PNAME(String nBPT_COMMON_XZQXHF_PNAME) {
 		NBPT_COMMON_XZQXHF_PNAME = nBPT_COMMON_XZQXHF_PNAME;
+	}
+	public String getREGION_NAME() {
+		return REGION_NAME;
+	}
+	public void setREGION_NAME(String rEGION_NAME) {
+		REGION_NAME = rEGION_NAME;
+	}
+	public String getREGION_ID() {
+		return REGION_ID;
+	}
+	public void setREGION_ID(String rEGION_ID) {
+		REGION_ID = rEGION_ID;
 	}
 	
 }

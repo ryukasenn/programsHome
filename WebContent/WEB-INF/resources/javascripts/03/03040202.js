@@ -27,7 +27,7 @@ $(function(){
 		$("." + thisItem).html(sum);
 	}
 	
-	$(".checkOut").on('click', function(){
+	$(".downLoadCheckOut").on('click', function(){
 		
 		tableToExcel($(this).val());
 	})

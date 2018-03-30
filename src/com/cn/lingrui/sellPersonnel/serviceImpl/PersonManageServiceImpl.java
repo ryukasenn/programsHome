@@ -403,31 +403,41 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			// 初始化大区下所有人员信息
 			List<CurrentPerson> personInfos = new ArrayList<>();
+			ModelAndView mv = null;
+			// 如果为空,则是大区总登录或混合大区总
 			
-			// 如果为空,则是大区总登录
-			if(CommonUtil.isEmpty(regionUid)) {
+			// 1.获取登录信息
+			CurrentPerson loginPerson = this.getLoginPerson();
+
+			// 如果为空,则是后勤登录
+			if(null == loginPerson) {
+
+				// 2.1查询大区下所有人员信息
+				personInfos = personManageDao.receiveCurrentProvincePersonInfos(regionUid, this.getConnection());
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030404"));
+				// 2.2添加页面信息
+				mv.addObject("regionUid", regionUid);
+
+			}
+			
+			// 如果是大区总
+			else if("21".equals(loginPerson.getNBPT_SP_PERSON_JOB()) || "26".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
 				
-				// 1.获取登录信息
-				CurrentPerson loginPerson = this.getLoginPerson();
 				
-				// 2.查询大区总下所有人员信息
+				// 2.1查询大区总下所有人员信息
 				personInfos = personManageDao.receiveCurrentProvincePersonInfos(loginPerson.getREGION_UID(), this.getConnection());
+				
+				// 2.2添加页面信息
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030502"));
+				mv.addObject("regionUid", loginPerson.getREGION_UID());
 			} 
 
-			// 如果不为空,则是后勤登录
-			else {
-
-				// 1.查询大区下所有人员信息
-				personInfos = personManageDao.receiveCurrentProvincePersonInfos(regionUid, this.getConnection());
-			}
 			
 			// 后勤人员查询合计信息处理
 			List<CurrentPerson_statistics> infos = PersonManageServiceUtils.provincePersons_check(personInfos);
 			
-			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030404"));
-			
 			mv.addObject("infos", infos);
-			mv.addObject("regionUid", regionUid);
 			
 			return this.after(mv);
 		}catch (SQLException e) {
@@ -444,12 +454,13 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		try {
 			
 			this.before();
+
+			// 初始化返回信息
+			ModelAndView mv = null;
 			
-			// 查询所有下级人员信息
+			// 所有人员信息
 			List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(areaUid,this.getConnection());
 
-			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030405"));
-			
 			CurrentPerson areaResper = new CurrentPerson();
 			String resper = "";
 			for(CurrentPerson person : personInfos) {
@@ -473,12 +484,29 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				}
 			}
 			
+			// 1.获取登录信息
+			CurrentPerson loginPerson = this.getLoginPerson();
+
+			// 如果为空,则是后勤登录
+			if(null == loginPerson) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030405"));
+				
+			}
+			
+			// 如果是大区总
+			else if("21".equals(loginPerson.getNBPT_SP_PERSON_JOB()) || "26".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030503"));
+				
+			}
+			
 			// 1.查询该地总配额
 			mv.addObject("thisNeed", areaResper.getNBPT_SP_REGION_ONAME());
-			
+
 			// 2.该地总手下人数
 			mv.addObject("thisInfact", personInfos.size());
-
+			
 			// 3.该地区负责人
 			mv.addObject("thisResper", resper);
 			

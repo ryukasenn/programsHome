@@ -157,7 +157,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	 * 获取修改部门信息页面
 	 */
 	@Override
-	public ModelAndView getChangeRegion(RegionsPojo pojo) throws Exception {
+	public ModelAndView getChangeRegion(String regionId) throws Exception {
 		
 		try {
 			
@@ -167,7 +167,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			ModelAndView mv = null;
 			
 			// 返回地区信息
-			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionId(), this.getConnection());
+			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(regionId, this.getConnection());
 			
 			// 获取负责人信息
 			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentPerson(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
@@ -216,7 +216,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	}
 
 	/**
-	 * 提交部门信息修改
+	 * 提交部门基本信息修改
 	 */
 	@Override
 	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) {
@@ -296,6 +296,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			// 初始化返回結果
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030205"));
+			
 			// 获取要设置的地区编号
 			String regionUid = in.getRegionId();
 			
@@ -312,6 +313,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 					mv.addObject("currentProvince", currentRegion.getNBPT_COMMON_XZQXHF_NAME());
 					mv.addObject("currentProvinceId", currentRegion.getNBPT_COMMON_XZQXHF_ID());
 					mv.addObject("currentAreaName", currentRegion.getNBPT_SP_REGION_NAME());
+					mv.addObject("currentAreaId", currentRegion.getNBPT_SP_REGION_ID());
+					mv.addObject("regionName", currentRegion.getREGION_NAME());
 					break;
 				}
 			}
@@ -367,6 +370,50 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			throw new Exception();
 		}
 	}
+	@Override
+	public ModelAndView postAddRegionXzqx(RegionsPojo in) throws Exception {
+
+		ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/changeRegion?regionId=" + in.getAddAreaContain_regionId());
+		
+		// 初始化存入参数
+		NBPT_SP_REGION_XZQX region_XZQX = new NBPT_SP_REGION_XZQX();
+		
+		// 唯一ID
+		region_XZQX.setNBPT_SP_REGION_XZQX_UID(CommonUtil.getUUID_32());
+		
+		// 类型为地区下辖市区县
+		region_XZQX.setNBPT_SP_REGION_XZQX_TYPE("22");
+		
+		// 
+		region_XZQX.setNBPT_SP_REGION_XZQX_REGIONID(in.getAddAreaContain_regionId());
+		
+		// 如果选择的区县级单位为空,则添加市级
+		if("".equals(in.getAddAreaContain_contyValue())) {
+			
+			region_XZQX.setNBPT_SP_REGION_XZQX_XZQXID(in.getAddAreaContain_cityValue());
+		} 
+		
+		// 如果区县级单位不为空,则添加区县级
+		else {
+
+			region_XZQX.setNBPT_SP_REGION_XZQX_XZQXID(in.getAddAreaContain_contyValue());
+		}
+
+		try {
+			
+			//regionManageDao.postAddRegionXzqx(region_XZQX, this.getConnection());
+			
+			return this.after(mv);
+			
+		} catch (Exception e) {
+
+			this.closeException();
+			log.error("添加地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+	
 	
 
 }

@@ -7,7 +7,6 @@ $(function(){
 		
 		$_this = $(this);		
 		var regionId = $_this.parent().parent().children().eq(1).find("p").html();
-		$('#regionId').val(regionId);
-		$('#controlForm').attr("action", baseUrl + "/sellPersonnel/changeRegion").attr("method", "POST").submit();
+		$('#controlForm').attr("action", baseUrl + "/sellPersonnel/changeRegion?regionId=" + regionId).attr("method", "GET").submit();
 	});
 })

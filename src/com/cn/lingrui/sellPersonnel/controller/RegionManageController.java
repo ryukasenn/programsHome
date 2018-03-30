@@ -56,10 +56,10 @@ public class RegionManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/changeRegion", method = RequestMethod.POST)
-	public ModelAndView getChangeRegion(RegionsPojo pojo) throws Exception {
+	@RequestMapping(value = "/changeRegion", method = RequestMethod.GET)
+	public ModelAndView getChangeRegion(String regionId) throws Exception {
 
-		ModelAndView mv = regionManageService.getChangeRegion(pojo);
+		ModelAndView mv = regionManageService.getChangeRegion(regionId);
 
 		return mv;
 	}
@@ -106,6 +106,20 @@ public class RegionManageController {
 	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
 
 		ModelAndView mv = regionManageService.getCheckXzqxs(in);
+
+		return mv;
+	}
+	
+	/**
+	 * 提交地区下辖行政区县增加
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/addRegionXzqx", method = RequestMethod.POST)
+	public ModelAndView postAddRegionXzqx(RegionsPojo in) throws Exception {
+
+		ModelAndView mv = regionManageService.postAddRegionXzqx(in);
 
 		return mv;
 	}

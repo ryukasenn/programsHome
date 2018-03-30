@@ -233,18 +233,29 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 	public List<CurrentRegion> receiveRegion_Xzqxs(String regionUid, Connection connection) throws SQLException {
 
 		try {
-			String sql = "  SELECT "
-					+ "  C.NBPT_SP_REGION_NAME," + "  A.NBPT_COMMON_XZQXHF_ID," + "  A.NBPT_COMMON_XZQXHF_NAME,"
-					+ "  B.NBPT_SP_REGION_XZQX_TYPE," + "  A.NBPT_COMMON_XZQXHF_LEVEL,"
-					+ "  (SELECT NBPT_COMMON_XZQXHF_NAME FROM NBPT_COMMON_XZQXHF WHERE NBPT_COMMON_XZQXHF_ID = A.NBPT_COMMON_XZQXHF_PID) AS NBPT_COMMON_XZQXHF_PNAME" 
-					+ "  FROM NBPT_COMMON_XZQXHF A "
-					+ "  LEFT JOIN NBPT_SP_REGION_XZQX B"
-					+ "  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_REGION_XZQX_XZQXID" + "  LEFT JOIN NBPT_SP_REGION C"
-					+ "  ON C.NBPT_SP_REGION_ID = B.NBPT_SP_REGION_XZQX_REGIONID" + "  WHERE  1 = 1"
-					+ "  AND C.NBPT_SP_REGION_UID = '" + regionUid + "' "
-					+ "  ORDER BY B.NBPT_SP_REGION_XZQX_REGIONID ASC, " + "  B.NBPT_SP_REGION_XZQX_TYPE ASC ";
+			
+			String sql ="  SELECT " + 
+						"  A.*," + 
+						"  B.NBPT_SP_REGION_XZQX_TYPE," + 
+						"  C.NBPT_COMMON_XZQXHF_ID," + 
+						"  C.NBPT_COMMON_XZQXHF_NAME," + 
+						"  C.NBPT_COMMON_XZQXHF_LEVEL," + 
+						"  (SELECT NBPT_COMMON_XZQXHF_NAME FROM NBPT_COMMON_XZQXHF WHERE NBPT_COMMON_XZQXHF_ID = C.NBPT_COMMON_XZQXHF_PID) AS NBPT_COMMON_XZQXHF_PNAME," + 
+						"  D.NBPT_SP_REGION_NAME AS REGION_NAME," + 
+						"  D.NBPT_SP_REGION_ID AS REGION_ID" + 
+						"  FROM NBPT_SP_REGION A" + 
+						"  LEFT JOIN NBPT_SP_REGION_XZQX B" + 
+						"  ON A.NBPT_SP_REGION_ID = B.NBPT_SP_REGION_XZQX_REGIONID" + 
+						"  LEFT JOIN NBPT_COMMON_XZQXHF C" + 
+						"  ON B.NBPT_SP_REGION_XZQX_XZQXID = C.NBPT_COMMON_XZQXHF_ID" + 
+						"  LEFT JOIN NBPT_SP_REGION D" + 
+						"  ON SUBSTRING(A.NBPT_SP_REGION_ID,1,2) = D.NBPT_SP_REGION_ID" + 
+						"  WHERE A.NBPT_SP_REGION_UID = '" + regionUid + "'" + 
+						"  ORDER BY C.NBPT_COMMON_XZQXHF_ID";
 			List<CurrentRegion> resultList;
+			
 			resultList = this.query(sql, connection, CurrentRegion.class);
+			
 			return resultList;
 		} catch (SQLException e) {
 
@@ -270,6 +281,24 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 			log.error("查询本地区下辖行政区县出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
+	}
+
+	@Override
+	public void postAddRegionXzqx(NBPT_SP_REGION_XZQX region_XZQX, Connection connection) throws SQLException {
+
+		try {
+			
+			String sql = DBUtils.beanToSql(NBPT_SP_REGION_XZQX.class, "INSERT", "NBPT_SP_REGION_XZQX", region_XZQX);
+			
+			this.excuteUpdate(sql, connection);
+			
+			
+		} catch (SQLException e) {
+			
+			log.error("提交添加地区下辖行政区县" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+		
 	}
 
 }

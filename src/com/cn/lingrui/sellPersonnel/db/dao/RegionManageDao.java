@@ -7,6 +7,7 @@ import java.util.List;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
@@ -34,6 +35,8 @@ public interface RegionManageDao {
 	public List<CurrentRegion> receiveRegion_Xzqxs(String regionUid, Connection connection) throws SQLException;
 
 	public List<NBPT_COMMON_XZQXHF> receiveAreaContainSelects(String parentId, Connection connection) throws SQLException;
+
+	public void postAddRegionXzqx(NBPT_SP_REGION_XZQX region_XZQX, Connection connection) throws SQLException;
 	
 
 }

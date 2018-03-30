@@ -9,14 +9,15 @@ div(role="dialog", aria-labelledby="030205ModalLabel", tabindex="-1").modal.fade
                 h4.modal-title 选择下辖市区县
             .modal-body                       
                 form.form-horizontal#addAreaContain
+                    input(type='hidden', name='addAreaContain_regionId')
                     .form-group
                         label.col-xs-2.col-sm-2.control-label 市级
                         .col-xs-6.col-sm-6
-                            select.form-control(name='')#citySelect  
+                            select.form-control(name='addAreaContain_cityValue')#citySelect  
                     .form-group
                         label.col-xs-2.col-sm-2.control-label 区县级
                         .col-xs-6.col-sm-6
-                            select.form-control(name='')#contySelect
+                            select.form-control(name='addAreaContain_contyValue')#contySelect
             .modal-footer
                 button(type="button", data-dismiss="modal").btn.btn-default 关闭
                 button(type="button").btn.btn-primary#addAreaConfirm 确定
