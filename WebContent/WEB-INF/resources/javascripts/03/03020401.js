@@ -28,10 +28,8 @@ $(function(){
 	 */
 	$("#checkXzqxs").on('click', function(){		
 		
-		// 获取地区编号
-		$("input[name='regionId']").val($("input[name='regionUid']").val());
-		
-		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/checkXzqxs").attr("method", "POST").submit();
+		// 获取地区编号		
+		window.location.href = baseUrl + "/sellPersonnel/checkXzqxs?regionUid=" + $("#updateRegion input[name='regionUid']").val();
 	})
 	
 	/**
@@ -39,9 +37,10 @@ $(function(){
 	 */
 	$(".changeAreaInfo").on('click', function(){
 		
+		alert("该功能还没做好");
 		// 获取地区编号
-		$("input[name='regionId']").val($("input[name='regionUid']").val());
-		$("#updateRegion").attr("action", baseUrl + "/sellPersonnel/postChangeRegion").attr("method", "POST").submit();
+//		$("input[name='regionId']").val($("input[name='regionUid']").val());
+//		$("#updateRegion").attr("action", baseUrl + "/sellPersonnel/postChangeRegion").attr("method", "POST").submit();
 	})
 	
 })

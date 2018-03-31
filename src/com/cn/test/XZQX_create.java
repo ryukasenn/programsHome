@@ -71,7 +71,7 @@ public class XZQX_create {
 		//this.addArea_Province();
 		
 		// 添加负责人和部门关系列表
-		//this.addResponseble();
+		this.addResponseble();
 		
 		// 添加用户名
 		//this.addLoginId();
@@ -79,7 +79,9 @@ public class XZQX_create {
 		//System.out.println(CommonUtil.getUUID_32());
 		
 		// 删除离职人员
-		this.deleteOut();
+		//this.deleteOut();
+		
+		
 	}
 	private void deleteOut() throws ClassNotFoundException, SQLException {
 		
@@ -209,8 +211,13 @@ public class XZQX_create {
 	private void addResponseble() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
-		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '2'");
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+//		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement(  "  SELECT A.* " + 
+														"  FROM NBPT_SP_REGION A " + 
+														"  LEFT JOIN NBPT_SP_REGION_XZQX B " + 
+														"  ON A.NBPT_SP_REGION_ID = B.NBPT_SP_REGION_XZQX_REGIONID" + 
+														"  WHERE (B.NBPT_SP_REGION_XZQX_REGIONID IS NULL OR B.NBPT_SP_REGION_XZQX_REGIONID = '') AND A.NBPT_SP_REGION_LEVEL = '2'");
 		ResultSet rs1 = ps1.executeQuery();
 		
 		// 查询河南区县划分
@@ -219,8 +226,13 @@ public class XZQX_create {
 		List<String> sqls = new ArrayList<>();
 		for(NBPT_SP_REGION personRegion : resultList) {
 			
-			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
-						  "WHERE NBPT_SP_PERSON_PID = '" + personRegion.getNBPT_SP_REGION_RESPONSIBLER() + "'";
+			String sql = "INSERT NBPT_SP_REGION_XZQX VALUES("
+					+ "'" + CommonUtil.getUUID_32() + "',"
+					+ "'" + personRegion.getNBPT_SP_REGION_ID() + "',"
+					+ "'" + personRegion.getNBPT_SP_REGION_ID().substring(2, 4) + "0000" + "',"
+					+ "'21')";
+//			String sql =  "UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_DEPT_ID = '" + personRegion.getNBPT_SP_REGION_UID() + "' " + 
+//						  "WHERE NBPT_SP_PERSON_PID = '" + personRegion.getNBPT_SP_REGION_RESPONSIBLER() + "'";
 			sqls.add(sql);
 		}
 		

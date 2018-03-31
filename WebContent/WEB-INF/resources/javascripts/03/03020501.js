@@ -35,16 +35,17 @@ $(function(){
 			
 			return ;
 		} else {
+
+			$("input[name='addAreaContain_regionUid']").val($("#changeRegion_regionUid").val());
+			$("input[name='addAreaContain_regionId']").val($("#changeRegion_regionId").val());
 			
 			if("" == contyValue){
 				if(comfirm("是否只选择市级行政单位")){
 
-					$("input[name='addAreaContain_regionId']").val($("#changeRegion_regionId").val());
 					$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
 				}
 			} else {
 
-				$("input[name='addAreaContain_regionId']").val($("#changeRegion_regionId").val());
 				$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
 			}
 			

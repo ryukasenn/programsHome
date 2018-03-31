@@ -157,7 +157,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	 * 获取修改部门信息页面
 	 */
 	@Override
-	public ModelAndView getChangeRegion(String regionId) throws Exception {
+	public ModelAndView getChangeRegion(String regionUid) throws Exception {
 		
 		try {
 			
@@ -167,7 +167,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			ModelAndView mv = null;
 			
 			// 返回地区信息
-			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(regionId, this.getConnection());
+			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(regionUid, this.getConnection());
 			
 			// 获取负责人信息
 			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentPerson(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
@@ -288,7 +288,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	 * @throws Exception 
 	 */
 	@Override
-	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
+	public ModelAndView getCheckXzqxs(String  regionUid) throws Exception {
 		
 		try {
 			
@@ -296,10 +296,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			// 初始化返回結果
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030205"));
-			
-			// 获取要设置的地区编号
-			String regionUid = in.getRegionId();
-			
+						
 			// 1.根据编号，查询地区当前的划分情况
 			List<CurrentRegion> region_xzqxs = regionManageDao.receiveRegion_Xzqxs(regionUid, this.getConnection());
 		
@@ -313,6 +310,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 					mv.addObject("currentProvince", currentRegion.getNBPT_COMMON_XZQXHF_NAME());
 					mv.addObject("currentProvinceId", currentRegion.getNBPT_COMMON_XZQXHF_ID());
 					mv.addObject("currentAreaName", currentRegion.getNBPT_SP_REGION_NAME());
+					mv.addObject("currentAreaUid", regionUid);
 					mv.addObject("currentAreaId", currentRegion.getNBPT_SP_REGION_ID());
 					mv.addObject("regionName", currentRegion.getREGION_NAME());
 					break;
@@ -373,7 +371,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	@Override
 	public ModelAndView postAddRegionXzqx(RegionsPojo in) throws Exception {
 
-		ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/changeRegion?regionId=" + in.getAddAreaContain_regionId());
+		ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/checkXzqxs?regionUid=" + in.getAddAreaContain_regionUid());
 		
 		// 初始化存入参数
 		NBPT_SP_REGION_XZQX region_XZQX = new NBPT_SP_REGION_XZQX();
@@ -400,12 +398,14 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		}
 
 		try {
+
+			this.before();
 			
-			//regionManageDao.postAddRegionXzqx(region_XZQX, this.getConnection());
+			regionManageDao.postAddRegionXzqx(region_XZQX, this.getConnection());
 			
 			return this.after(mv);
 			
-		} catch (Exception e) {
+		} catch (SQLException e) {
 
 			this.closeException();
 			log.error("添加地区下辖行政区县出错" + CommonUtil.getTraceInfo());

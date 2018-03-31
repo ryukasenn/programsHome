@@ -12,6 +12,7 @@ block contents
                     label.col-xs-1.col-sm-1.control-label 地区名称
                     .col-xs-4.col-sm-4
                         input.form-control(value='#{currentAreaName}', readOnly)
+                        input(type="hidden", value='#{currentAreaUid}')#changeRegion_regionUid
                         input(type="hidden", value='#{currentAreaId}')#changeRegion_regionId
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 所属大区

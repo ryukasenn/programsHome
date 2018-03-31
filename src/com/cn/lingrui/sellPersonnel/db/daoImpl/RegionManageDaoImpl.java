@@ -105,10 +105,10 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 	}
 
 	@Override
-	public NBPT_SP_REGION receiveCurrentRegion(String regionId, Connection connection) throws SQLException {
+	public NBPT_SP_REGION receiveCurrentRegion(String regionUid, Connection connection) throws SQLException {
 
 		try {
-			String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_UID = '" + regionId + "'";
+			String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_UID = '" + regionUid + "'";
 
 			NBPT_SP_REGION regionInfo = this.oneQuery(sql, connection, NBPT_SP_REGION.class);
 

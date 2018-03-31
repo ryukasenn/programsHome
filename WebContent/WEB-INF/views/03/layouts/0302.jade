@@ -11,6 +11,7 @@ block main
     h2.page-header 部门管理
     form.form-inline#controlForm
         input(type='hidden', name='regionId')#regionId
+        input(type="hidden", name="regionUid") 
         .form-group
             input.form-control(type="text",placeholder='输入名称,默认全部', name='regionName')#regionsPickup
             |&nbsp&nbsp

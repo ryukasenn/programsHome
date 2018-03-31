@@ -56,10 +56,10 @@ public class RegionManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/changeRegion", method = RequestMethod.GET)
-	public ModelAndView getChangeRegion(String regionId) throws Exception {
+	@RequestMapping(value = "/changeRegion", method = RequestMethod.POST)
+	public ModelAndView getChangeRegion(RegionsPojo pojo) throws Exception {
 
-		ModelAndView mv = regionManageService.getChangeRegion(regionId);
+		ModelAndView mv = regionManageService.getChangeRegion(pojo.getRegionUid());
 
 		return mv;
 	}
@@ -102,10 +102,10 @@ public class RegionManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/checkXzqxs", method = RequestMethod.POST)
-	public ModelAndView getCheckXzqxs(RegionsPojo in) throws Exception {
+	@RequestMapping(value = "/checkXzqxs", method = RequestMethod.GET)
+	public ModelAndView getCheckXzqxs(String regionUid) throws Exception {
 
-		ModelAndView mv = regionManageService.getCheckXzqxs(in);
+		ModelAndView mv = regionManageService.getCheckXzqxs(regionUid);
 
 		return mv;
 	}
