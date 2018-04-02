@@ -38,7 +38,7 @@ $(function(){
 	/**
 	 * 大区基本信息修改
 	 */
-	$("#updateRegionConfirm").on("clikc", function(){
+	$("#updateRegionConfirm").on("click", function(){
 		
 		$('#updateRegion').attr('action', baseUrl + "/sellPersonnel/updateRegion").attr('method', 'POST').submit();
 	})

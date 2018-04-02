@@ -74,11 +74,11 @@ function createModal(url, data, title){
 			$('.bodyTable').empty();
 			$('.modal-title').html(title);
 			var $_table = $(
-								"<table class='table tableBody'>" +
-									"<colgroup>" +
-										"<col class='col-xs-1 col-sm-1'/>" +
-										"<col class='col-xs-2 col-sm-2'/>" +
-									"</colgroup>" +
+								"<table class='table table-striped table-bordered tableBody'>" +
+//									"<colgroup>" +
+//										"<col class='col-xs-1 col-sm-1'/>" +
+//										"<col class='col-xs-2 col-sm-2'/>" +
+//									"</colgroup>" +
 								"</table>").appendTo($('.bodyTable'));
 			
 			for(var i = 0; i < jsonData.length; i++){

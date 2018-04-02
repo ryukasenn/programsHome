@@ -93,8 +93,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 				if("null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {
 					
-					String message = "您没有被分配管理地区,请联系后勤人员或管理员";
-					mv.addObject("message", message);
+					mv.addObject("message", "您没有被分配管理地区,请联系后勤人员或管理员");
 					
 					return this.after(mv);
 				}else {
@@ -539,7 +538,19 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 
 		try {
 			
-			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030406"));
+			ModelAndView mv = null;
+			
+			// 如果是混合大区总地总,或者是大区总
+			if("600008".equals(this.getRole()) || "600006".equals(this.getRole())) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030504"));
+			} 
+			
+			// 如果是后勤人员
+			else if("600005".equals(this.getRole())) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030406"));
+			}
 			
 			// 查询该登录人员下未审核名单
 			NBPT_SP_PERSON person = checkManageDao.receiveUncheck(personPid, this.getConnection());

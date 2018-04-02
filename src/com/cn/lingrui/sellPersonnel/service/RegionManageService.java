@@ -38,4 +38,12 @@ public interface RegionManageService {
 	 */
 	public ModelAndView postAddRegionXzqx(RegionsPojo in) throws Exception;
 
+	/**
+	 * 提交部门信息更新
+	 * @param in
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception;
+
 }

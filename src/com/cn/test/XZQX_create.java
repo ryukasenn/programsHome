@@ -71,7 +71,7 @@ public class XZQX_create {
 		//this.addArea_Province();
 		
 		// 添加负责人和部门关系列表
-		this.addResponseble();
+		//this.addResponseble();
 		
 		// 添加用户名
 		//this.addLoginId();
@@ -80,6 +80,191 @@ public class XZQX_create {
 		
 		// 删除离职人员
 		//this.deleteOut();
+		
+		// 添加大区总
+		//this.addRegionResper();
+		this.addRegionResperRights();
+		
+		
+	}
+	
+	private void addRegionResperRights() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		//Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_PERSON WHERE NBPT_SP_PERSON_JOB = '21'");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询所有地总
+		List<NBPT_SP_PERSON> resultList = XZQX_create.rsToBean(NBPT_SP_PERSON.class, rs1);	
+		
+
+		List<String> sqls1 = new ArrayList<String>();
+		List<String> sqls2 = new ArrayList<String>();
+		for(NBPT_SP_PERSON person : resultList) {
+			
+			String sql1 = "INSERT NBPT_RSFZ_USER (NBPT_RSFZ_USER_ID, NBPT_RSFZ_USER_NAME, NBPT_RSFZ_USER_PASSWORD) "
+													 + "VALUES ('" + person.getNBPT_SP_PERSON_LOGINID() + "',"
+													 + "'" + person.getNBPT_SP_PERSON_NAME() + "', "
+													 + "'lingrui123')";
+			sqls1.add(sql1);
+			
+			String sql2 = "INSERT NBPT_RSFZ_U_R VALUES ('" + person.getNBPT_SP_PERSON_LOGINID() + "', '600006')";
+			sqls2.add(sql2);
+			
+		}
+
+		Statement stmt;
+		stmt = conn.createStatement();
+
+
+		for(String sql : sqls1) {
+			stmt.addBatch(sql);
+		}
+		for(String sql : sqls2) {
+			stmt.addBatch(sql);
+		}
+
+		stmt.executeBatch();
+	}
+
+	private void addRegionResper() throws ClassNotFoundException, SQLException {
+		String fileNameTemp = GlobalParams.FILE_PATH + "daquzong.xls";
+		File targetFile = new File(fileNameTemp);
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		//Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1'");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询所有地总
+		List<NBPT_SP_REGION> resultList = XZQX_create.rsToBean(NBPT_SP_REGION.class, rs1);	
+		if(!targetFile.exists()) {
+			
+		} else {
+
+			try {
+				List<String> sqls = new ArrayList<String>();
+				List<String> chekcItems = new ArrayList<String>();
+				// 如果存在,获取工作簿
+				Workbook book = null;
+				book = Workbook.getWorkbook(targetFile);
+			
+			
+				// 获取sheet页
+				int maxSheet = book.getNumberOfSheets();
+				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
+					
+					// 获取sheet页
+					Sheet sheet = book.getSheet(sheeti); 
+					
+					// 获取行数
+					int realRows = sheet.getRows();
+					
+					// 初始化
+					for(int rowi = 3; rowi < realRows; rowi++) {
+						
+						if("".equals(sheet.getCell(4,rowi).getContents())) {
+							
+							break;
+						} else {
+							
+							String deptId = "";
+							for(NBPT_SP_REGION region : resultList) {
+								
+								if(sheet.getCell(1,rowi).getContents().trim().equals(region.getNBPT_SP_REGION_NAME())) {
+									
+									deptId = region.getNBPT_SP_REGION_UID();
+									break;
+								}
+							}
+							
+							if("".equals(deptId)) {
+								
+								System.out.println(sheet.getCell(2,rowi).getContents()+"的大区名有误");
+								continue;
+							}
+							
+							String male = "男".equals(sheet.getCell(3,rowi).getContents())?"1":"0";
+							String birs = "";
+							
+							if(!"".equals(sheet.getCell(18,rowi).getContents().trim())) {
+
+								birs= sheet.getCell(18,rowi).getContents().substring(6, 14);
+							}else {
+
+								System.out.println("姓名为" + sheet.getCell(2,rowi).getContents() + "身份证号为空");
+							}
+							String entryDate = "";
+							
+							if (sheet.getCell(15,rowi).getType() == CellType.DATE) { 
+						         DateCell dc = (DateCell) sheet.getCell(15,rowi);
+						         entryDate = CommonUtil.dateToYYYYMMDD(dc.getDate()); 
+							} 
+
+							if("".equals(entryDate)){
+								
+
+								System.out.println("姓名为" + sheet.getCell(2,rowi).getContents() + "入职日期有误");
+							}
+							String sql = "INSERT NBPT_SP_PERSON ("
+									+ "NBPT_SP_PERSON_PID,"
+									+ "NBPT_SP_PERSON_ID,"
+									+ "NBPT_SP_PERSON_DEPT_ID,"
+									+ "NBPT_SP_PERSON_TYPE,"
+									+ "NBPT_SP_PERSON_NAME,"
+									+ "NBPT_SP_PERSON_MALE,"
+									+ "NBPT_SP_PERSON_BIRS,"
+									+ "NBPT_SP_PERSON_IDNUM,"
+									+ "NBPT_SP_PERSON_MOB1,"
+									+ "NBPT_SP_PERSON_MOB2,"
+									+ "NBPT_SP_PERSON_PLACE,"
+									+ "NBPT_SP_PERSON_JOB,"
+									+ "NBPT_SP_PERSON_DEGREE,"
+									+ "NBPT_SP_PERSON_FLAG,"
+									+ "NBPT_SP_PERSON_ENTRYDATA"
+									+ ")"
+									+ " VALUES ("
+									+ "'" + CommonUtil.getUUID_32() + "',"
+									+ "'" + (102827 + rowi - 3) + "',"
+									+ "'" + deptId + "',"
+									+ "'2',"
+									+ "'" + sheet.getCell(2,rowi).getContents() + "',"
+									+ "'" + male + "',"
+									+ "'" + birs + "',"
+									+ "'" + sheet.getCell(18,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(19,rowi).getContents() + "',"
+									+ "'',"
+									+ "'" + sheet.getCell(17,rowi).getContents() + "',"
+									+ "'21',"
+									+ "'" + sheet.getCell(9,rowi).getContents() + "',"
+									+ "'2',"
+									+ "'" + entryDate + "'"
+									+ ")";
+							sqls.add(sql);
+							
+						}
+					}
+				}
+				Statement stmt;
+				stmt = conn.createStatement();
+
+
+				for(String sql : sqls) {
+					stmt.addBatch(sql);
+				}
+
+				stmt.executeBatch();
+			} catch (BiffException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+		}
 		
 		
 	}

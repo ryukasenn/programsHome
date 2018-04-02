@@ -20,6 +20,13 @@ public interface RegionManageDao {
 
 	public List<NBPT_SP_REGION> receiveRegionsSelect(Connection connection) throws SQLException;
 
+	/**
+	 * 根据部门UID获取部门信息
+	 * @param regionId 部门UID
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
 	public NBPT_SP_REGION receiveCurrentRegion(String regionId, Connection connection) throws SQLException;
 
 	public NBPT_SP_PERSON receiveCurrentPerson(String nbpt_SP_REGION_RESPONSIBLER, Connection connection) throws SQLException;
@@ -37,6 +44,13 @@ public interface RegionManageDao {
 	public List<NBPT_COMMON_XZQXHF> receiveAreaContainSelects(String parentId, Connection connection) throws SQLException;
 
 	public void postAddRegionXzqx(NBPT_SP_REGION_XZQX region_XZQX, Connection connection) throws SQLException;
+
+	/**
+	 * 更新大区信息
+	 * @param updateRegion
+	 * @throws SQLException 
+	 */
+	void updateRegion(NBPT_SP_REGION updateRegion, Connection connection) throws SQLException;
 	
 
 }

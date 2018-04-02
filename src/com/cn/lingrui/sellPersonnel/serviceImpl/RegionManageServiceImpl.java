@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.method.annotation.ModelAndViewMethodReturnValueHandler;
 
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
@@ -96,7 +97,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	}
 	
 	/**
-	 * 获取查看大区页面输入框自动补全信息
+	 * AJAX获取查看大区页面输入框自动补全信息
 	 */
 	@Override
 	public String receiveRegionsSelect() throws Exception {
@@ -409,6 +410,51 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 
 			this.closeException();
 			log.error("添加地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+	@Override
+	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception {
+			
+		try {
+			this.before();
+			// 获取部门信息
+			NBPT_SP_REGION region = regionManageDao.receiveCurrentRegion(in.getRegionUid(),this.getConnection());
+			
+			ModelAndView mv = null;
+			
+			// 判断部门等级,如果为大区
+			if("1".equals(region.getNBPT_SP_REGION_LEVEL())) {
+				
+				// 返回大区列表
+				mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regions?typeRadio=1");
+				
+				// 设置更新数据
+				NBPT_SP_REGION updateRegion = new NBPT_SP_REGION();
+				
+				// 条件
+				updateRegion.setNBPT_SP_REGION_UID(region.getNBPT_SP_REGION_UID());
+				
+				// 内容
+				updateRegion.setNBPT_SP_REGION_ONAME(in.getRegionNeed());
+				updateRegion.setNBPT_SP_REGION_RESPONSIBLER(in.getRegionResponsibler());
+				updateRegion.setNBPT_SP_REGION_NOTE(in.getRegionNote());
+				
+				regionManageDao.updateRegion(updateRegion, this.getConnection());
+			} 
+			
+			// 如果是地区
+			else if("2".equals(region.getNBPT_SP_REGION_LEVEL())) {
+				
+				// TODO
+			}
+			
+			return this.after(mv);
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("修改部门信息出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}

@@ -96,6 +96,15 @@ public class RegionManageController {
 	}
 	
 
+	@RequestMapping(value = "/updateRegion", method = RequestMethod.POST)
+	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception {
+
+		ModelAndView mv = regionManageService.postUpdateRegion(in);
+
+		return mv;
+	}
+	
+
 	/**
 	 * 获取地区划分页面
 	 * @param in

@@ -301,4 +301,46 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 		
 	}
 
+	@Override
+	public void updateRegion(NBPT_SP_REGION updateRegion, Connection connection) throws SQLException {
+
+		try {
+			String sql =  "UPDATE NBPT_SP_REGION SET "
+						+ "NBPT_SP_REGION_RESPONSIBLER = '" + updateRegion.getNBPT_SP_REGION_RESPONSIBLER() + "', "
+						+ "NBPT_SP_REGION_NOTE = '" + updateRegion.getNBPT_SP_REGION_NOTE() + "', "
+						+ "NBPT_SP_REGION_ONAME = '" + updateRegion.getNBPT_SP_REGION_ONAME() + "' "
+						+ "WHERE NBPT_SP_REGION_UID = '" + updateRegion.getNBPT_SP_REGION_UID() + "'";
+			this.excuteUpdate(sql, connection);
+			
+		} catch (SQLException e) {
+			
+			log.error("提交添加地区下辖行政区县" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
