@@ -92,7 +92,19 @@ block contents
                             |&nbsp&nbsp&nbsp&nbsp入职时间
                         .col-xs-4.col-sm-4
                             input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_ENTRYDATA", required='true', value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
-                    
+                    .form-group
+                        label.col-xs-1.col-sm-1.control-label 
+                            font(color="red") *
+                            |&nbsp&nbsp&nbsp&nbsp学历
+                        .col-xs-4.col-sm-4
+                            select(name="NBPT_SP_PERSON_DEGREE", value='#{person.NBPT_SP_PERSON_DEGREE}').form-control
+                                option(value='小学') 小学
+                                option(value='初中') 初中
+                                option(value='高中') 高中
+                                option(value='中专') 中专
+                                option(value='大专') 大专
+                                option(value='本科') 本科
+                                option(value='研究生') 研究生
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -133,19 +145,6 @@ block contents
                             |&nbsp&nbsp&nbsp&nbsp邮箱
                         .col-xs-4.col-sm-4
                             input.form-control(name="NBPT_SP_PERSON_MAIL", value='#{person.NBPT_SP_PERSON_MAIL}', maxlength="50")
-                    .form-group
-                        label.col-xs-1.col-sm-1.control-label 
-                            font(color="red") *
-                            |&nbsp&nbsp&nbsp&nbsp学历
-                        .col-xs-4.col-sm-4
-                            select(name="NBPT_SP_PERSON_DEGREE", value='#{person.NBPT_SP_PERSON_DEGREE}').form-control
-                                option(value='小学') 小学
-                                option(value='初中') 初中
-                                option(value='高中') 高中
-                                option(value='中专') 中专
-                                option(value='大专') 大专
-                                option(value='本科') 本科
-                                option(value='研究生') 研究生
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *

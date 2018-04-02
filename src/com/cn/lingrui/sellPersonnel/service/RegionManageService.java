@@ -46,4 +46,12 @@ public interface RegionManageService {
 	 */
 	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception;
 
+	/**
+	 * 提交删除地区下辖行政区县
+	 * @param in 包含选中地区的参数
+	 * @return
+	 * @throws Exception 
+	 */
+	ModelAndView postDeleteRegionXzqx(String regionUid, String regionId, String cityValue) throws Exception;
+
 }

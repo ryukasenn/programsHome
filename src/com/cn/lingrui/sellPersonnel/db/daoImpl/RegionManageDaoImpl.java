@@ -145,15 +145,29 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 	public List<NBPT_SP_PERSON> receiveRegionReper(String personType, Connection connection) throws SQLException {
 
 		try {
-			String sql = DBUtils.beanToSql(NBPT_SP_PERSON.class, "SELECT", "NBPT_SP_PERSON");
 
+			String sql =
+					"  SELECT A.*" + 
+					"  FROM NBPT_SP_PERSON A " + 
+					"  WHERE NOT EXISTS ";
 			List<NBPT_SP_PERSON> resultList = new ArrayList<>();
 			if ("26".equals(personType)) {
-				resultList = this.query(sql + " WHERE (NBPT_SP_PERSON_JOB = '21' OR NBPT_SP_PERSON_JOB = '26') "
-						+ " ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
+				
+				resultList = this.query(sql + " (SELECT * " + 
+							"	 FROM NBPT_SP_REGION " + 
+							"	 WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
+							"	 AND NBPT_SP_REGION_LEVEL = '1') " + 
+							"  AND A.NBPT_SP_PERSON_JOB IN ('21', '26')" + 
+							"  ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
+				
 			} else if ("22".equals(personType)) {
-				resultList = this.query(sql + " WHERE NBPT_SP_PERSON_JOB = '22' " + " ORDER BY NBPT_SP_PERSON_ID ASC ",
-						connection, NBPT_SP_PERSON.class);
+				
+				resultList = this.query(sql + " (SELECT * " + 
+						"	 FROM NBPT_SP_REGION " + 
+						"	 WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
+						"	 AND NBPT_SP_REGION_LEVEL = '2') " + 
+						"  AND A.NBPT_SP_PERSON_JOB IN ('22','26') " + 
+						"  ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
 			}
 
 			return resultList;
@@ -314,9 +328,26 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 			
 		} catch (SQLException e) {
 			
-			log.error("提交添加地区下辖行政区县" + CommonUtil.getTraceInfo());
+			log.error("提交添加地区下辖行政区县出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
+	}
+
+	@Override
+	public void deleteRegionXzqx(String regionId, String cityValue, Connection connection) throws SQLException {
+		try {
+			String sql =  "DELETE FROM NBPT_SP_REGION_XZQX "
+						+ "WHERE NBPT_SP_REGION_XZQX_REGIONID = '" + regionId + "' AND "
+						+ "NBPT_SP_REGION_XZQX_XZQXID = '" + cityValue + "' AND "
+						+ "NBPT_SP_REGION_XZQX_TYPE = '22'";
+			this.excuteUpdate(sql, connection);
+			
+		} catch (SQLException e) {
+			
+			log.error("提交删除地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+		
 	}
 
 }

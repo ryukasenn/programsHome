@@ -51,6 +51,15 @@ public interface RegionManageDao {
 	 * @throws SQLException 
 	 */
 	void updateRegion(NBPT_SP_REGION updateRegion, Connection connection) throws SQLException;
+
+	/**
+	 * 删除地区行政区县对应关系
+	 * @param regionId 地区ID
+	 * @param cityValue 行政区县ID
+	 * @param connection
+	 * @throws SQLException 
+	 */
+	public void deleteRegionXzqx(String regionId, String cityValue, Connection connection) throws SQLException;
 	
 
 }

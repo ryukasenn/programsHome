@@ -41,11 +41,8 @@ $(function(){
 	var radioItems = new Array("NBPT_SP_PERSON_MALE", "NBPT_SP_PERSON_JOB");
 	
 	// 需要验证的下拉框
-	var selectItems = new Array("NBPT_SP_PERSON_POLICYTYPE");
+	var selectItems = new Array("NBPT_SP_PERSON_DEGREE");
 	
-	// 时间格式验证
-	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA")//, "NBPT_SP_PERSON_POLICY_DATA1", "NBPT_SP_PERSON_POLICY_DATA2");
-
 	/**
 	 * 点击提交事件
 	 */
@@ -74,7 +71,7 @@ $(function(){
 		$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 		
 		// 输入框统一为空检验
-		if(necessaryCheck(inputItems,radioItems,null)){
+		if(necessaryCheck(inputItems,radioItems,selectItems)){
 			
 			// 如果没有错误了,提交
 			if(0 == $(".has-error").length){
@@ -87,15 +84,19 @@ $(function(){
 		}
 	})
 
-//	/**
-//	 * 职务点击事件,职务点击要跟身份证验证同时进行
-//	 */
-//	$("input[name='NBPT_SP_PERSON_JOB']").on("click", function(){
-//		
-//		$_this = $("input[name='NBPT_SP_PERSON_IDNUM']");
-//		$_thisParent = $_this.parents(".form-group");
-//		idNumCheck($_this, $_thisParent);
-//	})
+	/**
+	 * 职务点击事件,职务点击要跟身份证验证同时进行
+	 */
+	$("input[name='NBPT_SP_PERSON_JOB']").on("click", function(){
+		
+
+		if("" == $("#NBPT_SP_PERSON_PID").val()){
+
+			$_this = $("input[name='NBPT_SP_PERSON_IDNUM']");
+			$_thisParent = $_this.parents(".form-group");
+			idNumCheck($_this, $_thisParent);
+		}
+	})
 	
 	/**
 	 * 输入框统一去除错误提示
@@ -129,7 +130,6 @@ $(function(){
 						})
 					} else {
 						
-						$("input[name='NBPT_SP_PERSON_PLACE']").val("");
 						$_thisParent.addClass("has-error");
 						return;
 					}
@@ -185,46 +185,49 @@ $(function(){
 			return false;
 		}
 		
-//		// 判断年龄是否符合要求
-//		if(null == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
-//			
-//			// 如果没有选择职位
-//			$_thisParent.addClass("has-error");
-//			$(".errorMessage").empty();	
-//			$(".errorMessage").append($("<font color='red' ><p>请选择职务后再确认身份证</p></font>"))
-//			return false;
-//			
-//		} else if("25" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
-//			
-//			// 如果是推广经理,要求55以下
-//			if($_this.val().substr(6,4) < 1963){
-//				alert($_this.val().substr(6,4));
-//				$_thisParent.addClass("has-error");
-//				$(".errorMessage").empty();	
-//				$(".errorMessage").append($("<font color='red' ><p>推广经理要求55岁以下</p></font>"))
-//				return false;
-//			} else {
-//
-//				$_thisParent.removeClass("has-error");
-//				$(".errorMessage").empty();
-//				return true;
-//			}
-//		} else {
-//			
-//			// 如果不是推广经理,要求35以下
-//			if($_this.val().substr(6,4) < 1983){
-//
-//				$_thisParent.addClass("has-error");
-//				$(".errorMessage").empty();	
-//				$(".errorMessage").append($("<font color='red' ><p>非推广经理要求35岁以下</p></font>"))
-//				return false;
-//			} else {
-//
-//				$_thisParent.removeClass("has-error");
-//				$(".errorMessage").empty();
-//				return true;
-//			}
-//		}
+		if("" == $("#NBPT_SP_PERSON_PID").val()){
+			// 判断年龄是否符合要求
+			if(null == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
+				
+				// 如果没有选择职位
+				$_thisParent.addClass("has-error");
+				$(".errorMessage").empty();	
+				$(".errorMessage").append($("<font color='red' ><p>请选择职务后再确认身份证</p></font>"))
+				return false;
+				
+			} else if("25" == $("input[name='NBPT_SP_PERSON_JOB']:checked").val()){
+				
+				// 如果是推广经理,要求55以下
+				if($_this.val().substr(6,4) < 1963){
+					alert($_this.val().substr(6,4));
+					$_thisParent.addClass("has-error");
+					$(".errorMessage").empty();	
+					$(".errorMessage").append($("<font color='red' ><p>推广经理要求55岁以下</p></font>"))
+					return false;
+				} else {
+
+					$_thisParent.removeClass("has-error");
+					$(".errorMessage").empty();
+					return true;
+				}
+			} else {
+				
+				// 如果不是推广经理,要求35以下
+				if($_this.val().substr(6,4) < 1983){
+
+					$_thisParent.addClass("has-error");
+					$(".errorMessage").empty();	
+					$(".errorMessage").append($("<font color='red' ><p>非推广经理要求35岁以下</p></font>"))
+					return false;
+				} else {
+
+					$_thisParent.removeClass("has-error");
+					$(".errorMessage").empty();
+					return true;
+				}
+			}
+		}
+		
 		
 	}
 	

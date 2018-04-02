@@ -65,6 +65,20 @@ public class RegionManageController {
 	}
 	
 	/**
+	 * 获取修改部门信息页面
+	 * @param pojo
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/changeRegion", method = RequestMethod.GET)
+	public ModelAndView getChangeRegion_get(String regionUid) throws Exception {
+
+		ModelAndView mv = regionManageService.getChangeRegion(regionUid);
+
+		return mv;
+	}
+	
+	/**
 	 * 提交修改部门信息页面
 	 * @param pojo
 	 * @return
@@ -133,8 +147,20 @@ public class RegionManageController {
 		return mv;
 	}
 	
-	
+	/**
+	 * 提交地区下辖行政区县删除
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/deleteRegionXzqx", method = RequestMethod.GET)
+	public ModelAndView postDeleteRegionXzqx(String regionUid, String regionId, String cityValue) throws Exception {
 
+		ModelAndView mv = regionManageService.postDeleteRegionXzqx(regionUid, regionId, cityValue);
+
+		return mv;
+	}
+	
 	/**
 	 * 获取大区信息下拉框
 	 * @param parentId

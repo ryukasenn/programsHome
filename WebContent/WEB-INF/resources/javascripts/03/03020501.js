@@ -40,16 +40,62 @@ $(function(){
 			$("input[name='addAreaContain_regionId']").val($("#changeRegion_regionId").val());
 			
 			if("" == contyValue){
-				if(comfirm("是否只选择市级行政单位")){
+				if(confirm("是否只选择市级行政单位")){
 
-					$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
+					if(checkRepeat(cityValue)){
+
+						$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
+					} else {
+						
+						alert("重复添加");
+					}
+					
 				}
 			} else {
 
-				$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
+				if(checkRepeat(contyValue)){
+
+					$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
+				} else {
+
+					alert("重复添加");
+				}
 			}
 			
 		}
+	})
+	
+	/**
+	 * 如果重复返回false
+	 */
+	function checkRepeat(value){
+		
+		var $_values = $(".delete");
+		for(var i = 0; i < $_values.length; i++){
+			
+			if(value == $_values.eq(i).val()){
+				
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * 提交删除
+	 */
+	$(".delete").on("click", function(){
+
+		// 1.传递地区编号
+		var regionId = $("#changeRegion_regionId").val();
+
+		// 2.传递区县编号
+		var cityValue = $(this).val();
+		
+		// 3.传递地区32UID
+		var regionUid = $("#changeRegion_regionUid").val();
+		
+		window.location.href = baseUrl + "/sellPersonnel/deleteRegionXzqx?regionUid=" + regionUid + "&regionId=" + regionId + "&cityValue=" + cityValue;
 	})
 	
 	

@@ -8,8 +8,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.method.annotation.ModelAndViewMethodReturnValueHandler;
-
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
@@ -455,6 +453,24 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 
 			this.closeException();
 			log.error("修改部门信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	@Override
+	public ModelAndView postDeleteRegionXzqx(String regionUid, String regionId, String cityValue) throws Exception {
+
+		try {
+			this.before();
+			
+			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/checkXzqxs?regionUid=" + regionUid);
+			
+			regionManageDao.deleteRegionXzqx(regionId, cityValue, this.getConnection());
+			
+			return this.after(mv);
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("删除地区下辖行政区县出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}
