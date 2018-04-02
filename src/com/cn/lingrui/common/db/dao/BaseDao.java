@@ -67,4 +67,6 @@ public interface BaseDao {
 	 * @throws SQLException
 	 */
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException;
+
+	String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException;
 }

@@ -201,9 +201,26 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 				// 获取用户角色
 				String role = loginDao.getRole(username, this.getConnection()).get(0).getNBPT_RSFZ_U_R_RID();
 
-				log.info("用户 " + username + " 登录成功");
-				ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", role));
+				log.info("用户 " + username + " OA登录成功");
 				
+				ModelAndView mv = null;
+				// 信息专员权限
+				if("600007".equals(role)) {
+
+					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030101", role));
+				} 
+				
+				// 大区总权限
+				else if("600006".equals(role)){
+					
+					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030501", role));
+				}
+				
+				// 默认人员管理页面
+				else {
+
+					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", role));
+				}
 
 				// 添加登录信息
 				// 添加用户登录session

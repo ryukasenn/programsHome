@@ -403,7 +403,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 初始化大区下所有人员信息
 			List<CurrentPerson> personInfos = new ArrayList<>();
 			ModelAndView mv = null;
-			// 如果为空,则是大区总登录或混合大区总
 			
 			// 1.获取登录信息
 			CurrentPerson loginPerson = this.getLoginPerson();

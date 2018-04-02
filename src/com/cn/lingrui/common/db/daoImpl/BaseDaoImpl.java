@@ -180,6 +180,25 @@ public class BaseDaoImpl implements BaseDao{
 			throw new SQLException();
 		}
 	}
+	
+	@Override
+	public String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException {
+		
+		String maxId = null;
+		try {
+			ResultSet rs = this.callProcedure(procName, conn, tableName, where);
+			while(rs.next()) {
+				maxId = rs.getString("MAXID");
+			}
+			DBUtils.closePsRs(null, rs);
+			
+			return maxId;
+		} catch (Exception e) {
+			
+			log.error("获取" + tableName + "最大标号出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
 
 	@Override
 	public List<NBPT_COMMON_DICTIONARY> receiveDictionarys(String type, Connection conn, String... level) throws SQLException {
