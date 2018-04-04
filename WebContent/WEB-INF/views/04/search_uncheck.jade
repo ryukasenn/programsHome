@@ -1,0 +1,59 @@
+extends ../layout
+
+
+block header
+	link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-datetimepicker.min.css')
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	.row
+		form(role="form" method="POST" action="/zdkh/search_uncheck")
+			div(style="height:40px;")
+			h1= title
+			.form-group
+				.input-group
+					.input-group-addon
+						span 选择省份
+					input(name="province", placeholder="请选择要查询的省份，不选择默认全部", autocomplete="off", data-provide="typeahead",  style="width:50%;",  value= data.province)#province.form-control
+			.form-group
+				.input-group
+					.input-group-addon
+						span 选择月份
+					input(name="timeStart", readonly , placeholder="请选择要查询的年份，不选择默认今年", style="width:50%;", value= data.timeStart)#timeStart.form-control
+					button(type="button" style="margin-left: 10px;")#confirmIn.btn.btn-primary 查询
+					button(type="button" style="margin-left: 10px;")#confirmIn4Cancel.btn.btn-primary 去除重复订单
+	if reports.length
+		.row
+			.panel.panel-default
+				.panel-heading 未考核记录数#{count_all}条,其中有#{count_repeated}属于重复记录
+				table.table
+					tr
+						th 订单编号
+						th 产品编号
+						th 产品名称
+						th 客户编号
+						th 客户名称
+						th 业务员编号
+						th 业务员姓名
+						th 核销人姓名
+						th 订单定制日期
+					each report in reports
+						tr
+							each item in report
+								td= item
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在进行查询，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/typeahead.min.js")
+	script(src="/javascripts/bootstrap-datetimepicker.min.js")
+	script(src="/javascripts/search_uncheck.js")
+		

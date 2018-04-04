@@ -81,7 +81,7 @@ $(function(){
 		var result = addResult % 11;
 		
 		// 如果验证结果跟最后一位不匹配
-		if (realNums[result] != nums[17]){
+		if (realNums[result].toUpperCase() != nums[17].toUpperCase()){
 			
 			return false;
 		}

@@ -1,0 +1,74 @@
+extends ../layout
+
+
+block fnzdy
+	li 
+		a(href="/zdhx/search?province=#{datas.province}&timeStart=#{datas.timeStart}&timeEnd=#{datas.timeEnd}") 返回
+		
+block content
+	div(style="height:40px;")
+	.row
+		hgroup
+			h1.pull-left= zgxm
+			h3.pull-left (#{datas.timeStart}至#{datas.timeEnd})
+	.row
+		.panel.panel-default
+			.panel-heading
+				each item in globalXSHKS
+					span(style='padding-left:10px;width:100px;display:inline-block') 回款总额
+					span #{item.BHKES} 
+					br
+					span(style='padding-left:10px;width:100px;display:inline-block') 已核销金额
+					span #{item.YDHSJHKS}
+					br
+					span(style='padding-left:10px;width:100px;display:inline-block') 剩余金额
+					span #{item.SYYHKE}
+	.row
+		.panel.panel-default
+			.panel-heading 回款记录	
+			.panel-body
+				div
+					span(style='padding-left:10px;width:100px;display:inline-block') 回款单编号
+					span(style='width:300px;display:inline-block') 单位名称
+					span(style='width:120px;display:inline-block') 回款额
+					span(style='width:120px;display:inline-block') 已核销金额
+					span(style='width:120px;display:inline-block') 剩余金额
+					span(style='width:120px;display:inline-block') 回款时间
+					br
+				div(style="max-height:120px;overflow-y:scroll")
+					each XSHK in XSHKS
+						span(style='padding-left:10px;width:100px;display:inline-block') #{XSHK.XSHK_HKBH}
+						span(style='width:300px;display:inline-block') #{XSHK.XSHK_SHDKHMC}
+						span(style='width:120px;display:inline-block') #{XSHK.XSHK_BHKE}
+						span(style='width:120px;display:inline-block') #{XSHK.XSHK_YDHSJHK}
+						span(style='width:120px;display:inline-block') #{XSHK.SYYHKE}
+						span(style='width:120px;display:inline-block') #{XSHK.XSHK_DJRQ}
+						br
+	// 核销记录
+	.row
+		.panel.panel-default
+			.panel-heading 核销记录			
+			.panel-body
+				div
+					span(style='padding-left:10px;width:100px;display:inline-block') 回款单编号
+					span(style='width:90px;display:inline-block') 发货单编号
+					span(style='width:70px;display:inline-block') 物料编号
+					span(style='width:140px;display:inline-block') 物料名称
+					span(style='width:300px;display:inline-block') 单位名称 
+					span(style='width:100px;display:inline-block') 回款额
+					span(style='width:100px;display:inline-block') 发货金额 
+					span(style='width:100px;display:inline-block') 已核销金额 
+					span(style='width:100px;display:inline-block') 核销人姓名 	
+					br
+				div(style="max-height:120px;overflow-y:scroll")
+					each xsddhx in XSDDHXS
+						span(style='padding-left:10px;width:100px;display:inline-block') #{xsddhx.XSHK_HKBH}
+						span(style='width:90px;display:inline-block') #{xsddhx.XSDD_DDBH}
+						span(style='width:70px;display:inline-block') #{xsddhx.XSDDHX_WLBH}
+						span(style='width:140px;display:inline-block') #{xsddhx.LSWLZD_WLMC}
+						span(style='width:300px;display:inline-block') #{xsddhx.XSDD_SHDKHMC}
+						span(style='width:100px;display:inline-block') #{xsddhx.XSHK_BHKE}
+						span(style='width:100px;display:inline-block') #{xsddhx.XSDDMX_YYFE}
+						span(style='width:100px;display:inline-block') #{xsddhx.XSDDHX_HXSJHK}
+						span(style='width:100px;display:inline-block') #{xsddhx.XSDDHX_HXXM}
+						br

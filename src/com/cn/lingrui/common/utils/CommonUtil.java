@@ -9,6 +9,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
+import java.util.Random;
 import java.util.UUID;
 
 
@@ -366,6 +367,16 @@ public class CommonUtil {
 	 * @return
 	 */
 	public static Boolean idNumCheck(String idNum) {
+		 
+		if(18 != idNum.length()) {
+
+			return false;
+		}
+		
+		if(-1 != idNum.indexOf(" ")) {
+
+			return false;
+		}
 		// 分界身份证数字
 		String[] nums = idNum.split("");
 		String[] checkNums = new String[] {"7","9","10","5","8","4","2","1","6","3","7","9","10","5","8","4","2"};
@@ -378,7 +389,7 @@ public class CommonUtil {
 		int result = addResult % 11;
 		
 		// 如果验证结果跟最后一位不匹配
-		if (Integer.valueOf(realNums[result]) != Integer.valueOf(nums[17])){
+		if (!realNums[result].toUpperCase().equals(nums[17].toUpperCase())){
 			
 			return false;
 		}
@@ -476,6 +487,36 @@ public class CommonUtil {
 	public static Integer objToInteger(String obj) {
 		
 		return Integer.valueOf(obj.trim());
+	}
+	
+	/**
+	 * 获取随机字母
+	 * @return
+	 */
+	public static char getRandomLetter() {
+
+		// 定义随机字母
+		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		return letters.charAt(new Random().nextInt(52));
+	}
+	
+
+	/**
+	 * 获取随机字母
+	 * @param type 0:小写字母,非0:大写字母
+	 * @return
+	 */
+	public static char getRandomLetter(int type) {
+
+		String letters = null;
+		// 定义随机字母
+		if(0 == type) {
+
+			letters = "abcdefghijklmnopqrstuvwxyz";
+		} else {
+			letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		}
+		return letters.charAt(new Random().nextInt(26));
 	}
 	
 }

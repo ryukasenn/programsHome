@@ -1,0 +1,66 @@
+extends ../layout
+
+
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	.row
+		form(role="form" action="/zdhx/mission" method="POST")
+			div(style="height:40px;")
+			h1= title
+			.form-group
+				.input-group
+					#timeStartIcon.input-group-addon
+						span 待核销省份
+					input(name="province", placeholder="请选择要查询省份",style="width:50%;“", autocomplete="off", data-provide="typeahead", value= data.province)#province.form-control
+					button(type="submit" style="margin-left: 10px;")#confirmIn.btn.btn-primary 确定
+	.row
+		div(style="overflow-y:auto;height:349px;").panel.panel-default
+			.panel-heading 待核销订单
+			table.table#ddmxMission
+				tr
+					th 订单编号
+					th 订单分流
+					th 订单日期
+					th 物料编号
+					th 单位名称
+					th 业务员
+					th 发货金额
+					th 已核销金额
+					th 剩余需核销金额
+				each XSDDMX in result_XSDDMXS
+					tr
+						each item in XSDDMX
+							td= item
+	.row
+		div(style="overflow-y:auto;height:349px;").panel.panel-default
+			.panel-heading 待核销回款
+			table.table#ddhkMission
+				tr
+					th 回款单编号
+					th 回款类型
+					th 回款时间
+					th 回款客户
+					th 业务员
+					th 回款金额
+					th 已核销金额
+					th 剩余核销金额
+					th 记账人姓名
+				each XSHK in result_XSHKS
+					tr
+						each item in XSHK
+							td= item
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在查询等待任务，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/typeahead.min.js")
+	script(src="/javascripts/mission.js")
+		

@@ -8,7 +8,7 @@ $(function(){
 		// 负责区域的单选框点击事件
 		AjaxForGet(baseUrl + "/sellPersonnel/receiveAreaContainSelects", {parentId : $("#changeRegion_provinceId").val()},function(jsonData){
 			
-			
+			$("#citySelect").empty();
 			for(var i = 0; i < jsonData.length; i++){
 				
 				$("<option value='" + jsonData[i].NBPT_COMMON_XZQXHF_ID + "'>" + jsonData[i].NBPT_COMMON_XZQXHF_NAME + "</option>").appendTo($("#citySelect"));
@@ -95,7 +95,11 @@ $(function(){
 		// 3.传递地区32UID
 		var regionUid = $("#changeRegion_regionUid").val();
 		
-		window.location.href = baseUrl + "/sellPersonnel/deleteRegionXzqx?regionUid=" + regionUid + "&regionId=" + regionId + "&cityValue=" + cityValue;
+		if(confirm("删除将同时删除负责该地区的终端相关信息")){
+
+			window.location.href = baseUrl + "/sellPersonnel/deleteRegionXzqx?regionUid=" + regionUid + "&regionId=" + regionId + "&cityValue=" + cityValue;
+		}
+			
 	})
 	
 	

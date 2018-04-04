@@ -4,7 +4,7 @@ public class CurrentPerson_statistics {
 
 	// 统计OTC全部信息
 	private String name = ""; // 大区名称
-	private String uid = ""; // 大区UID
+	private String uid = ""; // 大区UID或者地区UID
 	private Integer need = 0; // 大区配额
 	private String balance = ""; // 大区差额
 	private Integer regionResper = 0; // 大区总
@@ -15,10 +15,13 @@ public class CurrentPerson_statistics {
 	private Integer dismission = 0; // 离职数量
 	private Integer total = 0; // 离职数量
 	private String dismissionRate = ""; // 离职数量
+	private String regionUid = ""; // uid为地区UID时,regionUid为大区UID
 	
 	// 统计OTC大区下省份人员信息
 	private String provinceId = ""; // 省份ID
 	private String provinceName = ""; // 省份名称
+	
+	
 	
 	
 	public Integer getRegionResper() {
@@ -104,6 +107,12 @@ public class CurrentPerson_statistics {
 	}
 	public void setDismissionRate(String dismissionRate) {
 		this.dismissionRate = dismissionRate;
+	}
+	public String getRegionUid() {
+		return regionUid;
+	}
+	public void setRegionUid(String regionUid) {
+		this.regionUid = regionUid;
 	}
 	
 

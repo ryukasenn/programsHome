@@ -430,9 +430,23 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030502"));
 				mv.addObject("regionUid", loginPerson.getREGION_UID());
 			} 
-
 			
-			// 后勤人员查询合计信息处理
+			// 如果是信息专员
+			else if("27".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
+				
+				// 2.1查询信息专员协管下,所有人员信息
+				String[] regionUids = loginPerson.getREGION_UID().split(",");
+				
+				for(String uid : regionUids) {
+					personInfos.addAll(personManageDao.receiveCurrentProvincePersonInfos(uid, this.getConnection()));
+				}
+
+				// 2.2添加页面信息
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030502"));
+				mv.addObject("regionUid", loginPerson.getREGION_UID());
+			}
+
+			// 人员信息处理
 			List<CurrentPerson_statistics> infos = PersonManageServiceUtils.provincePersons_check(personInfos);
 			
 			mv.addObject("infos", infos);
@@ -492,8 +506,10 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 				
 			}
 			
-			// 如果是大区总
-			else if("21".equals(loginPerson.getNBPT_SP_PERSON_JOB()) || "26".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
+			// 如果是大区总,或信息专员
+			else if("21".equals(loginPerson.getNBPT_SP_PERSON_JOB()) 
+					|| "26".equals(loginPerson.getNBPT_SP_PERSON_JOB())
+					|| "27".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
 
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030503"));
 				
@@ -540,7 +556,9 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			ModelAndView mv = null;
 			
 			// 如果是混合大区总地总,或者是大区总
-			if("600008".equals(this.getRole()) || "600006".equals(this.getRole())) {
+			if("600008".equals(this.getRole()) 
+					|| "600006".equals(this.getRole()) 
+					|| "600007".equals(this.getRole())) {// 信息专员
 
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030504"));
 			} 

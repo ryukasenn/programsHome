@@ -39,6 +39,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 					"            THEN B.NBPT_SP_REGION_UID" + 
 					"        WHEN '26'" + 
 					"            THEN (SELECT NBPT_SP_REGION_UID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
+					"        WHEN '27'" + 
+					"            THEN A.NBPT_SP_PERSON_DEPT_ID" + 
 					"        END AS REGION_UID," + // 所在大区UID
 					"    CASE A.NBPT_SP_PERSON_JOB " + 
 					"        WHEN '22'" + 
@@ -47,6 +49,8 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 					"            THEN B.NBPT_SP_REGION_NAME" + 
 					"        WHEN '26'" + 
 					"            THEN (SELECT NBPT_SP_REGION_NAME FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
+					"        WHEN '27'" + 
+					"            THEN '信息专员没有所属大区'" +  
 					"        END AS REGION_NAME" + // 所在大区NAME
 					"    FROM NBPT_SP_PERSON A " + 
 					"    LEFT JOIN NBPT_SP_REGION B " + 
@@ -492,10 +496,13 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 
 
 		try {
-			String sql ="  SELECT A.*,D.NBPT_COMMON_XZQXHF_ID,D.NBPT_COMMON_XZQXHF_NAME,B.NBPT_SP_REGION_ONAME," + 
+			String sql ="  SELECT A.*," + 
 						"  B.NBPT_SP_REGION_ONAME," +
 						"  B.NBPT_SP_REGION_NAME," +
-						"  B.NBPT_SP_REGION_UID" +
+						"  B.NBPT_SP_REGION_UID," +
+						"  C.NBPT_SP_REGION_UID AS REGION_UID," +
+						"  D.NBPT_COMMON_XZQXHF_ID," + 
+						"  D.NBPT_COMMON_XZQXHF_NAME" +
 						"  FROM NBPT_SP_PERSON A" + 
 						"  LEFT JOIN NBPT_SP_REGION B" + 
 						"  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID" + 
@@ -505,6 +512,7 @@ public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
 						"  ON SUBSTRING(B.NBPT_SP_REGION_ID,3,2)+'0000' = D.NBPT_COMMON_XZQXHF_ID " + 
 						"  WHERE C.NBPT_SP_REGION_UID = '" + region_UID + "'" + 
 						"  AND B.NBPT_SP_REGION_UID <> '" + region_UID + "'" + 
+						"  AND A.NBPT_SP_PERSON_JOB <> '27'" +
 						"  ORDER BY B.NBPT_SP_REGION_ID";
 			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
 			return personinfos;

@@ -1,0 +1,10 @@
+extends ./layout
+
+block sidebar
+    ul.nav.nav-sidebar
+        if rights.functionsRight
+            each item in rights.functionsRight
+                case item
+                    when "0401": li: a(href="#{myPath}/module?module=0401"): span 首页
+                    when "0402": li: a(href="#{myPath}/module?module=0402"): span 自动核销
+                    when "0403": li: a(href="#{myPath}/module?module=0403"): span 自动考核

@@ -523,6 +523,7 @@ public class PersonManageServiceUtils {
 				thisInfo.setProvinceName(person.getNBPT_COMMON_XZQXHF_NAME());
 				thisInfo.setName(person.getNBPT_SP_REGION_NAME());
 				thisInfo.setUid(person.getNBPT_SP_REGION_UID());
+				thisInfo.setRegionUid(person.getREGION_UID());
 				
 				// 4.加入列表
 				infos.add(thisInfo);

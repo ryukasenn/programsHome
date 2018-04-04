@@ -464,7 +464,11 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/checkXzqxs?regionUid=" + regionUid);
 			
+			// 删除该下辖区县
 			regionManageDao.deleteRegionXzqx(regionId, cityValue, this.getConnection());
+			
+			// 删除相关负责终端信息
+			regionManageDao.deletePersonXzqx(cityValue, this.getConnection());
 			
 			return this.after(mv);
 		} catch (SQLException e) {

@@ -17,7 +17,8 @@ $(function(){
 	
 	$("#supportAdd").on("click", function(){
 		
-		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/supportAdd").attr("method", "GET").submit();
+		alert("暂不支持该功能");
+		//$("#controlForm").attr("action", baseUrl + "/sellPersonnel/supportAdd").attr("method", "GET").submit();
 	})
 	
 })

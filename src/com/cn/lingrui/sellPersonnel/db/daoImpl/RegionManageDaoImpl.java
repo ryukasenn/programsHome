@@ -350,6 +350,21 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 		
 	}
 
+	@Override
+	public void deletePersonXzqx(String cityValue, Connection connection) throws SQLException {
+		
+		try {
+			String sql =  "DELETE FROM NBPT_SP_PERSON_XZQX "
+						+ "WHERE NBPT_SP_PERSON_XZQX_XID = '" + cityValue + "'";
+			this.excuteUpdate(sql, connection);
+			
+		} catch (SQLException e) {
+			
+			log.error("提交删除地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
 }
 
 

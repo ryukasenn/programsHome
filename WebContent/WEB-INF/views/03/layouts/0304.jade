@@ -3,15 +3,16 @@
 extends ../../personnelLayout
 
 block main
-    h2.page-header 人员管理
-    form.form-inline#controlForm
-        .form-group
-            button(type="button").btn.btn-default#receivePersons 查看当前人员信息
-            |&nbsp&nbsp
-        block buttons
-    .row.col-xs-6.col-sm-6
-        h2.page-header
-    block contents
+    .col-xs-12.col-sm-12.main-header
+        h2 人员管理
+        form.form-inline#controlForm
+            .form-group
+                button(type="button").btn.btn-default#receivePersons 查看当前人员信息
+                |&nbsp&nbsp
+            block buttons
+        hr
+    .main-body
+        block contents
 
 block layoutScripts
     script(language="javascript", src="#{myPath}/javascripts/03/0304.js")

@@ -1,0 +1,72 @@
+extends ../layout
+
+
+block header
+	link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-datetimepicker.min.css')
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	include ../includes/i_search_form
+	if generalInfo.length
+		.row
+			.panel.panel-default
+				.panel-heading
+					each info in generalInfo
+						span(style='padding-left:10px;width:100px;display:inline-block') 回款总额
+						span #{info.BHKES}
+						br
+						span(style='padding-left:10px;width:100px;display:inline-block') 已核销金额 
+						span #{info.YDHSJHKS}
+						br
+						span(style='padding-left:10px;width:100px;display:inline-block') 剩余金额 
+						span #{info.SYYHKE}
+		.row
+		if XSHKS.length		
+			.panel.panel-default.col-md-8
+				.panel-heading 回款单详细信息
+				table.table.table-bordered
+					thead(style="display: block")
+						tr
+							td(style='width:50px;') #
+							td(style='width:140px;') 回款单编号
+							td(style='width:170px;') 回款金额
+							td(style='width:170px;') 已核销金额
+							td(style='width:170px;') 剩余核销金额	
+					tbody(style="display: block;height:400px;overflow-y:scroll")
+						each hk,i in XSHKS
+							tr
+								td(style='width:50px;') #{i+1}
+								td(style='width:140px;') #{hk.XSHK_HKBH}
+								td(style='width:170px;') #{hk.XSHK_BHKE}
+								td(style='width:170px;') #{hk.XSHK_YDHSJHK}
+								td(style='width:170px;') #{hk.SYYHKE}
+		if ZWZGS.length	
+			.panel.panel-default.col-md-4
+				.panel-heading 业务员信息
+				table.table.table-bordered
+					thead(style="display: block")
+						tr
+							td(style='padding-left:10px;width:150px;') 业务员编号
+							td(style='padding-left:10px;width:120px;') 业务员姓名
+					tbody(style="display: block;height:400px;overflow-y:scroll")
+						each ZG in ZWZGS
+							tr
+								td(style='padding-left:10px;width:150px;') 
+									a(href="/zdhx/search/#{ZG.XSDD_RYBH}?timeStart=#{timeStart}&timeEnd=#{timeEnd}&province=#{province}" role="button" style='padding-left:10px;width:100px;display:inline-block') #{ZG.XSDD_RYBH}
+								td(style='padding-left:10px;width:120px;') #{ZG.ZWZGZD_ZGXM}
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在进行查询，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/typeahead.min.js")
+	script(src="/javascripts/bootstrap-datetimepicker.min.js")
+	script(src="/javascripts/search.js")
+		

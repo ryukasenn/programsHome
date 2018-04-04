@@ -1,10 +1,8 @@
 
-// 终端管理:添加终端人员(地总)
-extends ./layouts/0304
+// 大区信息:查看终端人员详细信息(大区总,信息专员)
+extends ./layouts/0305
+
 block buttons
-    .form-group
-        button(type="button").btn.btn-default#supportAdd 添加大区总地总
-        |&nbsp&nbsp
     .form-group
         a(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{areaUid}&regionUid=#{regionUid}').btn.btn-default#supportAdd 后退
         |&nbsp&nbsp
@@ -167,7 +165,7 @@ block contents
                             input.form-control(name="NBPT_SP_PERSON_TITLE", value='#{person.NBPT_SP_PERSON_TITLE}', readOnly)
     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040602.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03050401.js")
     script
         var male = '#{person.NBPT_SP_PERSON_MALE}';
         var job = '#{person.NBPT_SP_PERSON_JOB}';

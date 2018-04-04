@@ -1,0 +1,62 @@
+extends ../layout
+
+
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	.row
+		.col-sm-4
+		form(role="form" action="/zdhx/salesman" method="POST").form-inline.col-sm-5
+			div(style="height:40px;")
+			h1= title
+			.form-group
+				label(for="salesman").control-label 核销业务员选择
+				.input-group
+					input(name="salesman", placeholder="请选择要核销业务员", autocomplete="off" data-provide="typeahead" style="auto" value= data.salesman)#salesman.form-control
+					#selectIcon.input-group-addon.btn.btn-default
+						span.glyphicon.glyphicon-search
+			button(type="submit")#confirmIn.btn.btn-primary 确定
+		.col-sm-3
+	br
+	.row
+		.panel.panel-default
+			.panel-heading 核销记录
+			table.table
+				tr
+					th 订单编号
+					th 回款单编号
+					th 物料编号
+					th 业务员
+					th 单位编号
+					th 单位名称
+					th 核销日期
+					th 实际核销金额
+					th 核销人
+				each XSDDHX in XSDDHXS
+					tr
+						each item in XSDDHX
+							td= item
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在进行自动核销，请稍后
+				.modal-footer
+	.modal#choseSalesman
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button(type="button" data-dismiss="modal").close
+						span(aria-hidden="true") &times;
+						span.sr-only
+					h4 选择业务员
+				.modal-body
+					p 正在进行自动核销，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/salesmanSel.js")
+		

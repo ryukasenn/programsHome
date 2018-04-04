@@ -60,6 +60,14 @@ public interface RegionManageDao {
 	 * @throws SQLException 
 	 */
 	public void deleteRegionXzqx(String regionId, String cityValue, Connection connection) throws SQLException;
+
+	/**
+	 * 因为删除了该地区的下辖行政区县,所以要删除与该行政区县相关的负责人对应信息
+	 * @param cityValue 被删除的下辖行政区县
+	 * @param connection
+	 * @throws SQLException 
+	 */
+	public void deletePersonXzqx(String cityValue, Connection connection) throws SQLException;
 	
 
 }

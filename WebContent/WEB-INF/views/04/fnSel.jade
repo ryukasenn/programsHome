@@ -1,0 +1,23 @@
+extends ../layout
+
+
+block content
+    .row
+        div(style="height:100px;")
+        .panel.panel-default
+            .panel-heading 功能选择
+            .panel-body
+                p 请按需求选择相应功能
+            ul.list-group
+                li.list-group-item
+                    a(href="#{myPath}/zdhx/province", role="button").btn.btn-link 按省份进行核销
+                //
+                    li.list-group-item
+                        a(href="#{myPath}/zdhx/mission", role="button").btn.btn-link 待核销任务查询
+                li.list-group-item
+                    a(href="#{myPath}/zdkh", role="button").btn.btn-link 自动考核
+                li.list-group-item
+                    a(href="#{myPath}/zdhx/search", role="button").btn.btn-link 核销结果查询
+                if extra
+                    li.list-group-item
+                        a(href="#{myPath}/zdkh/search_uncheck", role="button").btn.btn-link 往年未考核订单查询

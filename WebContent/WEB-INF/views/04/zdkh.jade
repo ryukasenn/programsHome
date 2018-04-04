@@ -1,0 +1,39 @@
+extends ../layout
+
+
+block header
+	link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+	link(rel='stylesheet', href='/stylesheets/bootstrap-datetimepicker.min.css')
+block fnzdy
+	li 
+		a(href="/zdhx/login/next") 返回
+block content
+	.row
+		form(role="form" method="POST")
+			div(style="height:40px;")
+			h1= title
+			.form-group
+				.input-group
+					.input-group-addon
+						span 选择省份
+					input(name="province", placeholder="请选择要核销省份", autocomplete="off", data-provide="typeahead",  style="width:50%;",  value= data.province)#province.form-control
+			.form-group
+				.input-group
+					.input-group-addon
+						span 选择月份
+					input(name="timeStart", readonly , placeholder="请选择要考核的月份，将于该月考核所有已核销未考核订单", style="width:50%;")#timeStart.form-control
+					button(type="submit" style="margin-left: 10px;")#confirmIn.btn.btn-primary 确定
+	.modal#mymodal
+		.modal-dialog
+			.modal-content
+				.modal-header
+					h4 提示内容
+				.modal-body
+					p 正在进行自动考核，请稍后
+				.modal-footer
+	script(src="/javascripts/jquery.min.js")
+	script(src="/javascripts/bootstrap.min.js")
+	script(src="/javascripts/typeahead.min.js")
+	script(src="/javascripts/bootstrap-datetimepicker.min.js")
+	script(src="/javascripts/zdkh.js")
+		
