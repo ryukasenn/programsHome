@@ -43,6 +43,8 @@ $(function(){
 	// 需要验证的下拉框
 	var selectItems = new Array("NBPT_SP_PERSON_DEGREE");
 	
+	// 需要验证的时间格式
+	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA");
 	/**
 	 * 点击提交事件
 	 */
@@ -133,6 +135,19 @@ $(function(){
 						$_thisParent.addClass("has-error");
 						return;
 					}
+				}
+				
+				if (timeItems.indexOf($_this.attr('name')) >= 0 ){ // 如果是时间项目,要验证时间格式
+					
+					if(timeCheck($_this)){
+
+						$_thisParent.removeClass("has-error");
+					} else {
+
+						$_thisParent.addClass("has-error");
+						return;
+					}
+					
 				}
 				
 				$_thisParent.removeClass("has-error");

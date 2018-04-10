@@ -56,44 +56,52 @@ public class Encrypt {
 	@Test
 	public void encode() {
 
-//		char head = CommonUtil.getRandomLetter(0);
-//		char foot = CommonUtil.getRandomLetter(0);
-//		
-//		String mima = "hehelong123";
-//		List<Character> ss = new ArrayList<>();
-//		ss.add(foot);
-//		int vinum = 0;
-//		for(int i = 0; i < mima.length(); i++) {
-//
-//			vinum += 1;
-//			char currentLetter = mima.charAt(i);
-//
-////			char temp = (char) (((int) first - firstAsc) * 26 + sec - 97 - vicz);
-//			char sec = CommonUtil.getRandomLetter(0);
-////			System.out.println(sec);
-//			int first = ((int)currentLetter + 97 + (int)foot - (int)head - (int)sec) / 26 + (int)head;
-////			System.out.println((char) first);
-//			
-//
-//			if (vinum / 2 != (vinum + 1) / 2) {
-//
-//				ss.add(sec);
-//				ss.add((char)first);
-//			} else {
-//				ss.add((char)first);
-//				ss.add(sec);
-//			}
-//		}
-//		ss.add(head);
-//		Collections.reverse(ss);
-//		String code = "";
-//		for(char s : ss) {
-//			
-//			code += s;
-//		}
-//		System.out.println(code);
-//		System.out.println(CommonUtil.decodeRs(code));
-		System.out.println(CommonUtil.decodeRs("bdsqddprdgbdgfqdgfxu"));
+		char head = CommonUtil.getRandomLetter(0);
+		char foot = CommonUtil.getRandomLetter(0);
+		
+		String mima = "hehelong123";
+		List<Character> ss = new ArrayList<>();
+		ss.add(foot);
+		int vinum = 0;
+		for(int i = 0; i < mima.length(); i++) {
+
+			vinum += 1;
+			char currentLetter = mima.charAt(i);
+
+//			char temp = (char) (((int) first - firstAsc) * 26 + sec - 97 - vicz);
+			
+			int indexNum = CommonUtil.getLetterIndex(head);
+			
+			char first = CommonUtil.getLetter(indexNum + new Random().nextInt(5));
+			
+//			System.out.println(sec);
+			int sec = (int) currentLetter - ((int) first - (int)head) * 26 + 97 + ((int)foot - (int)head) ;
+//			System.out.println((char) first);
+			
+
+			if (vinum / 2 != (vinum + 1) / 2) {
+
+				ss.add((char)sec);
+				ss.add(first);
+			} else {
+				ss.add(first);
+				ss.add((char)sec);
+			}
+		}
+		ss.add(head);
+		Collections.reverse(ss);
+		String code = "";
+		for(char s : ss) {
+			
+			code += s;
+		}
+		System.out.println(code);
+	}
+	
+	@Test
+	public void decode() {
+
+		System.out.println(CommonUtil.decodeRs("llsmlZpnÊlp_rolÃÀlouf"));
 	}
 	
 	

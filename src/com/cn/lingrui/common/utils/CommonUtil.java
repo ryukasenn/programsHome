@@ -7,7 +7,10 @@ import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
@@ -325,6 +328,54 @@ public class CommonUtil {
 	}
 	
 	/**
+	 * 浪潮系统密码加密
+	 * @param mima
+	 * @return
+	 */
+	public static String encode(String mima) {
+
+		char head = CommonUtil.getRandomLetter(0);
+		char foot = CommonUtil.getRandomLetter(0);
+		
+		List<Character> ss = new ArrayList<>();
+		ss.add(foot);
+		int vinum = 0;
+		for(int i = 0; i < mima.length(); i++) {
+
+			vinum += 1;
+			char currentLetter = mima.charAt(i);
+
+//			char temp = (char) (((int) first - firstAsc) * 26 + sec - 97 - vicz);
+			
+			int indexNum = CommonUtil.getLetterIndex(head);
+			
+			char first = CommonUtil.getLetter(indexNum + new Random().nextInt(5));
+			
+//			System.out.println(sec);
+			int sec = (int) currentLetter - ((int) first - (int)head) * 26 + 97 + ((int)foot - (int)head) ;
+//			System.out.println((char) first);
+			
+
+			if (vinum / 2 != (vinum + 1) / 2) {
+
+				ss.add((char)sec);
+				ss.add(first);
+			} else {
+				ss.add(first);
+				ss.add((char)sec);
+			}
+		}
+		ss.add(head);
+		Collections.reverse(ss);
+		String code = "";
+		for(char s : ss) {
+			
+			code += s;
+		}
+		return code;
+	}
+	
+	/**
 	 * 获取异常信息
 	 * @param t
 	 * @return
@@ -518,5 +569,30 @@ public class CommonUtil {
 		}
 		return letters.charAt(new Random().nextInt(26));
 	}
+	
+	/**
+	 * 获取固定位置字母
+	 * @param type 0:小写字母,非0:大写字母
+	 * @return
+	 */
+	public static char getLetter(int index) {
+
+		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		return letters.charAt(index);
+	}
+	
+	/**
+	 * 获取字母的位置
+	 * @param type 0:小写字母,非0:大写字母
+	 * @return
+	 */
+	public static Integer getLetterIndex(Character s) {
+
+		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		return letters.indexOf(s);
+	}
+	
+	
+	
 	
 }

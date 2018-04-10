@@ -16,6 +16,11 @@ $(function(){
 		})
 	})
 	
+	$(".downLoadCheckOut").on('click', function(){
+		
+		tableToExcel($(this).val());
+	})
+	
 })
 
 
@@ -205,6 +210,20 @@ $(function(){
 		$_parentItem = item.parents(".form-group");
 		$_messageBox = $_parentItem.nextAll(".errorMessages").remove();
 	}
+	
+	function timeCheck(item){
+
+		var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		var regExp = new RegExp(reg);
+		if(!regExp.test(item.val())){
+
+			return false;
+		}
+		
+		return true;
+
+	}
+	
 	
 	
 	

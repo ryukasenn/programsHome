@@ -179,7 +179,8 @@ block scripts
         var male = '#{person.NBPT_SP_PERSON_MALE}';
         var job = '#{person.NBPT_SP_PERSON_JOB}';
         $("input:radio[name='NBPT_SP_PERSON_MALE'][value='" + male + "']").attr("checked",true);
-        $("input:radio[name='NBPT_SP_PERSON_JOB'][value='" + job + "']").attr("checked",true);
+        $("input:radio[name='NBPT_SP_PERSON_JOB'][value='" + job + "']").attr("checked",true)
+        $("select[name='NBPT_SP_PERSON_DEGREE']").val('#{person.NBPT_SP_PERSON_DEGREE}');
         $("select[name='NBPT_SP_PERSON_POLICYTYPE']").val('#{person.NBPT_SP_PERSON_POLICYTYPE}');
     
 block pageId

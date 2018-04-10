@@ -447,6 +447,8 @@ public class PersonManageServiceUtils {
 		// 人员状态标志
 		person.setNBPT_SP_PERSON_FLAG("2"); // TODO ,当前版本设为在职状态
 		
+		person.setNBPT_SP_PERSON_ENTERINGTIME(CommonUtil.getYYYYMMDD()); // 设置系统录入时间
+		
 	}
 	
 	/**

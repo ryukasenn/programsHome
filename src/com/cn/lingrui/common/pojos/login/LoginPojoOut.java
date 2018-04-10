@@ -7,6 +7,7 @@ public class LoginPojoOut extends BasePojoOut{
 	private Boolean flag = null;
 	private String userName = "";
 	private String userRole = "";
+	private CurrentUser userInfo;
 	public Boolean getFlag() {
 		return flag;
 	}
@@ -29,5 +30,13 @@ public class LoginPojoOut extends BasePojoOut{
 
 	public void setUserRole(String userRole) {
 		this.userRole = userRole;
+	}
+
+	public CurrentUser getUserInfo() {
+		return userInfo;
+	}
+
+	public void setUserInfo(CurrentUser userInfo) {
+		this.userInfo = userInfo;
 	}
 }

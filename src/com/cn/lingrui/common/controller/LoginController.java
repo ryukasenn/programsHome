@@ -42,7 +42,10 @@ public class LoginController {
 			//String username = HttpUtil.decodeToken(token);
 			if(!"".equals(username)) {
 				
-				ModelAndView mv = loginService.otherLogin(username);
+				LoginPojoIn in = new LoginPojoIn();
+				in.setUserId(username);
+				in.setLoginModel("1");
+				ModelAndView mv = loginService.otherLogin(in);
 				return mv;
 			}
 		}

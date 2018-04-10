@@ -30,6 +30,7 @@ public class NBPT_SP_PERSON {
 	private String NBPT_SP_PERSON_NOTE = ""; // 备注
 	private String NBPT_SP_PERSON_FLAG = ""; // 离职标志
 	private String NBPT_SP_PERSON_POLICYTYPE = ""; // 保单类型
+	private String NBPT_SP_PERSON_ENTERINGTIME = ""; // 录入时间
 	public String getNBPT_SP_PERSON_ID() {
 		return NBPT_SP_PERSON_ID;
 	}
@@ -203,5 +204,11 @@ public class NBPT_SP_PERSON {
 	}
 	public void setNBPT_SP_PERSON_FLAG(String nBPT_SP_PERSON_FLAG) {
 		NBPT_SP_PERSON_FLAG = nBPT_SP_PERSON_FLAG;
+	}
+	public String getNBPT_SP_PERSON_ENTERINGTIME() {
+		return NBPT_SP_PERSON_ENTERINGTIME;
+	}
+	public void setNBPT_SP_PERSON_ENTERINGTIME(String nBPT_SP_PERSON_ENTERINGTIME) {
+		NBPT_SP_PERSON_ENTERINGTIME = nBPT_SP_PERSON_ENTERINGTIME;
 	}
 }

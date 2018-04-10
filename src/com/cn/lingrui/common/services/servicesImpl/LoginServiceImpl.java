@@ -13,10 +13,12 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cn.lingrui.common.db.dao.LoginDao;
 import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_USER;
 import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_U_R;
+import com.cn.lingrui.common.pojos.login.CurrentUser;
 import com.cn.lingrui.common.pojos.login.LoginPojoIn;
 import com.cn.lingrui.common.pojos.login.LoginPojoOut;
 import com.cn.lingrui.common.services.BServiceLogic;
 import com.cn.lingrui.common.services.LoginService;
+import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 
 @Service("loginService")
@@ -30,42 +32,76 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 	@Override
 	public ModelAndView checkUser(LoginPojoIn in) throws Exception {
 
-		this.before();
-		
-		// 执行登录验证操作
-		log.info("用户 " + in.getUserId() + " 尝试登录");
-		ModelAndView mv = null;
-		
-		LoginPojoOut out = new LoginPojoOut();
-		
 		try {
-			mv = this.excuteLogin(in, out);
+			
+			this.before();
+			
+			log.info("用户 " + in.getUserId() + " 尝试登录");
+			
+			// 初始化返回信息
+			ModelAndView mv = null;
+			LoginPojoOut out = new LoginPojoOut();
+			
+			// 执行登录验证操作
+			mv = this.loginConfirm(in, out, mv);
+			
+			log.info("用户 " + in.getUserId() + " 登录成功");
+			
+			// 执行结束操作
+			return this.after(mv, "login", out.getUserName(), out.getUserRole());
 		} catch (Exception e) {
 
+			log.info("普通登录出错");
 			this.closeException();
 			throw new Exception();
 		}
+	}
 
-		// 执行结束操作
-		return this.after(mv, "login", out.getUserName(), out.getUserRole());
+	
+
+	@Override
+	protected String getFunNum() {
+		return null;
+	}
+
+	@Override
+	public ModelAndView otherLogin(LoginPojoIn in) throws Exception {
+
+		try {
+
+			log.info("用户 " + in.getUserId() + " 尝试从OA链接登录");
+			
+			this.before();
+			
+			// 初始化返回信息
+			ModelAndView mv = null;
+			LoginPojoOut out = new LoginPojoOut();
+			
+			// 执行登录验证操作
+			mv = this.loginConfirm(in, out, mv);
+			
+			log.info("用户 " + in.getUserId() + " OA链接登录成功");
+			
+			// 执行结束操作
+			return this.after(mv, "login", out.getUserName(), out.getUserRole());
+		} catch (Exception e) {
+			
+			log.info("OA连接登录出错");
+			this.closeException();
+			throw new Exception();
+		}
 	}
 
 	/**
-	 * 登录验证
-	 * 
-	 * @param in
-	 *            前台传入数据
-	 * @param resp
+	 * 加入核销系统后,新的登录逻辑
+	 * @param in 登录页面传入数据
+	 * @param out 登录逻辑后传出数据
 	 * @return
 	 * @throws Exception
 	 */
-	private ModelAndView excuteLogin(LoginPojoIn in, LoginPojoOut out) throws Exception {
+	private ModelAndView loginConfirm(LoginPojoIn in, LoginPojoOut out, ModelAndView mv) throws Exception {
 
-		// 初始化返回结果
-		ModelAndView mv = null;
-
-		
-		// 管理员用户登录
+		// 1.管理员用户登录
 		if ("admin".equals(in.getUserId())) {
 
 			mv = HttpUtil.getModelAndView("common/index");
@@ -75,74 +111,81 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 			return mv;
 		}
 
-		// TODO
-		// 新方法
-		List<NBPT_RSFZ_USER> users;
-		users = loginDao.checkUser(in, this.getConnection());
-
-		if (null == users || 0 == users.size()) {
-
-			// 如果找不到,
-			out.setFlag(false);
-			out.getMessages().add("用户名或密码错误");
-			log.info("用户名或密码错误");
-		} else {
-
-			out.setUserName(users.get(0).getNBPT_RSFZ_USER_NAME());
-			// 获取用户角色
-			List<NBPT_RSFZ_U_R> roles = loginDao.getRole(in, this.getConnection());
-
-			if (null == roles || 0 == roles.size()) {
-
-				out.setFlag(false);
-				out.getMessages().add("该用户没有添加角色,请联系管理员");
-				log.info("该用户没有添加角色,请联系管理员");
-			} else {
-
-				out.setUserRole(roles.get(0).getNBPT_RSFZ_U_R_RID());
-				out.setFlag(true);
-			}
-		}
-		// LoginPojoOut out = DBUtils.checkUser(in);
-
-		if (out.getFlag()) {
-
-			// 获取用户信息成功,获取用户权限信息
-			// DBUtils.checkUserRole(in, out);
-
-			// 添加登录信息
-			addLoginInfo(in, out, null);
-			
-			// 信息专员权限
-			if("600007".equals(out.getUserRole())) {
-
-				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030101", out.getUserRole()));
-			} 
-			
-			// 大区总权限
-			else if("600006".equals(out.getUserRole())){
-				
-				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030501", out.getUserRole()));
-			}
-			
-			// 默认人员管理页面
-			else {
-
-				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", out.getUserRole()));
-			}
-
-			log.info("用户 " + in.getUserId() + " 登录成功");
-			
-		} else {
-			mv = HttpUtil.getModelAndView("common/login");
-		}
-		mv.addObject("messages", out.getMessages());
-		return mv;
+		// 2.1普通用户登录,登录用户信息并验证
+		this.getUserInfo(in, out);
+		
+		// 2.2普通用户登录,首页跳转,及登录信息
+		return this.setLoginPage(in, out);
 
 	}
 
 	/**
-	 * 添加用户登录信息
+	 * 用户验证成功设定返回信息
+	 * @param in
+	 * @param out
+	 */
+	private ModelAndView setLoginPage(LoginPojoIn in, LoginPojoOut out) {
+		
+		ModelAndView mv = null;
+		if(!out.getFlag()) {
+
+			mv = HttpUtil.getModelAndView("common/login");
+			mv.addObject("messages", out.getMessages());
+			return mv;
+		}
+		
+		else if (out.getFlag()) {
+
+			// 添加登录信息
+			addLoginInfo(in, out, null);
+
+			// 获取该权限的首页配置
+			String firstPage = CommonUtil.getBasePropertieValue(out.getUserRole());
+
+			mv = HttpUtil.getModelAndView(firstPage.substring(0, 2) + "/" + this.getCheckPage(firstPage, out.getUserRole()));	
+		}
+		
+		return mv;
+	}
+
+	/**
+	 * 获取登录用户信息并验证
+	 * @param in
+	 * @param out
+	 * @throws SQLException 
+	 */
+	private void getUserInfo(LoginPojoIn in, LoginPojoOut out) throws SQLException {
+
+
+		CurrentUser userinfo = loginDao.getUserInfo(in, this.getConnection());
+		
+		if (null == userinfo) {
+
+			// 如果找不到,
+			out.setFlag(false);
+			out.getMessages().add("用户名或密码错误");
+			log.info("用户名为 " + in.getUserId() + " 的用户尝试登录不成功,因为用户不存在或密码错误");
+		} else {
+
+			out.setUserName(userinfo.getNBPT_RSFZ_USER_NAME());
+			out.setUserInfo(userinfo);
+			// 获取用户角色
+			String role = userinfo.getNBPT_RSFZ_U_R_RID();
+
+			if (null == role || "" == role) {
+
+				out.getMessages().add("该用户没有分配权限,请联系管理员");
+				out.setFlag(false);
+			} else {
+
+				out.setUserRole(role);
+				out.setFlag(true);
+			}
+		}
+	}
+	
+	/**
+	 * 添加用户登录信息cookies
 	 * 
 	 * @param in
 	 *            页面传入参数
@@ -177,71 +220,6 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 			getResponse().addCookie(cookieId);
 		}
 	}
-
-	@Override
-	protected String getFunNum() {
-		return null;
-	}
-
-	@Override
-	public ModelAndView otherLogin(String username) throws Exception {
-
-		log.info("用户 " + username + " 尝试从OA系统登录");
-		this.before();
-		
-		// 验证用户
-		try {
-			List<NBPT_RSFZ_USER> users = loginDao.otherLogin(username, this.getConnection());
-			
-			if(0 == users.size()) {
-
-				throw new Exception();
-			} else {
-				
-				// 获取用户角色
-				String role = loginDao.getRole(username, this.getConnection()).get(0).getNBPT_RSFZ_U_R_RID();
-
-				log.info("用户 " + username + " OA登录成功");
-				
-				ModelAndView mv = null;
-				// 信息专员权限
-				if("600007".equals(role)) {
-
-					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030101", role));
-				} 
-				
-				// 大区总权限
-				else if("600006".equals(role)){
-					
-					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030501", role));
-				}
-				
-				// 默认人员管理页面
-				else {
-
-					mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401", role));
-				}
-
-				// 添加登录信息
-				// 添加用户登录session
-				getSession().setAttribute(username, role);
-
-				// 验证成功添加Cookie
-				Cookie cookieName = new Cookie("userName", users.get(0).getNBPT_RSFZ_USER_NAME());
-				Cookie cookieId = new Cookie("userID", username);
-				
-				getResponse().addCookie(cookieName);
-				getResponse().addCookie(cookieId);
-				return this.after(mv, "login", username, role);
-			}
-			
-		} catch (SQLException e) {
-			
-			log.info("外部链接登录错误");
-			throw new Exception();
-		}
-	}
-
 }
 
 
