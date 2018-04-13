@@ -1,4 +1,4 @@
-package com.cn.lingrui.sellPersonnel.db.dbpojos.check;
+package com.cn.lingrui.sellPersonnel.db.dbpojos.infoCommissioner;
 
 public class UncheckPerson {
 

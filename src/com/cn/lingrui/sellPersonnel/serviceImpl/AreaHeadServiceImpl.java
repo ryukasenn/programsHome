@@ -200,12 +200,4 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 		return loginPerson;
 	}
 	
-	/**
-	 * 获取登录人员的id
-	 * @return
-	 */
-	private String getLoginId() {
-		
-		return this.getRequest().getAttribute("userID").toString();
-	}
 }

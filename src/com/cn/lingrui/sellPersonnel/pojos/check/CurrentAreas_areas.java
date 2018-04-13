@@ -3,7 +3,7 @@ package com.cn.lingrui.sellPersonnel.pojos.check;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cn.lingrui.sellPersonnel.db.dbpojos.check.UncheckPerson;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.infoCommissioner.UncheckPerson;
 
 public class CurrentAreas_areas {
 

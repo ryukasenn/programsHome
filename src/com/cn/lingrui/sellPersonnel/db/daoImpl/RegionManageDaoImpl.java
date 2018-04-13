@@ -22,7 +22,7 @@ import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 
 @Repository("regionManageDao")
-public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao {
+public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements RegionManageDao {
 
 	private static Logger log = LogManager.getLogger();
 
@@ -121,7 +121,7 @@ public class RegionManageDaoImpl extends BaseDaoImpl implements RegionManageDao 
 	}
 
 	@Override
-	public NBPT_SP_PERSON receiveCurrentPerson(String personPid, Connection connection) throws SQLException {
+	public NBPT_SP_PERSON receiveCurrentResper(String personPid, Connection connection) throws SQLException {
 
 		try {
 

@@ -235,7 +235,8 @@ public class PersonManageServiceUtils {
 			
 			thisInfo.setName("OTC");
 			
-			if("1".equals(person.getNBPT_SP_PERSON_FLAG())) {
+			// 离职合计
+			if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
 				
 				thisInfo.setDismission(thisInfo.getDismission() + 1);
 				

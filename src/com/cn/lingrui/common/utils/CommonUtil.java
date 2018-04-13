@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -592,7 +593,59 @@ public class CommonUtil {
 		return letters.indexOf(s);
 	}
 	
-	
+	/**
+	 * 将一个列表,按某个属性值分类成多个列表
+	 * @param undealList
+	 * @param byKey
+	 * @param clasz
+	 * @return
+	 */
+	public static <T> List<List<T>> classify(List<T> undealList, String byKey, Class<T> clasz) throws NoSuchFieldException{
+		
+		// 分类标志
+		List<String> keyList = new ArrayList<>();
+		
+		// 返回列表
+		List<List<T>> resultList = new ArrayList<>();
+		
+		for(T t : undealList ) {
+			
+			try {
+				Field field = t.getClass().getDeclaredField(byKey);
+				
+				// 如果属性包含该属性,则获取
+				boolean flag = field.isAccessible();
+				field.setAccessible(true);
+				
+				String key = (String) field.get(t);
+				
+				// 如果标志列表中,包含了该标志
+				if(keyList.contains(key)) {
+					
+					// 取得当前list
+					List<T> currentList = resultList.get(keyList.indexOf(key));
+					
+					// 添加至分类list中
+					currentList.add(t);
+				} else {
+
+					// 取得当前list
+					List<T> currentList = new ArrayList<>();
+					resultList.add(currentList);
+					
+					// 添加至分类list中
+					currentList.add(t);
+					keyList.add(key);
+				}
+
+				field.setAccessible(flag);
+			} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				
+				e.printStackTrace();
+			} 
+		}
+		return resultList;
+	}
 	
 	
 }

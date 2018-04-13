@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public interface BaseDao {
 	
@@ -68,5 +69,5 @@ public interface BaseDao {
 	 */
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException;
 
-	String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException;
+	public String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException;
 }

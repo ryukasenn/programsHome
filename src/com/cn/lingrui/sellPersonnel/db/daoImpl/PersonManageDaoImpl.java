@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
-
-import com.cn.lingrui.common.db.daoImpl.BaseDaoImpl;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
@@ -20,55 +18,9 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 @Repository("personManageDao")
-public class PersonManageDaoImpl extends BaseDaoImpl implements PersonManageDao{
+public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements PersonManageDao{
 
 	private static Logger log = LogManager.getLogger();	
-
-	@Override
-	public CurrentPerson receiveCurrentPerson(String loginId, Connection conn) throws SQLException {
-		
-		// userId获取的是辅助系统的登录ID,与人员信息LOGINID一致,如果REGION_UID为空,则是地总,不为空则是大区总,REGION_UID为负责大区的UID
-		
-		String sql ="    SELECT A.*, " + 
-					"    B.NBPT_SP_REGION_ONAME AS NBPT_SP_REGION_NEED," + // 所在部门配额(22或26,获取的是地区,21获取的大区)
-					"    B.NBPT_SP_REGION_RESPONSIBLER AS NBPT_SP_REGION_RESPONSIBLER, " + // 所在部门负责人
-					"    CASE A.NBPT_SP_PERSON_JOB " + 
-					"        WHEN '22'" + 
-					"            THEN (SELECT NBPT_SP_REGION_UID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_ID = SUBSTRING(B.NBPT_SP_REGION_ID,1,2))" + 
-					"        WHEN '21'" + 
-					"            THEN B.NBPT_SP_REGION_UID" + 
-					"        WHEN '26'" + 
-					"            THEN (SELECT NBPT_SP_REGION_UID FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
-					"        WHEN '27'" + 
-					"            THEN A.NBPT_SP_PERSON_DEPT_ID" + 
-					"        END AS REGION_UID," + // 所在大区UID
-					"    CASE A.NBPT_SP_PERSON_JOB " + 
-					"        WHEN '22'" + 
-					"            THEN (SELECT NBPT_SP_REGION_NAME FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_ID = SUBSTRING(B.NBPT_SP_REGION_ID,1,2))" + 
-					"        WHEN '21'" + 
-					"            THEN B.NBPT_SP_REGION_NAME" + 
-					"        WHEN '26'" + 
-					"            THEN (SELECT NBPT_SP_REGION_NAME FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_LEVEL = '1' AND NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID)" + 
-					"        WHEN '27'" + 
-					"            THEN '信息专员没有所属大区'" +  
-					"        END AS REGION_NAME" + // 所在大区NAME
-					"    FROM NBPT_SP_PERSON A " + 
-					"    LEFT JOIN NBPT_SP_REGION B " + 
-					"    ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID " + 
-					"    WHERE NBPT_SP_PERSON_LOGINID = '" + loginId + "'";
-		
-		try {
-			
-			CurrentPerson resultList = this.oneQuery(sql, conn, CurrentPerson.class);
-			
-			return resultList;
-			
-		} catch (SQLException e) {
-			
-			log.error("查询当前登录用户出错" + CommonUtil.getTraceInfo());
-			throw new SQLException();
-		}
-	}
 
 	@Override
 	public List<CurrentPerson> receiveCurrentTerminals(NBPT_SP_PERSON person, Connection conn)  throws SQLException {

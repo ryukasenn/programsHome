@@ -15,6 +15,7 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public class BaseDaoImpl implements BaseDao{
 

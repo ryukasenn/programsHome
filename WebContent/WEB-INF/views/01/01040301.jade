@@ -34,7 +34,7 @@ block contents
                     |&nbsp&nbsp
                     button.btn.btn-primary(type="button",data-toggle="collapse",data-target="#pageList", aria-expanded="false",aria-controls="pageList") 添加页面
             .row.placeholders.collapse#moduleList
-                .col-md-6.col-sm-6
+                .col-md-12.col-sm-12
                     .panel.panel-default
                         .panel-heading 模块列表
                         table.table
@@ -48,7 +48,7 @@ block contents
                                     td= module.NBPT_RSFZ_PAGE_NAME
                                     td= module.NBPT_RSFZ_PAGE_BZ
             .row.placeholders.collapse#funcList
-                .col-md-6.col-sm-6
+                .col-md-12.col-sm-12
                     .panel.panel-default
                         .panel-heading 功能列表
                         table.table
@@ -62,17 +62,19 @@ block contents
                                     td= func.NBPT_RSFZ_PAGE_NAME
                                     td= func.NBPT_RSFZ_PAGE_BZ
             .row.placeholders.collapse#pageList
-                .col-md-6.col-sm-6
+                .col-md-12.col-sm-12
                     .panel.panel-default
                         .panel-heading 页面列表
                         table.table
                             tr
                                 th.col-md-1.col-sm-1(style="text-align:center") #
+                                td.col-md-1.col-sm-1 页面ID
                                 td.col-md-2.col-sm-2 页面名称
-                                td.col-md-3.col-sm-3 页面描述
+                                td.col-md-4.col-sm-4 页面描述
                             each page in pageContent.pageList
                                 tr 
                                     th(style="text-align:center"): input(type="checkbox",name='pages',value="#{page.NBPT_RSFZ_PAGE_ID}",id="#{page.NBPT_RSFZ_PAGE_ID}")
+                                    td= page.NBPT_RSFZ_PAGE_ID
                                     td= page.NBPT_RSFZ_PAGE_NAME
                                     td= page.NBPT_RSFZ_PAGE_BZ
 block scripts

@@ -29,7 +29,7 @@ public interface RegionManageDao {
 	 */
 	public NBPT_SP_REGION receiveCurrentRegion(String regionId, Connection connection) throws SQLException;
 
-	public NBPT_SP_PERSON receiveCurrentPerson(String nbpt_SP_REGION_RESPONSIBLER, Connection connection) throws SQLException;
+	public NBPT_SP_PERSON receiveCurrentResper(String nbpt_SP_REGION_RESPONSIBLER, Connection connection) throws SQLException;
 
 	public List<NBPT_SP_PERSON> receiveRegionReper(String personType, Connection connection) throws SQLException;
 

@@ -169,7 +169,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(regionUid, this.getConnection());
 			
 			// 获取负责人信息
-			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentPerson(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
+			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentResper(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
 			
 			if("1".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 

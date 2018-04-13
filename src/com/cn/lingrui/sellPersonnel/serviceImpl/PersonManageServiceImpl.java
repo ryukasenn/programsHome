@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
-import com.cn.lingrui.sellPersonnel.db.dao.CheckManageDao;
+import com.cn.lingrui.sellPersonnel.db.dao.InfoCommissionerDao;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
@@ -27,8 +27,8 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	@Resource(name = "personManageDao")
 	private PersonManageDao personManageDao;
 
-	@Resource(name="checkManageDao")
-	private CheckManageDao checkManageDao;
+	@Resource(name="infoCommissionerDao")
+	private InfoCommissionerDao checkManageDao;
 	
 	@Override
 	protected String getFunNum() {
@@ -37,7 +37,6 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 	
 	@Override
 	public ModelAndView getProvincePersons(String regionUid) throws Exception {
-
 
 		try {
 			
@@ -216,7 +215,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			NBPT_SP_PERSON person = checkManageDao.receiveUncheck(personPid, this.getConnection());
 			
 			// 获取该人员的负责区域
-			List<NBPT_COMMON_XZQXHF> responsAreas = checkManageDao.receiveUncheckResponsAreas(personPid, this.getConnection());
+			List<NBPT_COMMON_XZQXHF> responsAreas = checkManageDao.receiveTerminalResponsAreas(personPid, this.getConnection());
 			
 			mv.addObject("person", person);
 			mv.addObject("controllAreas", responsAreas);
@@ -249,14 +248,7 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 		return loginPerson;
 	}
 	
-	/**
-	 * 获取登录人员的id
-	 * @return
-	 */
-	private String getLoginId() {
-		
-		return this.getRequest().getAttribute("userID").toString();
-	}
+
 
 }
 

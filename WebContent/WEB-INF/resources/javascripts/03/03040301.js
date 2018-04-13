@@ -118,6 +118,16 @@ $(function(){
 					
 					if(idNumCheck($_this, $_thisParent)){
 						
+						if($_this.val().charAt(16)%2 == 0){
+							
+							// 验证通过后,可以确定男女
+							$("input[name='NBPT_SP_PERSON_MALE'][value='0']").prop("checked", "checked");
+						} else {
+
+							// 验证通过后,可以确定男女
+							$("input[name='NBPT_SP_PERSON_MALE'][value='1']").prop("checked", "checked");
+						}
+						
 						// 验证通过后,同时如果能取到籍贯信息,添加籍贯信息
 						AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalPlace", {idNum : $_this.val().trim()},function(jsonData){
 							

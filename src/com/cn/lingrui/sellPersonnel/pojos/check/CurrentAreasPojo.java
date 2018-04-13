@@ -2,7 +2,7 @@ package com.cn.lingrui.sellPersonnel.pojos.check;
 
 import java.util.List;
 
-import com.cn.lingrui.sellPersonnel.db.dbpojos.check.Region;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.infoCommissioner.Region;
 
 public class CurrentAreasPojo {
 

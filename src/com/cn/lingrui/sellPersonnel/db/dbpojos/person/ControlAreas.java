@@ -1,6 +1,6 @@
 package com.cn.lingrui.sellPersonnel.db.dbpojos.person;
 
-public class ControAreas {
+public class ControlAreas {
 
 	private String AREANAME;
 	private String AREAID;
