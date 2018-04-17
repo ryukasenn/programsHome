@@ -8,6 +8,6 @@ $(function(){
 		$_this = $(this);		
 		var regionUid = $_this.parent().parent().children().eq(1).find("p").html();
 		$('input[name="regionUid"]').val(regionUid);
-		$('#controlForm').attr("action", baseUrl + "/sellPersonnel/changeRegion").attr("method", "POST").submit();
+		$('#controlForm').attr("action", baseUrl + "/sellPersonnel/regionController/changeRegion").attr("method", "POST").submit();
 	});
 })

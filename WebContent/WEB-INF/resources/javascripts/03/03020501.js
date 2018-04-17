@@ -6,7 +6,7 @@ $(function(){
 	$(".add").on("click", function(){
 		
 		// 负责区域的单选框点击事件
-		AjaxForGet(baseUrl + "/sellPersonnel/receiveAreaContainSelects", {parentId : $("#changeRegion_provinceId").val()},function(jsonData){
+		AjaxForGet(baseUrl + "/sellPersonnel/regionController/receiveAreaContainSelects", {parentId : $("#changeRegion_provinceId").val()},function(jsonData){
 			
 			$("#citySelect").empty();
 			for(var i = 0; i < jsonData.length; i++){
@@ -14,7 +14,6 @@ $(function(){
 				$("<option value='" + jsonData[i].NBPT_COMMON_XZQXHF_ID + "'>" + jsonData[i].NBPT_COMMON_XZQXHF_NAME + "</option>").appendTo($("#citySelect"));
 			}
 			
-
 			$("#030205Modal").modal('show')
 		})
 	})
@@ -40,25 +39,37 @@ $(function(){
 			$("input[name='addAreaContain_regionId']").val($("#changeRegion_regionId").val());
 			
 			if("" == contyValue){
-				if(confirm("是否只选择市级行政单位")){
-
-					if(checkRepeat(cityValue)){
-
-						$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
-					} else {
-						
-						alert("重复添加");
-					}
+				new Confirm({
 					
-				}
+					"message" : "是否添加市级单位",
+					"cancelCallBack" : function(){
+						return;
+					},
+					"sureCallBack" : function(){
+
+						if(checkRepeat(cityValue)){
+	
+							$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/regionController/addRegionXzqx").attr("method", "POST").submit();
+						} else {
+							
+							new Confirm({
+								"type" : "alert",
+								"message" : "重复添加"
+							});
+						}
+					}
+				});
 			} else {
 
 				if(checkRepeat(contyValue)){
 
-					$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/addRegionXzqx").attr("method", "POST").submit();
+					$("#addAreaContain").attr("action", baseUrl + "/sellPersonnel/regionController/addRegionXzqx").attr("method", "POST").submit();
 				} else {
 
-					alert("重复添加");
+					new Confirm({
+						"type" : "alert",
+						"message" : "重复添加"
+					});
 				}
 			}
 			
@@ -97,7 +108,7 @@ $(function(){
 		
 		if(confirm("删除将同时删除负责该地区的终端相关信息")){
 
-			window.location.href = baseUrl + "/sellPersonnel/deleteRegionXzqx?regionUid=" + regionUid + "&regionId=" + regionId + "&cityValue=" + cityValue;
+			window.location.href = baseUrl + "/sellPersonnel/regionController/deleteRegionXzqx?regionUid=" + regionUid + "&regionId=" + regionId + "&cityValue=" + cityValue;
 		}
 			
 	})
@@ -114,7 +125,7 @@ $(function(){
 		}
 		
 		// 市级下拉框选择后,生成区县级下拉框
-		AjaxForGet(baseUrl + "/sellPersonnel/receiveAreaContainSelects", {parentId : $_thisCity.val()},function(jsonData){
+		AjaxForGet(baseUrl + "/sellPersonnel/regionController/receiveAreaContainSelects", {parentId : $_thisCity.val()},function(jsonData){
 			
 			$("#contySelect").empty();
 			

@@ -55,6 +55,7 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
 
+			// 如果为null,则登录人员为后勤
 			if(null == person) {
 
 				// 查询所有下级人员信息

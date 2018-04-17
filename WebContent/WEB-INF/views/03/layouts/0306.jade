@@ -1,20 +1,18 @@
 
-// 大区信息公共头部
+// 信息专员权限功能公共首页
 extends ../../personnelLayout
 
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0305.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0306.js")
     
 block main
     .col-xs-12.col-sm-12.main-header
-        h2 大区人员管理
+        h2 信息专员管理
         form.form-inline#controlForm
             .form-group
-                button(type="button").btn.btn-default#receivePersons 查看大区人员
+                button(type="button").btn.btn-default#receivePersons 查看大区人员信息
                 |&nbsp&nbsp
             block buttons
         hr
     .main-body
         block contents
-
-    

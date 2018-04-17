@@ -15,7 +15,6 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public class BaseDaoImpl implements BaseDao{
 
@@ -28,10 +27,10 @@ public class BaseDaoImpl implements BaseDao{
 	 * @param stmt
 	 * @throws SQLException
 	 */
-	public void excuteUpdateGroups(List<String> sqls, Connection conn) throws SQLException {
+	public void excuteUpdateGroups(List<String> sqls, Connection connection) throws SQLException {
 		
 		Statement stmt;
-		stmt = conn.createStatement();
+		stmt = connection.createStatement();
 	
 	
 		for(String sql : sqls) {
@@ -45,16 +44,16 @@ public class BaseDaoImpl implements BaseDao{
 	/**
 	 * 单条插入,更新或删除
 	 * @param sql
-	 * @param conn
+	 * @param connection
 	 * @return
 	 * @throws SQLException
 	 */
-	public void excuteUpdate(String sql, Connection conn)  throws SQLException {
+	public void excuteUpdate(String sql, Connection connection)  throws SQLException {
 		
 		PreparedStatement ps;
 		try {
 			
-			ps = conn.prepareStatement(sql);
+			ps = connection.prepareStatement(sql);
 		
 		
 			ps.executeUpdate();
@@ -71,17 +70,18 @@ public class BaseDaoImpl implements BaseDao{
 	/**
 	 * 通用查询方法,根据对应的bean生成sql,查询所有
 	 * @param sql
-	 * @param conn
+	 * @param connection
 	 * @return
 	 * @throws SQLException 执行查询是的异常
 	 */
-	public <T> List<T> query(String sql, Connection conn, Class<T> classz) throws SQLException {
+	public <T> List<T> queryForClaszs(String sql, Connection connection, Class<T> classz) throws SQLException {
 		
 		PreparedStatement ps = null;
 				ResultSet rs = null;
 			try {
-				ps = conn.prepareStatement(sql);
+				ps = connection.prepareStatement(sql);
 				rs = ps.executeQuery();
+		
 				return DBUtils.rsToBean(classz, rs);
 			} catch (SQLException e) {
 
@@ -93,15 +93,15 @@ public class BaseDaoImpl implements BaseDao{
 	/**
 	 * 通用查询方法,根据对应的bean生成sql,查询单个
 	 * @param sql
-	 * @param conn
+	 * @param connection
 	 * @return
 	 * @throws SQLException 执行查询是的异常
 	 */
-	public <T> T oneQuery(String sql, Connection conn, Class<T> classz) throws SQLException {
+	public <T> T oneQueryForClasz(String sql, Connection connection, Class<T> classz) throws SQLException {
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
-			ps = conn.prepareStatement(sql);
+			ps = connection.prepareStatement(sql);
 			rs = ps.executeQuery();
 			List<T> resultList = DBUtils.rsToBean(classz, rs);
 			return resultList.size() == 0 ? null : resultList.get(0);
@@ -113,13 +113,59 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	/**
+	 * 通用查询方法,查询批量
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<String> queryForObjects(String sql, Connection connection) throws SQLException {
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = connection.prepareStatement(sql);
+			rs = ps.executeQuery();
+			List<String> results = DBUtils.rsToString(rs);
+			return results;
+		} catch (Exception e) {
+	
+			log.error("通用查询出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		} 
+	}
+	
+	/**
+	 * 通用查询方法,查询单个字段
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public String oneQueryForObject(String sql, Connection connection) throws SQLException {
+		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = connection.prepareStatement(sql);
+			rs = ps.executeQuery();
+			List<String> results = DBUtils.rsToString(rs);
+			return results.size() == 0 ? null : results.get(0);
+		} catch (Exception e) {
+	
+			log.error("通用查询出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		} 
+	}
+	
+	/**
 	 * 调用存储过程
 	 * @param procName 存储过程名称
-	 * @param conn 数据库连接
+	 * @param connection 数据库连接
 	 * @return
 	 * @throws SQLException 
 	 */
-	public ResultSet callProcedure(String procName, Connection conn, String... params) throws SQLException {
+	public ResultSet callProcedure(String procName, Connection connection, String... params) throws SQLException {
 		
 		CallableStatement cs = null;
 		ResultSet rs = null;
@@ -142,7 +188,7 @@ public class BaseDaoImpl implements BaseDao{
 			}
 			
 			// 预执行
-			cs = conn.prepareCall(sql.toString());
+			cs = connection.prepareCall(sql.toString());
 			
 			// 如果有参数,则填入相关参数
 			if(0 != params.length) {
@@ -164,11 +210,11 @@ public class BaseDaoImpl implements BaseDao{
 	}
 
 	@Override
-	public String receiveMaxId(String procName, Connection conn, String tableName) throws SQLException {
+	public String receiveMaxId(String procName, Connection connection, String tableName) throws SQLException {
 		
 		String maxId = null;
 		try {
-			ResultSet rs = this.callProcedure(procName, conn, tableName);
+			ResultSet rs = this.callProcedure(procName, connection, tableName);
 			while(rs.next()) {
 				maxId = rs.getString("MAXID");
 			}
@@ -183,11 +229,11 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	@Override
-	public String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException {
+	public String receiveMaxId(String procName, Connection connection, String tableName, String where) throws SQLException {
 		
 		String maxId = null;
 		try {
-			ResultSet rs = this.callProcedure(procName, conn, tableName, where);
+			ResultSet rs = this.callProcedure(procName, connection, tableName, where);
 			while(rs.next()) {
 				maxId = rs.getString("MAXID");
 			}
@@ -202,7 +248,7 @@ public class BaseDaoImpl implements BaseDao{
 	}
 
 	@Override
-	public List<NBPT_COMMON_DICTIONARY> receiveDictionarys(String type, Connection conn, String... level) throws SQLException {
+	public List<NBPT_COMMON_DICTIONARY> receiveDictionarys(String type, Connection connection, String... level) throws SQLException {
 		
 		String sql = null;
 		if(0 == level.length) {
@@ -216,7 +262,7 @@ public class BaseDaoImpl implements BaseDao{
 
 		try {
 			
-			List<NBPT_COMMON_DICTIONARY> resultList = this.query(sql, conn, NBPT_COMMON_DICTIONARY.class);
+			List<NBPT_COMMON_DICTIONARY> resultList = this.queryForClaszs(sql, connection, NBPT_COMMON_DICTIONARY.class);
 						
 			return resultList;
 		} catch (Exception e) {
@@ -227,7 +273,7 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	@Override
-	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException {
+	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection connection) throws SQLException {
 		
 		StringBuffer sql = new StringBuffer("SELECT * FROM NBPT_COMMON_XZQXHF ");
 		
@@ -246,7 +292,7 @@ public class BaseDaoImpl implements BaseDao{
 		sql.append("ORDER BY NBPT_COMMON_XZQXHF_ID ASC ");
 		try {
 			
-			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql.toString(), conn, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> resultList = this.queryForClaszs(sql.toString(), connection, NBPT_COMMON_XZQXHF.class);
 			
 			return resultList;
 		} catch (SQLException e) {

@@ -15,7 +15,7 @@ import com.cn.lingrui.sellPersonnel.service.RegionManageService;
 
 
 @Controller
-@RequestMapping("/sellPersonnel")
+@RequestMapping("/sellPersonnel/regionController")
 public class RegionManageController {
 
 
@@ -51,7 +51,7 @@ public class RegionManageController {
 	}
 	
 	/**
-	 * 获取修改部门信息页面
+	 * 获取修改部门基本信息页面
 	 * @param pojo
 	 * @return
 	 * @throws Exception
@@ -65,7 +65,7 @@ public class RegionManageController {
 	}
 	
 	/**
-	 * 获取修改部门信息页面
+	 * 获取修改部门基本信息页面
 	 * @param pojo
 	 * @return
 	 * @throws Exception
@@ -84,10 +84,10 @@ public class RegionManageController {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/postChangeRegion", method = RequestMethod.POST)
-	public ModelAndView postChangeRegion(UpdateRegionPojo pojo) throws Exception {
+	@RequestMapping(value = "/updateRegion", method = RequestMethod.POST)
+	public ModelAndView postUpdateRegion(UpdateRegionPojo pojo) throws Exception {
 
-		ModelAndView mv = regionManageService.postChangeRegion(pojo);
+		ModelAndView mv = regionManageService.postUpdateRegion(pojo);
 
 		return mv;
 	}
@@ -108,16 +108,7 @@ public class RegionManageController {
 
 		return mv;
 	}
-	
 
-	@RequestMapping(value = "/updateRegion", method = RequestMethod.POST)
-	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception {
-
-		ModelAndView mv = regionManageService.postUpdateRegion(in);
-
-		return mv;
-	}
-	
 
 	/**
 	 * 获取地区划分页面

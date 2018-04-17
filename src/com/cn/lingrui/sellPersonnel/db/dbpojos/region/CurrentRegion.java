@@ -6,11 +6,11 @@ public class CurrentRegion {
 	private String NBPT_SP_REGION_UID; // 自动生成
 	private String NBPT_SP_REGION_ID; // 部门ID
 	private String NBPT_SP_REGION_NAME; // 部门名称   
-	private String NBPT_SP_REGION_ONAME; // 部门别名   
+	private String NBPT_SP_REGION_NEED; // 部门配额   
 	private String NBPT_SP_REGION_RESPONSIBLER; // 部门负责人   
 	private String NBPT_SP_REGION_LEVEL; // 部门级别   
 	private String NBPT_SP_REGION_NOTE; // 备注
-	private String NBPT_SP_PERSON_NAME; // 负责人名称
+	private String NBPT_SP_REGION_RESPONSIBLER_NAME; // 负责人名称
 	
 	
 	// 地区管理,下辖市区县划分
@@ -58,12 +58,6 @@ public class CurrentRegion {
 	public void setNBPT_SP_REGION_NAME(String nBPT_SP_REGION_NAME) {
 		NBPT_SP_REGION_NAME = nBPT_SP_REGION_NAME;
 	}
-	public String getNBPT_SP_REGION_ONAME() {
-		return NBPT_SP_REGION_ONAME;
-	}
-	public void setNBPT_SP_REGION_ONAME(String nBPT_SP_REGION_ONAME) {
-		NBPT_SP_REGION_ONAME = nBPT_SP_REGION_ONAME;
-	}
 	public String getNBPT_SP_REGION_RESPONSIBLER() {
 		return NBPT_SP_REGION_RESPONSIBLER;
 	}
@@ -81,12 +75,6 @@ public class CurrentRegion {
 	}
 	public void setNBPT_SP_REGION_NOTE(String nBPT_SP_REGION_NOTE) {
 		NBPT_SP_REGION_NOTE = nBPT_SP_REGION_NOTE;
-	}
-	public String getNBPT_SP_PERSON_NAME() {
-		return NBPT_SP_PERSON_NAME;
-	}
-	public void setNBPT_SP_PERSON_NAME(String nBPT_SP_PERSON_NAME) {
-		NBPT_SP_PERSON_NAME = nBPT_SP_PERSON_NAME;
 	}
 	public String getNBPT_COMMON_XZQXHF_LEVEL() {
 		return NBPT_COMMON_XZQXHF_LEVEL;
@@ -111,6 +99,18 @@ public class CurrentRegion {
 	}
 	public void setREGION_ID(String rEGION_ID) {
 		REGION_ID = rEGION_ID;
+	}
+	public String getNBPT_SP_REGION_RESPONSIBLER_NAME() {
+		return NBPT_SP_REGION_RESPONSIBLER_NAME;
+	}
+	public void setNBPT_SP_REGION_RESPONSIBLER_NAME(String nBPT_SP_REGION_RESPONSIBLER_NAME) {
+		NBPT_SP_REGION_RESPONSIBLER_NAME = nBPT_SP_REGION_RESPONSIBLER_NAME;
+	}
+	public String getNBPT_SP_REGION_NEED() {
+		return NBPT_SP_REGION_NEED;
+	}
+	public void setNBPT_SP_REGION_NEED(String nBPT_SP_REGION_NEED) {
+		NBPT_SP_REGION_NEED = nBPT_SP_REGION_NEED;
 	}
 	
 }

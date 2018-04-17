@@ -26,9 +26,9 @@ block contents
                                         p(style='display:none')= region.NBPT_SP_REGION_UID
                                     td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
                                     td.col-xs-2.col-sm-2
-                                        case region.NBPT_SP_PERSON_NAME
+                                        case region.NBPT_SP_REGION_RESPONSIBLER_NAME
                                             when 'null': 暂无
-                                            default: #{region.NBPT_SP_PERSON_NAME}
+                                            default: #{region.NBPT_SP_REGION_RESPONSIBLER_NAME}
                                     td.col-xs-1.col-sm-1 大区
                                     td.col-xs-2.col-sm-2 
                                         button(type="button").btn.btn-link.btn-xs.changeButton 修改
@@ -40,9 +40,9 @@ block contents
                                         p(style='display:none')= region.NBPT_SP_REGION_UID
                                     td.col-xs-3.col-sm-3= region.NBPT_SP_REGION_NAME
                                     td.col-xs-2.col-sm-2
-                                        case region.NBPT_SP_PERSON_NAME
+                                        case region.NBPT_SP_REGION_RESPONSIBLER_NAME
                                             when 'null': 暂无
-                                            default: #{region.NBPT_SP_PERSON_NAME}
+                                            default: #{region.NBPT_SP_REGION_RESPONSIBLER_NAME}
                                     td.col-xs-1.col-sm-1 地区
                                     td.col-xs-2.col-sm-2 
                                         button(type="button").btn.btn-link.btn-xs.changeButton 修改

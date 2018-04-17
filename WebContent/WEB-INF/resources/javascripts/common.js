@@ -224,7 +224,109 @@ $(function(){
 
 	}
 	
+	/**
+	 * 代替confirm模态框
+	 */
+	var Confirm = function (options){
+		
+		// 定义属性
+        this.sureBtn    = null;
+        this.cancelBtn  = null;
+        this.textInput  = null;
+        this.contain = null;
+        
+        // 设置默认属性
+        this.configs = {
+            "type": "confirm",
+            "title": "",
+            "message": "这是一个提示",
+            "cancelCallBack": "",
+            "sureCallBack": ""
+        };
+
+        // 扩展默认属性
+        options && this.extend(this.configs, options);
+        
+        // 初始化方法
+        this.init();
+        // 事件添加
+        this.sureBtn   && this.addEvent(this.sureBtn,   "click", this.btnClick.bind(this));
+        this.cancelBtn && this.addEvent(this.cancelBtn, "click", this.btnClick.bind(this));
+		
+		$("#ConfirmModal").modal({
+			backdrop:'static'
+		})
+	}
 	
+	Confirm.prototype = {
+		init: function () {
+			var config = this.configs
+			
+			this.contain = $( '<div role="dialog" aria-labelledby="ConfirmModalLabel" tabindex="-1" class="modal fade" id="ConfirmModal">' +
+					'<div class="modal-dialog" role ="document">' +
+					'<div class="modal-content">' +
+						'<div class="modal-body"></div>' +
+						'<div class="modal-footer"></div>' +
+					'</div>' +
+				'</div>' +
+			'</div>');
+
+			this.contain.find('.modal-body').append($("<p>" + config.message + "</p>"));
+			this.contain.appendTo($('body'));
+			
+			switch (config.type){
+			
+				case "confirm" :
+					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-default" id="ConfirmModalCancel">取消</buttion>'));
+					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-primary" id="ConfirmModalSure">确定</buttion>'));
+					this.sureBtn   = this.contain.find('.btn-primary')[0];
+					this.cancelBtn   = this.contain.find('.btn-default')[0];
+					break;
+				case "alert" :
+					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-primary" id="ConfirmModalSure">确定</buttion>'));
+					this.sureBtn   = this.contain.find('.btn-primary')[0];
+					break;
+			}
+		},
+		extend: function (oldObj, newObj) {
+			for(var key in newObj) {
+				oldObj[key] = newObj[key];
+			}
+			return oldObj;
+		},
+		addEvent: function(el, type, callBack) {
+            if (el.attachEvent) {
+                el.attachEvent('on' + type, callBack);
+            } else {
+                el.addEventListener(type, callBack, false);
+            }
+        },
+		btnClick: function (e) {
+            e = e || event;
+            var _this    = this,
+                _tarId   = e.target.id,
+                _configs = this.configs;
+            switch(_tarId) {
+                // 点击取消按钮
+                case "ConfirmModalCancel":{
+                    _this.close();
+                    _configs.cancelCallBack && _configs.cancelCallBack();
+                } break;
+                // 点击确认按钮
+                case "ConfirmModalSure": {
+                    _this.close();
+                    _configs.sureCallBack && _configs.sureCallBack();
+                }break;
+            }
+            
+        },
+        close: function(){
+
+        	this.contain.next(".modal-backdrop").remove();
+        	this.contain.remove();
+        }
+		
+	}
 	
 	
 	

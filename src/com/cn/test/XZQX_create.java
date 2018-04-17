@@ -92,12 +92,145 @@ public class XZQX_create {
 		// 查看身份证有误
 		//this.checkIdnum();
 		
-		for(int i = 0 ; i < 7; i ++) {
-
-			System.out.println(CommonUtil.getUUID_32());
-		}
+		// 添加其他类别人员
+		this.addOtherType();
 	}
 	
+	private void addOtherType() throws ClassNotFoundException, SQLException {
+		
+		String fileNameTemp = GlobalParams.FILE_PATH + "qita.xls";
+		File targetFile = new File(fileNameTemp);
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+//		Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
+				
+		// 查询所有地总
+		if(!targetFile.exists()) {
+			
+		} else {
+			try {
+				List<String> sqls = new ArrayList<String>();
+				// 如果存在,获取工作簿
+				Workbook book = null;
+				book = Workbook.getWorkbook(targetFile);
+			
+			
+				// 获取sheet页
+				int maxSheet = book.getNumberOfSheets();
+				for(int sheeti = 0; sheeti < maxSheet; sheeti++){
+					
+					// 获取sheet页
+					Sheet sheet = book.getSheet(sheeti); 
+					
+					// 获取行数
+					int realRows = sheet.getRows();
+					
+					// 初始化
+					for(int rowi = 2; rowi < realRows; rowi++) {
+						
+						if("".equals(sheet.getCell(4,rowi).getContents())) {
+							
+							break;
+						} else {
+							
+							
+							String male = "男".equals(sheet.getCell(4,rowi).getContents())?"1":"0";
+							String birs = "";
+							
+							if(!"".equals(sheet.getCell(18,rowi).getContents().trim())) {
+
+								birs= sheet.getCell(18,rowi).getContents().substring(6, 14);
+							}else {
+
+								System.out.println("姓名为" + sheet.getCell(2,rowi).getContents() + "身份证号为空");
+							}
+							String entryDate = "";
+							
+							if (sheet.getCell(15,rowi).getType() == CellType.DATE) { 
+						         DateCell dc = (DateCell) sheet.getCell(15,rowi);
+						         entryDate = CommonUtil.dateToYYYYMMDD(dc.getDate()); 
+							} 
+
+							if("".equals(entryDate)){
+								
+
+								System.out.println("姓名为" + sheet.getCell(2,rowi).getContents() + "入职日期有误");
+							}
+							String type = "临床部".equals(sheet.getCell(1,rowi).getContents())? "3" : "基层医疗拓展部".equals(sheet.getCell(1,rowi).getContents())? "4" : "1";
+							String job = "";
+							if("1".equals(type)) {
+								
+								job = "大区总经理".equals(sheet.getCell(8,rowi).getContents()) ? "11" : "12";
+							} 
+							
+							else if("3".equals(type)) {
+								
+								job = "大区总经理".equals(sheet.getCell(8,rowi).getContents()) ? "31" : "32";
+							}
+							
+							else if("4".equals(type)) {
+								
+								job = "大区总经理".equals(sheet.getCell(8,rowi).getContents()) ? "41" : "42";
+							}
+							String sql = "INSERT NBPT_SP_PERSON ("
+									+ "NBPT_SP_PERSON_PID,"
+									+ "NBPT_SP_PERSON_ID,"
+									+ "NBPT_SP_PERSON_TYPE,"
+									+ "NBPT_SP_PERSON_NAME,"
+									+ "NBPT_SP_PERSON_MALE,"
+									+ "NBPT_SP_PERSON_BIRS,"
+									+ "NBPT_SP_PERSON_IDNUM,"
+									+ "NBPT_SP_PERSON_MOB1,"
+									+ "NBPT_SP_PERSON_MOB2,"
+									+ "NBPT_SP_PERSON_PLACE,"
+									+ "NBPT_SP_PERSON_JOB,"
+									+ "NBPT_SP_PERSON_DEGREE,"
+									+ "NBPT_SP_PERSON_FLAG,"
+									+ "NBPT_SP_PERSON_ENTRYDATA,"
+									+ "NBPT_SP_PERSON_ENTERINGTIME"
+									+ ")"
+									+ " VALUES ("
+									+ "'" + CommonUtil.getUUID_32() + "',"
+									+ "'" + (103055 + rowi - 1) + "',"
+									+ "'" + type + "',"
+									+ "'" + sheet.getCell(3,rowi).getContents() + "',"
+									+ "'" + male + "',"
+									+ "'" + birs + "',"
+									+ "'" + sheet.getCell(18,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(19,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(23,rowi).getContents() + "',"
+									+ "'" + sheet.getCell(17,rowi).getContents() + "',"
+									+ "'" + job + "',"
+									+ "'" + sheet.getCell(11,rowi).getContents() + "',"
+									+ "'2',"
+									+ "'" + entryDate + "',"
+									+ "'" + CommonUtil.getYYYYMMDD() +"')";
+							sqls.add(sql);
+							
+						}
+					}
+				}
+				Statement stmt;
+				stmt = conn.createStatement();
+
+
+				for(String sql : sqls) {
+					stmt.addBatch(sql);
+				}
+
+				stmt.executeBatch();
+			} catch (BiffException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO 自动生成的 catch 块
+				e.printStackTrace();
+			}
+		}
+	}
+		
+
 	private void checkIdnum() throws ClassNotFoundException, SQLException {
 		
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

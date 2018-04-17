@@ -23,6 +23,7 @@ public class CommonController {
 
 	@Resource(name = "commonService")
 	private CommonService commonService;
+	
 	/**
 	 * 查询当前人员
 	 * @return

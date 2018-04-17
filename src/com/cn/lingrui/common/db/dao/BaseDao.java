@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 public interface BaseDao {
 	
@@ -34,7 +33,7 @@ public interface BaseDao {
 	 * @param classz 查询后生成对应的bean
 	 * @return
 	 */
-	public <T> List<T> query(String sql, Connection conn, Class<T> classz) throws SQLException;
+	public <T> List<T> queryForClaszs(String sql, Connection conn, Class<T> classz) throws SQLException;
 	
 	/**
 	 * 调用存储过程
@@ -62,7 +61,7 @@ public interface BaseDao {
 
 	/**
 	 * 获取国家行政区县列表
-	 * @param parentId
+	 * @param parentId 上级区县的ID,如果为null或空,则是查省份,如果不为空,则查其下级
 	 * @param conn
 	 * @return
 	 * @throws SQLException

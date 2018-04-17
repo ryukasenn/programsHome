@@ -10,6 +10,7 @@ block extraButtons
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
+            input(type='hidden', value='#{currentProvince}')#OringeProvince
             form.form-horizontal#updateRegion
                 input(type='hidden', name='regionUid', value='#{regionInfo.NBPT_SP_REGION_UID}')
                 input(type='hidden', name='regionResponsibler', value='#{regionInfo.NBPT_SP_REGION_RESPONSIBLER}')#ResperPid
@@ -29,17 +30,15 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 人员配额
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_ONAME}', name='regionNeed')
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NEED}', name='regionNeed')
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 备注
                     .col-xs-4.col-sm-4
                         input.form-control(name="regionNote")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 所属省份
-                    .col-xs-2.col-sm-2
-                        select.form-control(name="regionProvince")#provinceSelect
-                            each item in provinces
-                                option(id="#{item.NBPT_COMMON_XZQXHF_ID}",value="#{item.NBPT_COMMON_XZQXHF_ID}") #{item.NBPT_COMMON_XZQXHF_NAME}
+                    .col-xs-4.col-sm-4
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_PROVINCE_NAME}', readonly)
                 .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
                         button(type="button").btn.btn-primary.changeAreaInfo 提交
@@ -48,7 +47,7 @@ block modal
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03020401.js")
     script(language='javascript')
-        $("#provinceSelect").val('#{currentProvince.XZQX_ID}');
+        $("#provinceSelect").val('#{currentProvince}');
     
 block pageId
     p(style="display:none") 03020401

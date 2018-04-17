@@ -16,10 +16,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.cn.lingrui.common.db.DBConnect;
 import com.cn.lingrui.common.db.dao.ConditionDao;
-import com.cn.lingrui.common.db.dbpojos.GSDBZTXX;
 import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_CONDITION;
 import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_U_R;
-import com.cn.lingrui.common.db.dbpojos.SYSUSERLIST;
 import com.cn.lingrui.common.pojos.login.LoginPojoIn;
 import com.cn.lingrui.common.pojos.login.LoginPojoOut;
 
@@ -87,83 +85,21 @@ public class DBUtils {
 
 		return list;
 	}
+	
+	public static List<String> rsToString(ResultSet rs) throws SQLException {
 
-	/**
-	 * 用户登录时,获取公共账户
-	 * 
-	 * @param in
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
-	 */
-	@Deprecated
-	public static LoginPojoOut checkUser(LoginPojoIn in) {
-
-		// 初始化返回结果
-		LoginPojoOut out = new LoginPojoOut();
-		out.setFlag(false);
-		ResultSet rs = null;
-		PreparedStatement ps = null;
-		DBConnect dbc = null;
-		try {
-
-			dbc = getUserDBC(in.getUserId(), in.getPassword());
-			// 如果公共账户密码为空,则需要重新获取
-			if ("".equals(GlobalParams.RSFZ_PASSWORD) || "".equals(GlobalParams.RSFZ_USERNAME)) {
-
-//				ps = dbc.getConnection()
-//						.prepareStatement("SELECT * FROM GSDBZTXX WHERE GSDBZTXX_ZTBH = " + GlobalParams.ZTBH + " ");
-
-				rs = ps.executeQuery();
-
-				List<GSDBZTXX> listGSDBZTXX = DBUtils.rsToBean(GSDBZTXX.class, rs);
-				if (1 == listGSDBZTXX.size()) {
-
-					GlobalParams.RSFZ_PASSWORD = CommonUtil.decodeRs(listGSDBZTXX.get(0).getGSDBZTXX_PASS());
-					GlobalParams.RSFZ_USERNAME = listGSDBZTXX.get(0).getGSDBZTXX_OWNER();
-					GlobalParams.RSFZ_DBNAME = listGSDBZTXX.get(0).getGSDBZTXX_BASE();
-				} else {
-
-					out.getMessages().add("用户登录出错,取不到公共账号");
-					return out;
-				}
-				
-				closePsRs(ps, rs);
-			}
-
-			// 登录验证,重新获取用户名
-//			ps = dbc.getConnection().prepareStatement("SELECT * FROM SYSUSERLIST WHERE SYSUSERLIST_USERID = '"
-//					+ in.getUserId() + "' AND SYSUSERLIST_ACCID = " + GlobalParams.ZTBH);
-
-			rs = ps.executeQuery();
-
-			List<SYSUSERLIST> listSYSUSERLIST = DBUtils.rsToBean(SYSUSERLIST.class, rs);
-			if (1 == listSYSUSERLIST.size()) {
-
-				out.setUserName(listSYSUSERLIST.get(0).getSYSUSERLIST_USERNAME());
-			} else {
-
-				out.getMessages().add("用户登录出错,取不到用户名");
-				return out;
-			}
-
-		} catch (Exception e) {
-
-			log.info("获取公共用户是出现错误:" + e.getMessage());
-			return out;
-		} finally {
-
-			try {
-
-				closePsRs(ps, rs);
-				dbc.closeConnection();
-			} catch (Exception e) {
-
-				log.info("获取公共用户是出现错误:" + e.getMessage());
-				return out;
-			}
+		// 初始化返回数据
+		List<String> resultStrings = new ArrayList<>();
+		
+		String columnName = rs.getMetaData().getColumnName(1);
+		
+		while (rs.next()) {
+			
+			// 
+			resultStrings.add(String.valueOf(null == rs.getObject(columnName) ? "" : rs.getObject(columnName)));
 		}
-		out.setFlag(true);
-		return out;
+
+		return resultStrings;
 	}
 
 	/**

@@ -22,7 +22,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao{
 	@Override
 	public List<NBPT_RSFZ_USER> checkUser(LoginPojoIn in, Connection conn) throws SQLException {
 
-		List<NBPT_RSFZ_USER> resultList = this.query("SELECT * FROM NBPT_RSFZ_USER WHERE NBPT_RSFZ_USER_ID = '" 
+		List<NBPT_RSFZ_USER> resultList = this.queryForClaszs("SELECT * FROM NBPT_RSFZ_USER WHERE NBPT_RSFZ_USER_ID = '" 
 												+ in.getUserId() 
 												+ "' AND NBPT_RSFZ_USER_PASSWORD = '" 
 												+ in.getPassword() 
@@ -33,7 +33,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao{
 	@Override
 	public List<NBPT_RSFZ_U_R> getRole(LoginPojoIn in, Connection conn) throws SQLException {
 
-		List<NBPT_RSFZ_U_R> resultList = this.query("SELECT * FROM NBPT_RSFZ_U_R WHERE NBPT_RSFZ_U_R_UID = '" + in.getUserId() + "'", conn, NBPT_RSFZ_U_R.class);
+		List<NBPT_RSFZ_U_R> resultList = this.queryForClaszs("SELECT * FROM NBPT_RSFZ_U_R WHERE NBPT_RSFZ_U_R_UID = '" + in.getUserId() + "'", conn, NBPT_RSFZ_U_R.class);
 		
 		return resultList;
 	}
@@ -41,7 +41,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao{
 	@Override
 	public List<NBPT_RSFZ_USER> otherLogin(String username, Connection conn) throws SQLException {
 		
-		List<NBPT_RSFZ_USER> resultList = this.query("SELECT * FROM NBPT_RSFZ_USER WHERE NBPT_RSFZ_USER_ID = '" 
+		List<NBPT_RSFZ_USER> resultList = this.queryForClaszs("SELECT * FROM NBPT_RSFZ_USER WHERE NBPT_RSFZ_USER_ID = '" 
 				+ username + "'", conn, NBPT_RSFZ_USER.class);
 		return resultList;
 	}
@@ -50,7 +50,7 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao{
 	@Override
 	public List<NBPT_RSFZ_U_R> getRole(String userId, Connection conn) throws SQLException {
 
-		List<NBPT_RSFZ_U_R> resultList = this.query("SELECT * FROM NBPT_RSFZ_U_R WHERE NBPT_RSFZ_U_R_UID = '" + userId + "'", conn, NBPT_RSFZ_U_R.class);
+		List<NBPT_RSFZ_U_R> resultList = this.queryForClaszs("SELECT * FROM NBPT_RSFZ_U_R WHERE NBPT_RSFZ_U_R_UID = '" + userId + "'", conn, NBPT_RSFZ_U_R.class);
 		
 		return resultList;
 	}
@@ -69,14 +69,14 @@ public class LoginDaoImpl extends BaseDaoImpl implements LoginDao{
 			// 如果登录模式为1
 			if("1".equals(in.getLoginModel())) {
 
-				userinfo = this.oneQuery(sql, connection, CurrentUser.class);
+				userinfo = this.oneQueryForClasz(sql, connection, CurrentUser.class);
 			} 
 			
 			// 正常登录
 			else {
 				
 				sql += "AND A.NBPT_RSFZ_USER_PASSWORD = '" + in.getPassword() + "'";
-				userinfo = this.oneQuery(sql, connection, CurrentUser.class);
+				userinfo = this.oneQueryForClasz(sql, connection, CurrentUser.class);
 			}
 			
 			return userinfo;

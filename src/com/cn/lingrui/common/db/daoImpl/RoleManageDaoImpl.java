@@ -30,7 +30,7 @@ public class RoleManageDaoImpl extends BaseDaoImpl implements RoleManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " WHERE NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_LEVEL >= '1' "
+				resultList = this.queryForClaszs(sql + " WHERE NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_LEVEL >= '1' "
 						+ " order by NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_ID ASC,NBPT_RSFZ_ROLE.NBPT_RSFZ_ROLE_LEVEL ASC", conn, NBPT_RSFZ_ROLE.class);
 			} catch (SQLException e) {
 
@@ -73,7 +73,7 @@ public class RoleManageDaoImpl extends BaseDaoImpl implements RoleManageDao{
 		
 		String sql = DBUtils.beanToSql(NBPT_RSFZ_ROLE.class, "select", "NBPT_RSFZ_ROLE");
 		
-		List<NBPT_RSFZ_ROLE> results = this.query(sql + " WHERE NBPT_RSFZ_ROLE_ID = '" + role.getNBPT_RSFZ_ROLE_ID() + "' ", conn, NBPT_RSFZ_ROLE.class);
+		List<NBPT_RSFZ_ROLE> results = this.queryForClaszs(sql + " WHERE NBPT_RSFZ_ROLE_ID = '" + role.getNBPT_RSFZ_ROLE_ID() + "' ", conn, NBPT_RSFZ_ROLE.class);
 		
 		if(0 == results.size()) {
 			
@@ -90,7 +90,7 @@ public class RoleManageDaoImpl extends BaseDaoImpl implements RoleManageDao{
 		
 		List<NBPT_RSFZ_R_P> resultList = new ArrayList<NBPT_RSFZ_R_P>();
 				
-		resultList = this.query(sql + " WHERE NBPT_RSFZ_R_P_RID = '" + role.getNBPT_RSFZ_ROLE_ID() + "' ", conn, NBPT_RSFZ_R_P.class);
+		resultList = this.queryForClaszs(sql + " WHERE NBPT_RSFZ_R_P_RID = '" + role.getNBPT_RSFZ_ROLE_ID() + "' ", conn, NBPT_RSFZ_R_P.class);
 		
 		
 		return resultList;

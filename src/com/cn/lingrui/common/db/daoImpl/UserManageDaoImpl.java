@@ -29,7 +29,7 @@ public class UserManageDaoImpl extends BaseDaoImpl implements UserManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " where NBPT_RSFZ_USER_ID > '10000' order by NBPT_RSFZ_USER.NBPT_RSFZ_USER_ID ASC", conn, NBPT_RSFZ_USER.class);
+				resultList = this.queryForClaszs(sql + " where NBPT_RSFZ_USER_ID > '10000' order by NBPT_RSFZ_USER.NBPT_RSFZ_USER_ID ASC", conn, NBPT_RSFZ_USER.class);
 			} catch (Exception e) {
 
 				log.error("查询所有用户出错" + e.getMessage());
@@ -47,7 +47,7 @@ public class UserManageDaoImpl extends BaseDaoImpl implements UserManageDao{
 		String sql = DBUtils.beanToSql(NBPT_RSFZ_USER.class, "select", "NBPT_RSFZ_USER");
 
 		try {
-			resultList = this.query(sql + " where NBPT_RSFZ_USER_ID = '" + userId + "'", conn, NBPT_RSFZ_USER.class);
+			resultList = this.queryForClaszs(sql + " where NBPT_RSFZ_USER_ID = '" + userId + "'", conn, NBPT_RSFZ_USER.class);
 			return resultList;
 		} catch (Exception e) {
 

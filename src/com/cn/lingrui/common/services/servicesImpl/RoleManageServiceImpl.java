@@ -89,7 +89,7 @@ public class RoleManageServiceImpl extends BServiceLogic implements RoleManageSe
 		// 1.验证重复性
 		List<NBPT_RSFZ_ROLE> rsfzrole;
 		try {
-			rsfzrole = roleManageDao.query("SELECT * FROM NBPT_RSFZ_ROLE WHERE NBPT_RSFZ_ROLE_NAME = '" + 
+			rsfzrole = roleManageDao.queryForClaszs("SELECT * FROM NBPT_RSFZ_ROLE WHERE NBPT_RSFZ_ROLE_NAME = '" + 
 															in.getNBPT_RSFZ_ROLE_NAME() + "'", this.getConnection(), NBPT_RSFZ_ROLE.class);
 			
 			if(0 == rsfzrole.size()) {

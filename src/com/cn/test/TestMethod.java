@@ -148,6 +148,15 @@ public class TestMethod {
 		
 		CommonUtil.getBasePropertieValue("BASE_URL");
 	}
+	
+	@Test
+	public void test6() {
+		
+		for(int i = 0 ; i < 31; i++) {
+			
+			System.out.println(CommonUtil.getUUID_32());
+		}
+	}
 }
 
 

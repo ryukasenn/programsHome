@@ -18,9 +18,19 @@ $(function(){
 		
 		$_this = $(this);
 		
-		createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '26'}, '大区总名单');
+		createModal(baseUrl + "/sellPersonnel/regionController/receiveRegionReper",{personType : '26'}, '大区总名单');
+	});
+	
+	/**
+	 * 删除负责人按钮
+	 */
+	$('.deleteResponsibler').on('click', function(){
+				
+		$('#ResperName').val("");
+		$('#ResperPid').val("");
 	});
 
+	
 	/**
 	 * 添加负责人modal的查询操作
 	 */
@@ -30,7 +40,7 @@ $(function(){
 			
 		} else {
 			
-			createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '26', searchName : $('#searchName').val().trim()}, '大区总名单');
+			createModal(baseUrl + "/sellPersonnel/regionController/receiveRegionReper",{personType : '26', searchName : $('#searchName').val().trim()}, '大区总名单');
 		}
 	});
 	
@@ -40,7 +50,7 @@ $(function(){
 	 */
 	$("#updateRegionConfirm").on("click", function(){
 		
-		$('#updateRegion').attr('action', baseUrl + "/sellPersonnel/updateRegion").attr('method', 'POST').submit();
+		$('#updateRegion').attr('action', baseUrl + "/sellPersonnel/regionController/updateRegion").attr('method', 'POST').submit();
 	})
 	
 })

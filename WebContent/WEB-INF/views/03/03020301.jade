@@ -22,10 +22,19 @@ block contents
                     .col-md-1.col-sm-1 
                         button.btn.btn-default(type="button").addResponsibler
                             span.glyphicon.glyphicon-plus(aria-hidden="true")
+                        |&nbsp&nbsp&nbsp
+                        button.btn.btn-default(type="button").deleteResponsibler
+                            span.glyphicon.glyphicon-minus(aria-hidden="true")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 人员配额
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_ONAME}', name='regionNeed')
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NEED}', name='regionNeed')
+                    if needSum
+                        .col-xs-4.col-sm-4
+                            p 当前计算的所有地区配额合计为
+                                font(color='red')
+                                    #{needSum}
+                            
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 备注
                     .col-xs-4.col-sm-4

@@ -3,8 +3,8 @@ html(lang="en")
     head
         meta(charset="UTF-8")
         title 羚锐集团内部平台
-        link(rel='stylesheet', href='#{myPath}/stylesheets/css/bootstrap.css')
-        link(rel='stylesheet', href='#{myPath}/stylesheets/layout.css')
+        link(rel='stylesheet', href='#{myPath}/stylesheets/css/bootstrap.min.css')
+        link(rel='stylesheet', href='#{myPath}/stylesheets/layout.min.css')
         block header
     body
         script
@@ -44,6 +44,7 @@ html(lang="en")
     block modal
     script(src="#{myPath}/javascripts/jquery.min.js")
     script(src="#{myPath}/javascripts/bootstrap.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/common.min.js")
     block layoutScripts
     block scripts
     block pageId

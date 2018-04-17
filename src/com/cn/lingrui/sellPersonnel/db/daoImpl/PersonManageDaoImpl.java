@@ -67,7 +67,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 								"ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID " + 
 								"WHERE A.NBPT_SP_PERSON_JOB  = '1' OR A.NBPT_SP_PERSON_JOB = '6' ORDER BY NBPT_SP_PERSON_ID ASC ";
 				
-				List<CurrentPerson> resultList = this.query(sql, conn, CurrentPerson.class);
+				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
 				
 				return resultList;
 			} 
@@ -98,7 +98,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 								"	  ) " + 
 								"ORDER BY A.NBPT_SP_PERSON_ID ASC";
 				
-				List<CurrentPerson> resultList = this.query(sql, conn, CurrentPerson.class);
+				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
 				
 				return resultList;
 			}
@@ -127,7 +127,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 								"ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID " +
 								"WHERE A.NBPT_SP_PERSON_JOB BETWEEN '3' AND '5' ORDER BY NBPT_SP_PERSON_ID ASC , NBPT_SP_PERSON_LOGINID DESC ";
 				
-				List<CurrentPerson> resultList = this.query(sql, conn, CurrentPerson.class);
+				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
 				
 				return resultList;
 			} else {
@@ -171,7 +171,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 		}
 		try {
 			
-			List<NBPT_SP_REGION> resultList = this.query(sql.toString(), conn, NBPT_SP_REGION.class);
+			List<NBPT_SP_REGION> resultList = this.queryForClaszs(sql.toString(), conn, NBPT_SP_REGION.class);
 			return resultList;
 		} catch (SQLException e) {
 			log.error("获取部门列表出错" + CommonUtil.getTrace(e));
@@ -227,7 +227,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 								"	AND (A.NBPT_SP_PERSON_FLAG = '3' OR A.NBPT_SP_PERSON_FLAG = '2')" + 
 								"	AND A.NBPT_SP_PERSON_TYPE IS NOT NULL AND A.NBPT_SP_PERSON_TYPE <> '' " +
 								"	ORDER BY B.NBPT_SP_REGION_ID";
-				persons = this.query(sql, connection, CurrentPerson.class);
+				persons = this.queryForClaszs(sql, connection, CurrentPerson.class);
 			} 
 			
 			// 如果登录人员的JOB是22或者26,则是地总,查询该地总下的所有人员
@@ -258,7 +258,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 							"  AND A.NBPT_SP_PERSON_FLAG <> '3'" +
 							"  ORDER BY A.NBPT_SP_PERSON_ID ";
 	
-				persons = this.query(sql, connection, CurrentPerson.class);
+				persons = this.queryForClaszs(sql, connection, CurrentPerson.class);
 			}
 			
 			return persons;
@@ -286,7 +286,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						"  AND A.NBPT_SP_REGION_XZQX_TYPE = '22'" +
 						"  ORDER BY D.NBPT_COMMON_XZQXHF_ID";
 			
-			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> resultList = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return resultList;
 		} catch (SQLException e) {
 			
@@ -306,7 +306,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						+ "ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_REGION_XZQX_XZQXID "
 						+ "WHERE B.NBPT_SP_REGION_XZQX_REGIONID = '" + areaId + "'";
 			
-			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> resultList = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 		
 			return resultList;
 		} catch (SQLException e) {
@@ -330,7 +330,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalPId +"'" +
 							"  ORDER BY A.NBPT_COMMON_XZQXHF_ID";
 			
-			List<NBPT_COMMON_XZQXHF> resultList = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> resultList = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 		
 			return resultList;
 		} catch (SQLException e) {
@@ -373,7 +373,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 							"  WHERE C.NBPT_SP_PERSON_PID = '"+ terminalId +"'" +
 							"  ORDER BY A.NBPT_COMMON_XZQXHF_ID";
 			
-			NBPT_SP_REGION resultList = this.oneQuery(sql, connection, NBPT_SP_REGION.class);
+			NBPT_SP_REGION resultList = this.oneQueryForClasz(sql, connection, NBPT_SP_REGION.class);
 		
 			return resultList;
 		} catch (SQLException e) {
@@ -393,7 +393,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						+ "  ORDER BY NBPT_SP_PERSON_ID";
 			
 			CurrentPerson person;
-			person = this.oneQuery(sql, connection, CurrentPerson.class);
+			person = this.oneQueryForClasz(sql, connection, CurrentPerson.class);
 			return person;
 		} catch (SQLException e) {
 			
@@ -434,7 +434,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						"  ON A.NBPT_COMMON_XZQXHF_PID = B.NBPT_COMMON_XZQXHF_ID" + 
 						"  WHERE A.NBPT_COMMON_XZQXHF_ID = '" + string + "'" +
 						"  ORDER BY B.NBPT_COMMON_XZQXHF_ID";
-			List<NBPT_COMMON_XZQXHF> placeInfo = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> placeInfo = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return placeInfo;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -466,7 +466,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						"  AND B.NBPT_SP_REGION_UID <> '" + region_UID + "'" + 
 						"  AND A.NBPT_SP_PERSON_JOB <> '27'" +
 						"  ORDER BY B.NBPT_SP_REGION_ID";
-			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
+			List<CurrentPerson> personinfos = this.queryForClaszs(sql, connection, CurrentPerson.class);
 			return personinfos;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -502,7 +502,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						"  END AS NBPT_SP_PERSON_WORKAGE " + 
 						"  FROM NBPT_SP_PERSON A  LEFT JOIN NBPT_SP_REGION B  ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID  " + 
 						"  WHERE B.NBPT_SP_REGION_UID = '" + areaUid + "'  ORDER BY B.NBPT_SP_REGION_ID";
-			List<CurrentPerson> personinfos = this.query(sql, connection, CurrentPerson.class);
+			List<CurrentPerson> personinfos = this.queryForClaszs(sql, connection, CurrentPerson.class);
 			return personinfos;
 		} catch (SQLException e) {
 			log.error("获取地区下人员信息出错" + CommonUtil.getTrace(e));

@@ -3,7 +3,7 @@ $(function(){
 	/**
 	 * 界面初始化,输入框自动补全
 	 */ 
-	var regions = AjaxForGet(baseUrl + "/sellPersonnel/receiveRegionsSelect","",function(jsonData){
+	var regions = AjaxForGet(baseUrl + "/sellPersonnel/regionController/receiveRegionsSelect","",function(jsonData){
 		
 		var regions = new Array();
 		for(var i = 0; i < jsonData.length; i++){
@@ -38,7 +38,7 @@ $(function(){
 	 */
 	$("#receiveRegions").on("click", function(){
 		
-		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/regions").attr("method", "POST").submit();
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/regionController/regions").attr("method", "POST").submit();
 	})
 	
 	$('#searchConfirm').on('click', function(){

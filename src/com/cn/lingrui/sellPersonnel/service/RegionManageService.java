@@ -28,7 +28,13 @@ public interface RegionManageService {
 
 	public String receiveAreaContainSelects(String parentId) throws Exception;
 
-	public ModelAndView postChangeRegion(UpdateRegionPojo pojo);
+	/**
+	 * 提交部门信息更新
+	 * @param in
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView postUpdateRegion(UpdateRegionPojo pojo) throws Exception;
 
 	/**
 	 * 提交添加地区下辖行政区县
@@ -37,14 +43,6 @@ public interface RegionManageService {
 	 * @throws Exception 
 	 */
 	public ModelAndView postAddRegionXzqx(RegionsPojo in) throws Exception;
-
-	/**
-	 * 提交部门信息更新
-	 * @param in
-	 * @return
-	 * @throws Exception 
-	 */
-	public ModelAndView postUpdateRegion(UpdateRegionPojo in) throws Exception;
 
 	/**
 	 * 提交删除地区下辖行政区县

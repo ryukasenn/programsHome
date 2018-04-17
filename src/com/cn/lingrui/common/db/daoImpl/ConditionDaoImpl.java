@@ -16,7 +16,7 @@ public class ConditionDaoImpl extends BaseDaoImpl implements ConditionDao{
 	public List<NBPT_RSFZ_CONDITION> receiveCondition(Connection conn) throws SQLException {
 
 		String sql = "SELECT * FROM RSFZCONDITION ORDER BY RSFZCONDITION_TYPE+0 ASC,RSFZCONDITION_ITEM+0 ASC ";
-		List<NBPT_RSFZ_CONDITION> resultList = this.query(sql, conn, NBPT_RSFZ_CONDITION.class);
+		List<NBPT_RSFZ_CONDITION> resultList = this.queryForClaszs(sql, conn, NBPT_RSFZ_CONDITION.class);
 		return resultList;
 	}
 

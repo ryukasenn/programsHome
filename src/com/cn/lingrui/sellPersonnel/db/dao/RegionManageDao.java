@@ -12,7 +12,7 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 
-public interface RegionManageDao {
+public interface RegionManageDao extends SellPersonnelBaseDao{
 
 	public List<CurrentRegion> receiveCurrentRegions(RegionsPojo pojo, Connection conn) throws SQLException ;
 
@@ -35,7 +35,6 @@ public interface RegionManageDao {
 
 	public List<NBPT_SP_PERSON> searchRegionReper(String personType, String searchName, Connection connection) throws SQLException;
 
-	public List<NBPT_COMMON_XZQXHF> receiveProvinceSelect(Connection connection) throws SQLException;
 
 	public List<Area_Xzqx_Info> receiveCurrentXzqxs(String regionId, Connection connection) throws SQLException;
 
@@ -68,6 +67,15 @@ public interface RegionManageDao {
 	 * @throws SQLException 
 	 */
 	public void deletePersonXzqx(String cityValue, Connection connection) throws SQLException;
+
+	/**
+	 * 获取大区配额计算数值,供基本信息修改参考
+	 * @param regionUid 大区UID
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public String receiveRegonNeedSum(String regionUid,Connection connection) throws SQLException;
 	
 
 }

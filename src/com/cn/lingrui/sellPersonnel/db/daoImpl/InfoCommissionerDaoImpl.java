@@ -44,7 +44,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 		
 		try {
 			
-			List<UncheckPerson> resultList = this.query(sql, conn, UncheckPerson.class);
+			List<UncheckPerson> resultList = this.queryForClaszs(sql, conn, UncheckPerson.class);
 			
 			return resultList;
 			
@@ -65,7 +65,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 		
 		try {
 			
-			NBPT_SP_PERSON personInfo = this.oneQuery(sql, conn, NBPT_SP_PERSON.class);
+			NBPT_SP_PERSON personInfo = this.oneQueryForClasz(sql, conn, NBPT_SP_PERSON.class);
 			
 			return personInfo;
 			
@@ -89,7 +89,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 		try {
 			
 			
-			List<NBPT_COMMON_XZQXHF> respons = this.query(sql, connection, NBPT_COMMON_XZQXHF.class);
+			List<NBPT_COMMON_XZQXHF> respons = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 			
 			return respons;
 		} catch (SQLException e) {
@@ -116,7 +116,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 				sql.append("SELECT A.* ");
 				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
 				sql.append("WHERE  A.NBPT_SP_PERSON_REGION_UID = '" + regionUid + "' ");
-				
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
 			} 
 			// 查省区
 			else if (null != provinceId) {
@@ -124,6 +124,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 				sql.append("SELECT A.* ");
 				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
 				sql.append("WHERE A.NBPT_SP_PERSON_PROVINCE_ID = '" + provinceId + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
 			}
 			// 查地区
 			else if(null != AreaId) {
@@ -131,6 +132,7 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 				sql.append("SELECT A.* ");
 				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
 				sql.append("WHERE A.NBPT_SP_PERSON_AREA_UID = '" + AreaId + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
 			}
 			// 查人
 			else if(null != terminalPid) {
@@ -138,10 +140,11 @@ public class InfoCommissionerDaoImpl extends SellPersonnelBaseDaoImpl implements
 				sql.append("SELECT A.* ");
 				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
 				sql.append("WHERE A.NBPT_SP_PERSON_PID = '" + terminalPid + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
 			}
 			
 			sql.append("AND A.NBPT_SP_PERSON_JOB IN (23,24,25)");
-			persons = this.query(sql.toString(), connection, NBPT_VIEW_CURRENTPERSON.class);
+			persons = this.queryForClaszs(sql.toString(), connection, NBPT_VIEW_CURRENTPERSON.class);
 			return persons;
 			
 		} catch (SQLException e) {

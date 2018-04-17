@@ -34,7 +34,7 @@ public class AuthorityDaoImpl extends BaseDaoImpl implements AuthorityDao{
 		
 		try {
 			
-			resultList = this.query(sql, conn, NBPT_RSFZ_R_P.class);
+			resultList = this.queryForClaszs(sql, conn, NBPT_RSFZ_R_P.class);
 		} catch (Exception e) {
 
 			log.info("查询错误" + e.getMessage());

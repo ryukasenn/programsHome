@@ -31,7 +31,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " order by NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_TYPE ASC,NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC", conn, NBPT_RSFZ_PAGE.class);				
+				resultList = this.queryForClaszs(sql + " order by NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_TYPE ASC,NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC", conn, NBPT_RSFZ_PAGE.class);				
 			} catch (SQLException e) {
 
 				log.error("查询所有页面出错" + e.getMessage());
@@ -51,7 +51,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '0' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);				
+				resultList = this.queryForClaszs(sql + " where NBPT_RSFZ_PAGE_TYPE = '0' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);				
 			} catch (Exception e) {
 
 				log.error("查询模块出错" + e.getMessage());
@@ -122,7 +122,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '1' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
+				resultList = this.queryForClaszs(sql + " where NBPT_RSFZ_PAGE_TYPE = '1' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
 			} catch (Exception e) {
 
 				log.error("查询功能出错" + e.getMessage());
@@ -192,7 +192,7 @@ public class PageManageDaoImpl extends BaseDaoImpl implements PageManageDao{
 		if(!"".equals(sql)) {
 
 			try {
-				resultList = this.query(sql + " where NBPT_RSFZ_PAGE_TYPE = '2' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
+				resultList = this.queryForClaszs(sql + " where NBPT_RSFZ_PAGE_TYPE = '2' ORDER BY NBPT_RSFZ_PAGE.NBPT_RSFZ_PAGE_ID ASC ", conn, NBPT_RSFZ_PAGE.class);
 			} catch (Exception e) {
 
 				log.error("查询页面出错" + e.getMessage());

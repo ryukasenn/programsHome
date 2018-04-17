@@ -7,7 +7,7 @@ $(function(){
 		
 		$_this = $(this);		
 
-		createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '22'}, '地总名单');
+		createModal(baseUrl + "/sellPersonnel/regionController/receiveRegionReper",{personType : '22'}, '地总名单');
 	});
 
 	/**
@@ -19,7 +19,7 @@ $(function(){
 			
 		} else {
 			
-			createModal(baseUrl + "/sellPersonnel/receiveRegionReper",{personType : '22', searchName : $('#searchName').val().trim()}, '地总名单');
+			createModal(baseUrl + "/sellPersonnel/regionController/receiveRegionReper",{personType : '22', searchName : $('#searchName').val().trim()}, '地总名单');
 		}
 	});
 	
@@ -29,7 +29,7 @@ $(function(){
 	$("#checkXzqxs").on('click', function(){		
 		
 		// 获取地区编号		
-		window.location.href = baseUrl + "/sellPersonnel/checkXzqxs?regionUid=" + $("#updateRegion input[name='regionUid']").val();
+		window.location.href = baseUrl + "/sellPersonnel/regionController/checkXzqxs?regionUid=" + $("#updateRegion input[name='regionUid']").val();
 	})
 	
 	/**
@@ -37,10 +37,55 @@ $(function(){
 	 */
 	$(".changeAreaInfo").on('click', function(){
 		
-		alert("该功能还没做好");
-		// 获取地区编号
-//		$("input[name='regionId']").val($("input[name='regionUid']").val());
-//		$("#updateRegion").attr("action", baseUrl + "/sellPersonnel/postChangeRegion").attr("method", "POST").submit();
+		if($("#provinceSelect").val() != $("#OringeProvince").val()){
+
+			new Confirm({
+				
+				"message" : "修改地区所在省份将同时删除该地区下辖行政区县",
+				"cancelCallBack" : function(){
+					
+					$("#provinceSelect").val($("#OringeProvince").val());
+				},
+				"sureCallBack" : function(){
+					
+					//alert("确定");
+				}
+			})
+		} else {
+			
+			$("#updateRegion").attr("action", baseUrl + "/sellPersonnel/regionController/updateRegion").attr("method","POST").submit();
+		}
+		
+		
 	})
 	
+	
+	
+	
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -45,7 +45,7 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 
 			try {
 
-				listPMBASE = query(sql + "order by PMBASE_ZGBH DESC", conn, PMBASE.class);
+				listPMBASE = queryForClaszs(sql + "order by PMBASE_ZGBH DESC", conn, PMBASE.class);
 
 			} catch (SQLException e) {
 
@@ -70,7 +70,7 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 		String sql = "select * from GZBMZD where GZBMZD_JS = '1' and GZBMZD_MX = '0'";
 		try {
 
-			result = query(sql, conn, GZBMZD.class);
+			result = queryForClaszs(sql, conn, GZBMZD.class);
 			return result;
 
 		} catch (Exception e) {
