@@ -31,10 +31,9 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	
 	/**
 	 * 获取部门信息
-	 * @param parentUid 指定上级部门编号
-	 * @param provinceId 指定所在省份ID
-	 * @param provinceId 指定所在省份ID
-	 * @param type 如果type==1:包含上级部门信息
+	 * @param parentUid 指定上级部门编号,可空,查所有
+	 * @param provinceId 指定所在省份ID,可空,查所有
+	 * @param type 可选参数,如果type==1:包含上级部门信息
 	 * @return
 	 * @throws SQLException
 	 */
@@ -48,4 +47,17 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException
 	 */
 	NBPT_VIEW_REGION receiveRegion(String regionUid, Connection conn) throws SQLException;
+
+	/**
+	 * 根据不同参数,查询信息专员管理下人员信息
+	 * @param regionUid 大区ID,其他为空,查询当前大区下所有人员信息
+	 * @param provinceId 省份ID,其他为空,查询选定省份下所有人员信息
+	 * @param AreaId 地区ID,其他为空,查询选定地区下所有人员信息
+	 * @param terminalPid 终端ID,其他为空,查询特定终端信息
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receiveTerminal(String regionUid, String provinceId, String AreaId, String terminalPid,
+			Connection connection) throws SQLException;
 }

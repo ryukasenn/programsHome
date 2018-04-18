@@ -55,6 +55,7 @@ public class NBPT_VIEW_CURRENTPERSON {
 	private String NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME; // 地区负责人名称
 	private String NBPT_SP_PERSON_REGION_RESPONSIBLER_NAME; // 大区负责人名称
 	private String NBPT_SP_PERSON_REAL_MALE; // 大区负责人名称
+	private String NBPT_SP_PERSON_TYPENAME; // 所属类别汉字名称
 	
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
@@ -349,6 +350,12 @@ public class NBPT_VIEW_CURRENTPERSON {
 	}
 	public void setNBPT_SP_PERSON_REAL_MALE(String nBPT_SP_PERSON_REAL_MALE) {
 		NBPT_SP_PERSON_REAL_MALE = nBPT_SP_PERSON_REAL_MALE;
+	}
+	public String getNBPT_SP_PERSON_TYPENAME() {
+		return NBPT_SP_PERSON_TYPENAME;
+	}
+	public void setNBPT_SP_PERSON_TYPENAME(String nBPT_SP_PERSON_TYPENAME) {
+		NBPT_SP_PERSON_TYPENAME = nBPT_SP_PERSON_TYPENAME;
 	}
 	
 	

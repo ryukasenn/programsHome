@@ -5,6 +5,4 @@ import org.springframework.web.servlet.ModelAndView;
 public interface SupportSerivce {
 
 	public ModelAndView getSupportAdd() throws Exception;
-
-	public ModelAndView receiveAllTerminals() throws Exception;
 }

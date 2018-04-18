@@ -2,6 +2,7 @@ package com.cn.lingrui.sellPersonnel.db.daoImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -109,7 +110,7 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			sql.append("AND A.NBPT_SP_REGION_PARENT_UID <> '' AND A.NBPT_SP_REGION_PARENT_UID IS NOT NULL ");
 		}
 		
-		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_PROVINCE_ID");
+		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
 		
 		try {
 			
@@ -148,6 +149,60 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 		} catch (SQLException e) {
 			
 			log.error("查询指定部门出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+	
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receiveTerminal(String regionUid, String provinceId, String AreaId, String terminalPid, Connection connection) throws SQLException {
+		
+		try {
+			
+			// 初始化返回结果
+			List<NBPT_VIEW_CURRENTPERSON> persons = new ArrayList<NBPT_VIEW_CURRENTPERSON>();
+
+			// 初始化查询sql
+			StringBuffer sql = new StringBuffer();
+			// 查大区
+			if(null != regionUid) {
+				
+				sql.append("SELECT A.* ");
+				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+				sql.append("WHERE  A.NBPT_SP_PERSON_REGION_UID = '" + regionUid + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
+			} 
+			// 查省区
+			else if (null != provinceId) {
+
+				sql.append("SELECT A.* ");
+				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+				sql.append("WHERE A.NBPT_SP_PERSON_PROVINCE_ID = '" + provinceId + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
+			}
+			// 查地区
+			else if(null != AreaId) {
+
+				sql.append("SELECT A.* ");
+				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+				sql.append("WHERE A.NBPT_SP_PERSON_AREA_UID = '" + AreaId + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
+			}
+			// 查人
+			else if(null != terminalPid) {
+
+				sql.append("SELECT A.* ");
+				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+				sql.append("WHERE A.NBPT_SP_PERSON_PID = '" + terminalPid + "' ");
+				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
+			}
+			
+			sql.append("AND A.NBPT_SP_PERSON_JOB IN (23,24,25)");
+			persons = this.queryForClaszs(sql.toString(), connection, NBPT_VIEW_CURRENTPERSON.class);
+			return persons;
+			
+		} catch (SQLException e) {
+			
+			log.error("信息专员查询终端出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

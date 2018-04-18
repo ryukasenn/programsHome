@@ -1,14 +1,16 @@
 package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
-import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.StatisticsTable;
+import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 
 public class InfoCommissionerServiceUtils {
 
@@ -20,22 +22,20 @@ public class InfoCommissionerServiceUtils {
 	 * @return
 	 * @throws NoSuchFieldException 
 	 */
-	public static List<List<NBPT_VIEW_CURRENTPERSON>> dealByKey(List<NBPT_VIEW_CURRENTPERSON> persons, String key) {
+	public static Map<String, List<NBPT_VIEW_CURRENTPERSON>> dealByKey(List<NBPT_VIEW_CURRENTPERSON> persons, String key) {
 
 		// 分类查询到的结果
-		List<List<NBPT_VIEW_CURRENTPERSON>> classifyedList = new ArrayList<>();
+		Map<String, List<NBPT_VIEW_CURRENTPERSON>> resultMap = new HashMap<>();
 		
 		try {
 			
-			classifyedList = CommonUtil.classify(persons, key, NBPT_VIEW_CURRENTPERSON.class);
+			resultMap = CommonUtil.classify(persons, key, NBPT_VIEW_CURRENTPERSON.class);
 
 		} catch (NoSuchFieldException e) {
 			
-			log.error("按某属性分类时发生错误");
-			e.printStackTrace();
+			log.error("按属性" + key + "分类时发生错误");
 		}
-
-		return classifyedList;
+		return resultMap;
 	}
 	
 	/**
@@ -43,13 +43,15 @@ public class InfoCommissionerServiceUtils {
 	 * @param classifyedLists
 	 * @return
 	 */
-	public static List<StatisticsTable> countClassifyList_byRegion(List<List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
+	public static List<StatisticsTable> countClassifyList_byRegion(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
 		
 		List<StatisticsTable> resultList = new ArrayList<>();
 		
-		for(List<NBPT_VIEW_CURRENTPERSON> classifyedList : classifyedLists) {
+		for(String key : classifyedLists.keySet()) {
 			
 			StatisticsTable table = new StatisticsTable();
+			
+			List<NBPT_VIEW_CURRENTPERSON> classifyedList = classifyedLists.get(key);
 			
 			for(NBPT_VIEW_CURRENTPERSON person : classifyedList) {
 				
@@ -63,7 +65,7 @@ public class InfoCommissionerServiceUtils {
 				table.setNeed(Integer.valueOf(person.getNBPT_SP_PERSON_REGION_NEED()));
 				
 				// 分类加1
-				table = InfoCommissionerServiceUtils.count(table, person);
+				table = CommonServiceUtils.count(table, person);
 			}
 			resultList.add(table);
 		}
@@ -76,14 +78,16 @@ public class InfoCommissionerServiceUtils {
 	 * @param classifyedLists
 	 * @return
 	 */
-	public static List<StatisticsTable> countClassifyList_byProvince(List<List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
+	public static List<StatisticsTable> countClassifyList_byProvince(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
 		
 		List<StatisticsTable> resultList = new ArrayList<>();
 		
-		for(List<NBPT_VIEW_CURRENTPERSON> classifyedList : classifyedLists) {
+		for(String key : classifyedLists.keySet()) {
 			
 			StatisticsTable table = new StatisticsTable();
-
+			
+			List<NBPT_VIEW_CURRENTPERSON> classifyedList = classifyedLists.get(key);
+			
 			// 地区checkList
 			List<String> areaCheckList = new ArrayList<>();
 			for(NBPT_VIEW_CURRENTPERSON person : classifyedList) {
@@ -92,6 +96,7 @@ public class InfoCommissionerServiceUtils {
 				if(areaCheckList.contains(person.getNBPT_SP_PERSON_AREA_UID())) {
 					
 				} else {
+					
 					areaCheckList.add(person.getNBPT_SP_PERSON_AREA_UID());
 					table.setNeed(table.getNeed() + Integer.valueOf(person.getNBPT_SP_PERSON_AREA_NEED().trim()));
 				}
@@ -102,13 +107,20 @@ public class InfoCommissionerServiceUtils {
 				// 注入省份ID
 				table.setProvinceId(person.getNBPT_SP_PERSON_PROVINCE_ID());
 				
-				
 				// 分类加1
-				table = InfoCommissionerServiceUtils.count(table, person);
+				table = CommonServiceUtils.count(table, person);
+
 			}
 			resultList.add(table);
 		}
-		
+
+		// 差额计算
+		for(StatisticsTable info : resultList) {
+			
+			Integer balance = info.getTotal() - info.getNeed();
+
+			info.setBalance(balance);
+		}
 		return resultList;
 	}
 	
@@ -117,14 +129,16 @@ public class InfoCommissionerServiceUtils {
 	 * @param classifyedLists
 	 * @return
 	 */
-	public static List<StatisticsTable> countClassifyList_byArea(List<List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
+	public static List<StatisticsTable> countClassifyList_byArea(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyedLists) {
 
 		List<StatisticsTable> resultList = new ArrayList<>();
 		
-		for(List<NBPT_VIEW_CURRENTPERSON> classifyedList : classifyedLists) {
+		for(String key  : classifyedLists.keySet()) {
 			
 			StatisticsTable table = new StatisticsTable();
-
+			
+			List<NBPT_VIEW_CURRENTPERSON> classifyedList = classifyedLists.get(key);
+			
 			for(NBPT_VIEW_CURRENTPERSON person : classifyedList) {
 				
 				// 地区配额
@@ -140,64 +154,20 @@ public class InfoCommissionerServiceUtils {
 				table.setRegionUid(person.getNBPT_SP_PERSON_REGION_UID());
 				
 				// 分类加1
-				table = InfoCommissionerServiceUtils.count(table, person);
+				table = CommonServiceUtils.count(table, person);
 			}
 			resultList.add(table);
 		}
-		
+
+		// 差额计算
+		for(StatisticsTable info : resultList) {
+			
+			Integer balance = info.getTotal() - info.getNeed();
+
+			info.setBalance(balance);
+		}
 		return resultList;
 	}
-	
-	/**
-	 * 单一终端的计算方法
-	 * @param table
-	 * @param person
-	 * @return
-	 */
-	private static StatisticsTable count(StatisticsTable table, NBPT_VIEW_CURRENTPERSON person) {
-		
-		if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
-			
-			// 离职合计数
-			table.setDismission(table.getDismission() + 1);
-			
-			return table;
-		}
-
-		String job = person.getNBPT_SP_PERSON_JOB();
-		
-		switch (job) {
-		
-			// 如果是区县总
-			case "23":
-				table.setXzquResper(table.getXzquResper() + 1);
-				break;
-				
-			// 如果是预备区县总
-			case "24":
-				table.setXzquResper_preparatory(table.getXzquResper_preparatory() + 1);
-				break;
-				
-			// 如果是推广经理
-			case "25":
-				table.setPromote(table.getPromote() + 1);
-				break;
-				
-		default:
-			break;
-		}
-		
-		if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
-
-			// 添加合计数
-			table.setTotal(table.getTotal()+ 1);
-		} else {
-
-		}
-		
-		return table;		
-	}
-
 	
 	
 

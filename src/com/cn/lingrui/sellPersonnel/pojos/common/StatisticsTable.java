@@ -1,4 +1,4 @@
-package com.cn.lingrui.sellPersonnel.pojos.infoCommissioner;
+package com.cn.lingrui.sellPersonnel.pojos.common;
 
 public class StatisticsTable {
 
@@ -19,6 +19,7 @@ public class StatisticsTable {
 	private String areaUid = ""; // 地区UID
 	private String provinceId = ""; // 省份ID
 	private String terminalPid = ""; // 人员PID
+	private String type = "";
 	
 	public String getRegionName() {
 		return regionName;
@@ -121,6 +122,12 @@ public class StatisticsTable {
 	}
 	public void setTerminalPid(String terminalPid) {
 		this.terminalPid = terminalPid;
+	}
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

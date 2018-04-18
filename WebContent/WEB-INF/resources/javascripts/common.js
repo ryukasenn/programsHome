@@ -117,8 +117,13 @@ $(function(){
 					
 					// 如果必填项为空
 					$_checkItem.parents(".form-group").addClass("has-error");
-					
-					confirm("有必填项没有填写");
+
+					new Confirm({
+						
+						'message' : '有必填项没有填写',
+						'type' : 'alert',
+						'focusTarget' : inputNames[nameI]
+					})
 					return false;
 				}
 			}
@@ -139,8 +144,13 @@ $(function(){
 
 					// 如果没有选择
 					$_checkItem.parents(".form-group").addClass("has-error");
-					
-					confirm("有必填项没有填写");
+
+					new Confirm({
+						
+						'message' : '有必填项没有填写',
+						'type' : 'alert',
+						'focusTarget' : radioNames[nameI]
+					})
 					return false;
 				};
 			}
@@ -161,8 +171,13 @@ $(function(){
 
 					// 如果没有选择
 					$_checkItem.parents(".form-group").addClass("has-error");
-					
-					confirm("有必填项没有填写");
+
+					new Confirm({
+						
+						'message' : '有必填项没有填写',
+						'type' : 'alert',
+						'focusTarget' : selectNames[nameI]
+					})
 					return false;
 				}
 				
@@ -241,7 +256,8 @@ $(function(){
             "title": "",
             "message": "这是一个提示",
             "cancelCallBack": "",
-            "sureCallBack": ""
+            "sureCallBack": "",
+            "focusTarget" : ""
         };
 
         // 扩展默认属性
@@ -321,9 +337,11 @@ $(function(){
             
         },
         close: function(){
-
+        	
+        	$("body").removeClass("modal-open")
         	this.contain.next(".modal-backdrop").remove();
         	this.contain.remove();
+        	$("input[name='" + this.configs.focusTarget + "']").focus();
         }
 		
 	}

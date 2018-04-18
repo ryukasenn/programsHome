@@ -311,7 +311,7 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 			
 		} catch (SQLException e) {
 			
-			log.error("提交添加地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			log.error("提交修改大区或地区信息出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -358,7 +358,7 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 			return this.oneQueryForObject(sql, connection);
 		} catch (SQLException e) {
 			
-			log.error("提交删除地区下辖行政区县出错" + CommonUtil.getTraceInfo());
+			log.error("获取大区应配参考数出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

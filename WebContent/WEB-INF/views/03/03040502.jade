@@ -53,13 +53,13 @@ block contents
                                 th(style="text-align:center") 年龄
                                 th(style="text-align:center") 当前状态
                             each person,i in personInfos
-                                tr(style="text-align:center;")  
-                                    th(style="vertical-align:middle",scope="row")= i+1
-                                    td(style="vertical-align:middle").col-xs-1.col-sm-1
+                                tr  
+                                    th(style="vertical-align:middle;text-align:center;",scope="row")= i+1
+                                    td(style="text-align:center;").col-xs-1.col-sm-1
                                         a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/receivePerson?areaUid=#{areaUid}&regionUid=#{regionUid}&personPid=#{person.NBPT_SP_PERSON_PID}')
                                             #{person.NBPT_SP_PERSON_NAME}
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MALE
-                                    td(style="vertical-align:middle")
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_MALE
+                                    td(style="text-align:center;")
                                         case person.NBPT_SP_PERSON_JOB
                                             when '21': 大区总
                                             when '22': 地总
@@ -67,14 +67,14 @@ block contents
                                             when '24': 预备区县总
                                             when '25': 推广经理
                                             when '26': 大区总兼地总
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_DEGREE
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_ENTRYDATA
-                                    td(style="vertical-align:middle") #{person.NBPT_SP_PERSON_WORKAGE}年
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_PLACE
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB1
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
-                                    td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
-                                    td(style="vertical-align:middle")
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_DEGREE
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_ENTRYDATA
+                                    td(style="text-align:center;") #{person.NBPT_SP_PERSON_WORKAGE}年
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_PLACE
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB1
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB2
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_AGE
+                                    td(style="text-align:center;")
                                         case person.NBPT_SP_PERSON_FLAG
                                             when '2': 在职
                                             when '0': 等待信息专员审核

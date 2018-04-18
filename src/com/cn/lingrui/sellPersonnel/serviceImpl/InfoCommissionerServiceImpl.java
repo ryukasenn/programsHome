@@ -4,6 +4,7 @@ package com.cn.lingrui.sellPersonnel.serviceImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -18,8 +19,8 @@ import com.cn.lingrui.sellPersonnel.db.dao.InfoCommissionerDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.infoCommissioner.UncheckPerson;
+import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.InfoCommissionerPojoIn;
-import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.StatisticsTable;
 import com.cn.lingrui.sellPersonnel.service.InfoCommissionerService;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
 
@@ -126,7 +127,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			
 			
 			// 分类人员信息
-			List<List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_REGION_UID");
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = CommonServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_REGION_UID");
 			
 			// 处理结果
 			List<StatisticsTable> resultTables = InfoCommissionerServiceUtils.countClassifyList_byRegion(classfyedResults);
@@ -158,7 +159,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			persons = infoCommissionerDao.receiveTerminal(in.getRegionUid(), null,  null, null, this.getConnection());
 			
 			// 分类人员信息
-			List<List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_PROVINCE_ID");
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_PROVINCE_ID");
 			
 			// 处理结果
 			List<StatisticsTable> resultTables = InfoCommissionerServiceUtils.countClassifyList_byProvince(classfyedResults);
@@ -190,7 +191,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			persons = infoCommissionerDao.receiveTerminal(null, in.getProvinceId(), null, null, this.getConnection());
 			
 			// 分类人员信息
-			List<List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_AREA_UID");
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_AREA_UID");
 			
 			// 处理结果
 			List<StatisticsTable> resultTables = InfoCommissionerServiceUtils.countClassifyList_byArea(classfyedResults);

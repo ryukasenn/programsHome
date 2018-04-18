@@ -192,7 +192,7 @@ public class XZQX_create {
 									+ ")"
 									+ " VALUES ("
 									+ "'" + CommonUtil.getUUID_32() + "',"
-									+ "'" + (103055 + rowi - 1) + "',"
+									+ "'" + (103096 + rowi - 1) + "',"
 									+ "'" + type + "',"
 									+ "'" + sheet.getCell(3,rowi).getContents() + "',"
 									+ "'" + male + "',"

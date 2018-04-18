@@ -50,27 +50,18 @@ $(function(){
 	 */
 	$("#addPerson").on("click", function(){
 		
-		var areanos = "";
-		
-
 		if(1 == $(".reponseAreas").length && "" == $(".reponseAreas").find("select").val()){
 			
 			$(".reponseAreas").addClass("has-error");
+			new Confirm({
+				
+				'message' : '有必填项目未填写',
+				'type' : 'alert'
+			});
 			return;
 		}
 		
-		for(var i = 0; i < $(".reponseAreas").length; i++){
-			
-			var selectValue = $(".reponseAreas").eq(i).find("select").val();
-			
-			if(null != selectValue && "" != selectValue ){
-				
-				areanos += selectValue + "&" ;
-			} 
-		}
 		
-		
-		$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 		
 		// 输入框统一为空检验
 		if(necessaryCheck(inputItems,radioItems,selectItems)){
@@ -78,6 +69,19 @@ $(function(){
 			// 如果没有错误了,提交
 			if(0 == $(".has-error").length){
 
+				var areanos = "";
+				
+				for(var i = 0; i < $(".reponseAreas").length; i++){
+					
+					var selectValue = $(".reponseAreas").eq(i).find("select").val();
+					
+					if(null != selectValue && "" != selectValue ){
+						
+						areanos += selectValue + "&" ;
+					} 
+				}
+
+				$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 				$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
 			}
 			

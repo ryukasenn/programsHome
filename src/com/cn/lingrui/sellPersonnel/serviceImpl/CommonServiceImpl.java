@@ -2,6 +2,7 @@ package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -14,10 +15,12 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dao.SupportDao;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson_statistics;
 import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
+import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 import com.cn.lingrui.sellPersonnel.service.CommonService;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
 
@@ -30,6 +33,9 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 	@Resource(name = "personManageDao")
 	private PersonManageDao personManageDao;
+
+	@Resource(name = "supportDao")
+	private SupportDao supportDao;
 	
 	@Override
 	public ModelAndView receiveCurrentTerminals() throws Exception {
@@ -57,24 +63,24 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 			// 如果为null,则登录人员为后勤
 			if(null == person) {
-
-				// 查询所有下级人员信息
-				List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
-
-				// 查询所有的大区信息
-				List<NBPT_SP_REGION> regionList = personManageDao.getRegions("1", this.getConnection());
 				
-				// 后勤人员查询合计信息处理
-				List<CurrentPerson_statistics> infos = PersonManageServiceUtils.dealCurrentPerson_total(personInfos,regionList);
+				// 除信息专员外,获取所有人信息
+				List<NBPT_VIEW_CURRENTPERSON> persons = supportDao.receiveAllPersons(this.getConnection());
+				
+				List<NBPT_VIEW_REGION> regions = supportDao.receiveRegion(null, null, this.getConnection(),1);
+
+				// 合计信息
+				List<StatisticsTable> totalInfos = SupportServiceUtils.dealCurrentPerson_total(persons);
+				
+				// 分类统计信息
+				Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyByType = CommonUtil.classify(persons, "NBPT_SP_PERSON_TYPE", NBPT_VIEW_CURRENTPERSON.class);
 				
 				// 后勤人员查询OTC统计信息处理
-				List<CurrentPerson_statistics> otcInfos = PersonManageServiceUtils.dealCurrentPerson_region(personInfos);
+				List<StatisticsTable> OTCInfos = SupportServiceUtils.dealCurrentPerson_otc(classifyByType.get("2"),regions);
 				
-				// 合计信息
-				mv.addObject("totalInfos", infos);
+				mv.addObject("totalInfos", totalInfos);
+				mv.addObject("OTCInfos", OTCInfos);
 				
-				// OTC统计信息
-				mv.addObject("OTCInfos", otcInfos);
 			} else {
 
 				if(null == person.getNBPT_SP_REGION_NEED() || "null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {

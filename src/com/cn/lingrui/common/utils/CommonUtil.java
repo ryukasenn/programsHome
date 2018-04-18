@@ -11,7 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
@@ -600,13 +602,10 @@ public class CommonUtil {
 	 * @param clasz
 	 * @return
 	 */
-	public static <T> List<List<T>> classify(List<T> undealList, String byKey, Class<T> clasz) throws NoSuchFieldException{
-		
-		// 分类标志
-		List<String> keyList = new ArrayList<>();
-		
+	public static <T> Map<String, List<T>> classify(List<T> undealList, String byKey, Class<T> clasz) throws NoSuchFieldException{
+				
 		// 返回列表
-		List<List<T>> resultList = new ArrayList<>();
+		Map<String, List<T>> resultMap = new LinkedHashMap<>();
 		
 		for(T t : undealList ) {
 			
@@ -620,10 +619,10 @@ public class CommonUtil {
 				String key = (String) field.get(t);
 				
 				// 如果标志列表中,包含了该标志
-				if(keyList.contains(key)) {
+				if(resultMap.containsKey(key)) {
 					
 					// 取得当前list
-					List<T> currentList = resultList.get(keyList.indexOf(key));
+					List<T> currentList = resultMap.get(key);
 					
 					// 添加至分类list中
 					currentList.add(t);
@@ -631,11 +630,11 @@ public class CommonUtil {
 
 					// 取得当前list
 					List<T> currentList = new ArrayList<>();
-					resultList.add(currentList);
 					
 					// 添加至分类list中
 					currentList.add(t);
-					keyList.add(key);
+					resultMap.put(key, currentList);
+					
 				}
 
 				field.setAccessible(flag);
@@ -644,7 +643,7 @@ public class CommonUtil {
 				e.printStackTrace();
 			} 
 		}
-		return resultList;
+		return resultMap;
 	}
 	
 	

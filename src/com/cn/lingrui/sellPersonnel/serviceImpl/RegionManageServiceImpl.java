@@ -249,7 +249,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				RegionManageServiceUtils.setUpdateRegionInfos(updateInfo, pojo, regionInfo);
 
 				// 2.4 更新基本信息
-				//regionManageDao.updateRegion(updateInfo, this.getConnection());
+				regionManageDao.updateRegion(updateInfo, this.getConnection());
 				
 			}
 
