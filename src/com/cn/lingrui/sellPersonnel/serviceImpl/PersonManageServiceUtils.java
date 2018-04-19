@@ -10,6 +10,7 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson_statistics;
 import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
@@ -481,9 +482,8 @@ public class PersonManageServiceUtils {
 	 * @param person
 	 * @throws Exception
 	 */
-	public static void getChangePerson_dealCurrentPerson(CurrentPerson person){
+	public static void getChangePerson_dealCurrentPerson(NBPT_VIEW_CURRENTPERSON person){
 
-		
 		// 入职时间
 		person.setNBPT_SP_PERSON_ENTRYDATA(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_ENTRYDATA()));
 		

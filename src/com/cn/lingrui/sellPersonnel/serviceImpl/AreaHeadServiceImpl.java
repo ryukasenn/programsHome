@@ -18,6 +18,7 @@ import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
@@ -161,7 +162,7 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 			dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
 			
 			// 1.查询人员信息
-			CurrentPerson person = personManageDao.receiveCurrentTerminal(changePersonPid, this.getConnection());
+			NBPT_VIEW_CURRENTPERSON person = personManageDao.receiveTerminal(null,null,null,changePersonPid, this.getConnection()).get(0);
 			
 			// 2.处理数据
 			PersonManageServiceUtils.getChangePerson_dealCurrentPerson(person);

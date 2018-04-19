@@ -14,6 +14,7 @@ import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.InfoCommissionerDao;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson_statistics;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
@@ -112,6 +113,11 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 初始化返回信息
 			ModelAndView mv = null;
 			
+			// 获取终端人员信息
+			//List<NBPT_VIEW_CURRENTPERSON> personInfos = personManageDao.receiveTerminal(null, null, areaUid, null, this.getConnection());
+			
+			// 获取负责人信息
+			//NBPT_VIEW_CURRENTPERSON resperInfo = personManageDao.re
 			// 所有人员信息
 			List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(areaUid,this.getConnection());
 

@@ -33,6 +33,15 @@ public class SupportServiceUtils {
 				
 				totalInfos.add(info);
 			}
+
+			StatisticsTable table = new StatisticsTable();
+			table.setRegionName("合计");
+			
+			for(StatisticsTable info : totalInfos) {
+
+				table.setTotal(table.getTotal() + info.getTotal());
+			}
+			totalInfos.add(table);
 			return totalInfos;
 			
 		} catch (NoSuchFieldException e) {

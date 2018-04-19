@@ -20,8 +20,8 @@ import com.cn.lingrui.sellPersonnel.service.InfoCommissionerService;
 @RequestMapping("/sellPersonnel/infoCommissioner")
 public class InfoCommissionerController {
 
-	@Resource(name = "checkManageService")
-	private InfoCommissionerService checkManageService;
+	@Resource(name = "infoCommissionerService")
+	private InfoCommissionerService infoCommissionerService;
 
 	/**
 	 * 获取未审核人员列表
@@ -31,7 +31,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/receiveUnchecks", method = RequestMethod.GET)
 	public ModelAndView receiveUnchecks() throws Exception {
 
-		ModelAndView mv = checkManageService.receiveUnchecks();
+		ModelAndView mv = infoCommissionerService.receiveUnchecks();
 
 		return mv;
 	}
@@ -44,7 +44,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/receiveUncheck", method = RequestMethod.POST)
 	public ModelAndView receiveUncheck(CheckPojoIn in) throws Exception {
 
-		ModelAndView mv = checkManageService.receiveUncheck(in.getUNCHECKPID());
+		ModelAndView mv = infoCommissionerService.receiveUncheck(in.getUNCHECKPID());
 
 		return mv;
 	}
@@ -57,7 +57,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/allTerminals", method = RequestMethod.GET)
 	public ModelAndView receiveAllTerminals() throws Exception {
 
-		ModelAndView mv = checkManageService.receiveAllTerminals();
+		ModelAndView mv = infoCommissionerService.receiveAllTerminals();
 
 		return mv;
 	}
@@ -70,7 +70,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/regionTerminals", method = RequestMethod.GET)
 	public ModelAndView receiveRegionTerminals(InfoCommissionerPojoIn in) throws Exception {
 
-		ModelAndView mv = checkManageService.receiveRegionTerminals(in);
+		ModelAndView mv = infoCommissionerService.receiveRegionTerminals(in);
 
 		return mv;
 	}
@@ -83,7 +83,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/provinceTerminals", method = RequestMethod.GET)
 	public ModelAndView receiveProvinceTerminals(InfoCommissionerPojoIn in) throws Exception {
 
-		ModelAndView mv = checkManageService.receiveProvinceTerminals(in);
+		ModelAndView mv = infoCommissionerService.receiveProvinceTerminals(in);
 
 		return mv;
 	}
@@ -96,7 +96,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/areaTerminals", method = RequestMethod.GET)
 	public ModelAndView receiveAreaTerminals(InfoCommissionerPojoIn in) throws Exception {
 
-		ModelAndView mv = checkManageService.receiveAreaTerminals(in);
+		ModelAndView mv = infoCommissionerService.receiveAreaTerminals(in);
 
 		return mv;
 	}
@@ -109,7 +109,7 @@ public class InfoCommissionerController {
 	@RequestMapping(value = "/terminal", method = RequestMethod.GET)
 	public ModelAndView receiveTerminal(InfoCommissionerPojoIn in) throws Exception {
 
-		ModelAndView mv = checkManageService.receiveTerminal(in);
+		ModelAndView mv = infoCommissionerService.receiveTerminal(in);
 
 		return mv;
 	}

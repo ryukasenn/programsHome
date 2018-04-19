@@ -16,16 +16,6 @@ public interface PersonManageDao extends SellPersonnelBaseDao{
 
 	public void addTerminal(NBPT_SP_PERSON person, Connection conn) throws SQLException;
 
-
-	/**
-	 * 获取部门的方法
-	 * @param level 1:查询所有大区  2:查询所有地区  3:查询全部
-	 * @param connection
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<NBPT_SP_REGION> getRegions(String level, Connection connection) throws SQLException;
-	
 	/**
 	 * 添加终端人员负责区县数据
 	 * @param reponseAreas 负责区县列表
@@ -34,14 +24,6 @@ public interface PersonManageDao extends SellPersonnelBaseDao{
 	 */
 	public void addReposeAreas(List<NBPT_SP_PERSON_XZQX> reponseAreas, Connection conn) throws SQLException;
 
-	/**
-	 * 查询当前人员信息,地总和后勤权限
-	 * @param nbpt_SP_PERSON
-	 * @param connection
-	 * @return
-	 * @throws SQLException
-	 */
-	public List<CurrentPerson> receiveCurrentPersonInfos(CurrentPerson nbpt_SP_PERSON, Connection connection) throws SQLException;
 
 	/**
 	 * 获取地总下辖行政区县
@@ -64,10 +46,6 @@ public interface PersonManageDao extends SellPersonnelBaseDao{
 	public List<NBPT_COMMON_XZQXHF> getTerminalResponsXzqx(String terminalPId, Connection connection) throws SQLException;
 
 	public void addTerminalDeptId(String pid, String regionId, Connection connection) throws SQLException;
-
-	public NBPT_SP_REGION getTerminalDeptInfo(String terminalId, Connection connection) throws SQLException;
-
-	public CurrentPerson receiveCurrentTerminal(String changePersonPid, Connection connection) throws SQLException;
 
 	void updateTerminal(NBPT_SP_PERSON person, Connection connection) throws SQLException;
 

@@ -202,7 +202,72 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			
 		} catch (SQLException e) {
 			
-			log.error("信息专员查询终端出错" + CommonUtil.getTraceInfo());
+			log.error("查询终端出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_REGION> receiveRegion(List<String> regionUids, Connection conn) throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT A.* ");
+		sql.append("FROM NBPT_VIEW_REGION A ");
+		sql.append("WHERE A.NBPT_SP_REGION_UID = '' ");
+
+		if(0 != regionUids.size()) {
+			
+			// 如果指定UID为空,查询所有
+			for(String regionUid : regionUids) {
+				
+				sql.append("OR A.NBPT_SP_REGION_UID = '" + regionUid + "' ");
+			}
+		}
+		
+		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
+		
+		try {
+		
+			List<NBPT_VIEW_REGION> regions = this.queryForClaszs(sql.toString(), conn, NBPT_VIEW_REGION.class);
+		
+			return regions;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定多部门出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_REGION> receiveRegion(String[] regionUids, Connection conn) throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT A.* ");
+		sql.append("FROM NBPT_VIEW_REGION A ");
+		sql.append("WHERE A.NBPT_SP_REGION_UID = '' ");
+
+		if(0 != regionUids.length) {
+			
+			// 如果指定UID为空,查询所有
+			for(String regionUid : regionUids) {
+				
+				sql.append("OR A.NBPT_SP_REGION_UID = '" + regionUid + "' ");
+			}
+			
+		}
+		
+		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
+		
+		try {
+		
+			List<NBPT_VIEW_REGION> regions = this.queryForClaszs(sql.toString(), conn, NBPT_VIEW_REGION.class);
+		
+			return regions;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定多部门出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

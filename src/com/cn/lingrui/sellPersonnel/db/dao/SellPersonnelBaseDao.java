@@ -47,6 +47,24 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException
 	 */
 	public NBPT_VIEW_REGION receiveRegion(String regionUid, Connection conn) throws SQLException;
+	
+	/**
+	 * 获取指定多部门信息
+	 * @param regionUids 指定部门编号列表
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_REGION> receiveRegion(List<String> regionUids, Connection conn) throws SQLException;
+	
+	/**
+	 * 获取指定多部门信息
+	 * @param regionUids 指定部门编号列表
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_REGION> receiveRegion(String[] regionUids, Connection conn) throws SQLException;
 
 	/**
 	 * 根据不同参数,查询信息专员管理下人员信息

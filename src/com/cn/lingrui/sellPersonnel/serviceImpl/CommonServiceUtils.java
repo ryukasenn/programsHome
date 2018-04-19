@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 
 public class CommonServiceUtils {
@@ -16,12 +17,12 @@ public class CommonServiceUtils {
 	private static Logger log = LogManager.getLogger();
 	
 	/**
-	 * 终端人员按大区进行分类
+	 * 终端人员按某属性分类
 	 * @param persons
 	 * @return
 	 * @throws NoSuchFieldException 
 	 */
-	public static Map<String, List<NBPT_VIEW_CURRENTPERSON>> dealByKey(List<NBPT_VIEW_CURRENTPERSON> persons, String key) {
+	public static Map<String, List<NBPT_VIEW_CURRENTPERSON>> dealPersonsByKey(List<NBPT_VIEW_CURRENTPERSON> persons, String key) {
 
 		// 分类查询到的结果
 		Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyedList = new HashMap<>();
@@ -29,6 +30,30 @@ public class CommonServiceUtils {
 		try {
 			
 			classifyedList = CommonUtil.classify(persons, key, NBPT_VIEW_CURRENTPERSON.class);
+
+		} catch (NoSuchFieldException e) {
+			
+			log.error("按属性" + key + "分类时发生错误");
+			e.printStackTrace();
+		}
+
+		return classifyedList;
+	}
+	
+	/**
+	 * 地区按某属性分类
+	 * @param persons
+	 * @return
+	 * @throws NoSuchFieldException 
+	 */
+	public static Map<String, List<NBPT_VIEW_REGION>> dealRegionsByKey(List<NBPT_VIEW_REGION> regions, String key) {
+
+		// 分类查询到的结果
+		Map<String, List<NBPT_VIEW_REGION>> classifyedList = new HashMap<>();
+		
+		try {
+			
+			classifyedList = CommonUtil.classify(regions, key, NBPT_VIEW_REGION.class);
 
 		} catch (NoSuchFieldException e) {
 			
