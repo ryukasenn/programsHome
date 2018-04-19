@@ -236,7 +236,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				
 				// 2.4 执行更新
 				regionManageDao.updateRegion(updateInfo, this.getConnection());
-				
+								
 			} else if("2".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 				
 				// 2.1 如果是地区信息修改,初始化信息
@@ -250,7 +250,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 
 				// 2.4 更新基本信息
 				regionManageDao.updateRegion(updateInfo, this.getConnection());
-				
+								
 			}
 
 			return this.after(mv);

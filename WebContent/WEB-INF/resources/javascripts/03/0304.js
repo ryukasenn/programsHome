@@ -9,4 +9,9 @@ $(function(){
 		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/persons").attr("method", "GET").submit();
 	})
 	
+	
+	$("#addTerminal").on("click", function(){
+		
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "GET").submit();
+	})
 })

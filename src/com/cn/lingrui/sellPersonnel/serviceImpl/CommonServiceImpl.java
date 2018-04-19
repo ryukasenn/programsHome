@@ -50,11 +50,10 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 		try {
 
-			// 获取登录名
-			String userId = this.getRequest().getAttribute("userID").toString();
-
 			// 获取当前登录人员信息
-			CurrentPerson person = personManageDao.receiveCurrentPerson(userId, this.getConnection());
+			CurrentPerson person = personManageDao.receiveCurrentPerson(this.getLoginId(), this.getConnection());
+			
+			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
 
 			// 处理当前登陆人员信息
 			PersonManageServiceUtils.dealCurrentPerson(person, out);
@@ -62,7 +61,7 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
 
 			// 如果为null,则登录人员为后勤
-			if(null == person) {
+			if(null == loginPerson) {
 				
 				// 除信息专员外,获取所有人信息
 				List<NBPT_VIEW_CURRENTPERSON> persons = supportDao.receiveAllPersons(this.getConnection());
@@ -83,28 +82,27 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 				
 			} else {
 
-				if(null == person.getNBPT_SP_REGION_NEED() || "null".equals(person.getNBPT_SP_REGION_NEED()) || "".equals(person.getNBPT_SP_REGION_NEED())) {
+				// 查询该登录人员的负责区域
+				NBPT_VIEW_REGION responsRegion = personManageDao.receiveRegionByResper(loginPerson.getNBPT_SP_PERSON_PID(), "2", this.getConnection());
+				
+				if(null == responsRegion) {
 					
 					mv.addObject("message", "您没有被分配管理地区,请联系后勤人员或管理员");
 					
 					return this.after(mv);
 				}else {
 					
-					// 如果是地总
-					if("22".equals(person.getNBPT_SP_PERSON_JOB()) || "26".equals(person.getNBPT_SP_PERSON_JOB())) {
-						
-						// 查询所有下级人员信息
-						List<CurrentPerson> personInfos = personManageDao.receiveCurrentPersonInfos(out.getPerson(),this.getConnection());
-						
-						// 1.查询该地总配额
-						mv.addObject("thisNeed", person.getNBPT_SP_REGION_NEED());
-						
-						// 2.该地总手下人数
-						mv.addObject("thisInfact", personInfos.size());
-						
-						// 返回数据
-						mv.addObject("personInfos", personInfos);
-					}
+					// 查询所有下级人员信息
+					List<NBPT_VIEW_CURRENTPERSON> persons = personManageDao.receiveTerminal(null, null, responsRegion.getNBPT_SP_REGION_UID(), null, this.getConnection());
+					
+					// 1.查询该地总配额
+					mv.addObject("thisNeed", responsRegion.getNBPT_SP_REGION_NEED());
+					
+					// 2.该地总手下人数
+					mv.addObject("thisInfact", persons.size());
+					
+					// 返回数据
+					mv.addObject("personInfos", persons);
 				}
 			}
 			

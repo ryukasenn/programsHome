@@ -46,7 +46,7 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @return
 	 * @throws SQLException
 	 */
-	NBPT_VIEW_REGION receiveRegion(String regionUid, Connection conn) throws SQLException;
+	public NBPT_VIEW_REGION receiveRegion(String regionUid, Connection conn) throws SQLException;
 
 	/**
 	 * 根据不同参数,查询信息专员管理下人员信息

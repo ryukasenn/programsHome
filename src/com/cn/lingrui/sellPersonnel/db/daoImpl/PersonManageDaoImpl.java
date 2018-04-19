@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -15,131 +14,13 @@ import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 @Repository("personManageDao")
 public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements PersonManageDao{
 
 	private static Logger log = LogManager.getLogger();	
-
-	@Override
-	public List<CurrentPerson> receiveCurrentTerminals(NBPT_SP_PERSON person, Connection conn)  throws SQLException {
-		
-		try {
-			
-			// 如果person为null,后勤查询
-			if(null == person) {
-
-				// 查询所有大区总
-				String sql =    "SELECT " + 
-								"CASE A.NBPT_SP_PERSON_TYPE " + 
-									"WHEN '1' THEN '商务' " + 
-									"WHEN '2' THEN 'OTC ' " + 
-									"WHEN '3' THEN '临床'" + 
-									"WHEN '4' THEN '诊所' " + 
-									"END AS TYPE," + 
-								"A.NBPT_SP_PERSON_NAME AS NAME," + 
-								"B.NBPT_SP_REGION_NAME AS AREA," + 
-								"B.NBPT_SP_REGION_ONAME AS NEED," + 
-								"(SELECT COUNT(*) FROM NBPT_SP_PERSON C " + 
-								" WHERE EXISTS( " + 
-								"	 SELECT * FROM NBPT_SP_REGION_XZQX D " + 
-								"	 WHERE D.NBPT_SP_REGION_XZQX_REGIONID <> A.NBPT_SP_PERSON_DEPT_ID AND " + 
-								"		 EXISTS(" + 
-								"			 SELECT * FROM NBPT_SP_REGION_XZQX E " + 
-								"			 WHERE E.NBPT_SP_REGION_XZQX_REGIONID = A.NBPT_SP_PERSON_DEPT_ID AND " + 
-								"				 D.NBPT_SP_REGION_XZQX_XZQXID = E.NBPT_SP_REGION_XZQX_XZQXID " + 
-								"		) AND " + 
-								"	      C.NBPT_SP_PERSON_DEPT_ID = D.NBPT_SP_REGION_XZQX_REGIONID AND " + 
-								"	      C.NBPT_SP_PERSON_FLAG = '0')) AS INFACT," + 
-								"(SELECT COUNT(*) FROM NBPT_SP_PERSON F " + 
-								" WHERE EXISTS( " + 
-								"	 SELECT * FROM NBPT_SP_REGION_XZQX G " + 
-								"	 WHERE G.NBPT_SP_REGION_XZQX_REGIONID <> A.NBPT_SP_PERSON_DEPT_ID AND " + 
-								"		 EXISTS(" + 
-								"			 SELECT * FROM NBPT_SP_REGION_XZQX H " + 
-								"			 WHERE H.NBPT_SP_REGION_XZQX_REGIONID = A.NBPT_SP_PERSON_DEPT_ID AND " + 
-								"				 G.NBPT_SP_REGION_XZQX_XZQXID = H.NBPT_SP_REGION_XZQX_XZQXID " + 
-								"		) AND " + 
-								"	      F.NBPT_SP_PERSON_DEPT_ID = G.NBPT_SP_REGION_XZQX_REGIONID )) AS HISTORY " + 
-								"FROM NBPT_SP_PERSON A " + 
-								"LEFT JOIN NBPT_SP_REGION B " + 
-								"ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID " + 
-								"WHERE A.NBPT_SP_PERSON_JOB  = '1' OR A.NBPT_SP_PERSON_JOB = '6' ORDER BY NBPT_SP_PERSON_ID ASC ";
-				
-				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
-				
-				return resultList;
-			} 
-			
-			// 如果是大区总
-			else if("1".equals(person.getNBPT_SP_PERSON_JOB()) || "6".equals(person.getNBPT_SP_PERSON_JOB())) {
-
-				// 查询所有非离职地总
-				String sql =    "SELECT " + 
-								"A.NBPT_SP_PERSON_NAME AS NAME ," + 
-								"B.NBPT_SP_REGION_NAME AS AREA ," + 
-								"B.NBPT_SP_REGION_ONAME AS NEED," + 
-								"(SELECT COUNT(*) - 1 FROM NBPT_SP_PERSON E WHERE E.NBPT_SP_PERSON_DEPT_ID = A.NBPT_SP_PERSON_DEPT_ID AND E.NBPT_SP_PERSON_FLAG = '0') AS INFACT," + 
-								"(SELECT COUNT(*) - 1 FROM NBPT_SP_PERSON F WHERE F.NBPT_SP_PERSON_DEPT_ID = A.NBPT_SP_PERSON_DEPT_ID) AS HISTORY " + 
-								"FROM NBPT_SP_PERSON A " + 
-								"LEFT JOIN NBPT_SP_REGION B " + 
-								"ON A.NBPT_SP_PERSON_ID = B.NBPT_SP_REGION_RESPONSIBLER " + 
-								"WHERE A.NBPT_SP_PERSON_JOB  = '2' AND " + 
-								"	  EXISTS(" + 
-								"		SELECT * FROM NBPT_SP_REGION_XZQX C " + 
-								"		WHERE EXISTS(" + 
-								"				  SELECT * FROM NBPT_SP_REGION_XZQX D " + 
-								"					  WHERE D.NBPT_SP_REGION_XZQX_REGIONID = '" + person.getNBPT_SP_PERSON_DEPT_ID() + "' AND " + 
-								"							C.NBPT_SP_REGION_XZQX_XZQXID = D.NBPT_SP_REGION_XZQX_XZQXID " + 
-								"		      ) AND" + 
-								"			  C.NBPT_SP_REGION_XZQX_REGIONID <> '" + person.getNBPT_SP_PERSON_DEPT_ID() + "'AND " + 
-								"			  A.NBPT_SP_PERSON_DEPT_ID = C.NBPT_SP_REGION_XZQX_REGIONID 			 " + 
-								"	  ) " + 
-								"ORDER BY A.NBPT_SP_PERSON_ID ASC";
-				
-				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
-				
-				return resultList;
-			}
-			
-			// 如果是地区总
-			else if("2".equals(person.getNBPT_SP_PERSON_JOB())) {
-
-				// 查询该部门下,非离职人员
-				String sql =    "SELECT " +
-								"A.NBPT_SP_PERSON_NAME AS NAME , " +// 姓名
-								"CASE A.NBPT_SP_PERSON_MALE " +
-									"WHEN '0' THEN '女' " +
-									"WHEN '1' THEN '男' " +
-									"END AS SEX, " + // 性别
-								"DATEDIFF(yy,CONVERT(datetime,SUBSTRING(A.NBPT_SP_PERSON_IDNUM,7,8),112),GETDATE()) AS AGE, "+ // 年龄
-								"CASE A.NBPT_SP_PERSON_JOB " +
-									"WHEN '3' THEN '区县总' " +
-									"WHEN '4' THEN '预备区县总' " +
-									"WHEN '5' THEN '推广经理' " +
-									"END AS JOB, " + // 职务
-								"A.NBPT_SP_PERSON_ENTRYDATA AS ENTRYDATA, " + // 入职时间
-								"A.NBPT_SP_PERSON_MOB1 AS MOB1, " + // 联系电话
-								"A.NBPT_SP_PERSON_MOB2 AS MOB2 " + // 紧急联络人
-								"FROM NBPT_SP_PERSON A " +
-								"LEFT JOIN NBPT_SP_REGION B " +
-								"ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_ID " +
-								"WHERE A.NBPT_SP_PERSON_JOB BETWEEN '3' AND '5' ORDER BY NBPT_SP_PERSON_ID ASC , NBPT_SP_PERSON_LOGINID DESC ";
-				
-				List<CurrentPerson> resultList = this.queryForClaszs(sql, conn, CurrentPerson.class);
-				
-				return resultList;
-			} else {
-				return new ArrayList<CurrentPerson>();
-			}
-			
-		} catch (SQLException e) {
-			
-			log.error("查询当前登录用户下所有终端出错" + CommonUtil.getTraceInfo());
-			throw new SQLException();
-		}
-	}
 
 	@Override
 	public void addTerminal(NBPT_SP_PERSON person, Connection conn) throws SQLException {
@@ -509,6 +390,45 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 			throw new SQLException();
 		}
 	}
+
+	@Override
+	public NBPT_VIEW_REGION receiveRegionByResper(String nbpt_SP_PERSON_PID, String type, Connection connection) throws SQLException {
+		
+		try {
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append("SELECT * ");
+			sql.append("FROM NBPT_VIEW_REGION A ");
+			sql.append("WHERE A.NBPT_SP_REGION_RESPONSIBLER = '" + nbpt_SP_PERSON_PID + "' ");
+			sql.append("AND A.NBPT_SP_REGION_LEVEL = '" + type + "' ");
+			NBPT_VIEW_REGION regionInfo = this.oneQueryForClasz(sql.toString(), connection, NBPT_VIEW_REGION.class);
+			return regionInfo;
+		} catch (SQLException e) {
+			log.error("根据负责人获取地区信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
 	
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

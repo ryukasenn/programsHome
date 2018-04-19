@@ -30,7 +30,7 @@ public class CommonController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/persons", method = RequestMethod.GET)
-	public ModelAndView receiveCurrentTerminal_support() throws Exception {
+	public ModelAndView receiveCurrentTerminal() throws Exception {
 
 		ModelAndView mv = commonService.receiveCurrentTerminals();
 

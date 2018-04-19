@@ -22,6 +22,15 @@ $(function(){
 			createModal(baseUrl + "/sellPersonnel/regionController/receiveRegionReper",{personType : '22', searchName : $('#searchName').val().trim()}, '地总名单');
 		}
 	});
+
+	/**
+	 * 删除负责人按钮
+	 */
+	$('.deleteResponsibler').on('click', function(){
+				
+		$('#ResperName').val("");
+		$('#ResperPid').val("");
+	});
 	
 	/**
 	 * 规划下辖市区县
