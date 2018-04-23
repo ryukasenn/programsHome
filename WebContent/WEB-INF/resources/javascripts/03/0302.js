@@ -70,6 +70,11 @@ function createModal(url, data, title){
 		
 		if(0 == jsonData.length){
 			
+			var name = (data.personType == '26')?'大区总':'地总'
+			new Confirm({
+				type:'alert',
+				message:'当前没有可选' + name
+			});
 		}else {
 			$('.bodyTable').empty();
 			$('.modal-title').html(title);

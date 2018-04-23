@@ -25,8 +25,8 @@ block contents
                             tr(style="text-align:center;") 
                                 td(style="vertical-align:middle")= info.provinceName
                                 td(style="vertical-align:middle")
-                                    a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{info.uid}&regionUid=#{info.regionUid}')
-                                        #{info.name}
+                                    a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{info.areaUid}&regionUid=#{regionUid}')
+                                        #{info.areaName}
                                 td(style="vertical-align:middle").OTC_xzquResper= info.xzquResper
                                 td(style="vertical-align:middle").OTC_xzquResper_preparatory= info.xzquResper_preparatory
                                 td(style="vertical-align:middle").OTC_promote= info.promote

@@ -15,6 +15,7 @@ import com.cn.lingrui.sellPersonnel.db.dao.RegionManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
@@ -48,11 +49,11 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 	}
 
 	@Override
-	public List<CurrentRegion> receiveCurrentRegions(RegionsPojo pojo, Connection conn) throws SQLException {
+	public List<NBPT_VIEW_REGION> receiveCurrentRegions(RegionsPojo pojo, Connection conn) throws SQLException {
 
 		try {
 
-			List<CurrentRegion> resultList = null;
+			List<NBPT_VIEW_REGION> resultList = null;
 
 			StringBuffer sql = new StringBuffer(  "  SELECT A.*"
 												+ "  FROM NBPT_VIEW_REGION A"
@@ -74,48 +75,12 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 
 			}
 
-			resultList = this.queryForClaszs(sql.toString() + " ORDER BY NBPT_SP_REGION_ID ASC ", conn, CurrentRegion.class);
+			resultList = this.queryForClaszs(sql.toString() + " ORDER BY NBPT_SP_REGION_ID ASC ", conn, NBPT_VIEW_REGION.class);
 
 			return resultList;
 		} catch (SQLException e) {
 
 			log.error("根据选择查询大区出错" + CommonUtil.getTraceInfo());
-			throw new SQLException();
-		}
-	}
-
-	@Override
-	public List<CurrentRegion> receiveCurrentRegions_Provinces(Connection connection) throws SQLException {
-		try {
-
-			String sql = "  SELECT B.NBPT_SP_REGION_XZQX_REGIONID AS REGIONID, "
-					+ "  A.NBPT_COMMON_XZQXHF_ID AS XZQXID, " + "  A.NBPT_COMMON_XZQXHF_NAME AS XZQXNAME "
-					+ "  FROM NBPT_SP_REGION_XZQX B " + "  LEFT JOIN NBPT_COMMON_XZQXHF A "
-					+ "  ON A.NBPT_COMMON_XZQXHF_ID = B.NBPT_SP_REGION_XZQX_XZQXID "
-					+ "  WHERE B.NBPT_SP_REGION_XZQX_TYPE = '11' "
-					+ "  ORDER BY B.NBPT_SP_REGION_XZQX_REGIONID+0 ASC, A.NBPT_COMMON_XZQXHF_ID ASC";
-			List<CurrentRegion> resultList = this.queryForClaszs(sql, connection, CurrentRegion.class);
-
-			return resultList;
-		} catch (SQLException e) {
-
-			log.error("查询所有大区对应省份出错" + CommonUtil.getTraceInfo());
-			throw new SQLException();
-		}
-	}
-
-	@Override
-	public NBPT_SP_REGION receiveCurrentRegion(String regionUid, Connection connection) throws SQLException {
-
-		try {
-			String sql = "SELECT * FROM NBPT_SP_REGION WHERE NBPT_SP_REGION_UID = '" + regionUid + "'";
-
-			NBPT_SP_REGION regionInfo = this.oneQueryForClasz(sql, connection, NBPT_SP_REGION.class);
-
-			return regionInfo;
-		} catch (SQLException e) {
-
-			log.error("查询部门信息出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -146,28 +111,38 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 
 		try {
 
-			String sql =
-					"  SELECT A.*" + 
-					"  FROM NBPT_SP_PERSON A " + 
-					"  WHERE NOT EXISTS ";
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append("SELECT A.* ");
+			sql.append("FROM NBPT_SP_PERSON A ");
+			sql.append("WHERE NOT EXISTS ");
+			
 			List<NBPT_SP_PERSON> resultList = new ArrayList<>();
 			if ("26".equals(personType)) {
 				
-				resultList = this.queryForClaszs(sql + " (SELECT * " + 
-							"	 FROM NBPT_SP_REGION " + 
-							"	 WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
-							"	 AND NBPT_SP_REGION_LEVEL = '1') " + 
-							"  AND A.NBPT_SP_PERSON_JOB IN ('21', '26')" + 
-							"  ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
+				sql.append("(");
+				sql.append("SELECT * ");
+				sql.append("FROM NBPT_SP_REGION ");
+				sql.append("WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID ");
+				sql.append("AND NBPT_SP_REGION_LEVEL = '1'");
+				sql.append(") ");
+				sql.append("AND A.NBPT_SP_PERSON_JOB IN ('21', '26') ");
+				sql.append("ORDER BY NBPT_SP_PERSON_ID ASC ");
+				
+				resultList = this.queryForClaszs(sql.toString(), connection, NBPT_SP_PERSON.class);
 				
 			} else if ("22".equals(personType)) {
+
+				sql.append("(");
+				sql.append("SELECT * ");
+				sql.append("FROM NBPT_SP_REGION ");
+				sql.append("WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID ");
+				sql.append("AND NBPT_SP_REGION_LEVEL = '2'");
+				sql.append(") ");
+				sql.append("AND A.NBPT_SP_PERSON_JOB IN ('22', '26') ");
+				sql.append("ORDER BY NBPT_SP_PERSON_ID ASC ");
 				
-				resultList = this.queryForClaszs(sql + " (SELECT * " + 
-						"	 FROM NBPT_SP_REGION " + 
-						"	 WHERE NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID " + 
-						"	 AND NBPT_SP_REGION_LEVEL = '2') " + 
-						"  AND A.NBPT_SP_PERSON_JOB IN ('22','26') " + 
-						"  ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
+				resultList = this.queryForClaszs(sql.toString(), connection, NBPT_SP_PERSON.class);
 			}
 
 			return resultList;
@@ -183,20 +158,48 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 			throws SQLException {
 
 		try {
-			String sql = DBUtils.beanToSql(NBPT_SP_PERSON.class, "SELECT", "NBPT_SP_PERSON");
-
-			List<NBPT_SP_PERSON> resultList = new ArrayList<>();
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append("SELECT A.* ");
+			sql.append("FROM NBPT_SP_PERSON A ");
+			sql.append("WHERE NOT EXISTS ");
+			
+			List<NBPT_SP_PERSON> result = new ArrayList<>();
 			if ("26".equals(personType)) {
-				resultList = this.queryForClaszs(sql + " WHERE (NBPT_SP_PERSON_JOB = '21' OR NBPT_SP_PERSON_JOB = '26') "
-						+ " AND (NBPT_SP_PERSON_NAME LIKE '%" + searchName + "%' OR NBPT_SP_PERSON_LOGINID LIKE '%"
-						+ searchName + "%') " + " ORDER BY NBPT_SP_PERSON_ID ASC", connection, NBPT_SP_PERSON.class);
+				
+				sql.append("(");
+				sql.append("SELECT * ");
+				sql.append("FROM NBPT_SP_REGION B ");
+				sql.append("WHERE B.NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID ");
+				sql.append("AND B.NBPT_SP_REGION_LEVEL = '1' ");
+				sql.append(") ");
+				sql.append("AND A.NBPT_SP_PERSON_JOB IN ('21', '26') ");
+				sql.append("AND (");
+				sql.append("NBPT_SP_PERSON_NAME LIKE '%" + searchName + "%' ");
+				sql.append("OR NBPT_SP_PERSON_LOGINID LIKE '%" + searchName + "%'");
+				sql.append(") ");
+				sql.append("ORDER BY NBPT_SP_PERSON_ID ASC ");
+				
+				result = this.queryForClaszs(sql.toString(), connection, NBPT_SP_PERSON.class);
+				
 			} else if ("22".equals(personType)) {
-				resultList = this.queryForClaszs(sql + " WHERE NBPT_SP_PERSON_JOB = '22' " + " AND (NBPT_SP_PERSON_NAME LIKE '%"
-						+ searchName + "%' OR NBPT_SP_PERSON_LOGINID LIKE '%" + searchName + "%') "
-						+ " ORDER BY NBPT_SP_PERSON_ID ASC ", connection, NBPT_SP_PERSON.class);
-			}
 
-			return resultList;
+				sql.append("(");
+				sql.append("SELECT * ");
+				sql.append("FROM NBPT_SP_REGION B ");
+				sql.append("WHERE B.NBPT_SP_REGION_RESPONSIBLER = A.NBPT_SP_PERSON_PID ");
+				sql.append("AND B.NBPT_SP_REGION_LEVEL = '1' ");
+				sql.append(") ");
+				sql.append("AND A.NBPT_SP_PERSON_JOB IN ('21', '26') ");
+				sql.append("AND (");
+				sql.append("NBPT_SP_PERSON_NAME LIKE '%" + searchName + "%' ");
+				sql.append("OR NBPT_SP_PERSON_LOGINID LIKE '%" + searchName + "%'");
+				sql.append(") ");
+				sql.append("ORDER BY NBPT_SP_PERSON_ID ASC ");
+				
+				result = this.queryForClaszs(sql.toString(), connection, NBPT_SP_PERSON.class);
+			}
+			return result;
 		} catch (SQLException e) {
 
 			log.error("查询分配负责人列表出错" + CommonUtil.getTraceInfo());
@@ -362,7 +365,6 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 			throw new SQLException();
 		}
 	}
-
 }
 
 

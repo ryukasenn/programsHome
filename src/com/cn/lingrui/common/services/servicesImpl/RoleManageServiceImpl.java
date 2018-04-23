@@ -105,7 +105,7 @@ public class RoleManageServiceImpl extends BServiceLogic implements RoleManageSe
 			}
 			
 			// 2.查询角色最大ID
-			String maxId = roleManageDao.receiveMaxId("RECEIVEMAXID", this.getConnection(), "NBPT_RSFZ_ROLE");
+			String maxId = roleManageDao.receiveMaxId(this.getConnection(), "NBPT_RSFZ_ROLE");
 			
 			
 			// 添加角色信息

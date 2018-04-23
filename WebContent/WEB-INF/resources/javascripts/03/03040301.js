@@ -176,15 +176,17 @@ $(function(){
 		}
 	})
 	
-	$(".form-group").on("click",".extraBtn",function (){
+	$(".extraBtn").on("click",function (){
 		
 		// 多地区管理的额外点击事件
 		var $_this = $(this);
-		$_copy = $_this.parents(".form-group").clone().insertAfter($_this.parents(".form-group"));
+		$_copy = $_this.parents(".form-group").clone(true,true);
 		$_copy.children().find("button").remove();
+		$_copy.find("label").empty();
+		$_copy.insertAfter($_this.parents(".form-group"));
 	})
 	
-	
+	// 下拉框去错处理
 	$(".form-group").on("change","select",function (){
 		
 		if($(this).val != ''){

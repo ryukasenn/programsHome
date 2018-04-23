@@ -26,7 +26,7 @@ public class NBPT_VIEW_CURRENTPERSON {
 	private String NBPT_SP_PERSON_POLICYNO = ""; // 保单编号
 	private String NBPT_SP_PERSON_POLICY_DATA1 = ""; // 保单开始日期
 	private String NBPT_SP_PERSON_POLICY_DATA2 = ""; // 保单结束日期
-	private String NBPT_SP_PERSON_AREANO = ""; // 区域编号
+	private String NBPT_SP_PERSON_AREANO = ""; // 负责区域区域编号
 	private String NBPT_SP_PERSON_LOGINID = ""; // 登录名
 	private String NBPT_SP_PERSON_NOTE = ""; // 备注
 	private String NBPT_SP_PERSON_FLAG = ""; // 离职标志

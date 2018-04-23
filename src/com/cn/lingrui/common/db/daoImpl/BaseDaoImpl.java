@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -210,11 +211,11 @@ public class BaseDaoImpl implements BaseDao{
 	}
 
 	@Override
-	public String receiveMaxId(String procName, Connection connection, String tableName) throws SQLException {
+	public String receiveMaxId(Connection connection, String tableName) throws SQLException {
 		
 		String maxId = null;
 		try {
-			ResultSet rs = this.callProcedure(procName, connection, tableName);
+			ResultSet rs = this.callProcedure("RECEIVEMAXID", connection, tableName);
 			while(rs.next()) {
 				maxId = rs.getString("MAXID");
 			}
@@ -229,11 +230,11 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	@Override
-	public String receiveMaxId(String procName, Connection connection, String tableName, String where) throws SQLException {
+	public String receiveMaxId(Connection connection, String tableName, String where) throws SQLException {
 		
 		String maxId = null;
 		try {
-			ResultSet rs = this.callProcedure(procName, connection, tableName, where);
+			ResultSet rs = this.callProcedure("RECEIVEMAXID_W", connection, tableName, where);
 			while(rs.next()) {
 				maxId = rs.getString("MAXID");
 			}
@@ -298,6 +299,41 @@ public class BaseDaoImpl implements BaseDao{
 		} catch (SQLException e) {
 			
 			log.error("查询行政区县划分出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public <T> void insertForClasz(Class<T> clasz, T t, Connection connection) throws SQLException {
+
+		try {
+			
+			@SuppressWarnings("unchecked")
+			String sql = DBUtils.beanToSql(clasz, "insert", clasz.getSimpleName(), t);
+			this.excuteUpdate(sql, connection);
+		} catch (SQLException e) {
+
+			log.error("通用单条插入出错");
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public <T> void insertForClaszs(Class<T> clasz, List<T> ts, Connection connection) throws SQLException {
+		
+		try {
+			
+			List<String> sqls = new ArrayList<>();
+			for(T t : ts) {
+
+				@SuppressWarnings("unchecked")
+				String sql = DBUtils.beanToSql(clasz, "insert", clasz.getSimpleName(), t);
+				sqls.add(sql);
+			}
+			this.excuteUpdateGroups(sqls, connection);
+		} catch (SQLException e) {
+
+			log.error("通用批量插入出错");
 			throw new SQLException();
 		}
 	}

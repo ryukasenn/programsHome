@@ -3,6 +3,11 @@
 extends ./layouts/0302
     
 
+block extraButtons        
+    .form-group
+        button(type="button").btn.btn-default#checkProvince 规划下辖省份
+        |&nbsp&nbsp
+    
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
@@ -18,7 +23,7 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 负责人
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{personInfo.NBPT_SP_PERSON_NAME}', readonly)#ResperName
+                        input.form-control(value='#{personName}', readonly)#ResperName
                     .col-md-1.col-sm-1 
                         button.btn.btn-default(type="button").addResponsibler
                             span.glyphicon.glyphicon-plus(aria-hidden="true")

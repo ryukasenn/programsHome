@@ -27,6 +27,22 @@ public interface BaseDao {
 	public void excuteUpdate(String sql, Connection conn) throws SQLException;
 	
 	/**
+	 * 单条插入语句实现
+	 * @param clasz
+	 * @param t
+	 * @param connection
+	 * @throws SQLException
+	 */
+	public <T> void insertForClasz(Class<T> clasz, T t, Connection connection) throws SQLException;
+	
+	/**
+	 * 多条更新插入及删除
+	 * @param sqls
+	 * @param conn
+	 * @throws SQLException 
+	 */
+	public <T> void insertForClaszs(Class<T> clasz, List<T> t, Connection conn) throws SQLException;
+	/**
 	 * 基类查询方法
 	 * @param sql sql语句
 	 * @param conn 数据库连接
@@ -48,8 +64,13 @@ public interface BaseDao {
 	 * 获取表中ID最大数
 	 * @return
 	 */
-	public String receiveMaxId(String procName, Connection conn, String params) throws SQLException;
-	
+	public String receiveMaxId(Connection conn, String params) throws SQLException;
+
+	/**
+	 * 获取表中ID最大数,带条件
+	 * @return
+	 */
+	public String receiveMaxId(Connection conn, String tableName, String where) throws SQLException;
 	/**
 	 * 获取字典表数据
 	 * @param type 字典类型
@@ -67,6 +88,6 @@ public interface BaseDao {
 	 * @throws SQLException
 	 */
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException;
+	
 
-	public String receiveMaxId(String procName, Connection conn, String tableName, String where) throws SQLException;
 }

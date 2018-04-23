@@ -48,22 +48,9 @@ $(function(){
 	/**
 	 * 大区基本信息修改
 	 */
-	$("#updateRegionConfirm").on("click", function(){
+	$("#addRegionConfirm").on("click", function(){
 		
-		$('#updateRegion').attr('action', baseUrl + "/sellPersonnel/regionController/updateRegion").attr('method', 'POST').submit();
+		$('#addRegion').attr('action', baseUrl + "/sellPersonnel/regionController/addRegion").attr('method', 'POST').submit();
 	})
-	
-	/**
-	 * 规划下辖省份
-	 */
-	$("#checkProvince").on('click', function(){		
-		
-		new Confirm({
-			type:'alert',
-			message:'暂不提供该功能'
-		});
-		//window.location.href = baseUrl + "/sellPersonnel/regionController/checkProvince?regionUid=" + $("#updateRegion input[name='regionUid']").val();
-	})
-	
 	
 })

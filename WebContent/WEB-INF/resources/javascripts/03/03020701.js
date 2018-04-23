@@ -1,16 +1,5 @@
 $(function(){
-	
-	/**
-	 * 人员配额初始化输入
-	 */
-//	AjaxForGet(baseUrl + "/sellPersonnel/receiveAreaContainSelects", {parentId : $("#provinceId").val()},function(jsonData){
-//		
-//		for(var i = 0; i < jsonData.length; i++){
-//			
-//		}
-//		
-//	})
-	
+		
 	/**
 	 * 添加负责人按钮
 	 */
@@ -30,7 +19,6 @@ $(function(){
 		$('#ResperPid').val("");
 	});
 
-	
 	/**
 	 * 添加负责人modal的查询操作
 	 */
@@ -44,26 +32,12 @@ $(function(){
 		}
 	});
 	
-	
 	/**
 	 * 大区基本信息修改
 	 */
-	$("#updateRegionConfirm").on("click", function(){
+	$("#addAreaConfirm").on("click", function(){
 		
-		$('#updateRegion').attr('action', baseUrl + "/sellPersonnel/regionController/updateRegion").attr('method', 'POST').submit();
+		$('#addArea').attr('action', baseUrl + "/sellPersonnel/regionController/addArea").attr('method', 'POST').submit();
 	})
-	
-	/**
-	 * 规划下辖省份
-	 */
-	$("#checkProvince").on('click', function(){		
-		
-		new Confirm({
-			type:'alert',
-			message:'暂不提供该功能'
-		});
-		//window.location.href = baseUrl + "/sellPersonnel/regionController/checkProvince?regionUid=" + $("#updateRegion input[name='regionUid']").val();
-	})
-	
 	
 })

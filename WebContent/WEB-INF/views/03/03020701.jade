@@ -1,29 +1,31 @@
 
-// 部门管理:修改地区
+// 部门管理:添加大区
 extends ./layouts/0302
     
-
-block extraButtons
-    .form-group
-        button(type="button").btn.btn-default#checkXzqxs 规划下辖市区县
-
+        
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
-            input(type='hidden', value='#{currentProvince}')#OringeProvince
-            form.form-horizontal#updateRegion
-                input(type='hidden', name='regionUid', value='#{regionInfo.NBPT_SP_REGION_UID}')
+            form.form-horizontal#addArea
                 input(type='hidden', name='regionResponsibler', value='#{regionInfo.NBPT_SP_REGION_RESPONSIBLER}')#ResperPid
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
-                        |&nbsp&nbsp&nbsp&nbsp地区名称
+                        |&nbsp&nbsp&nbsp&nbsp所属省份
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', name="regionName")
+                        select.form-control(name='provinceId')
+                            each item in provinces
+                                option(value="#{item.NBPT_COMMON_XZQXHF_ID}")= item.NBPT_COMMON_XZQXHF_NAME
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp大区名称
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="regionName")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 负责人
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{personName}', readonly)#ResperName
+                        input.form-control(readonly)#ResperName
                     .col-md-1.col-sm-1 
                         button.btn.btn-default(type="button").addResponsibler
                             span.glyphicon.glyphicon-plus(aria-hidden="true")
@@ -33,24 +35,18 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 人员配额
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NEED}', name='regionNeed')
+                        input.form-control(name='regionNeed')
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 备注
                     .col-xs-4.col-sm-4
                         input.form-control(name="regionNote")
                 .form-group
-                    label.col-xs-1.col-sm-1.control-label 所属省份
-                    .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_PROVINCE_NAME}', readonly)
-                .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
-                        button(type="button").btn.btn-primary.changeAreaInfo 提交
+                        button(type="button").btn.btn-primary#addAreaConfirm 提交
 block modal
     include includes/0302Modal
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03020401.js")
-    script(language='javascript')
-        $("#provinceSelect").val('#{currentProvince}');
+    script(language="javascript", src="#{myPath}/javascripts/03/03020701.js")
     
 block pageId
-    p(style="display:none") 03020401
+    p(style="display:none") 03020701

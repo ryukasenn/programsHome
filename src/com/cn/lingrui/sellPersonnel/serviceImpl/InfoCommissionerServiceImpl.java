@@ -201,7 +201,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			List<NBPT_VIEW_REGION> regions = infoCommissionerDao.receiveRegion(null, in.getProvinceId(), this.getConnection());
 			
 			// 分类人员信息
-			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedPersons = InfoCommissionerServiceUtils.dealByKey(persons, "NBPT_SP_PERSON_AREA_UID");
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedPersons = CommonServiceUtils.dealPersonsByKey(persons, "NBPT_SP_PERSON_AREA_UID");
 			
 			// 处理结果
 			List<StatisticsTable> resultTables = InfoCommissionerServiceUtils.countClassifyList_byArea(regions, classfyedPersons);

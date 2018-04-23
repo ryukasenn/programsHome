@@ -21,7 +21,7 @@ block contents
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 公司配额
                         .col-xs-4.col-sm-4
-                            input.form-control(value='#{thisNeed}', readOnly)
+                            input.form-control(value='#{regionInfo.NBPT_SP_REGION_NEED}', readOnly)
                         label.col-xs-1.col-sm-1.control-label 当前人员
                         .col-xs-4.col-sm-4
                             input.form-control(value='#{thisInfact}', readOnly)
@@ -31,12 +31,12 @@ block contents
                             input.form-control(value='#{thisResper}', readOnly)
                         label.col-xs-1.col-sm-1.control-label 地区
                         .col-xs-4.col-sm-4
-                            input.form-control(value='#{thisArea}', readOnly)
+                            input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', readOnly)
             unless personInfos.length
                 .col-xs-10.col-sm-10.placeholder
                     .panel.panel-default
                         .panel-heading 名单列表
-                            a.btn.btn-link(href = '#{baseUrl}/sellPersonnel/provincePersons?regionUid=#{regionUid}') 后退
+                            a.btn.btn-link(href = '#{baseUrl}/sellPersonnel/provincePersons?regionUid=#{regionInfo.NBPT_SP_REGION_PARENT_UID}') 后退
                             button.btn.btn-link.downLoadCheckOut(value='renyuanxinxi') 导出
                         table.table#renyuanxinxi
                             tr
@@ -58,7 +58,7 @@ block contents
                                     td(style="text-align:center;").col-xs-1.col-sm-1
                                         a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/receivePerson?areaUid=#{areaUid}&regionUid=#{regionUid}&personPid=#{person.NBPT_SP_PERSON_PID}')
                                             #{person.NBPT_SP_PERSON_NAME}
-                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_MALE
+                                    td(style="text-align:center;")= person.NBPT_SP_PERSON_REAL_MALE
                                     td(style="text-align:center;")
                                         case person.NBPT_SP_PERSON_JOB
                                             when '21': 大区总

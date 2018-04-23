@@ -18,8 +18,6 @@ import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dao.SupportDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
-import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 import com.cn.lingrui.sellPersonnel.service.CommonService;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
@@ -45,18 +43,10 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 		// 初始化返回
 		ModelAndView mv = null;
 
-		// 初始化返回内容
-		SellPersonnelPojoOut out = new SellPersonnelPojoOut();
 
 		try {
-
-			// 获取当前登录人员信息
-			CurrentPerson person = personManageDao.receiveCurrentPerson(this.getLoginId(), this.getConnection());
 			
 			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
-
-			// 处理当前登陆人员信息
-			PersonManageServiceUtils.dealCurrentPerson(person, out);
 
 			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030402"));
 

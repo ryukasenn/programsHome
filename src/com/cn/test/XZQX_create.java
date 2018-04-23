@@ -10,21 +10,15 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
-
-import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 
 import jxl.CellType;
 import jxl.DateCell;
@@ -231,61 +225,7 @@ public class XZQX_create {
 	}
 		
 
-	private void checkIdnum() throws ClassNotFoundException, SQLException {
-		
-		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
-		//Connection conn = DriverManager.getConnection(GlobalParams.DBBASE_URL + "cwbase1",GlobalParams.COMMON_USERNAME, GlobalParams.COMMON_PASSWORD);
-		PreparedStatement ps1 = conn.prepareStatement("SELECT A.*,B.NBPT_SP_REGION_NAME,C.NBPT_SP_REGION_NAME AS REGION_NAME,D.NBPT_SP_PERSON_NAME AS REGION_UID "
-													+ "FROM NBPT_SP_PERSON A "
-													+ "LEFT JOIN NBPT_SP_REGION B "
-													+ "ON A.NBPT_SP_PERSON_DEPT_ID = B.NBPT_SP_REGION_UID "
-													+ "LEFT JOIN NBPT_SP_REGION C "
-													+ "ON SUBSTRING(B.NBPT_SP_REGION_ID,1,2) = C.NBPT_SP_REGION_ID "
-													+ "LEFT JOIN NBPT_SP_PERSON D "
-													+ "ON B.NBPT_SP_REGION_RESPONSIBLER = D.NBPT_SP_PERSON_PID ");
-		ResultSet rs1 = ps1.executeQuery();
-		
-		// 查询所有地总
-		List<CurrentPerson> resultList = XZQX_create.rsToBean(CurrentPerson.class, rs1);	
-		
-		Map<String, Map<String,String>> phones = new HashMap();
-		int i = 0;
-		for(CurrentPerson person : resultList) {
-			
-			if(-1 != person.getNBPT_SP_PERSON_IDNUM().indexOf("l")) {
-
-				System.out.println(person.getNBPT_SP_PERSON_NAME() + "的身份证竟然有个L?");
-			}
-			if(CommonUtil.idNumCheck(person.getNBPT_SP_PERSON_IDNUM())) {
-				
-			} else {
-				
-				System.out.println((i + 1) + person.getNBPT_SP_PERSON_NAME() + "的身份证信息有误");
-				System.out.println(person.getNBPT_SP_PERSON_NAME() + "的身份证号为" + person.getNBPT_SP_PERSON_IDNUM());
-				System.out.println(person.getNBPT_SP_PERSON_NAME() + "所在地区为" + person.getNBPT_SP_REGION_NAME());
-				System.out.println(person.getNBPT_SP_PERSON_NAME() + "所在大区为" + person.getREGION_NAME());
-				System.out.println(person.getNBPT_SP_PERSON_NAME() + "当前负责人为" + person.getREGION_UID());
-				System.out.println();
-				i++;
-			}
-			
-			if(phones.containsKey(person.getNBPT_SP_PERSON_MOB1())) {
-				System.out.println("诶,这人电话重复了哦:所属地区为" + person.getNBPT_SP_REGION_NAME() + "的" + person.getNBPT_SP_PERSON_NAME() 
-								 + "跟" + phones.get(person.getNBPT_SP_PERSON_MOB1()).get("dept") + "的"
-						 		 + phones.get(person.getNBPT_SP_PERSON_MOB1()).get("name")+ "重复了");
-			}
-			else {
-				
-				Map<String, String> info = new HashMap<>();
-				info.put("name", person.getNBPT_SP_PERSON_NAME());
-				info.put("dept", person.getNBPT_SP_REGION_NAME());
-				info.put("head", person.getREGION_UID());
-				phones.put(person.getNBPT_SP_PERSON_MOB1(), info);
-			}
-		}
-	}
+	private void checkIdnum() throws ClassNotFoundException, SQLException {}
 
 	private void addRegionResperRights() throws ClassNotFoundException, SQLException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

@@ -54,7 +54,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		// 查询所有区域划分信息
 		try {
 
-			List<CurrentRegion> currentRegions = regionManageDao.receiveCurrentRegions(pojo, this.getConnection());
+			List<NBPT_VIEW_REGION> currentRegions = regionManageDao.receiveCurrentRegions(pojo, this.getConnection());
 			
 			mv.addObject("currentRegions", currentRegions);
 			
@@ -70,28 +70,94 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	
 	/**
 	 * 进入添加大区页面
+	 * @throws Exception 
 	 */
 	@Override
-	public ModelAndView getAddRegion() {
+	public ModelAndView getAddRegion() throws Exception {
+		
 		this.before();
 		
-		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030203"));
+		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030206"));
 		
-		return this.after(mv);
+		try {
+			
+			// 直接查询是否有弃用的大区
+			return this.after(mv);
+			
+		} catch (Exception e) {
+
+			this.closeException();
+			log.error("获取添加大区页面出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
 	}
 	
 	/**
 	 * 执行添加大区
+	 * @throws Exception 
 	 */
 	@Override
-	public ModelAndView postAddRegion(AddRegionPojoIn in) {
+	public ModelAndView postAddRegion(AddRegionPojoIn in) throws Exception {
 
 		this.before();
+
 		
-		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030202"));
+		try {
+
+			// 准备插入信息
+			NBPT_SP_REGION newRegion = new NBPT_SP_REGION();
+			
+			newRegion.setNBPT_SP_REGION_ID(in.getRegionId());
+			newRegion.setNBPT_SP_REGION_LEVEL("1");
+			newRegion.setNBPT_SP_REGION_NAME(in.getRegionName());
+			newRegion.setNBPT_SP_REGION_ONAME(in.getRegionNeed());
+			newRegion.setNBPT_SP_REGION_NOTE(in.getRegionNote());
+			newRegion.setNBPT_SP_REGION_RESPONSIBLER(in.getRegionResponsibler());
+			newRegion.setNBPT_SP_REGION_UID(CommonUtil.getUUID_32());
+
+			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regionController/changeRegion?regionUid=" + newRegion.getNBPT_SP_REGION_UID());
+			
+			// 执行插入
+			regionManageDao.insertForClasz(NBPT_SP_REGION.class, newRegion, this.getConnection());
+			
+			return this.after(mv);
+			
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+	@Override
+	public ModelAndView getAddArea() throws Exception {
 		
-		// 
-		return this.after(mv);
+		
+		try {
+
+			this.before();
+			
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030207"));
+			
+			// 查询省份列表
+			List<NBPT_COMMON_XZQXHF> provinces = regionManageDao.getXzqxhfs("", this.getConnection());
+			provinces.add(0,new NBPT_COMMON_XZQXHF());
+			mv.addObject("provinces", provinces);
+			
+			return this.after(mv);
+			
+		} catch (Exception e) {
+
+			this.closeException();
+			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	@Override
+	public ModelAndView postAddArea(AddRegionPojoIn in) {
+		// TODO 自动生成的方法存根
+		return null;
 	}
 	
 	/**
@@ -166,10 +232,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			// 返回地区信息
 			NBPT_VIEW_REGION regionInfo = regionManageDao.receiveRegion(regionUid, this.getConnection());
-			
-			// 获取负责人信息
-			NBPT_SP_PERSON personInfo = regionManageDao.receiveCurrentResper(regionInfo.getNBPT_SP_REGION_RESPONSIBLER(), this.getConnection());
-			
+						
 			if("1".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 
 				// 如果是大区,获取大区信息及配置处理页面
@@ -187,11 +250,10 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030204", this.getRole()));
 								
 				mv.addObject("currentProvince", regionInfo.getNBPT_SP_REGION_PROVINCE_ID());
-				
 			}
 			
 			mv.addObject("regionInfo", regionInfo);
-			mv.addObject("personInfo", personInfo);
+			mv.addObject("personName", regionInfo.getNBPT_SP_REGION_RESPONSIBLER_NAME());
 			
 			return this.after(mv);
 			
@@ -220,7 +282,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regionController/changeRegion?regionUid=" + pojo.getRegionUid());
 			
 			// 1.查询出部门相关信息
-			NBPT_SP_REGION regionInfo = regionManageDao.receiveCurrentRegion(pojo.getRegionUid(), this.getConnection());
+			NBPT_VIEW_REGION regionInfo = regionManageDao.receiveRegion(pojo.getRegionUid(), this.getConnection());
 			
 			// 2.设定修改信息
 			if("1".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
@@ -236,7 +298,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 				
 				// 2.4 执行更新
 				regionManageDao.updateRegion(updateInfo, this.getConnection());
-								
+
+				
 			} else if("2".equals(regionInfo.getNBPT_SP_REGION_LEVEL())) {
 				
 				// 2.1 如果是地区信息修改,初始化信息
@@ -250,7 +313,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 
 				// 2.4 更新基本信息
 				regionManageDao.updateRegion(updateInfo, this.getConnection());
-								
+				
 			}
 
 			return this.after(mv);
@@ -441,6 +504,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			throw new Exception();
 		}
 	}
+
 	
 	
 	

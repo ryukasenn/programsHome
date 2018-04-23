@@ -19,7 +19,6 @@ import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
 import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
 import com.cn.lingrui.sellPersonnel.service.AreaHeadService;
@@ -49,9 +48,9 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 		try {
 
 			// 获取当前登录人员信息
-			CurrentPerson loginPerson = this.getLoginPerson();
-			
-			if("null".equals(loginPerson.getNBPT_SP_REGION_NEED()) || "".equals(loginPerson.getNBPT_SP_REGION_NEED())) {
+			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
+
+			if(!loginPerson.getNBPT_SP_PERSON_PID().equals(loginPerson.getNBPT_SP_PERSON_AREA_RESPONSIBLER_PID())) {
 				
 				String message = "您没有被分配管理地区,请联系后勤人员或管理员";
 				mv.addObject("message", message);
@@ -92,16 +91,14 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 			SellPersonnelPojoOut out = new SellPersonnelPojoOut();
 
 			// 当前登录人员
-			CurrentPerson loginPerson = this.getLoginPerson();
-			out.setPerson(loginPerson);
-
+			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
 			
+			out.setPerson(loginPerson);
 			if(null == in.getNBPT_SP_PERSON_PID() || "".equals(in.getNBPT_SP_PERSON_PID()) ) {
 
 				// 最大人员ID
-				String maxId = personManageDao.receiveMaxId("RECEIVEMAXID", this.getConnection(), "NBPT_SP_PERSON");
+				String maxId = personManageDao.receiveMaxId(this.getConnection(), "NBPT_SP_PERSON");
 				out.setMaxId(maxId);
-				
 				// 管理区县
 				List<NBPT_SP_PERSON_XZQX> reposAreas = new ArrayList<NBPT_SP_PERSON_XZQX>();
 				
@@ -123,7 +120,7 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 				// 新数据导入
 				PersonManageServiceUtils.checkInData(in, person, reposAreas, out);
 				
-				// 存储新的人员信息
+				// 更新人员信息
 				personManageDao.updateTerminal(person, this.getConnection());
 				personManageDao.addReposeAreas(reposAreas, this.getConnection());
 			}
@@ -184,21 +181,6 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 	protected String getFunNum() {
 		// TODO 自动生成的方法存根
 		return null;
-	}
-	
-	/**
-	 * 获取登录人员信息方法
-	 * @return
-	 * @throws SQLException
-	 */
-	private CurrentPerson getLoginPerson() throws SQLException {
-
-		String loginId = this.getLoginId();
-
-		// 当前登录人员
-		CurrentPerson loginPerson = personManageDao.receiveCurrentPerson(loginId, this.getConnection());
-		
-		return loginPerson;
 	}
 	
 }

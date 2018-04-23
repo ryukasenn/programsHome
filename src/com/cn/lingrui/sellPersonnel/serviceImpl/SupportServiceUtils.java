@@ -68,7 +68,7 @@ public class SupportServiceUtils {
 				
 				StatisticsTable info = new StatisticsTable();
 				
-				info.setNeed(info.getNeed() + Integer.valueOf(region.getNBPT_SP_REGION_NEED()));
+				info.setNeed(info.getNeed() + CommonUtil.objToInteger(region.getNBPT_SP_REGION_NEED()));
 				info.setRegionUid(region.getNBPT_SP_REGION_UID());
 				info.setRegionName(region.getNBPT_SP_REGION_NAME());
 				

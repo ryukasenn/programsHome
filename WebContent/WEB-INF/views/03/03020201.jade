@@ -3,6 +3,15 @@
 // 地区管理,查看当前地区划分信息
 extends ./layouts/0302
 
+
+block extraButtons
+    .form-group
+        button(type="button").btn.btn-default#addRegion 添加大区
+        |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-default#addArea 添加地区
+        |&nbsp&nbsp
+            
 block contents
     unless regions.length
         .col-xs-10.col-sm-10

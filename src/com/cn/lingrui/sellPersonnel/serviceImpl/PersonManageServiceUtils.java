@@ -2,326 +2,17 @@ package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+import java.util.Map;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.person.CurrentPerson_statistics;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
+import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 
 public class PersonManageServiceUtils {
-
-	private static Logger log = LogManager.getLogger();
-
-	/**
-	 *  后勤人员查询合计信息处理
-	 * @param regionList 
-	 * @return
-	 */
-	public static List<CurrentPerson_statistics> dealCurrentPerson_total(List<CurrentPerson> personInfos, List<NBPT_SP_REGION> regionList){
-		
-		List<String> checkItems = new ArrayList<>();
-		List<CurrentPerson_statistics> resultList = new ArrayList<>();
-		for(CurrentPerson person : personInfos) {
-			
-			String type = person.getNBPT_SP_PERSON_TYPE();
-			if(checkItems.contains(type)) {
-				
-				// 获取当前信息
-				CurrentPerson_statistics thisInfo = resultList.get(checkItems.indexOf(type));
-				addPerson_total(thisInfo, person);
-			} else {
-				
-				// 加入检查列表
-				checkItems.add(type);
-
-				// 新增当前信息
-				CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
-				
-				if("2".equals(type)) {
-					
-					Integer need = 0;
-					
-					// 计算OTC合计配额数
-					for(NBPT_SP_REGION region : regionList) {
-						
-						need += Integer.valueOf(region.getNBPT_SP_REGION_ONAME());
-					}				
-					thisInfo.setNeed(need);
-				}
-				addPerson_total(thisInfo, person);
-				resultList.add(thisInfo);
-			}
-		}
-
-		for(CurrentPerson_statistics info : resultList) {
-			
-			Integer balance = info.getTotal() - info.getNeed();
-			info.setBalance(String.valueOf(balance));
-			
-//			if(0 < balance) {
-//				
-//				info.setBalance("差" + balance + "人");
-//			} else if(0 == balance) {
-//
-//				info.setBalance("满配");
-//			} else if(0 > balance) {
-//				
-//				info.setBalance("超出" + Math.abs(balance) + "人");
-//			}
-		}
-		return resultList;
-	}
-	
-	/**
-	 * 后勤人员查询OTC统计信息处理
-	 * @return
-	 */
-	public static List<CurrentPerson_statistics> dealCurrentPerson_region(List<CurrentPerson> personInfos){
-		
-		// 校验list
-		List<String> checkItems = new ArrayList<>();
-		List<CurrentPerson_statistics> resultList = new ArrayList<>(); 
-		
-		for(CurrentPerson person : personInfos) {
-			
-			
-			if("2".equals(person.getNBPT_SP_PERSON_TYPE())) {
-
-				String regionId = person.getNBPT_SP_REGION_ID().substring(0, 2);
-				// 按大区添加信息
-				if(checkItems.contains(regionId)) {
-					
-					CurrentPerson_statistics thisInfo = resultList.get(checkItems.indexOf(regionId));
-					
-					// 添加信息
-					addPerson_otc(thisInfo, person);
-				} else {
-
-					// 加入检查列表
-					checkItems.add(regionId);
-					
-					// 新增当前信息
-					CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
-
-					thisInfo.setName(person.getREGION_NAME());
-					thisInfo.setUid(person.getREGION_UID());
-					thisInfo.setNeed(Integer.valueOf(person.getREGION_ONAME() == null || "".equals(person.getREGION_ONAME()) ? "0" : person.getREGION_ONAME()));
-					addPerson_otc(thisInfo, person);
-					resultList.add(thisInfo);
-				}
-			}
-		}
-
-		// 差额计算
-		for(CurrentPerson_statistics info : resultList) {
-			
-			Integer balance = info.getTotal() - info.getNeed();
-
-			info.setBalance(String.valueOf(balance));
-//			if(0 < balance) {
-//				
-//				info.setBalance("差" + balance + "人");
-//			} else if(0 == balance) {
-//
-//				info.setBalance("满配");
-//			} else if(0 > balance) {
-//				
-//				info.setBalance("超出" + Math.abs(balance) + "人");
-//			}
-		}
-		
-		// 离职率计算
-		for(CurrentPerson_statistics info : resultList) {
-			
-			info.setDismissionRate(CommonUtil.getPercenttage(info.getDismission(), info.getNeed()));
-		}
-		
-		return resultList;
-	}
-	/**
-	 * 统计OTC信息辅助方法
-	 * @param thisInfo
-	 * @param person
-	 */
-	private static void addPerson_otc(CurrentPerson_statistics thisInfo, CurrentPerson person) {
-		
-		String job = person.getNBPT_SP_PERSON_JOB();
-		
-		if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
-			
-			// 离职合计数
-			thisInfo.setDismission(thisInfo.getDismission() + 1);
-			
-			return;
-		}
-		switch (job) {
-		
-			// 如果是大区总
-			case "21":
-				thisInfo.setRegionResper(thisInfo.getRegionResper() + 1);
-				break;
-			
-			// 如果是地总
-			case "22":
-				thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
-				break;
-			
-			// 如果是区县总
-			case "23":
-				thisInfo.setXzquResper(thisInfo.getXzquResper() + 1);
-				break;
-				
-			// 如果是预备区县总
-			case "24":
-				thisInfo.setXzquResper_preparatory(thisInfo.getXzquResper_preparatory() + 1);
-				break;
-				
-			// 如果是推广经理
-			case "25":
-				thisInfo.setPromote(thisInfo.getPromote() + 1);
-				break;
-				
-			// 如果是混合大区总
-			case "26":
-				thisInfo.setRegionResper(thisInfo.getRegionResper() + 1);
-				break;
-		default:
-			break;
-		}
-		
-		if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
-
-			// 添加合计数
-			thisInfo.setTotal(thisInfo.getTotal()+ 1);
-		} else {
-
-		}
-		
-		
-	}
-	
-
-	/**
-	 * 统计合计信息辅助方法
-	 * @param thisInfo
-	 * @param person
-	 */
-	private static void addPerson_total(CurrentPerson_statistics thisInfo,CurrentPerson person) {
-		
-		String type = person.getNBPT_SP_PERSON_TYPE();
-		// 如果是商务的
-		if("1".equals(type)) {
-
-			if("1".equals(person.getNBPT_SP_PERSON_FLAG())) {
-				
-				thisInfo.setDismission(thisInfo.getDismission() + 1);
-				
-				return;
-			}
-			thisInfo.setName("商务");
-			// TODO
-			thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
-		} 
-		
-		// 如果是OTC
-		else if("2".equals(type)) {
-			
-			thisInfo.setName("OTC");
-			
-			// 离职合计
-			if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
-				
-				thisInfo.setDismission(thisInfo.getDismission() + 1);
-				
-				return;
-			}
-			
-			// 职务类型
-			String job = person.getNBPT_SP_PERSON_JOB();
-			
-			switch (job) {
-			
-			case "21": // 如果是大区总
-				
-				thisInfo.setRegionResper(thisInfo.getRegionResper() + 1);
-				break;
-				
-			case "22": // 如果是地总
-				
-				thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
-				break;
-				
-			case "23": // 如果是区县总
-				
-				thisInfo.setXzquResper(thisInfo.getXzquResper() + 1);
-				break;
-				
-			case "24": // 如果是预备区县总
-				
-				thisInfo.setXzquResper_preparatory(thisInfo.getXzquResper_preparatory() + 1);
-				break;
-				
-			case "25": // 如果是推广经理
-				
-				thisInfo.setPromote(thisInfo.getPromote() + 1);
-				break;
-				
-			case "26": // 如果是混合
-
-				thisInfo.setRegionResper(thisInfo.getRegionResper() + 1);
-				break;
-				
-			default:
-				break;			
-			}
-
-			// 如果是地总
-			if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
-
-				// 添加合计数
-				thisInfo.setTotal(thisInfo.getTotal()+ 1);
-			} else {
-
-			}
-			
-		}
-		
-		// 如果是临床
-		else if("3".equals(type)) {
-
-			thisInfo.setName("临床");
-			if("1".equals(person.getNBPT_SP_PERSON_FLAG())) {
-				
-				thisInfo.setDismission(thisInfo.getDismission() + 1);
-				
-				return;
-			}
-			// TODO
-			thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
-		}
-		
-		// 如果是诊所
-		else if("4".equals(type)) {
-
-			thisInfo.setName("诊所");
-			if("1".equals(person.getNBPT_SP_PERSON_FLAG())) {
-				
-				thisInfo.setDismission(thisInfo.getDismission() + 1);
-				
-				return;
-			}
-			// TODO
-			thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);			
-		}
-	}
 	
 	/**
 	 * 地总添加人员信息注入
@@ -453,29 +144,7 @@ public class PersonManageServiceUtils {
 		
 	}
 	
-	/**
-	 * 处理当前登录人员信息
-	 * 
-	 * @param persons
-	 * @param out
-	 * @throws Exception
-	 */
-	public static void dealCurrentPerson(CurrentPerson person, SellPersonnelPojoOut out) throws Exception {
 
-		// 验证唯一性
-		if (null == person) {
-
-			// 如果有权限操作没有相应的人员信息,是后勤
-			out.setLoginDeptId("0");
-		} else {
-
-			// 获取部门信息
-			out.setLoginDeptId(person.getNBPT_SP_PERSON_DEPT_ID());
-
-			// 存储登录人员信息
-			out.setPerson(person);
-		}
-	}
 	
 	/**
 	 * 处理查询到的终端人员信息
@@ -493,144 +162,55 @@ public class PersonManageServiceUtils {
 		// 保单结束时间
 		person.setNBPT_SP_PERSON_POLICY_DATA2(CommonUtil.formateTimeToPage(person.getNBPT_SP_PERSON_POLICY_DATA2()));
 	}
-	
+
 	/**
-	 * 统计OTC大区下省份信息处理方法
-	 * @param personInfos
-	 * @return
+	 * 处理处理大区下所有人信息
+	 * @param person
+	 * @throws Exception
 	 */
-	public static List<CurrentPerson_statistics> provincePersons_check(List<CurrentPerson> personInfos) {
-
-		List<CurrentPerson_statistics> infos = new ArrayList<>();
-		List<String> provinceCheck = new ArrayList<>();
+	public static List<StatisticsTable> countClassifyList_byArea(List<NBPT_VIEW_REGION> regions, Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyiedPersons){
 		
-		for(CurrentPerson person : personInfos) {
-
-			String areaId  = person.getNBPT_SP_PERSON_DEPT_ID();
-			if(provinceCheck.contains(areaId)) {
+		// 初始化返回结果
+		List<StatisticsTable> resultList = new ArrayList<>();
+		
+		for(NBPT_VIEW_REGION region : regions) {
+			
+			StatisticsTable table = new StatisticsTable();
+			
+			table.setProvinceName(region.getNBPT_SP_REGION_PROVINCE_NAME());
+			
+			table.setAreaName(region.getNBPT_SP_REGION_NAME());
+			
+			table.setNeed(CommonUtil.objToInteger(region.getNBPT_SP_REGION_NEED()));
+			
+			table.setAreaUid(region.getNBPT_SP_REGION_UID());
+			
+			List<NBPT_VIEW_CURRENTPERSON> currentAreaPersons = CommonServiceUtils.getPersonsByKey(classifyiedPersons, region.getNBPT_SP_REGION_UID());
+			
+			for(NBPT_VIEW_CURRENTPERSON person : currentAreaPersons) {
 				
-				// 1.获取当前行
-				CurrentPerson_statistics thisInfo = infos.get(provinceCheck.indexOf(areaId));
-				
-				// 2.封装当前行信息
-				provincePersons_check_addInfo(thisInfo, person);
-			} else {
-				
-				// 1.按省份划分
-				provinceCheck.add(areaId);
-				
-				// 2.获取当前行
-				CurrentPerson_statistics thisInfo = new CurrentPerson_statistics();
-				
-				// 3.添加行信息
-				thisInfo.setProvinceName(person.getNBPT_COMMON_XZQXHF_NAME());
-				thisInfo.setName(person.getNBPT_SP_REGION_NAME());
-				thisInfo.setUid(person.getNBPT_SP_REGION_UID());
-				thisInfo.setRegionUid(person.getREGION_UID());
-				
-				// 4.加入列表
-				infos.add(thisInfo);
-				
-				// 5.封装当前行信息
-				provincePersons_check_addInfo(thisInfo, person);
+				CommonServiceUtils.count(table, person);
 			}
+			
+			resultList.add(table);
 		}
 		
-		// 差额计算
-		for(CurrentPerson_statistics info : infos) {
-			
-			Integer balance = info.getTotal() - info.getNeed();
-			info.setBalance(String.valueOf(balance));
-//			if(0 < balance) {
-//				
-//				info.setBalance("差" + balance + "人");
-//			} else if(0 == balance) {
-//
-//				info.setBalance("满配");
-//			} else if(0 > balance) {
-//				
-//				info.setBalance("超出" + Math.abs(balance) + "人");
-//			}
-		}
+		CommonServiceUtils.otherCompute(resultList);
 		
-		// 离职率计算
-
-		for(CurrentPerson_statistics info : infos) {
-			
-			info.setDismissionRate(CommonUtil.getPercenttage(info.getDismission(), info.getNeed()));
-		}
-		return infos;
+		return resultList;
 	}
-
-	private static void provincePersons_check_addInfo(CurrentPerson_statistics thisInfo, CurrentPerson person) {
-		
-		// 离职合计
-		if("3".equals(person.getNBPT_SP_PERSON_FLAG())) {
-			
-			// 离职合计数
-			thisInfo.setDismission(thisInfo.getDismission() + 1);
-			
-			return;
-		}
-
-		// 获取职位
-		String job = person.getNBPT_SP_PERSON_JOB();
-		
-		// 应配合计
-		if("22".equals(job) || "26".equals(job)) {
-			
-			thisInfo.setNeed(thisInfo.getNeed() + CommonUtil.objToInteger(person.getNBPT_SP_REGION_ONAME()));
-		}
-		
-		switch (job) {
-		
-			case "21":
-				
-				log.error("统计大区下省区信息有误, 不应该包含大区总信息");
-				break;
-		
-			case "22":
-				
-				// 如果是地总
-				thisInfo.setAreaResper(thisInfo.getAreaResper() + 1);
-				break;
-		
-			case "23":
-				
-				// 如果是区县总
-				thisInfo.setXzquResper(thisInfo.getXzquResper() + 1);
-				break;
-		
-			case "24":
-				
-				// 如果是预备区县总
-				thisInfo.setXzquResper_preparatory(thisInfo.getXzquResper_preparatory() + 1);
-				break;
-		
-			case "25":
-				
-				// 如果是推广经理
-				thisInfo.setPromote(thisInfo.getPromote() + 1);
-				break;
-		
-			case "26":
-				
-				// 如果是混合大区总
-				break;
-			default:
-				break;
-		}
-		
-
-		// 终端合计数
-		if("23".equals(job) || "24".equals(job) || "25".equals(job)) {
-
-			// 添加合计数
-			thisInfo.setTotal(thisInfo.getTotal()+ 1);
-		} else {
-
-		}
-		
-		
-	}
+	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

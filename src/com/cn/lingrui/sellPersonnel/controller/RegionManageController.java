@@ -92,6 +92,11 @@ public class RegionManageController {
 		return mv;
 	}
 
+	/**
+	 * 获取添加地区页面
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/addRegion", method = RequestMethod.GET)
 	public ModelAndView getAddRegion() throws Exception {
 
@@ -100,11 +105,43 @@ public class RegionManageController {
 		return mv;
 	}
 	
-
+	/**
+	 * 提交添加地区
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
 	@RequestMapping(value = "/addRegion", method = RequestMethod.POST)
 	public ModelAndView postAddRegion(AddRegionPojoIn in) throws Exception {
 
 		ModelAndView mv = regionManageService.postAddRegion(in);
+
+		return mv;
+	}
+	
+	/**
+	 * 获取添加地区页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/addArea", method = RequestMethod.GET)
+	public ModelAndView getAddArea() throws Exception {
+
+		ModelAndView mv = regionManageService.getAddArea();
+
+		return mv;
+	}
+	
+	/**
+	 * 提交添加地区
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/addArea", method = RequestMethod.POST)
+	public ModelAndView postAddArea(AddRegionPojoIn in) throws Exception {
+
+		ModelAndView mv = regionManageService.postAddArea(in);
 
 		return mv;
 	}
@@ -153,7 +190,7 @@ public class RegionManageController {
 	}
 	
 	/**
-	 * 获取大区信息下拉框
+	 * AJAX获取所有大区信息
 	 * @param parentId
 	 * @return
 	 * @throws Exception

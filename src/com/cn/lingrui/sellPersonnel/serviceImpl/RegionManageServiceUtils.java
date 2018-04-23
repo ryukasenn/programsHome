@@ -1,11 +1,12 @@
 package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 
 public class RegionManageServiceUtils {
 
-	public static void setUpdateRegionInfos(NBPT_SP_REGION updateInfo, UpdateRegionPojo pojo, NBPT_SP_REGION regionInfo) {
+	public static void setUpdateRegionInfos(NBPT_SP_REGION updateInfo, UpdateRegionPojo pojo, NBPT_VIEW_REGION regionInfo) {
 		
 		// 设定ID
 		updateInfo.setNBPT_SP_REGION_ID(regionInfo.getNBPT_SP_REGION_ID());

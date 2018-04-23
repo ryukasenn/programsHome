@@ -1,5 +1,6 @@
 package com.cn.lingrui.sellPersonnel.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,4 +129,72 @@ public class CommonServiceUtils {
 		
 		return table;		
 	}
+	
+	
+	public static void otherCompute(List<StatisticsTable> tables) {
+		
+		// 1.差额计算
+		for(StatisticsTable table : tables) {
+			
+			Integer balance = table.getTotal() - table.getNeed();
+
+			table.setBalance(balance);
+		}
+		
+		// 离职率计算
+		for(StatisticsTable table : tables) {
+			
+			table.setDismissionRate(CommonUtil.getPercenttage(table.getDismission(), table.getNeed()));
+		}
+	}
+	
+	public static List<NBPT_VIEW_CURRENTPERSON> getPersonsByKey(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyiedList, String key){
+		
+		if(null == classifyiedList.get(key)) {
+			
+			return new ArrayList<>();
+		} else {
+			
+			return classifyiedList.get(key);
+		}
+	}
+	
+
+	public static List<NBPT_VIEW_REGION> getRegionsByKey(Map<String, List<NBPT_VIEW_REGION>> classifyiedList, String key){
+		
+		if(null == classifyiedList.get(key)) {
+			
+			return new ArrayList<>();
+		} else {
+			
+			return classifyiedList.get(key);
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

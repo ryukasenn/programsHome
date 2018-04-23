@@ -540,7 +540,14 @@ public class CommonUtil {
 	 */
 	public static Integer objToInteger(String obj) {
 		
-		return Integer.valueOf(obj.trim());
+		try {
+			
+			Integer returnValue = Integer.valueOf(obj.trim());
+			return returnValue;
+		} catch(Exception e) {
+			
+			return 0;
+		}
 	}
 	
 	/**
