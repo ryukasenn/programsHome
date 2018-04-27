@@ -7,6 +7,7 @@ public class AddRegionPojoIn {
 	private String regionNeed;
 	private String regionResponsibler;
 	private String regionId;
+	private String provinceId;
 	public String getRegionName() {
 		return regionName;
 	}
@@ -36,6 +37,12 @@ public class AddRegionPojoIn {
 	}
 	public void setRegionId(String regionId) {
 		this.regionId = regionId;
+	}
+	public String getProvinceId() {
+		return provinceId;
+	}
+	public void setProvinceId(String provinceId) {
+		this.provinceId = provinceId;
 	}
 
 	

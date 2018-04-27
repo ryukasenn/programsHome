@@ -130,7 +130,10 @@ public class CommonServiceUtils {
 		return table;		
 	}
 	
-	
+	/**
+	 * 其他计算
+	 * @param tables
+	 */
 	public static void otherCompute(List<StatisticsTable> tables) {
 		
 		// 1.差额计算
@@ -148,27 +151,25 @@ public class CommonServiceUtils {
 		}
 	}
 	
-	public static List<NBPT_VIEW_CURRENTPERSON> getPersonsByKey(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyiedList, String key){
+	public static <T> List<T> getListInMapByKey(Map<String, List<T>> classifyiedList, String key){
 		
 		if(null == classifyiedList.get(key)) {
-			
-			return new ArrayList<>();
-		} else {
+			return new ArrayList<T>();
+		}else {
 			
 			return classifyiedList.get(key);
 		}
 	}
 	
+	public static List<NBPT_VIEW_CURRENTPERSON> getPersonsByKey(Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyiedList, String key){
+		
+		return getListInMapByKey(classifyiedList, key);
+	}
+	
 
 	public static List<NBPT_VIEW_REGION> getRegionsByKey(Map<String, List<NBPT_VIEW_REGION>> classifyiedList, String key){
-		
-		if(null == classifyiedList.get(key)) {
-			
-			return new ArrayList<>();
-		} else {
-			
-			return classifyiedList.get(key);
-		}
+
+		return getListInMapByKey(classifyiedList, key);
 	}
 }
 

@@ -165,6 +165,8 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 		dealReportData(result, rs);
 		return result;
 	}
+	
+	
 	/**
 	 * 报表数据公共处理方法
 	 * 
@@ -172,7 +174,7 @@ public class ReportDaoImpl extends BaseDaoImpl implements ReportDao {
 	 * @param rs
 	 * @return
 	 */
-	private BaseReport dealReportData(BaseReport report, ResultSet rs, BaseReport... reports) {
+	public BaseReport dealReportData(BaseReport report, ResultSet rs, BaseReport... reports) {
 
 		try {
 

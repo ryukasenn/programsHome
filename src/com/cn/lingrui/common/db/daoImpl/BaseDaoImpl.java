@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.db.dao.BaseDao;
+import com.cn.lingrui.common.db.dbpojos.BaseReport;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
@@ -55,7 +57,6 @@ public class BaseDaoImpl implements BaseDao{
 		try {
 			
 			ps = connection.prepareStatement(sql);
-		
 		
 			ps.executeUpdate();
 
@@ -338,4 +339,51 @@ public class BaseDaoImpl implements BaseDao{
 		}
 	}
 	
+	/**
+	 * 报表数据公共处理方法
+	 * 
+	 * @param report
+	 * @param rs
+	 * @return
+	 */
+	@Override
+	public BaseReport dealReportData(BaseReport report, ResultSet rs) {
+
+		try {
+
+			ResultSetMetaData rsMetaData = rs.getMetaData();
+
+			// 初始化查询结果的列名
+			List<String> columnNames = new ArrayList<String>();
+			
+			// 初始化划定顺序列名
+			String[] titles = report.getTitle();
+			
+			int columnCount = rsMetaData.getColumnCount();
+
+			for (int i = 1; i <= columnCount; i++) {
+
+				columnNames.add(rsMetaData.getColumnName(i).toUpperCase());
+			}
+
+			// 设定每行数据
+			while (rs.next()) {
+
+				List<String> rowList = new ArrayList<String>();
+
+				for (String title : titles) {
+					
+					if(columnNames.contains(title)) {
+						
+						rowList.add(rs.getString(title));
+					}
+				}
+				report.getReportData().add(rowList);
+			}
+		} catch (Exception e) {
+
+			log.info(CommonUtil.getTraceInfo());
+		}
+		return report;
+	}
 }

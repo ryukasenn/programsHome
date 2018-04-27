@@ -14,6 +14,7 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.SellPersonnelBaseDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_XZQX;
 
 public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonnelBaseDao{
 
@@ -63,7 +64,8 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 
 			sql.append("AND A.NBPT_SP_REGION_PARENT_UID <> '' AND A.NBPT_SP_REGION_PARENT_UID IS NOT NULL ");
 		}
-		
+
+		sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
 		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
 		
 		try {
@@ -91,9 +93,10 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 
 			sql.append("AND A.NBPT_SP_REGION_UID = '" + regionUid + "' ");
 		}
-		
+
+		sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
 		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
-		
+
 		try {
 			
 			NBPT_VIEW_REGION region = this.oneQueryForClasz(sql.toString(), conn, NBPT_VIEW_REGION.class);
@@ -148,9 +151,17 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
 				sql.append("WHERE A.NBPT_SP_PERSON_PID = '" + terminalPid + "' ");
 				sql.append("AND A.NBPT_SP_PERSON_TYPE = '2' ");
+			} 
+			// 所有参数为空,查询所有
+			else {
+
+				sql.append("SELECT A.* ");
+				sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+				sql.append("WHERE A.NBPT_SP_PERSON_TYPE = '2' ");
 			}
 			
 			sql.append("AND A.NBPT_SP_PERSON_JOB IN (23,24,25)");
+			sql.append("ORDER BY A.NBPT_SP_PERSON_AREA_ID ASC,A.NBPT_SP_PERSON_FLAG ASC,A.NBPT_SP_PERSON_ID ASC ");
 			persons = this.queryForClaszs(sql.toString(), connection, NBPT_VIEW_CURRENTPERSON.class);
 			return persons;
 			
@@ -167,7 +178,7 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 		
 		sql.append("SELECT A.* ");
 		sql.append("FROM NBPT_VIEW_REGION A ");
-		sql.append("WHERE A.NBPT_SP_REGION_UID = '' ");
+		sql.append("WHERE (A.NBPT_SP_REGION_UID = '' ");
 
 		if(0 != regionUids.size()) {
 			
@@ -177,7 +188,9 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 				sql.append("OR A.NBPT_SP_REGION_UID = '" + regionUid + "' ");
 			}
 		}
-		
+		sql.append(") ");
+
+		sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
 		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
 		
 		try {
@@ -199,7 +212,7 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 		
 		sql.append("SELECT A.* ");
 		sql.append("FROM NBPT_VIEW_REGION A ");
-		sql.append("WHERE A.NBPT_SP_REGION_UID = '' ");
+		sql.append("WHERE (A.NBPT_SP_REGION_UID = '' ");
 
 		if(0 != regionUids.length) {
 			
@@ -210,7 +223,8 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			}
 			
 		}
-		
+		sql.append(") ");
+		sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
 		sql.append("ORDER BY A.NBPT_SP_REGION_PARENT_ID ASC, A.NBPT_SP_REGION_ID ASC, A.NBPT_SP_REGION_PROVINCE_ID");
 		
 		try {
@@ -260,6 +274,7 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			sql.append("FROM NBPT_VIEW_REGION A ");
 			sql.append("WHERE A.NBPT_SP_REGION_RESPONSIBLER = '" + nbpt_SP_PERSON_PID + "' ");
 			sql.append("AND A.NBPT_SP_REGION_LEVEL = '" + type + "' ");
+			sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
 			NBPT_VIEW_REGION regionInfo = this.oneQueryForClasz(sql.toString(), connection, NBPT_VIEW_REGION.class);
 			return regionInfo;
 		} catch (SQLException e) {
@@ -282,6 +297,43 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			return regionInfo;
 		} catch (SQLException e) {
 			log.error("根据PID查询指定人员出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+	@Override
+	public NBPT_VIEW_XZQX receiveXzqx(String xzqxId, Connection connection) throws SQLException {
+
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT * ");
+		sql.append("FROM NBPT_VIEW_XZQX A ");
+		sql.append("WHERE A.NBPT_COMMON_XZQXHF_ID = '" + xzqxId + "' ");
+
+		try {
+			
+			return this.oneQueryForClasz(sql.toString(), connection, NBPT_VIEW_XZQX.class);
+		} catch (SQLException e) {
+			
+			log.error("查询废弃的部门出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_XZQX> receiveRegionXzqx(String regionUid, Connection connection) throws SQLException {
+
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT * ");
+		sql.append("FROM NBPT_VIEW_XZQX A ");
+		sql.append("WHERE A.NBPT_SP_REGION_UID = '" + regionUid + "' ");
+		
+		try {
+			
+			return this.queryForClaszs(sql.toString(), connection, NBPT_VIEW_XZQX.class);
+		} catch (SQLException e) {
+			
+			log.error("查询废弃的部门出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

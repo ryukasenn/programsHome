@@ -33,9 +33,6 @@ public interface RegionManageDao extends SellPersonnelBaseDao{
 	public List<NBPT_SP_REGION> receiveRegionsSelect(Connection connection) throws SQLException;
 
 
-
-	public NBPT_SP_PERSON receiveCurrentResper(String nbpt_SP_REGION_RESPONSIBLER, Connection connection) throws SQLException;
-
 	/**
 	 * 根据personType获取当前没有分配负责区域的大区总或地总
 	 * @param personType 22:地总,26:大区总
@@ -96,5 +93,15 @@ public interface RegionManageDao extends SellPersonnelBaseDao{
 	 * @throws SQLException
 	 */
 	public String receiveRegonNeedSum(String regionUid,Connection connection) throws SQLException;
+	
+	/**
+	 * 查询废弃的大区
+	 * provinceId 省份ID
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<NBPT_SP_REGION> receiveDumpedRegion(String provinceId, Connection connection) throws SQLException;
+	
+
 	
 }

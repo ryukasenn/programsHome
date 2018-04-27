@@ -7,9 +7,12 @@ block buttons
     .form-group
         button(type="button").btn.btn-default#supportAdd 添加大区总地总
         |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
+        |&nbsp&nbsp
         
 block contents
-    .col-xs-9.col-sm-9
+    .col-xs-10.col-sm-10
         .panel.panel-default
             .panel-heading 大区人员信息统计
                 a.btn.btn-link(href = '#{baseUrl}/sellPersonnel/persons') 后退
@@ -18,6 +21,7 @@ block contents
                 tr
                     th(style="text-align:center") 省份
                     th(style="text-align:center") 地区
+                    th(style="text-align:center") 地总
                     th(style="text-align:center") 正式区县总
                     th(style="text-align:center") 预备区县总
                     th(style="text-align:center") 推广经理
@@ -33,6 +37,7 @@ block contents
                             td(style="vertical-align:middle")
                                 a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{info.areaUid}&regionUid=#{regionUid}')
                                     #{info.areaName}
+                            td(style="vertical-align:middle")= info.areaHeader
                             td(style="vertical-align:middle").OTC_xzquResper= info.xzquResper
                             td(style="vertical-align:middle").OTC_xzquResper_preparatory= info.xzquResper_preparatory
                             td(style="vertical-align:middle").OTC_promote= info.promote
@@ -43,6 +48,7 @@ block contents
                             td(style="vertical-align:middle")= info.dismissionRate
                 tr
                     th(style="text-align:center") 已配
+                    th(style="text-align:center")
                     th(style="text-align:center")
                     th(style="text-align:center").OTC_xzquResper_total
                     th(style="text-align:center").OTC_xzquResper_preparatory_total

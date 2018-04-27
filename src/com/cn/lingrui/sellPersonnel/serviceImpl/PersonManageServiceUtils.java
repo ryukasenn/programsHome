@@ -60,7 +60,7 @@ public class PersonManageServiceUtils {
 		}
 				
 		// 添加部门
-		person.setNBPT_SP_PERSON_DEPT_ID(out.getPerson().getNBPT_SP_PERSON_DEPT_ID());
+		person.setNBPT_SP_PERSON_DEPT_ID(out.getPerson().getNBPT_SP_PERSON_AREA_UID());
 		
 		// 人员类型
 		person.setNBPT_SP_PERSON_TYPE(out.getPerson().getNBPT_SP_PERSON_TYPE());
@@ -184,6 +184,8 @@ public class PersonManageServiceUtils {
 			table.setNeed(CommonUtil.objToInteger(region.getNBPT_SP_REGION_NEED()));
 			
 			table.setAreaUid(region.getNBPT_SP_REGION_UID());
+			
+			table.setAreaHeader(region.getNBPT_SP_REGION_RESPONSIBLER_NAME());
 			
 			List<NBPT_VIEW_CURRENTPERSON> currentAreaPersons = CommonServiceUtils.getPersonsByKey(classifyiedPersons, region.getNBPT_SP_REGION_UID());
 			

@@ -5,52 +5,51 @@ extends ./layouts/0302
 
         
 block contents
-    .row.placeholders
-        .col-xs-12.col-sm-12.placeholder
-            .form-horizontal#changeRegion
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 地区名称
-                    .col-xs-4.col-sm-4
-                        input.form-control(value='#{currentAreaName}', readOnly)
-                        input(type="hidden", value='#{currentAreaUid}')#changeRegion_regionUid
-                        input(type="hidden", value='#{currentAreaId}')#changeRegion_regionId
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 所属大区
-                    .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionName}', readOnly)
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 所属省份
-                    .col-xs-4.col-sm-4
-                        input.form-control(value='#{currentProvince}', readOnly)
-                        input(type="hidden", value='#{currentProvinceId}')#changeRegion_provinceId
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 划分列表
-                    .col-xs-6.col-sm-6
-                        .panel.panel-default
-                            .panel-heading 
-                                |下辖市区县列表(
-                                |<button class="btn btn-link add">添加</button>
-                                |)
-                            table.table
-                                tr
-                                    th(style="text-align:center")
-                                    th(style="text-align:center") 市
-                                    th(style="text-align:center") 区县
-                                    th(style="text-align:center") 操作
-                                each item in citys
-                                    tr(style="text-align:center;")
-                                        td(style="vertical-align:middle")
-                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
-                                        td(style="vertical-align:middle")
-                                        td(style="vertical-align:middle") 
-                                            |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
-                                each item in contys
-                                    tr(style="text-align:center;")  
-                                        td(style="vertical-align:middle")
-                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_PNAME
-                                        td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
-                                        td(style="vertical-align:middle") 
-                                            |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
+    .col-xs-12.col-sm-12
+        .form-horizontal#changeRegion
+            .form-group
+                label.col-xs-1.col-sm-1.control-label 地区名称
+                .col-xs-4.col-sm-4
+                    input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', readOnly)
+                    input(type="hidden", value='#{regionInfo.NBPT_SP_REGION_UID}')#changeRegion_regionUid
+                    input(type="hidden", value='#{regionInfo.NBPT_SP_REGION_ID}')#changeRegion_regionId
+            .form-group
+                label.col-xs-1.col-sm-1.control-label 所属大区
+                .col-xs-4.col-sm-4
+                    input.form-control(value='#{regionInfo.NBPT_SP_REGION_PARENT_NAME}', readOnly)
+            .form-group
+                label.col-xs-1.col-sm-1.control-label 所属省份
+                .col-xs-4.col-sm-4
+                    input.form-control(value='#{regionInfo.NBPT_SP_REGION_PROVINCE_NAME}', readOnly)
+                    input(type="hidden", value='#{regionInfo.NBPT_SP_REGION_PROVINCE_ID}')#changeRegion_provinceId
+            .form-group
+                label.col-xs-1.col-sm-1.control-label 划分列表
+                .col-xs-6.col-sm-6
+                    .panel.panel-default
+                        .panel-heading 
+                            |下辖市区县列表(
+                            |<button class="btn btn-link add">添加</button>
+                            |)
+                        table.table.table-hover
+                            tr
+                                th(style="text-align:center")
+                                th(style="text-align:center") 市
+                                th(style="text-align:center") 区县
+                                th(style="text-align:center") 操作
+                            each item in citys
+                                tr(style="text-align:center;")
+                                    td(style="vertical-align:middle")
+                                    td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
+                                    td(style="vertical-align:middle")
+                                    td(style="vertical-align:middle") 
+                                        |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
+                            each item in contys
+                                tr(style="text-align:center;")  
+                                    td(style="vertical-align:middle")
+                                    td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_PNAME
+                                    td(style="vertical-align:middle")= item.NBPT_COMMON_XZQXHF_NAME
+                                    td(style="vertical-align:middle") 
+                                        |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03020501.js")
     

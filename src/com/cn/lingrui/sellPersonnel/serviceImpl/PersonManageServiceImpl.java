@@ -121,11 +121,12 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 获取终端人员信息
 			List<NBPT_VIEW_CURRENTPERSON> personInfos = personManageDao.receiveTerminal(null, null, areaUid, null, this.getConnection());
 			
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> personsClassifyed = CommonServiceUtils.dealPersonsByKey(personInfos, "NBPT_SP_PERSON_FLAG");
 			// 获取地区信息
 			NBPT_VIEW_REGION regionInfo = personManageDao.receiveRegion(areaUid, this.getConnection());
 			
 			// 1.该地总手下人数
-			mv.addObject("thisInfact", personInfos.size());
+			mv.addObject("thisInfact", personsClassifyed.get("2").size());
 			
 			// 2.该地区负责人
 			mv.addObject("thisResper", "".equals(regionInfo.getNBPT_SP_REGION_RESPONSIBLER_NAME()) ? "" :
@@ -135,8 +136,11 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			// 3.传递地区UID
 			mv.addObject("areaUid", areaUid);
 			
-			// 返回终端数据
-			mv.addObject("personInfos", personInfos);
+			// 返回在职数据
+			mv.addObject("personInfos", CommonUtil.getListInMapByKey(personsClassifyed, "2"));
+			
+			// 返回离职数据
+			mv.addObject("personDimissionInfos", CommonUtil.getListInMapByKey(personsClassifyed, "3"));
 			
 			// 返回地区信息
 			mv.addObject("regionInfo", regionInfo);

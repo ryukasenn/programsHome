@@ -2,6 +2,8 @@ doctype html
 html(lang="en")
     head
         meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible", content="IE=edge")
+        meta(name="viewport", content="width=device-width, initial-scale=1")
         title 羚锐集团内部平台
         link(rel='stylesheet', href='#{myPath}/stylesheets/css/bootstrap.min.css')
         link(rel='stylesheet', href='#{myPath}/stylesheets/layout.min.css')
@@ -26,9 +28,7 @@ html(lang="en")
                     .navbar-collapse.collapse
                         ul.nav.navbar-nav.navbar-right
                             li: a 你好，#{niko}
-                            li: a(href="#{myPath}/login") 退出
-                        form.navbar-form.navbar-right
-                            input.form-control(type="text",placeholder='Search...' )
+                            li: a(href="#{myPath}/logout") 退出
         block body
             .container-fluid
                 .row-fluid

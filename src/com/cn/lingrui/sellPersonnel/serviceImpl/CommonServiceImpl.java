@@ -1,6 +1,7 @@
 package com.cn.lingrui.sellPersonnel.serviceImpl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,10 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 	private static Logger log = LogManager.getLogger();
 
+	@Override
+	protected String getFunNum() {
+		return null;
+	}
 	@Resource(name = "personManageDao")
 	private PersonManageDao personManageDao;
 
@@ -42,7 +47,6 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 
 		// 初始化返回
 		ModelAndView mv = null;
-
 
 		try {
 			
@@ -85,14 +89,20 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 					// 查询所有下级人员信息
 					List<NBPT_VIEW_CURRENTPERSON> persons = personManageDao.receiveTerminal(null, null, responsRegion.getNBPT_SP_REGION_UID(), null, this.getConnection());
 					
+					Map<String, List<NBPT_VIEW_CURRENTPERSON>> personClassifyed = CommonServiceUtils.dealPersonsByKey(persons, "NBPT_SP_PERSON_FLAG");
+					
 					// 1.查询该地总配额
 					mv.addObject("thisNeed", responsRegion.getNBPT_SP_REGION_NEED());
 					
-					// 2.该地总手下人数
-					mv.addObject("thisInfact", persons.size());
+					// 2.该地总手下在职人数
+					mv.addObject("thisInfact", CommonUtil.getListInMapByKey(personClassifyed, "2").size());
+										
+					// 在职数据
+					mv.addObject("personInJobInfos", CommonUtil.getListInMapByKey(personClassifyed, "2"));
 					
-					// 返回数据
-					mv.addObject("personInfos", persons);
+					// 离职数据
+					mv.addObject("personDimissionInfos", CommonUtil.getListInMapByKey(personClassifyed, "3"));
+					
 				}
 			}
 			
@@ -106,6 +116,59 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 		}
 	}
 
+	@Override
+	public ModelAndView receiveAllCurrentTerminals() throws Exception {
+
+
+		try {
+
+			this.before();
+
+			// 初始化返回
+			ModelAndView mv = null ;
+			
+			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
+	
+			List<NBPT_VIEW_CURRENTPERSON> persons = new ArrayList<NBPT_VIEW_CURRENTPERSON>();
+			// 后勤人员获取
+			if(null == loginPerson) {
+				
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030407"));
+				persons = personManageDao.receiveTerminal(null, null, null, null, this.getConnection());
+			}
+			
+			// 如果是大区总
+			else if("21".equals(loginPerson.getNBPT_SP_PERSON_JOB()) || "26".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030505"));
+				persons = personManageDao.receiveTerminal(loginPerson.getNBPT_SP_PERSON_REGION_UID(), null, null, null, this.getConnection());
+			}
+			
+			// 如果是信息专员
+			else if("27".equals(loginPerson.getNBPT_SP_PERSON_JOB())) {
+
+				mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030607"));
+				// 处理信息专员管理大区
+				String[] reginUids = loginPerson.getNBPT_SP_PERSON_DEPT_ID().split(",");
+				
+				for(String regionUid : reginUids) {
+					
+					persons.addAll(personManageDao.receiveTerminal(regionUid, null, null, null, this.getConnection()));
+				}
+			}
+
+			mv.addObject("personInfos", persons);
+			
+			return this.after(mv);
+
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("查询当前所有人员详细信息出错");
+			throw new Exception();
+		}
+	}
+	
 	@Override
 	public String receiveSelect(String parentId) throws Exception {
 
@@ -175,10 +238,6 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 		}
 	}
 
-	@Override
-	protected String getFunNum() {
-		// TODO 自动生成的方法存根
-		return null;
-	}
+
 
 }

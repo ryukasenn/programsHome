@@ -87,6 +87,15 @@ public interface RegionManageService {
 	 * @return
 	 * @throws Exception
 	 */
-	public ModelAndView postAddArea(AddRegionPojoIn in);
+	public ModelAndView postAddArea(AddRegionPojoIn in) throws Exception;
+
+	/**
+	 * AJAX检测是否有废弃的部门
+	 * @param type
+	 * @param provinceId
+	 * @return
+	 * @throws Exception 
+	 */
+	public String checkRegion(String type, String provinceId) throws Exception;
 
 }

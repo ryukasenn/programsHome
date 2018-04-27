@@ -60,6 +60,7 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 				controllAreas = personManageDao.getAreaSelects(loginPerson.getNBPT_SP_PERSON_LOGINID(), this.getConnection());
 				controllAreas.add(0, new NBPT_COMMON_XZQXHF());
 				
+				// 获取保单类型
 				dictionarys = personManageDao.receiveDictionarys("POLICYTYPE", this.getConnection());
 	
 				mv.addObject("controllAreas", controllAreas);

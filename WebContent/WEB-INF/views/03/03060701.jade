@@ -1,0 +1,57 @@
+
+// 信息专员:查看所有
+extends ./layouts/0306
+        
+block contents
+    if message
+        .col-xs-12.col-sm-12
+            h3= message
+    else 
+        unless personInfos.length
+            .col-xs-10.col-sm-10
+                .panel.panel-default
+                    .panel-heading 名单列表
+                        button.btn.btn-link.downLoadCheckOut(value='renyuanxinxi') 导出
+                    table.table#renyuanxinxi
+                        tr
+                            th(style="text-align:center") #
+                            th(style="text-align:center") 姓名
+                            th(style="text-align:center") 性别
+                            th(style="text-align:center") 职务
+                            th(style="text-align:center") 文化程度
+                            th(style="text-align:center") 入职日期
+                            th(style="text-align:center") 工龄
+                            th(style="text-align:center") 籍贯
+                            th(style="text-align:center") 联系电话
+                            th(style="text-align:center") 紧急联系人
+                            th(style="text-align:center") 年龄
+                            th(style="text-align:center") 当前状态
+                        each person,i in personInfos
+                            tr  
+                                th(style="vertical-align:middle;text-align:center;",scope="row")= i+1
+                                td(style="text-align:center;").col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_REAL_MALE
+                                td(style="text-align:center;")
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '23': 正式区县总
+                                        when '24': 预备区县总
+                                        when '25': 推广经理
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_DEGREE
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_ENTRYDATA
+                                td(style="text-align:center;") #{person.NBPT_SP_PERSON_WORKAGE}年
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_PLACE
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB1
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB2
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_AGE
+                                td(style="text-align:center;")
+                                    case person.NBPT_SP_PERSON_FLAG
+                                        when '2': 在职
+                                        when '3': 离职
+                        
+                            
+        
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js")
+        
+block pageId
+    p(style="display:none") 03060701

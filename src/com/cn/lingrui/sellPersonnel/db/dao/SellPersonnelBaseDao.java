@@ -8,6 +8,7 @@ import com.cn.lingrui.common.db.dao.BaseDao;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_XZQX;
 
 public interface SellPersonnelBaseDao extends BaseDao{
 
@@ -97,5 +98,22 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException 
 	 */
 	public NBPT_VIEW_REGION receiveRegionByResper(String nbpt_SP_PERSON_PID, String type, Connection connection) throws SQLException;
-
+	
+	/**
+	 * 查询指定国家行政区县划分
+	 * @param xzqxId 行政区县ID
+	 * @param connection
+	 * @return
+	 * @throws SQLException 
+	 */
+	public NBPT_VIEW_XZQX receiveXzqx(String xzqxId, Connection connection) throws SQLException;
+	
+	/**
+	 * 查询部门负责行政区县
+	 * @param xzqxId 行政区县ID
+	 * @param connection
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<NBPT_VIEW_XZQX> receiveRegionXzqx(String regionUid, Connection connection) throws SQLException;
 }

@@ -10,6 +10,13 @@ public interface CommonService {
 	 * @throws Exception 
 	 */
 	public ModelAndView receiveCurrentTerminals() throws Exception;
+	
+	/**
+	 * 查询当前所有人员信息(根据不同权限,生成不同页面)
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView receiveAllCurrentTerminals() throws Exception;
 
 	public String receiveSelect(String parentId) throws Exception;
 

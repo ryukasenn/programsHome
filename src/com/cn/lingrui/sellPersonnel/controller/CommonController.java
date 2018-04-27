@@ -36,6 +36,19 @@ public class CommonController {
 
 		return mv;
 	}
+	
+	/**
+	 * 查询当前人员
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/receiveAllPersons", method = RequestMethod.GET)
+	public ModelAndView receiveAllCurrentTerminal() throws Exception {
+
+		ModelAndView mv = commonService.receiveAllCurrentTerminals();
+
+		return mv;
+	}
 
 	/**
 	 * 获取负责区域下拉框

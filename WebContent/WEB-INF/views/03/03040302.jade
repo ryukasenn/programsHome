@@ -7,6 +7,9 @@ block buttons
     .form-group
         button(type="button").btn.btn-default#supportAdd 添加大区总地总
         |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
+        |&nbsp&nbsp
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
@@ -17,6 +20,18 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp姓名
                     .col-xs-4.col-sm-2
                         input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp身份证号码
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_IDNUM")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp籍贯
+                    .col-xs-4.col-sm-4
+                        input.form-control(name="NBPT_SP_PERSON_PLACE",placeholder="例:信阳", value='#{person.NBPT_SP_PERSON_PLACE}', maxlength="10")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -62,20 +77,6 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
-                        |&nbsp&nbsp&nbsp&nbsp负责大区
-                    .col-xs-2.col-sm-2
-                        select.form-control.provinceSelect
-                            each item in regions
-                                option(value="#{item.NBPT_COMMON_XZQXHF_ID}") #{item.NBPT_SP_REGION_NAME}
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 
-                        font(color="red") *
-                        |&nbsp&nbsp身份证号码
-                    .col-xs-4.col-sm-4
-                        input.form-control(name="NBPT_SP_PERSON_IDNUM")
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 
-                        font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp个人手机
                     .col-xs-4.col-sm-4
                         input.form-control(name="NBPT_SP_PERSON_MOB1",placeholder="例:18518596989")
@@ -91,12 +92,6 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp入职时间
                     .col-xs-4.col-sm-4
                         input.form-control(name="NBPT_SP_PERSON_ENTRYDATA",placeholder="例:19981010")
-                .form-group
-                    label.col-xs-1.col-sm-1.control-label 
-                        font(color="red") *
-                        |&nbsp&nbsp&nbsp&nbsp籍贯
-                    .col-xs-4.col-sm-4
-                        input.form-control(name="NBPT_SP_PERSON_PLACE",placeholder="例:张三")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *

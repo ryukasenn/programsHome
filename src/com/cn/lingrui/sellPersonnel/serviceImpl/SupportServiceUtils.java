@@ -76,14 +76,11 @@ public class SupportServiceUtils {
 				for(NBPT_VIEW_CURRENTPERSON otcType : classifyByRegions.get(region.getNBPT_SP_REGION_UID())) {
 					CommonServiceUtils.count(info, otcType);
 				}
-	
-				// 差额计算
-				Integer balance = info.getTotal() - info.getNeed();
-				info.setBalance(balance);
-				
+								
 				OTCInfos.add(info);
 			}
-			
+
+			CommonServiceUtils.otherCompute(OTCInfos);
 			return OTCInfos; 
 		}catch (NoSuchFieldException e) {
 			

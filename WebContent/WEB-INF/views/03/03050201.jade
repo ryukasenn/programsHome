@@ -1,52 +1,51 @@
 
-// 大区信息,查看大区人员信息(大区总,信息专员)
+// 大区信息,查看大区人员信息(大区总)
 extends ./layouts/0305
         
 block contents
-    .row.placeholders
-        .col-xs-9.col-sm-9.placeholder
-            .panel.panel-default
-                .panel-heading 大区人员信息统计
-                    button.btn.btn-link.downLoadCheckOut(value='hejixinxi') 导出
-                table.table#hejixinxi
-                    tr
-                        th(style="text-align:center") 省份
-                        th(style="text-align:center") 地区
-                        th(style="text-align:center") 正式区县总
-                        th(style="text-align:center") 预备区县总
-                        th(style="text-align:center") 推广经理
-                        th(style="text-align:center") 已配
-                        th(style="text-align:center") 应配
-                        th(style="text-align:center") 差额
-                        th(style="text-align:center") 离职合计
-                        th(style="text-align:center") 离职率
-                    unless infos.length
-                        each info in infos
-                            tr(style="text-align:center;") 
-                                td(style="vertical-align:middle")= info.provinceName
-                                td(style="vertical-align:middle")
-                                    a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{info.areaUid}&regionUid=#{regionUid}')
-                                        #{info.areaName}
-                                td(style="vertical-align:middle").OTC_xzquResper= info.xzquResper
-                                td(style="vertical-align:middle").OTC_xzquResper_preparatory= info.xzquResper_preparatory
-                                td(style="vertical-align:middle").OTC_promote= info.promote
-                                td(style="vertical-align:middle").OTC_heji= info.total
-                                td(style="vertical-align:middle").OTC_need= info.need
-                                td(style="vertical-align:middle")= info.balance
-                                td(style="vertical-align:middle").OTC_dismission= info.dismission
-                                td(style="vertical-align:middle")= info.dismissionRate
-                    tr
-                        th(style="text-align:center") 已配
-                        th(style="text-align:center")
-                        th(style="text-align:center").OTC_xzquResper_total
-                        th(style="text-align:center").OTC_xzquResper_preparatory_total
-                        th(style="text-align:center").OTC_promote_total
-                        th(style="text-align:center").OTC_heji_total
-                        th(style="text-align:center").OTC_need_total
-                        th(style="text-align:center")
-                        th(style="text-align:center").OTC_dismission_total
-                        th(style="text-align:center")
-                            
+    .col-xs-9.col-sm-9
+        .panel.panel-default
+            .panel-heading 大区人员信息统计
+                button.btn.btn-link.downLoadCheckOut(value='hejixinxi') 导出
+            table.table#hejixinxi
+                tr
+                    th(style="text-align:center") 省份
+                    th(style="text-align:center") 地区
+                    th(style="text-align:center") 正式区县总
+                    th(style="text-align:center") 预备区县总
+                    th(style="text-align:center") 推广经理
+                    th(style="text-align:center") 已配
+                    th(style="text-align:center") 应配
+                    th(style="text-align:center") 差额
+                    th(style="text-align:center") 离职合计
+                    th(style="text-align:center") 离职率
+                unless infos.length
+                    each info in infos
+                        tr(style="text-align:center;") 
+                            td(style="vertical-align:middle")= info.provinceName
+                            td(style="vertical-align:middle")
+                                a.btn.btn-link.btn-xs.OTC_regionResper(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{info.areaUid}&regionUid=#{regionUid}')
+                                    #{info.areaName}
+                            td(style="vertical-align:middle").OTC_xzquResper= info.xzquResper
+                            td(style="vertical-align:middle").OTC_xzquResper_preparatory= info.xzquResper_preparatory
+                            td(style="vertical-align:middle").OTC_promote= info.promote
+                            td(style="vertical-align:middle").OTC_heji= info.total
+                            td(style="vertical-align:middle").OTC_need= info.need
+                            td(style="vertical-align:middle")= info.balance
+                            td(style="vertical-align:middle").OTC_dismission= info.dismission
+                            td(style="vertical-align:middle")= info.dismissionRate
+                tr
+                    th(style="text-align:center") 已配
+                    th(style="text-align:center")
+                    th(style="text-align:center").OTC_xzquResper_total
+                    th(style="text-align:center").OTC_xzquResper_preparatory_total
+                    th(style="text-align:center").OTC_promote_total
+                    th(style="text-align:center").OTC_heji_total
+                    th(style="text-align:center").OTC_need_total
+                    th(style="text-align:center")
+                    th(style="text-align:center").OTC_dismission_total
+                    th(style="text-align:center")
+                        
         
 
 block scripts

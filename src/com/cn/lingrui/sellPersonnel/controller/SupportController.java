@@ -18,4 +18,29 @@ public class SupportController {
 	@Resource(name = "supportSerivce")
 	private SupportSerivce supportSerivce;
 	
+	/**
+	 * 生成考核列表
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/createEvaluationForm", method = RequestMethod.GET)
+	public ModelAndView createEvaluationForm(String endTime) throws Exception {
+
+		ModelAndView mv = supportSerivce.createEvaluationForm(endTime);
+
+		return mv;
+	}
+	
+	/**
+	 * 生成考核列表
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/supportAdd", method = RequestMethod.GET)
+	public ModelAndView getSupportAdd() throws Exception {
+
+		ModelAndView mv = supportSerivce.getSupportAdd();
+
+		return mv;
+	}
 }

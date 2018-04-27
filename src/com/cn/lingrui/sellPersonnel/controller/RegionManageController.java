@@ -145,6 +145,21 @@ public class RegionManageController {
 
 		return mv;
 	}
+	
+	/**
+	 * 检测是否有废弃部门
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+	@RequestMapping(value = "/checkRegion", method = RequestMethod.GET)
+	public String checkRegion(String type, String provinceId) throws Exception {
+
+		String mv = regionManageService.checkRegion(type,provinceId);
+
+		return mv;
+	}
 
 
 	/**

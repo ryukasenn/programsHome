@@ -166,7 +166,8 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp备注
                     .col-xs-4.col-sm-4
-                        textarea.form-control(type='textarea', rows='3', name="NBPT_SP_PERSON_NOTE", value='#{person.NBPT_SP_PERSON_NOTE}', maxlength="100")
+                        textarea.form-control(type='textarea', rows='3', name="NBPT_SP_PERSON_NOTE", maxlength="100")
+                            #{person.NBPT_SP_PERSON_NOTE}
                 .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
                         button(type="button")#addPerson.btn.btn-primary 提交

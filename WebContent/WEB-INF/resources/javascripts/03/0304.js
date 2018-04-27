@@ -14,4 +14,16 @@ $(function(){
 		
 		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "GET").submit();
 	})
+	
+	
+	$("#supportAdd").on("click", function(){
+		
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/support/supportAdd").attr("method", "GET").submit();
+	})
+	
+	
+	$("#receiveAllPersons").on("click", function(){
+		
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/receiveAllPersons").attr("method", "GET").submit();
+	})
 })

@@ -41,7 +41,7 @@ block contents
                             th(style="text-align:center") 紧急联系人
                             th(style="text-align:center") 年龄
                             th(style="text-align:center") 当前状态
-                        each person,i in personInfos
+                        each person,i in personInJobInfos
                             tr(style="text-align:center;")
                                 th(style="text-align:center",scope="row")= i+1
                                 td(style="vertical-align:middle").col-xs-1.col-sm-1
@@ -50,12 +50,9 @@ block contents
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REAL_MALE
                                 td(style="vertical-align:middle")
                                     case person.NBPT_SP_PERSON_JOB
-                                        when '21': 大区总
-                                        when '22': 地总
                                         when '23': 区县总
                                         when '24': 预备区县总
                                         when '25': 推广经理
-                                        when '26': 大区总兼地总
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_DEGREE
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_ENTRYDATA
                                 td(style="vertical-align:middle") #{person.NBPT_SP_PERSON_WORKAGE}年
@@ -63,12 +60,25 @@ block contents
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB1
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
+                                td(style="vertical-align:middle") 在职
+                        each person,i in personDimissionInfos
+                            tr(style="text-align:center;")
+                                th(style="text-align:center",scope="row")= i+1
+                                td(style="vertical-align:middle").col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REAL_MALE
                                 td(style="vertical-align:middle")
-                                    case person.NBPT_SP_PERSON_FLAG
-                                        when '2': 在职
-                                        when '0': 等待信息专员审核
-                                        when '1': 等待大区总审核
-                                        when '3': 离职
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '23': 区县总
+                                        when '24': 预备区县总
+                                        when '25': 推广经理
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_DEGREE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_ENTRYDATA
+                                td(style="vertical-align:middle") #{person.NBPT_SP_PERSON_WORKAGE}年
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_PLACE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB1
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
+                                td(style="vertical-align:middle") 离职
                                 
         
 block scripts

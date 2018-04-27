@@ -33,5 +33,9 @@ $(function(){
 		
 		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/infoCommissioner/allTerminals").attr("method", "GET").submit();
 	})
+	$("#receiveAllPersons").on("click", function(){
+		
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/receiveAllPersons").attr("method", "GET").submit();
+	})
 
 })

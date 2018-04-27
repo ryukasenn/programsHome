@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.SupportDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
+import com.cn.lingrui.sellPersonnel.pojos.support.EvaluationForm;
 
 
 @Repository("supportDao")
@@ -36,6 +37,22 @@ public class SupportDaoImpl extends SellPersonnelBaseDaoImpl implements SupportD
 		} catch (SQLException e) {
 	
 			log.error("后勤查询所有人员信息,除信息专员外出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public EvaluationForm receiveEvalutionForm(String endTime, Connection conn) throws SQLException {
+
+		
+		try {
+			EvaluationForm resultList = new EvaluationForm();
+						
+			this.dealReportData(resultList, this.callProcedure("NBPT_PROCEDURE_EVALUATION_FORM", conn, endTime));
+			return resultList;
+		} catch (SQLException e) {
+	
+			log.error("后勤查询考勤出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

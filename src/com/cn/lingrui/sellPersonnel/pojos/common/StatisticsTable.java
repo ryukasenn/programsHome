@@ -5,6 +5,7 @@ public class StatisticsTable {
 	private String regionName; // 大区名称
 	private String provinceName; // 省区名称
 	private String areaName; // 地区名称
+	private String areaHeader; // 地总名称
 	private Integer need = 0; // 配额
 	private Integer balance = 0; // 大区差额
 	private Integer regionResper = 0; // 大区总
@@ -128,6 +129,12 @@ public class StatisticsTable {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getAreaHeader() {
+		return areaHeader;
+	}
+	public void setAreaHeader(String areaHeader) {
+		this.areaHeader = areaHeader;
 	}
 	
 	

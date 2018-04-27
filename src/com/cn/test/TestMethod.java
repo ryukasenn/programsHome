@@ -152,7 +152,7 @@ public class TestMethod {
 	@Test
 	public void test6() {
 		
-		for(int i = 0 ; i < 31; i++) {
+		for(int i = 0 ; i < 34; i++) {
 			
 			System.out.println(CommonUtil.getUUID_32());
 		}

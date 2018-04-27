@@ -24,6 +24,15 @@ $(function(){
 			}
 			
 		})
+		
+		// 锁死部分项目
+		var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_ENTRYDATA");
+		var radioItems = new Array("NBPT_SP_PERSON_JOB","NBPT_SP_PERSON_MALE");
+		
+		setReadOnly({
+			inputItems : inputItems,
+			radioItems : radioItems
+		});
 	}
 	
 	// 必填项目列表
@@ -45,11 +54,12 @@ $(function(){
 	
 	// 需要验证的时间格式
 	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA");
+	
 	/**
 	 * 点击提交事件
 	 */
 	$("#addPerson").on("click", function(){
-		
+				
 		if(1 == $(".reponseAreas").length && "" == $(".reponseAreas").find("select").val()){
 			
 			$(".reponseAreas").addClass("has-error");
@@ -60,8 +70,6 @@ $(function(){
 			});
 			return;
 		}
-		
-		
 		
 		// 输入框统一为空检验
 		if(necessaryCheck(inputItems,radioItems,selectItems)){
@@ -153,7 +161,7 @@ $(function(){
 				
 				if (timeItems.indexOf($_this.attr('name')) >= 0 ){ // 如果是时间项目,要验证时间格式
 					
-					if(timeCheck($_this)){
+					if(isTime($_this)){
 
 						$_thisParent.removeClass("has-error");
 					} else {

@@ -185,25 +185,39 @@ public class HttpUtil {
 	 */
 	public static String getCookieValue(HttpServletRequest req, String key) {
 
-		return readCookie(req).get(key).getValue();
+		Cookie cookie = readCookie(req).get(key);
+		
+		return null == cookie ? "" : readCookie(req).get(key).getValue();
 	}
 	
 	public static String decodeToken(String token) throws UnsupportedEncodingException {
-
-		String CHARSET = "utf-8";
+		
+		if(null == token || "".equals(token)) {
+			return "";
+		}
+		String CHARSET = "UTF-8";
 		String ltpaDominoSecret="YZLGw22dlpZukZmTb5plaGyWymE=";
-		byte[] dominoSecret = Base64.decodeBase64(ltpaDominoSecret.getBytes());
-		String preltpaToken=token;
+		byte[] dominoSecret = Base64.decodeBase64(ltpaDominoSecret.getBytes());         			
+		String preltpaToken= token;
 		StringBuffer sb=new StringBuffer(preltpaToken);
-		if(preltpaToken.length()<64) {
-				for(int j=0;j<64-preltpaToken.length();j++) {
-		 		sb.append("=");
-				}
-			}
-	   String newltpaToken=token.toString();
-	   System.out.println(newltpaToken);
+
+		switch(preltpaToken.length()%4) {  
+				  case 3:  
+						 sb.append("==="); break; // 注：其实只需要补充一个或者两个等号，不存在补充三个等号的情况  
+				  case 2:  
+						 sb.append("=="); break;  
+				  case 1:  
+						 sb.append("="); break;  
+				  default:  
+				}  
+
+
+	   String newltpaToken = sb.toString();							
+		
+	   //System.out.println(newltpaToken);
+	   //System.out.println(newltpaToken.length());
 	   byte[] ltpa =Base64.decodeBase64(newltpaToken.getBytes());
-	   System.out.println("ltpa:"+ltpa);
+	   //System.out.println("ltpa:"+ltpa);
 	   ByteArrayInputStream stream = new ByteArrayInputStream(ltpa); 
 	   int usernameLength = ltpa.length - 40;
 	   byte header[] = new byte[4];
@@ -213,42 +227,19 @@ public class HttpUtil {
 	   byte[] sha = new byte[20];
 	  
 	   stream.read(header, 0, 4); 
+	   // 读取LTPAToken版本号  14stream.read(header, 0, 4);
 	   if (header[0] != 0 || header[1] != 1 || header[2] != 2|| header[3] != 3)
 		           throw new IllegalArgumentException("Invalid ltpaToken format"); 
+//						       // 读取开始时间   
 	   stream.read(creation, 0, 8);
+//						      // 读取到期时间   
 	   stream.read(expires, 0, 8);  
+//						 // 读取Domino用户DN   
 	   stream.read(username, 0, usernameLength);  
+//						   // 读取SHA校验和    
 	   stream.read(sha, 0, 20);
-	   char characters[] = new char[usernameLength];  
-		   
-	    try {   
-		    	InputStreamReader isr = new InputStreamReader(  new ByteArrayInputStream(username),  CHARSET); 
-		    	isr.read(characters);  
-	    	} catch (Exception e) {     } 
-    	ByteArrayOutputStream ostream = new ByteArrayOutputStream(); 
-    	try {   
-			ostream.write(header); 
-    		ostream.write(creation); 
-    		ostream.write(expires);    
-    		ostream.write(username); 
-    		ostream.write(dominoSecret);  	
-    		ostream.close();   
-		} catch (IOException e) {
-				throw new RuntimeException(e);
-		}  
-		MessageDigest md; 
-		System.out.println("username"+ new String(username));
-		//System.out.println("username"+ new String(username));
-		try {   
-			md = MessageDigest.getInstance("SHA-1"); 
-			md.reset();   
-		} catch (NoSuchAlgorithmException e) {         throw new RuntimeException(e);     }   
-		byte[] digest = md.digest(ostream.toByteArray()); 
-		System.out.println("degest: "+ new String(digest,"utf-8"));
-		System.out.println("sha: "+ new String(sha,"utf-8"));
-		//boolean valid = MessageDigest.isEqual(digest, sha); 
 		
-		return new String(username);
+	   return new String(username);
 	}
 
 }

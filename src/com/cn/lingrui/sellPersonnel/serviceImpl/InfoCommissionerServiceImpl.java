@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
+import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.InfoCommissionerDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
@@ -236,11 +237,18 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			
 			persons = infoCommissionerDao.receiveTerminal(null, null, in.getAreaUid(), null, this.getConnection());
 			
-			mv.addObject("persons", persons);
+			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifiedPersons = CommonServiceUtils.dealPersonsByKey(persons, "NBPT_SP_PERSON_FLAG");
+			
+			// 在职人员
+			mv.addObject("persons", CommonUtil.getListInMapByKey(classifiedPersons, "2"));
+			// 离职人员
+			mv.addObject("personsDimission", CommonUtil.getListInMapByKey(classifiedPersons, "3"));
+			
+			
 
 			mv.addObject("provinceId", region.getNBPT_SP_REGION_PROVINCE_ID());
 			mv.addObject("thisNeed", region.getNBPT_SP_REGION_NEED());
-			mv.addObject("thisInfact", persons.size());
+			mv.addObject("thisInfact", classifiedPersons.get("2").size());
 			mv.addObject("thisResper", region.getNBPT_SP_REGION_RESPONSIBLER_NAME());
 			mv.addObject("thisArea", region.getNBPT_SP_REGION_NAME());
 			

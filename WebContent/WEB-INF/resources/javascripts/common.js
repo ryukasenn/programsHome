@@ -226,21 +226,22 @@ $(function(){
 		$_messageBox = $_parentItem.nextAll(".errorMessages").remove();
 	}
 	
-	function timeCheck(item){
+	function isTime(item){
 
-		var reg = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
-		var regExp = new RegExp(reg);
-		if(!regExp.test(item.val())){
-
-			return false;
-		}
+		var reg1 = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		var reg2 = /^[1-9]\d{3}\/(0[1-9]|1[0-2])\/(0[1-9]|[1-2][0-9]|3[0-1])$/;
+		var regExp1 = new RegExp(reg1);
+		var regExp2 = new RegExp(reg2);
 		
-		return true;
+		if(regExp1.test(item.val()) || regExp2.test(item.val())){
 
+			return true;
+		}
+		return false;
 	}
 	
 	/**
-	 * 代替confirm模态框
+	 * 代替confirm,alert模态框
 	 */
 	var Confirm = function (options){
 		
@@ -292,15 +293,16 @@ $(function(){
 			
 			switch (config.type){
 			
-				case "confirm" :
-					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-default" id="ConfirmModalCancel">取消</buttion>'));
-					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-primary" id="ConfirmModalSure">确定</buttion>'));
-					this.sureBtn   = this.contain.find('.btn-primary')[0];
-					this.cancelBtn   = this.contain.find('.btn-default')[0];
-					break;
 				case "alert" :
 					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-primary" id="ConfirmModalSure">确定</buttion>'));
 					this.sureBtn   = this.contain.find('.btn-primary')[0];
+					break;
+			
+				default:
+					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-default" id="ConfirmModalCancel">取消</buttion>'));
+					this.contain.find(".modal-footer").append($('<button type="button" data-dismiss="modal" class="btn btn-primary" id="ConfirmModalSure">确定</buttion>'));
+					this.sureBtn   = this.contain.find('.btn-primary')[0];
+					this.cancelBtn = this.contain.find('.btn-default')[0];
 					break;
 			}
 		},
@@ -346,6 +348,66 @@ $(function(){
 		
 	}
 	
+	/**
+	 * 获取当前时间YYYY-MM-DD格式
+	 * @returns
+	 */
+	function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    }
+	
+	function setReadOnly(items){
+		
+		if(undefined != items.inputItems || null != items.inputItems){
+			
+			var inputItems = items.inputItems;
+			// 遍历设置只读的input
+			for(var nameI = 0; nameI < inputItems.length; nameI++){
+				
+				// 获取只读项
+				var $_checkItem = $("input[name='" + inputItems[nameI] + "']");
+				
+				$_checkItem.attr("readOnly","readOnly");
+			}
+		}
+		if(undefined != items.radioItems || null != items.radioItems){
+			
+			var radioItems = items.radioItems;
+			// 遍历设置只读的radio
+			for(var nameI = 0; nameI < radioItems.length; nameI++){
+				
+				// 获取只读项
+				var $_checkItem = $("input[name='" + radioItems[nameI] + "']");
+
+				$_checkItem.attr("disabled","disabled");
+			}
+		}
+		if(undefined != items.selectItems || null != items.selectItems){
+	
+			var selectItems = items.selectItems;
+			// 遍历设置只读的select
+			for(var nameI = 0; nameI < selectItems.length; nameI++){
+				
+				// 获取只读项
+				var $_checkItem = $("input[name='" + selectItems[nameI] + "']");
+				
+				$_checkItem.attr("disabled","disabled");
+			}
+		}
+		
+	}
 	
 	
 	

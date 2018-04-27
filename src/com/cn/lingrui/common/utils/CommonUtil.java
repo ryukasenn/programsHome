@@ -484,7 +484,7 @@ public class CommonUtil {
 	}
 	
 	/**
-	 * 从数据库去除的数据传到页面
+	 * 从数据库取出的数据传到页面
 	 * @param date
 	 * @return
 	 */
@@ -502,7 +502,7 @@ public class CommonUtil {
 	 */
 	public static String formateTiemToBasic(String date){
 		
-		return "".equals(date) || null == date? "" : date.replaceAll("-", "");
+		return "".equals(date) || null == date? "" : date.replaceAll("-", "").replaceAll("/", "");
 	}
 	
 	/**
@@ -653,5 +653,19 @@ public class CommonUtil {
 		return resultMap;
 	}
 	
-	
+	/**
+	 * 按key值将分类号的列表取出
+	 * @param classifyiedList
+	 * @param key
+	 * @return
+	 */
+	public static <T> List<T> getListInMapByKey(Map<String, List<T>> classifyiedList, String key){
+		
+		if(null == classifyiedList.get(key)) {
+			return new ArrayList<T>();
+		}else {
+			
+			return classifyiedList.get(key);
+		}
+	}
 }

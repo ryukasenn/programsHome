@@ -42,7 +42,8 @@ public class InfoCommissionerServiceUtils {
 			}
 			resultList.add(table);
 		}
-		
+
+		CommonServiceUtils.otherCompute(resultList);
 		return resultList;
 	}
 
@@ -85,14 +86,8 @@ public class InfoCommissionerServiceUtils {
 			resultList.add(table);
 			
 		}
-		
-		// 差额计算
-		for(StatisticsTable table : resultList) {
-			
-			Integer balance = table.getTotal() - table.getNeed();
 
-			table.setBalance(balance);
-		}
+		CommonServiceUtils.otherCompute(resultList);
 		return resultList;
 	}
 	
@@ -130,14 +125,8 @@ public class InfoCommissionerServiceUtils {
 			}
 			resultList.add(table);
 		}
-
-		// 差额计算
-		for(StatisticsTable info : resultList) {
-			
-			Integer balance = info.getTotal() - info.getNeed();
-
-			info.setBalance(balance);
-		}
+		
+		CommonServiceUtils.otherCompute(resultList);
 		return resultList;
 	}
 	

@@ -67,7 +67,7 @@ public class GlobalParams {
 	
 	public static List<String> ageTitle = new ArrayList<String>();
 	
-	public static String REFER = "http://ekp.lingrui.com:5000/sys/portal/page.jsp";
+	public static String REFER = "http://ekp.lingrui.com:5000/sys/";
 	/**
 	 * 导出文件所在路径
 	 */

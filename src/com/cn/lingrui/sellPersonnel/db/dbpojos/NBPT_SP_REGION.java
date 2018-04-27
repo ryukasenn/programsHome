@@ -9,7 +9,10 @@ public class NBPT_SP_REGION {
 	private String NBPT_SP_REGION_ONAME; // 部门别名   
 	private String NBPT_SP_REGION_RESPONSIBLER; // 部门负责人   
 	private String NBPT_SP_REGION_LEVEL; // 部门级别   
-	private String NBPT_SP_REGION_NOTE; // 备注
+	private String NBPT_SP_REGION_NOTE; // 备注 
+	private String NBPT_SP_REGION_FLAG = "1"; // 废弃标志
+	private String NBPT_SP_REGION_PROVINCE_ID; // 所属省份
+	private String NBPT_SP_REGION_PARENT_UID; // 上级UID
 	public String getNBPT_SP_REGION_ID() {
 		return NBPT_SP_REGION_ID;
 	}
@@ -51,6 +54,24 @@ public class NBPT_SP_REGION {
 	}
 	public void setNBPT_SP_REGION_UID(String nBPT_SP_REGION_UID) {
 		NBPT_SP_REGION_UID = nBPT_SP_REGION_UID;
+	}
+	public String getNBPT_SP_REGION_FLAG() {
+		return NBPT_SP_REGION_FLAG;
+	}
+	public void setNBPT_SP_REGION_FLAG(String nBPT_SP_REGION_FLAG) {
+		NBPT_SP_REGION_FLAG = nBPT_SP_REGION_FLAG;
+	}
+	public String getNBPT_SP_REGION_PROVINCE_ID() {
+		return NBPT_SP_REGION_PROVINCE_ID;
+	}
+	public void setNBPT_SP_REGION_PROVINCE_ID(String nBPT_SP_REGION_PROVINCE_ID) {
+		NBPT_SP_REGION_PROVINCE_ID = nBPT_SP_REGION_PROVINCE_ID;
+	}
+	public String getNBPT_SP_REGION_PARENT_UID() {
+		return NBPT_SP_REGION_PARENT_UID;
+	}
+	public void setNBPT_SP_REGION_PARENT_UID(String nBPT_SP_REGION_PARENT_UID) {
+		NBPT_SP_REGION_PARENT_UID = nBPT_SP_REGION_PARENT_UID;
 	}
 	
 	

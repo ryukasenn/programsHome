@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.cn.lingrui.common.db.dbpojos.BaseReport;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 
@@ -88,6 +89,15 @@ public interface BaseDao {
 	 * @throws SQLException
 	 */
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection conn) throws SQLException;
+
+	/**
+	 * 报表处理方法
+	 * @param report
+	 * @param rs
+	 * @param reports
+	 * @return
+	 */
+	public BaseReport dealReportData(BaseReport report, ResultSet rs);
 	
 
 }

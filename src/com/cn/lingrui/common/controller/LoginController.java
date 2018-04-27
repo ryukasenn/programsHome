@@ -33,21 +33,16 @@ public class LoginController {
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public ModelAndView getLogin(HttpServletRequest req) throws Exception {
 		
-		String url = req.getHeader("referer");
-		//String token = req.getParameter("LtpaToken");
-		String username = req.getParameter("username");
-		
-		if(null != url && -1 != url.indexOf(GlobalParams.REFER)) {
+		String username = HttpUtil.decodeToken(HttpUtil.getCookieValue(req, "LtpaToken"));
+					
+		//String username = HttpUtil.decodeToken(token);
+		if(!"".equals(username)) {
 			
-			//String username = HttpUtil.decodeToken(token);
-			if(!"".equals(username)) {
-				
-				LoginPojoIn in = new LoginPojoIn();
-				in.setUserId(username);
-				in.setLoginModel("1");
-				ModelAndView mv = loginService.otherLogin(in);
-				return mv;
-			}
+			LoginPojoIn in = new LoginPojoIn();
+			in.setUserId(username);
+			in.setLoginModel("1");
+			ModelAndView mv = loginService.otherLogin(in);
+			return mv;
 		}
 		
 		ModelAndView mv = HttpUtil.getModelAndView("common/login", "登录");

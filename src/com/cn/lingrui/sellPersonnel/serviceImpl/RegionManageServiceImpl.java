@@ -3,6 +3,8 @@ package com.cn.lingrui.sellPersonnel.serviceImpl;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +18,7 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_XZQX;
 import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
@@ -75,15 +77,10 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 	@Override
 	public ModelAndView getAddRegion() throws Exception {
 		
-		this.before();
-		
-		ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030206"));
-		
 		try {
-			
-			// 直接查询是否有弃用的大区
+
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030206"));
 			return this.after(mv);
-			
 		} catch (Exception e) {
 
 			this.closeException();
@@ -101,13 +98,13 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 
 		this.before();
 
-		
 		try {
 
 			// 准备插入信息
 			NBPT_SP_REGION newRegion = new NBPT_SP_REGION();
 			
-			newRegion.setNBPT_SP_REGION_ID(in.getRegionId());
+			String newMaxId = regionManageDao.receiveMaxId(this.getConnection(), "NBPT_SP_REGION", " WHERE NBPT_SP_REGION_LEVEL = '1'");
+			newRegion.setNBPT_SP_REGION_ID(newMaxId);
 			newRegion.setNBPT_SP_REGION_LEVEL("1");
 			newRegion.setNBPT_SP_REGION_NAME(in.getRegionName());
 			newRegion.setNBPT_SP_REGION_ONAME(in.getRegionNeed());
@@ -115,7 +112,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			newRegion.setNBPT_SP_REGION_RESPONSIBLER(in.getRegionResponsibler());
 			newRegion.setNBPT_SP_REGION_UID(CommonUtil.getUUID_32());
 
-			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regionController/changeRegion?regionUid=" + newRegion.getNBPT_SP_REGION_UID());
+			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regionController/regions");
 			
 			// 执行插入
 			regionManageDao.insertForClasz(NBPT_SP_REGION.class, newRegion, this.getConnection());
@@ -125,14 +122,43 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
+			log.error("执行添加大区出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
+	}
+	
+	@Override
+	public String checkRegion(String type, String provinceId) throws Exception {
+		this.before();
+		
+		
+		try {
+			// 直接查询是否有弃用的大区
+			List<NBPT_SP_REGION> dumpedRegions = new ArrayList<>();
+			if("1".equals(type)) {
+
+				// 直接查询是否有弃用的大区
+				dumpedRegions = regionManageDao.receiveDumpedRegion("", this.getConnection());
+				
+			} else {
+				// 直接查询是否有弃用的大区
+				dumpedRegions = regionManageDao.receiveDumpedRegion(provinceId, this.getConnection());
+			}
+			
+			JSONArray ja = JSONArray.fromObject(dumpedRegions);
+	
+			return this.after(ja.toString());
+			
+		} catch (Exception e) {
+
+			this.closeException();
+			log.error("获取废弃的部门出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}
 	
 	@Override
 	public ModelAndView getAddArea() throws Exception {
-		
 		
 		try {
 
@@ -150,14 +176,50 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		} catch (Exception e) {
 
 			this.closeException();
-			log.error("获取区域划分信息出错" + CommonUtil.getTraceInfo());
+			log.error("获取添加地区页面出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}
+	
 	@Override
-	public ModelAndView postAddArea(AddRegionPojoIn in) {
-		// TODO 自动生成的方法存根
-		return null;
+	public ModelAndView postAddArea(AddRegionPojoIn in) throws Exception {
+
+		this.before();
+
+		try {
+
+			// 准备插入信息
+			NBPT_SP_REGION newRegion = new NBPT_SP_REGION();
+			
+			String newMaxId = regionManageDao.receiveMaxId(this.getConnection(), "NBPT_SP_REGION"
+					, " WHERE NBPT_SP_REGION_LEVEL = '2' AND NBPT_SP_REGION_PROVINCE_ID = '" + in.getProvinceId() + "'");
+			newRegion.setNBPT_SP_REGION_ID(newMaxId);
+			newRegion.setNBPT_SP_REGION_LEVEL("2");
+			newRegion.setNBPT_SP_REGION_NAME(in.getRegionName());
+			newRegion.setNBPT_SP_REGION_ONAME(in.getRegionNeed());
+			newRegion.setNBPT_SP_REGION_NOTE(in.getRegionNote());
+			newRegion.setNBPT_SP_REGION_RESPONSIBLER(in.getRegionResponsibler());
+			newRegion.setNBPT_SP_REGION_UID(CommonUtil.getUUID_32());
+			
+			// 获取父大区的UID
+			NBPT_VIEW_XZQX xzqx = regionManageDao.receiveXzqx(in.getProvinceId(), this.getConnection());
+			
+			newRegion.setNBPT_SP_REGION_PARENT_UID(xzqx.getNBPT_SP_REGION_UID());
+			newRegion.setNBPT_SP_REGION_PROVINCE_ID(in.getProvinceId());
+
+			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/regionController/regions");
+			
+			// 执行插入
+			regionManageDao.insertForClasz(NBPT_SP_REGION.class, newRegion, this.getConnection());
+			
+			return this.after(mv);
+			
+		} catch (SQLException e) {
+
+			this.closeException();
+			log.error("执行添加地区出错" + CommonUtil.getTraceInfo());
+			throw new Exception();
+		}
 	}
 	
 	/**
@@ -363,49 +425,24 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			
 			// 初始化返回結果
 			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030205"));
-						
-			// 1.根据编号，查询地区当前的划分情况
-			List<CurrentRegion> region_xzqxs = regionManageDao.receiveRegion_Xzqxs(regionUid, this.getConnection());
-		
-			// 2.处理查询到的数据
-			
-			// 2.1分离出省份信息
-			for(CurrentRegion currentRegion : region_xzqxs) {
-				
-				if("21".equals(currentRegion.getNBPT_SP_REGION_XZQX_TYPE()) && "1".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
-					
-					mv.addObject("currentProvince", currentRegion.getNBPT_COMMON_XZQXHF_NAME());
-					mv.addObject("currentProvinceId", currentRegion.getNBPT_COMMON_XZQXHF_ID());
-					mv.addObject("currentAreaName", currentRegion.getNBPT_SP_REGION_NAME());
-					mv.addObject("currentAreaUid", regionUid);
-					mv.addObject("currentAreaId", currentRegion.getNBPT_SP_REGION_ID());
-					mv.addObject("regionName", currentRegion.getREGION_NAME());
-					break;
-				}
-			}
-			
-			// 2.2分离出下辖市,区和县
-			List<CurrentRegion> citys = new ArrayList<>();
-			List<CurrentRegion> contys = new ArrayList<>();
-			for(CurrentRegion currentRegion : region_xzqxs) {
-				
-				if("2".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
-					
-					citys.add(currentRegion);
-				}
-				if("3".equals(currentRegion.getNBPT_COMMON_XZQXHF_LEVEL())) {
 
-					contys.add(currentRegion);
-				}
-			}
+			// 查询部门信息
+			NBPT_VIEW_REGION region = regionManageDao.receiveRegion(regionUid, this.getConnection());
 			
-			mv.addObject("citys", citys);
-			mv.addObject("contys", contys);
+			// 2.查询地区下辖区和县
+			List<NBPT_VIEW_XZQX> region_xzqxs = regionManageDao.receiveRegionXzqx(regionUid, this.getConnection());
+						
+			// 3.分离出下辖市,区和县
+			Map<String, List<NBPT_VIEW_XZQX>> classifyedRegionXzqxs = CommonUtil.classify(region_xzqxs, "NBPT_COMMON_XZQXHF_LEVEL", NBPT_VIEW_XZQX.class);
+
+			mv.addObject("regionInfo", region);
+			mv.addObject("citys", CommonServiceUtils.getListInMapByKey(classifyedRegionXzqxs, "2"));
+			mv.addObject("contys", CommonServiceUtils.getListInMapByKey(classifyedRegionXzqxs, "3"));
 			return this.after(mv);			
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			log.error("查询地区下辖区县出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}	
 	}
@@ -431,7 +468,7 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 		} catch (SQLException e) {
 
 			this.closeException();
-			log.error("查询省份信息出错" + CommonUtil.getTraceInfo());
+			log.error("查询添加地区下辖区县时获取添加下拉表出错" + CommonUtil.getTraceInfo());
 			throw new Exception();
 		}
 	}
@@ -504,6 +541,8 @@ public class RegionManageServiceImpl extends SellPBaseService implements RegionM
 			throw new Exception();
 		}
 	}
+	
+
 
 	
 	

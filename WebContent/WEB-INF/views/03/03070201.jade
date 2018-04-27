@@ -1,0 +1,23 @@
+
+// 考核管理首页
+extends ./layouts/0307
+
+        
+block contents
+    .col-xs-12.col-sm-12
+        .panel.panel-default
+            .panel-heading 考核结果(#{formTime})
+                button.btn.btn-link.downLoadCheckOut(value='EVALUATION_FORM') 导出
+            table.table.table-hover#EVALUATION_FORM
+                if evaluationForm
+                    tr 
+                        each item in evaluationForm.title
+                            th= item
+                    each item in evaluationForm.reportData
+                        tr
+                            for data in item
+                                td= data
+        
+block pageId
+    p(style="display:none") 03070201
+    
