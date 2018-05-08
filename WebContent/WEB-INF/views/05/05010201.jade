@@ -1,0 +1,27 @@
+
+extends ./layouts/0501
+
+
+block contents
+    unless sameDwPm.length
+        .col-xs-8.col-sm-8
+            .panel.panel-default
+                .panel-heading 名单列表
+                table.table
+                    tr 
+                        th(style="text-align:center") #
+                        th(style="text-align:center") 排名
+                        th(style="text-align:center") 日期
+                        th(style="text-align:center") 姓名
+                        th(style="text-align:center") 段位
+                        th(style="text-align:center") 羚锐币
+                    tr 
+                        th(style="text-align:center") #
+                        th(style="text-align:center") #{grPm.PM}
+                        th(style="text-align:center") #{grPm.RQ}
+                        th(style="text-align:center") #{grPm.RYXM}
+                        th(style="text-align:center") #{grPm.DW}
+                        th(style="text-align:center") #{grPm.LRB}                            
+block pageId
+    p(style="display:none") 05020101
+   

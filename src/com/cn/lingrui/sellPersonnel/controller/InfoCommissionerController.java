@@ -6,8 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.cn.lingrui.sellPersonnel.pojos.check.CheckPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.InfoCommissionerPojoIn;
 import com.cn.lingrui.sellPersonnel.service.InfoCommissionerService;
 
@@ -23,31 +21,6 @@ public class InfoCommissionerController {
 	@Resource(name = "infoCommissionerService")
 	private InfoCommissionerService infoCommissionerService;
 
-	/**
-	 * 获取未审核人员列表
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/receiveUnchecks", method = RequestMethod.GET)
-	public ModelAndView receiveUnchecks() throws Exception {
-
-		ModelAndView mv = infoCommissionerService.receiveUnchecks();
-
-		return mv;
-	}
-	
-	/**
-	 * 获取未审核人员详细信息
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/receiveUncheck", method = RequestMethod.POST)
-	public ModelAndView receiveUncheck(CheckPojoIn in) throws Exception {
-
-		ModelAndView mv = infoCommissionerService.receiveUncheck(in.getUNCHECKPID());
-
-		return mv;
-	}
 	
 	/**
 	 * 获取该信息专员管理大区下所有人员信息展示

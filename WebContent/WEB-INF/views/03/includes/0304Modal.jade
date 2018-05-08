@@ -1,0 +1,19 @@
+
+
+div(role="dialog", aria-labelledby="0304ModalLabel", tabindex="-1").modal.fade#0304Modal
+    .modal-dialog(role="document")
+        .modal-content
+            .modal-header
+                button.close(data-dismiss="modal",type="button")
+                    span(aria-hidden="true") &times;
+                h5.modal-title
+            .modal-body
+                form.form-horizontal#dimissForm
+                    .form-group
+                        label.col-xs-2.col-sm-2.control-label 离职时间
+                        .col-xs-6.col-sm-6
+                            input.form-control(type="hidden",name='dimissTerminalPid')#dimissTerminalPid
+                            input.form-control(type="date",placeholder='例:2018-01-01', name='dimissTime')#dimissTime
+            .modal-footer
+                button(type="button", data-dismiss="modal").btn.btn-default 关闭
+                button(type="button").btn.btn-primary#dimissConfirm 确定

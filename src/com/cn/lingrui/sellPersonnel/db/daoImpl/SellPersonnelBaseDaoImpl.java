@@ -160,7 +160,8 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 				sql.append("WHERE A.NBPT_SP_PERSON_TYPE = '2' ");
 			}
 			
-			sql.append("AND A.NBPT_SP_PERSON_JOB IN (23,24,25)");
+
+			sql.append("AND A.NBPT_SP_PERSON_JOB IN (23,24,25)");			
 			sql.append("ORDER BY A.NBPT_SP_PERSON_AREA_ID ASC,A.NBPT_SP_PERSON_FLAG ASC,A.NBPT_SP_PERSON_ID ASC ");
 			persons = this.queryForClaszs(sql.toString(), connection, NBPT_VIEW_CURRENTPERSON.class);
 			return persons;
@@ -337,6 +338,67 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			throw new SQLException();
 		}
 	}
+	
+	@Override
+	public void changeTerminalState(String uncheckPid, String type, Connection conn, String... leaveTime) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("UPDATE NBPT_SP_PERSON ");
+		
+		sql.append("SET NBPT_SP_PERSON_FLAG = '" + type + "' ");
+		
+		if("0".equals(type)) {
+
+			sql.append(", NBPT_SP_PERSON_LEAVE_APPLY_DATA = '" + CommonUtil.getYYYYMMDD() + "' ");
+			sql.append(", NBPT_SP_PERSON_LEAVE_REAL_DATA = '" + leaveTime[0] + "' ");
+		}
+		
+		sql.append("WHERE NBPT_SP_PERSON_PID = '" + uncheckPid + "'");
+
+		try {
+			
+			this.excuteUpdate(sql, conn);
+			
+		} catch (SQLException e) {
+			
+			log.error("修改终端人员状态出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+	
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String[] personPids, Connection connection) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT A.* ");
+		sql.append("FROM NBPT_VIEW_CURRENTPERSON A ");
+		sql.append("WHERE (A.NBPT_SP_PERSON_PID = '' ");
+
+		if(0 != personPids.length) {
+			
+			// 如果指定UID为空,查询所有
+			for(String regionUid : personPids) {
+				
+				sql.append("OR A.NBPT_SP_PERSON_PID = '" + regionUid + "' ");
+			}
+		}
+		sql.append(") ");
+		
+		try {
+		
+			List<NBPT_VIEW_CURRENTPERSON> persons = this.queryForClaszs(sql, connection, NBPT_VIEW_CURRENTPERSON.class);
+		
+			return persons;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定人员出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
 }
 
 

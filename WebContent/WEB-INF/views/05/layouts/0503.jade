@@ -1,0 +1,19 @@
+
+// 审核管理公共头部
+extends ../../pmlayout
+
+
+block layoutScripts
+    script(language="javascript", src="#{myPath}/javascripts/03/0503.js")
+
+
+block main
+    .col-xs-12.col-sm-12
+        h2 销售战绩排名
+        form.form-inline#controlForm
+            .form-group
+                button(type="button").btn.btn-default#receiveAllPm 查看所有排名
+                |&nbsp&nbsp
+            block buttons
+        hr
+        block contents

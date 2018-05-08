@@ -99,9 +99,17 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 										
 					// 在职数据
 					mv.addObject("personInJobInfos", CommonUtil.getListInMapByKey(personClassifyed, "2"));
+
+					List<NBPT_VIEW_CURRENTPERSON> unCheckedPersonInfos = new ArrayList<>();
+					unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(personClassifyed, "0"));
+					unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(personClassifyed, "1"));
+					
+					// 审核中数据
+					mv.addObject("unCheckedPersonInfos", unCheckedPersonInfos);
 					
 					// 离职数据
 					mv.addObject("personDimissionInfos", CommonUtil.getListInMapByKey(personClassifyed, "3"));
+					
 					
 				}
 			}
@@ -119,7 +127,6 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 	@Override
 	public ModelAndView receiveAllCurrentTerminals() throws Exception {
 
-
 		try {
 
 			this.before();
@@ -130,6 +137,7 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
 	
 			List<NBPT_VIEW_CURRENTPERSON> persons = new ArrayList<NBPT_VIEW_CURRENTPERSON>();
+			
 			// 后勤人员获取
 			if(null == loginPerson) {
 				

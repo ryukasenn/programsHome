@@ -8,7 +8,8 @@ import com.cn.lingrui.common.utils.CommonUtil;
 public class ProvincePojoIn extends BasePojoIn{
 
 	private String province;// 选择省份
-	private String timeEnd;// 选择时间
+	private String returnEnd;// 回款截至
+	private String shipmentsEnd;// 发货截至
 	private String privinceId;// 省份编号
 	private String privinceMc;// 省份名称
 	
@@ -25,9 +26,7 @@ public class ProvincePojoIn extends BasePojoIn{
 		}
 		return privinceId;
 	}
-	public void setPrivinceId(String privinceId) {
-		this.privinceId = privinceId;
-	}
+	
 	public String getPrivinceMc() {
 
 		if(CommonUtil.isEmpty(this.privinceMc)) {
@@ -35,15 +34,22 @@ public class ProvincePojoIn extends BasePojoIn{
 		}
 		return this.privinceMc;
 	}
-	public void setPrivinceMc(String privinceMc) {
-		this.privinceMc = privinceMc;
-	}
-	public String getTimeEnd() {
+	
+	public String getReturnEnd() {
 		
-		return timeEnd.replaceAll("-", "");
+		return CommonUtil.formateTiemToBasic(returnEnd);
 	}
-	public void setTimeEnd(String timeEnd) {
-		this.timeEnd = timeEnd;
+	public void setReturnEnd(String returnEnd) {
+		
+		this.returnEnd = CommonUtil.formateTiemToBasic(returnEnd);
+	}
+	public String getShipmentsEnd() {
+		
+		return CommonUtil.formateTiemToBasic(shipmentsEnd);
+	}
+	public void setShipmentsEnd(String shipmentsEnd) {
+		
+		this.returnEnd = CommonUtil.formateTiemToBasic(shipmentsEnd);
 	}
 	
 }

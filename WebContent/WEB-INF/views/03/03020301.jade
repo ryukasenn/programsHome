@@ -9,9 +9,9 @@ block extraButtons
         |&nbsp&nbsp
     
 block contents
-    .row.placeholders
-        .col-xs-12.col-sm-12.placeholder
-            form.form-horizontal#updateRegion
+    .row
+        .col-xs-12.col-sm-12
+            form#updateRegion
                 input(type='hidden', name='regionUid', value='#{regionInfo.NBPT_SP_REGION_UID}')
                 input(type='hidden', name='regionResponsibler', value='#{regionInfo.NBPT_SP_REGION_RESPONSIBLER}')#ResperPid
                 .form-group

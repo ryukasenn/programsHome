@@ -4,64 +4,63 @@ extends ./layouts/0303
 
 block buttons
     .form-group
-        button(type="button").btn.btn-default#addTerminal 通过审核
+        button(type="button").btn.btn-default.btn-danger#addTerminal 通过审核
         |&nbsp&nbsp
 
 block contents
     if message
-        .row.placeholders
-            .col-xs-12.col-sm-12.placeholder
+        .row
+            .col-xs-12.col-sm-12
                 h3= message
     else
-        .row.placeholders
-            .col-xs-12.col-sm-12.placeholder
+        .row
+            .col-xs-12.col-sm-12
                 form.form-horizontal#addPersonForm
-                    input(type="hidden", name="NBPT_SP_PERSON_AREANO")
-                    input(type="hidden", name="NBPT_SP_PERSON_PID", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
-                    input(type="hidden", name="NBPT_SP_PERSON_ID", value='#{person.NBPT_SP_PERSON_ID}')#NBPT_SP_PERSON_ID
+                    input(type="hidden", name="uncheckPid", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
+                    input(type="hidden", name="type", value='#{type}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp姓名
                         .col-xs-4.col-sm-2
-                            input.form-control(name="NBPT_SP_PERSON_NAME", value='#{person.NBPT_SP_PERSON_NAME}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_NAME}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp职务
                         .col-xs-4.col-sm-4
                             label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="23", disabled)
+                                input(type="radio",value="23", name='NBPT_SP_PERSON_JOB', disabled)
                                 |区县总
                             label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="24", disabled)
+                                input(type="radio",value="24", name='NBPT_SP_PERSON_JOB', disabled)
                                 |预备区县总
                             label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_JOB",value="25", disabled)
+                                input(type="radio",value="25", name='NBPT_SP_PERSON_JOB', disabled)
                                 |推广经理
                     .form-group
                         label.col-xs-1.col-sm-1.control-label
                             font(color="red") *
                             |&nbsp&nbsp身份证号码
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_IDNUM", value='#{person.NBPT_SP_PERSON_IDNUM}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_IDNUM}', readOnly)
                         .col-xs-2.col-sm-2.errorMessage
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp籍贯
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_PLACE", value='#{person.NBPT_SP_PERSON_PLACE}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_PLACE}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp性别
                         .col-xs-4.col-sm-4
                             label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_MALE",value="1", disabled)
+                                input(type="radio",value="1", name='NBPT_SP_PERSON_MALE', disabled)
                                 |男
                             label.radio-inline
-                                input(type="radio",name="NBPT_SP_PERSON_MALE",value="0", disabled)
+                                input(type="radio",value="0", name='NBPT_SP_PERSON_MALE',disabled)
                                 |女
                     
                     each item,i in controllAreas
@@ -82,88 +81,88 @@ block contents
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp个人手机
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MOB1", value='#{person.NBPT_SP_PERSON_MOB1}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_MOB1}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp紧急联络人
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MOB2", value='#{person.NBPT_SP_PERSON_MOB2}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_MOB2}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp入职时间
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_ENTRYDATA", value='#{person.NBPT_SP_PERSON_ENTRYDATA}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_ENTRYDATA}', readOnly)
                     
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单编号
                         .col-xs-2.col-sm-2
-                            input.form-control(name="NBPT_SP_PERSON_POLICYTYPE", value="#{person.NBPT_SP_PERSON_POLICYTYPE}", readOnly)
+                            input.form-control(value="#{person.NBPT_SP_PERSON_POLICYTYPE}", name='NBPT_SP_PERSON_POLICYTYPE', readOnly)
                         .col-xs-2.col-sm-2
-                            input.form-control(name="NBPT_SP_PERSON_POLICYNO", value='#{person.NBPT_SP_PERSON_POLICYNO}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_POLICYNO}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单起始
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_POLICY_DATA1}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp保单结束
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_POLICY_DATA2}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbspQQ
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_QQ", value='#{person.NBPT_SP_PERSON_QQ}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_QQ}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp微信
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_CHAT", value='#{person.NBPT_SP_PERSON_CHAT}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_CHAT}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp邮箱
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_MAIL", value='#{person.NBPT_SP_PERSON_MAIL}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_MAIL}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp学历
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_DEGREE", value='#{person.NBPT_SP_PERSON_DEGREE}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_DEGREE}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp毕业学校
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_SCHOOL", value='#{person.NBPT_SP_PERSON_SCHOOL}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_SCHOOL}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp专业
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_PROFESS", value='#{person.NBPT_SP_PERSON_PROFESS}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_PROFESS}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp备注
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_NOTE", value='#{person.NBPT_SP_PERSON_NOTE}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_NOTE}', readOnly)
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
                             |&nbsp&nbsp&nbsp&nbsp职称
                         .col-xs-4.col-sm-4
-                            input.form-control(name="NBPT_SP_PERSON_TITLE", value='#{person.NBPT_SP_PERSON_TITLE}', readOnly)
+                            input.form-control(value='#{person.NBPT_SP_PERSON_TITLE}', readOnly)
     
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/common.js")
@@ -176,5 +175,5 @@ block scripts
         $("select[name='NBPT_SP_PERSON_POLICYTYPE']").val('#{person.NBPT_SP_PERSON_POLICYTYPE}');
     
 block pageId
-    p(style="display:none") 03040301
+    p(style="display:none") 03030301
     

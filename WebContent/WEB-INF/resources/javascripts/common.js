@@ -368,6 +368,11 @@ $(function(){
         return currentdate;
     }
 	
+	/**
+	 * 设置项目只读
+	 * @param items
+	 * @returns
+	 */
 	function setReadOnly(items){
 		
 		if(undefined != items.inputItems || null != items.inputItems){

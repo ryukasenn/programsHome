@@ -135,12 +135,21 @@ public class PersonManageServiceImpl extends SellPBaseService implements PersonM
 			
 			// 3.传递地区UID
 			mv.addObject("areaUid", areaUid);
+			// 3.传递大区UID
+			mv.addObject("regionUid", regionUid);
 			
 			// 返回在职数据
 			mv.addObject("personInfos", CommonUtil.getListInMapByKey(personsClassifyed, "2"));
 			
 			// 返回离职数据
 			mv.addObject("personDimissionInfos", CommonUtil.getListInMapByKey(personsClassifyed, "3"));
+
+			List<NBPT_VIEW_CURRENTPERSON> unCheckedPersonInfos = new ArrayList<>();
+			unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(personsClassifyed, "0"));
+			unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(personsClassifyed, "1"));
+			
+			// 审核中数据
+			mv.addObject("unCheckedPersonInfos", unCheckedPersonInfos);
 			
 			// 返回地区信息
 			mv.addObject("regionInfo", regionInfo);

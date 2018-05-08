@@ -62,4 +62,18 @@ public class AreaHeadController {
 
 		return mv;
 	}
+	
+	/**
+	 * 申请终端离职
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/dimissTerminal", method = RequestMethod.POST)
+	public ModelAndView dimissTerminal(String dimissTerminalPid, String dimissTime) throws Exception {
+
+		ModelAndView mv = areaHeadService.dimissTerminal(dimissTerminalPid, dimissTime);
+
+		return mv;
+	}
 }

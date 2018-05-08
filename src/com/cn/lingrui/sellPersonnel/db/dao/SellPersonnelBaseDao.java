@@ -81,6 +81,15 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	public NBPT_VIEW_CURRENTPERSON receivePerson(String personPid, Connection connection) throws SQLException;
 	
 	/**
+	 * 查询指定人员
+	 * @param regionUid 查询特定人员信息
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String[] personPids, Connection connection) throws SQLException;
+	
+	/**
 	 * 获取终端人员负责区域
 	 * @param uncheckpid
 	 * @param connection
@@ -116,4 +125,12 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException 
 	 */
 	public List<NBPT_VIEW_XZQX> receiveRegionXzqx(String regionUid, Connection connection) throws SQLException;
+	
+	/**
+	 * 修改终端人员状态
+	 * @param uncheckPid
+	 * @param type 0:离职审核,1:录入审核,2:在职,3:离职
+	 * @throws SQLException 
+	 */
+	public void changeTerminalState(String uncheckPid, String type, Connection conn, String... leaveTime) throws SQLException;
 }

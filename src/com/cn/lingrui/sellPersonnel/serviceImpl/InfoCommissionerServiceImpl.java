@@ -17,10 +17,8 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.InfoCommissionerDao;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
-import com.cn.lingrui.sellPersonnel.db.dbpojos.infoCommissioner.UncheckPerson;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
 import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.InfoCommissionerPojoIn;
 import com.cn.lingrui.sellPersonnel.service.InfoCommissionerService;
@@ -44,65 +42,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 		return null;
 	}
 
-	@Override
-	public ModelAndView receiveUnchecks() throws Exception {
-
-
-		this.before();
-
-		// 初始化返回
-		ModelAndView mv = null;
-
-		try {
-			
-			mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030302"));
-			// 获取登录名
-			String userId = this.getRequest().getAttribute("userID").toString();
-			
-			// 查询该登录人员下未审核名单
-			List<UncheckPerson> uncheckList = infoCommissionerDao.receiveUnchecks(userId, this.getConnection());
-			
-			mv.addObject("uncheckList", uncheckList);
-			
-			return this.after(mv);
-
-		} catch (SQLException e) {
-
-			this.closeException();
-			log.error("查询当前所有人员出错");
-			throw new Exception();
-
-		}
-	}
-
-	@Override
-	public ModelAndView receiveUncheck(String uncheckpid) throws Exception {
-
-		this.before();
-
-		try {
-			
-			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030303"));
-			
-			// 查询该登录人员下未审核名单
-			NBPT_SP_PERSON person = infoCommissionerDao.receiveUncheck(uncheckpid, this.getConnection());
-			
-			// 获取该人员的负责区域
-			List<NBPT_COMMON_XZQXHF> responsAreas = infoCommissionerDao.receiveTerminalResponsAreas(uncheckpid, this.getConnection());
-			
-			mv.addObject("person", person);
-			mv.addObject("controllAreas", responsAreas);
-			
-			return this.after(mv);
-
-		} catch (SQLException e) {
-
-			this.closeException();
-			log.error("查询当前所有人员出错");
-			throw new Exception();
-
-		}
-	}
+	
 
 	@Override
 	public ModelAndView receiveAllTerminals() throws Exception {
@@ -243,7 +183,13 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 			mv.addObject("persons", CommonUtil.getListInMapByKey(classifiedPersons, "2"));
 			// 离职人员
 			mv.addObject("personsDimission", CommonUtil.getListInMapByKey(classifiedPersons, "3"));
+
+			List<NBPT_VIEW_CURRENTPERSON> unCheckedPersonInfos = new ArrayList<>();
+			unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(classifiedPersons, "0"));
+			unCheckedPersonInfos.addAll(CommonUtil.getListInMapByKey(classifiedPersons, "1"));
 			
+			// 审核中数据
+			mv.addObject("unCheckedPersonInfos", unCheckedPersonInfos);
 			
 
 			mv.addObject("provinceId", region.getNBPT_SP_REGION_PROVINCE_ID());

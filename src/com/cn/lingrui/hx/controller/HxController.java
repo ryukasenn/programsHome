@@ -3,6 +3,7 @@ package com.cn.lingrui.hx.controller;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -11,11 +12,14 @@ import com.cn.lingrui.hx.services.ZdhxService;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.hx.pojos.province.ProvincePojoIn;
 
+
+@Controller
+@RequestMapping("/hx")
 public class HxController {
 
-	
 	@Resource
 	private ZdhxService zdhxService;
+	
 	/**
 	 * 自动核销页面请求
 	 * @param req
@@ -38,8 +42,8 @@ public class HxController {
 	 * @param req
 	 * @return
 	 */
-	@RequestMapping(value = "/province", method=RequestMethod.POST)
-	public ModelAndView provinceSelected(HttpServletRequest req, ProvincePojoIn in) {		
+	@RequestMapping(value = "/zdhxByProvince", method=RequestMethod.POST)
+	public ModelAndView provinceSelected(ProvincePojoIn in) {		
 
 //		log.info("用户: " + CommonUtil.getCookieValue(req, "userName") + " 选择了" + in.getProvince() + "进行自动核销");
 //		in.setUserName(CommonUtil.getCookieValue(req, "userName"));

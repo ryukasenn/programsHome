@@ -451,6 +451,23 @@ public class CommonUtil {
 	}
 	
 	/**
+	 * 根据身份证获取人员性别
+	 * @param idNum 身份证号
+	 * @return 1:男,0:女
+	 */
+	public static Integer getPersonMale(String idNum) {
+		
+		Integer theNum = Integer.valueOf(String.valueOf(idNum.charAt(16)));
+		if(theNum % 2 == 1) {
+
+			return 1;
+		} else {
+			
+			return 0;
+		}
+	}
+	
+	/**
 	 * 读取Properties文件中的配置
 	 * @param fileName
 	 * @param key

@@ -2,8 +2,6 @@ doctype html
 html(lang="en")
     head
         meta(charset="UTF-8")
-        meta(http-equiv="X-UA-Compatible", content="IE=edge")
-        meta(name="viewport", content="width=device-width, initial-scale=1")
         title 羚锐集团内部平台
         link(rel='stylesheet', href='#{myPath}/stylesheets/css/bootstrap.min.css')
         link(rel='stylesheet', href='#{myPath}/stylesheets/layout.min.css')
@@ -25,6 +23,7 @@ html(lang="en")
                                         when "01": li: a(href="#{myPath}/module?module=01"): span 个人信息
                                         when "02": li: a(href="#{myPath}/module?module=02"): span 集团人事
                                         when "03": li: a(href="#{myPath}/module?module=03"): span 销售人事
+                                        when "05": li: a(href="#{myPath}/module?module=05"): span 销售战绩
                     .navbar-collapse.collapse
                         ul.nav.navbar-nav.navbar-right
                             li: a 你好，#{niko}
@@ -32,12 +31,9 @@ html(lang="en")
         block body
             .container-fluid
                 .row-fluid
-                    .col-sm-3.col-md-1.sidebar
+                    .col-md-1.sidebar
                         block sidebar
-                    .col-sm-9.col-sm-offset-3.col-md-11.col-md-offset-1.main
-                        if messages
-                            each item in messages
-                                p: font(color="red")= item 
+                    .col-md-11.col-md-offset-1.main
                         block main
     block layoutModal
         include includes/waitModal
@@ -45,6 +41,7 @@ html(lang="en")
     script(src="#{myPath}/javascripts/jquery.min.js")
     script(src="#{myPath}/javascripts/bootstrap.min.js")
     script(language="javascript", src="#{myPath}/javascripts/common.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/jquery.table2excel.min.js")
     block layoutScripts
     block scripts
     block pageId

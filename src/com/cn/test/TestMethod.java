@@ -18,7 +18,6 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.common.utils.GlobalParams;
-import com.cn.lingrui.common.utils.SelectsUtils;
 
 public class TestMethod {
 
@@ -134,7 +133,6 @@ public class TestMethod {
 		list.add(xzqxhf1);
 		list.add(xzqxhf2);
 		list.add(xzqxhf3);
-		System.out.println(SelectsUtils.createXzqxhfSelects(list));
 	}
 	
 	@Test

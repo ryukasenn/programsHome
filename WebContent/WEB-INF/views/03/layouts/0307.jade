@@ -13,7 +13,10 @@ block main
                 input(placeholder='截止日期,默认今天', name='endTime').form-control
                 |&nbsp&nbsp
             .form-group
-                button(type="button").btn.btn-default#createEvaluationForm 生成考核列表
+                button(type="button").btn.btn-default#createEvaluationForm 人员配置考核
+                |&nbsp&nbsp
+            .form-group
+                button(type="button").btn.btn-default#createAttendance 导出考勤
                 |&nbsp&nbsp
             block buttons
         hr

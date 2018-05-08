@@ -4,36 +4,65 @@ extends ./layouts/0303
 
 block contents
     form#checkOutForm
-        input(type='hidden', name='UNCHECKPID')
+        input(type='hidden', name='terminalPid')
+        input(type='hidden', name='type')
         
     if message
-        .row.placeholders
-            .col-xs-12.col-sm-12.placeholder
+        .row
+            .col-xs-12.col-sm-12
                 h3= message
     else
-        .row.placeholders
-            .col-xs-12.col-sm-12.placeholder
-                .col-xs-4.col-sm-4
-                    .panel.panel-default
-                        .panel-heading 名单列表
-                        table.table-striped
-                            tr
-                                th(style='text-align:center') #
-                                th 名称
-                                th 所属地区
-                                th 所属地总
-                                th 操作
-                            unless uncheckList.length
-                                each item,i in uncheckList
-                                    tr
-                                        th.col-xs-1.col-sm-1= i + 1
-                                        td= item.UNCHECKNAME
-                                        td= item.UNCHECKDEPTNAME
-                                        td= item.UNCHECKAREABELONGTONAME
-                                        td 
-                                            button.btn.btn-link(value='#{item.UNCHECKPID}').checkOutPersonInfo 详细信息
-                                    
-                                    
+        .row
+            .col-xs-12.col-sm-12
+                .panel.panel-default
+                    .panel-heading 录入审核
+                    table.table.table-hover
+                        tr
+                            th(style="text-align:center") #
+                            th(style="text-align:center") 名称
+                            th(style="text-align:center") 所属地区
+                            th(style="text-align:center") 所属地总
+                            th(style="text-align:center") 所属大区
+                            th(style="text-align:center") 联系电话
+                            th(style="text-align:center") 操作
+                            each item,i in newUncheckList
+                                tr(style="text-align:center;")
+                                    th(style="text-align:center",scope="row")= i + 1
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AREA_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_REGION_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_MOB1
+                                    td(style="vertical-align:middle") 
+                                        button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').passCheckOut 详细信息
+                                        button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').passDirect 直接通过
+                                        button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').passDelete 直接删除
+        .row
+            .col-xs-12.col-sm-12
+                .panel.panel-default
+                    .panel-heading 离职审核
+                    table.table.table-hover
+                        tr
+                            th(style="text-align:center") #
+                            th(style="text-align:center") 名称
+                            th(style="text-align:center") 所属地区
+                            th(style="text-align:center") 所属地总
+                            th(style="text-align:center") 离职提交时间
+                            th(style="text-align:center") 离职实际时间
+                            th(style="text-align:center") 所属大区
+                            th(style="text-align:center") 操作
+                            each item,i in deleteUncheckList
+                                tr(style="text-align:center;")
+                                    th(style="text-align:center",scope="row")= i + 1
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AREA_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_REGION_NAME
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_LEAVE_APPLY_DATA
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_LEAVE_REAL_DATA
+                                    td(style="vertical-align:middle") 
+                                        button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').leaveCheckOut 详细信息
+                                        button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').leaveDirect 直接通过
             
                     
 block scripts

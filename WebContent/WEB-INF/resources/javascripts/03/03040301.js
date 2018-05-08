@@ -2,7 +2,12 @@ $(function(){
 
 	if("" == $("#NBPT_SP_PERSON_PID").val()){
 
-	} else {
+		// 隐藏申请离职按钮
+		$("#dimissTerminal").css("display", "none");
+	} 
+	
+	// 如果PID不为空,是修改,修改页面的初始化操作
+	else {
 		// 负责区域初始化选定事件
 		AjaxForGet(baseUrl + "/sellPersonnel/receiveTerminalXzqx", {TerminalId : $("#NBPT_SP_PERSON_PID").val()},function(jsonData){
 						
@@ -28,6 +33,7 @@ $(function(){
 		// 锁死部分项目
 		var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_ENTRYDATA");
 		var radioItems = new Array("NBPT_SP_PERSON_JOB","NBPT_SP_PERSON_MALE");
+		
 		
 		setReadOnly({
 			inputItems : inputItems,
@@ -99,11 +105,48 @@ $(function(){
 	})
 
 	/**
+	 * 离职事件
+	 */
+	$("#dimissTerminal").on("click", function(){
+		
+		$("#0304Modal").modal('show')
+	});
+	
+	/**
+	 * 离职提交
+	 */
+	$("#dimissConfirm").on("click",function(){
+		
+		if(isTime($("#dimissTime"))){
+			
+			var beginDate=$("#dimissTime").val(); 
+			var now = getNowFormatDate();
+			var d1 = new Date(beginDate.replace(/\-/g, "\/")); 
+			var d2 = new Date(now.replace(/\-/g, "\/")); 
+
+			console.log("d1:" + d1 );
+			console.log("d2:" + d2);
+			if(beginDate!="" && d1 < d2) 
+			{
+				new Confirm({
+					message : '离职日期必须大于等于当前日期',
+					type : 'alter'
+				});
+				
+			} else {
+				
+				$("#dimissTerminalPid").val($("#NBPT_SP_PERSON_PID").val());
+				$("#dimissForm").attr("method", "POST").attr("action", baseUrl + "/sellPersonnel/dimissTerminal").submit();
+			}
+		}
+		
+	})
+	
+	/**
 	 * 职务点击事件,职务点击要跟身份证验证同时进行
 	 */
 	$("input[name='NBPT_SP_PERSON_JOB']").on("click", function(){
 		
-
 		if("" == $("#NBPT_SP_PERSON_PID").val()){
 
 			$_this = $("input[name='NBPT_SP_PERSON_IDNUM']");
@@ -202,8 +245,6 @@ $(function(){
 			$(this).parents(".form-group").removeClass("has-error");
 		}
 	})
-	
-
 	
 	/**
 	 * 身份证验证

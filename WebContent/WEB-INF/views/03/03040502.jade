@@ -73,6 +73,27 @@ block contents
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB2
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_AGE
                                 td(style="text-align:center;") 在职
+                        each person,i in unCheckedPersonInfos
+                            tr(style="text-align:center;")
+                                th(style="text-align:center",scope="row")= i+1
+                                td(style="vertical-align:middle").col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REAL_MALE
+                                td(style="vertical-align:middle")
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '23': 区县总
+                                        when '24': 预备区县总
+                                        when '25': 推广经理
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_DEGREE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_ENTRYDATA
+                                td(style="vertical-align:middle") #{person.NBPT_SP_PERSON_WORKAGE}年
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_PLACE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB1
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
+                                td(style="vertical-align:middle") 
+                                    case person.NBPT_SP_PERSON_FLAG
+                                        when '0': 离职审核中
+                                        when '1': 录入审核中
                         each person,i in personDimissionInfos
                             tr  
                                 th(style="vertical-align:middle;text-align:center;",scope="row")= i+1

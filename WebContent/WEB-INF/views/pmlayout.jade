@@ -1,0 +1,10 @@
+extends ./layout
+
+block sidebar
+    ul.nav.nav-sidebar
+        if rights.functionsRight
+            each item in rights.functionsRight
+                case item
+                    when "0501": li: a(href="#{myPath}/module?module=0501"): span 首页
+                    when "0502": li: a(href="#{myPath}/module?module=0502"): span 个人排名
+                    when "0503": li: a(href="#{myPath}/module?module=0503"): span 所有排名

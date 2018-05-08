@@ -70,6 +70,31 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	/**
+	 * 单条插入,更新或删除
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public void excuteUpdate(StringBuffer sql, Connection connection)  throws SQLException {
+		
+		PreparedStatement ps;
+		try {
+			
+			ps = connection.prepareStatement(sql.toString());
+		
+			ps.executeUpdate();
+
+			DBUtils.closePsRs(ps, null);
+			
+		} catch (SQLException e) {
+
+			log.error("执行单条插入,更新或删除出错" + CommonUtil.getTrace(e));
+			throw new SQLException() ;
+		}
+	}
+	
+	/**
 	 * 通用查询方法,根据对应的bean生成sql,查询所有
 	 * @param sql
 	 * @param connection
@@ -82,6 +107,29 @@ public class BaseDaoImpl implements BaseDao{
 				ResultSet rs = null;
 			try {
 				ps = connection.prepareStatement(sql);
+				rs = ps.executeQuery();
+		
+				return DBUtils.rsToBean(classz, rs);
+			} catch (SQLException e) {
+
+				log.error("通用查询出错" + CommonUtil.getTraceInfo());
+				throw new SQLException();
+			}
+	}
+	
+	/**
+	 * 通用查询方法,根据对应的bean生成sql,查询所有
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException 执行查询是的异常
+	 */
+	public <T> List<T> queryForClaszs(StringBuffer sql, Connection connection, Class<T> classz) throws SQLException {
+		
+		PreparedStatement ps = null;
+				ResultSet rs = null;
+			try {
+				ps = connection.prepareStatement(sql.toString());
 				rs = ps.executeQuery();
 		
 				return DBUtils.rsToBean(classz, rs);

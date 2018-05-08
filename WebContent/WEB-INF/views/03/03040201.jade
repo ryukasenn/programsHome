@@ -8,10 +8,10 @@ block buttons
         |&nbsp&nbsp
 block contents
     if message
-        .col-xs-12.col-sm-12.placeholder
+        .col-xs-12.col-sm-12
             h3= message
     else 
-        .col-xs-11.col-sm-11.placeholder
+        .col-xs-12.col-sm-12
             form#changePersonForm
                 input(type='hidden', name='changePersonPid')#changePersonPid
             .form-horizontal
@@ -24,7 +24,7 @@ block contents
                     .col-xs-4.col-sm-4
                         input.form-control(value='#{thisInfact}', readOnly)
         unless personInfos.length
-            .col-xs-8.col-sm-8.placeholder
+            .col-xs-12.col-sm-12.placeholder
                 .panel.panel-default
                     .panel-heading 名单列表
                     table.table.table-hover
@@ -79,6 +79,27 @@ block contents
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
                                 td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
                                 td(style="vertical-align:middle") 离职
+                        each person,i in unCheckedPersonInfos
+                            tr(style="text-align:center;")
+                                th(style="text-align:center",scope="row")= i+1
+                                td(style="vertical-align:middle").col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REAL_MALE
+                                td(style="vertical-align:middle")
+                                    case person.NBPT_SP_PERSON_JOB
+                                        when '23': 区县总
+                                        when '24': 预备区县总
+                                        when '25': 推广经理
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_DEGREE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_ENTRYDATA
+                                td(style="vertical-align:middle") #{person.NBPT_SP_PERSON_WORKAGE}年
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_PLACE
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB1
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_MOB2
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AGE
+                                td(style="vertical-align:middle") 
+                                    case person.NBPT_SP_PERSON_FLAG
+                                        when '0': 离职审核中
+                                        when '1': 录入审核中
                                 
         
 block scripts

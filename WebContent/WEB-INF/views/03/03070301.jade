@@ -1,0 +1,23 @@
+
+// 考核管理首页
+extends ./layouts/0307
+
+        
+block contents
+    .col-xs-12.col-sm-12
+        .panel.panel-default
+            .panel-heading 考勤表
+                button.btn.btn-link.downLoadCheckOut(value='ATTENDANCE_FORM') 导出
+            table.table.table-hover#ATTENDANCE_FORM
+                if report
+                    tr 
+                        each item in report.title
+                            th= item
+                    each item in report.reportData
+                        tr
+                            for data in item
+                                td(style="vnd.ms-excel.numberformat:@")= data
+        
+block pageId
+    p(style="display:none") 03070301
+    

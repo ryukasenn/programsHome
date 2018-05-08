@@ -5,10 +5,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cn.lingrui.sellPersonnel.pojos.infoCommissioner.InfoCommissionerPojoIn;
 
 public interface InfoCommissionerService {
-
-	public ModelAndView receiveUnchecks() throws Exception;
-
-	public ModelAndView receiveUncheck(String uncheckpid) throws Exception;
 	
 	/**
 	 * 获取该信息专员管理大区下所有人员信息展示

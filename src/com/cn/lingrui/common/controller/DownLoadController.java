@@ -6,11 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.io.FileUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,11 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
 import com.cn.lingrui.common.pojos.DownLoadIn;
 import com.cn.lingrui.common.utils.GlobalParams;
-import com.cn.lingrui.common.utils.HttpUtil;
 
 @Controller
 @RequestMapping("/download")
@@ -75,8 +69,10 @@ public class DownLoadController {
 	 * @throws UnsupportedEncodingException 
      */
 	@RequestMapping(value="", method=RequestMethod.POST)
-    public String downloadFile(DownLoadIn in,
+    public void downloadFile(DownLoadIn in,
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+		
+		
         if (in.getFileName() != null) {
     		String path = GlobalParams.FILE_PATH;
             File file = new File(path + in.getFileName());
@@ -118,7 +114,8 @@ public class DownLoadController {
                     }
                 }
             }
+        } else {
+        	
         }
-        return null;
     }
 }

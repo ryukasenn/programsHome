@@ -179,9 +179,40 @@ public class AreaHeadServiceImpl extends SellPBaseService implements AreaHeadSer
 	}
 
 	@Override
+	public ModelAndView dimissTerminal(String dimissTerminalPid, String dimissTime) throws Exception {
+		
+		try {
+			this.before();
+			
+			// 获取登录人员
+			NBPT_VIEW_CURRENTPERSON loginPerson = personManageDao.receiveLoginPerson(this.getLoginId(), this.getConnection());
+			
+			// 获取要修改的人员
+			NBPT_VIEW_CURRENTPERSON terminal = personManageDao.receivePerson(dimissTerminalPid, this.getConnection());
+			
+			if(loginPerson.getNBPT_SP_PERSON_AREA_RESPONSIBLER_PID().equals(terminal.getNBPT_SP_PERSON_AREA_RESPONSIBLER_PID())) {
+
+				// 修改状态为离职审核
+				personManageDao.changeTerminalState(dimissTerminalPid, "0", this.getConnection(), new String[] {CommonUtil.formateTiemToBasic(dimissTime)});
+			}
+
+			ModelAndView mv = HttpUtil.getModelAndView("redirect:/sellPersonnel/persons");
+			
+			return after(mv);
+			
+		} catch (Exception e) {
+			
+			this.closeException();
+			log.error("删除终端失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+	
+	@Override
 	protected String getFunNum() {
 		// TODO 自动生成的方法存根
 		return null;
 	}
+
 	
 }

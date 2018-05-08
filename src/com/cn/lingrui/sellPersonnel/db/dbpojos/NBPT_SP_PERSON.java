@@ -16,6 +16,8 @@ public class NBPT_SP_PERSON {
 	private String NBPT_SP_PERSON_MAIL = ""; // 邮箱
 	private String NBPT_SP_PERSON_ENTRYDATA = ""; // 入职时间
 	private String NBPT_SP_PERSON_LEAVEDATA = ""; // 离职时间
+	private String NBPT_SP_PERSON_LEAVE_APPLY_DATA; // 离职申请时间
+	private String NBPT_SP_PERSON_LEAVE_REAL_DATA; // 实际离职时间
 	private String NBPT_SP_PERSON_DEGREE = ""; // 学历
 	private String NBPT_SP_PERSON_PLACE = ""; // 籍贯
 	private String NBPT_SP_PERSON_SCHOOL = ""; // 毕业学校
@@ -31,6 +33,7 @@ public class NBPT_SP_PERSON {
 	private String NBPT_SP_PERSON_FLAG = ""; // 离职标志
 	private String NBPT_SP_PERSON_POLICYTYPE = ""; // 保单类型
 	private String NBPT_SP_PERSON_ENTERINGTIME = ""; // 录入时间
+	
 	public String getNBPT_SP_PERSON_ID() {
 		return NBPT_SP_PERSON_ID;
 	}
@@ -210,5 +213,17 @@ public class NBPT_SP_PERSON {
 	}
 	public void setNBPT_SP_PERSON_ENTERINGTIME(String nBPT_SP_PERSON_ENTERINGTIME) {
 		NBPT_SP_PERSON_ENTERINGTIME = nBPT_SP_PERSON_ENTERINGTIME;
+	}
+	public String getNBPT_SP_PERSON_LEAVE_APPLY_DATA() {
+		return NBPT_SP_PERSON_LEAVE_APPLY_DATA;
+	}
+	public void setNBPT_SP_PERSON_LEAVE_APPLY_DATA(String nBPT_SP_PERSON_LEAVE_APPLY_DATA) {
+		NBPT_SP_PERSON_LEAVE_APPLY_DATA = nBPT_SP_PERSON_LEAVE_APPLY_DATA;
+	}
+	public String getNBPT_SP_PERSON_LEAVE_REAL_DATA() {
+		return NBPT_SP_PERSON_LEAVE_REAL_DATA;
+	}
+	public void setNBPT_SP_PERSON_LEAVE_REAL_DATA(String nBPT_SP_PERSON_LEAVE_REAL_DATA) {
+		NBPT_SP_PERSON_LEAVE_REAL_DATA = nBPT_SP_PERSON_LEAVE_REAL_DATA;
 	}
 }

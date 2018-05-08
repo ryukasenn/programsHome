@@ -29,7 +29,13 @@ public class SupportServiceUtils {
 				StatisticsTable info = new StatisticsTable();
 				
 				info.setRegionName(key);
-				info.setTotal(classifyByTypePersons.get(key).size());
+				
+				// 合计只统计在职人员
+				List<NBPT_VIEW_CURRENTPERSON> inJobPersons = CommonUtil.getListInMapByKey(
+						CommonUtil.classify(
+								CommonUtil.getListInMapByKey(classifyByTypePersons, key), "NBPT_SP_PERSON_FLAG", NBPT_VIEW_CURRENTPERSON.class), "2");
+				
+				info.setTotal(inJobPersons.size());
 				
 				totalInfos.add(info);
 			}

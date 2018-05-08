@@ -6,6 +6,9 @@ block buttons
     .form-group
         button(type="button").btn.btn-default#addTerminal 添加下级人员
         |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-danger#dimissTerminal 申请离职
+        |&nbsp&nbsp
 
 block contents
     if message
@@ -181,6 +184,9 @@ block scripts
         $("input:radio[name='NBPT_SP_PERSON_JOB'][value='" + job + "']").attr("checked",true)
         $("select[name='NBPT_SP_PERSON_DEGREE']").val('#{person.NBPT_SP_PERSON_DEGREE}');
         $("select[name='NBPT_SP_PERSON_POLICYTYPE']").val('#{person.NBPT_SP_PERSON_POLICYTYPE}');
+    
+block modal
+    include includes/0304Modal
     
 block pageId
     p(style="display:none") 03040301

@@ -29,4 +29,12 @@ public interface AreaHeadService {
 	 */
 	public ModelAndView getChangePerson(String changePersonPid) throws Exception;
 
+	/**
+	 * 申请离职
+	 * @param dimissTerminalPid 指定终端PID
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView dimissTerminal(String dimissTerminalPid, String dimissTime) throws Exception;
+
 }

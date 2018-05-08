@@ -80,6 +80,12 @@ public class CommonServiceUtils {
 			
 			return table;
 		}
+		
+		// 如果不是在职,直接退出
+		if(!"2".equals(person.getNBPT_SP_PERSON_FLAG())) {
+			
+			return table;
+		}
 
 		String job = person.getNBPT_SP_PERSON_JOB();
 		

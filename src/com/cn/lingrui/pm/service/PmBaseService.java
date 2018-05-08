@@ -1,6 +1,5 @@
 package com.cn.lingrui.pm.service;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.apache.logging.log4j.LogManager;
@@ -8,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.db.DBConnect;
 import com.cn.lingrui.common.services.BServiceLogic;
-import com.cn.lingrui.common.services.BaseService;
 import com.cn.lingrui.common.utils.CommonUtil;
 
 public abstract class PmBaseService extends BServiceLogic{
@@ -25,10 +23,11 @@ public abstract class PmBaseService extends BServiceLogic{
 			this.connection = dbc.getConnection();
 		} catch (SQLException e) {
 
-			log.info("业务操作异常" + e.getMessage());
+			log.info("获取数据库连接异常" + e.getMessage());
 			
 		}
 	}
+	
 
 	
 }

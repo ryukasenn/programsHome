@@ -1,0 +1,38 @@
+
+extends ./layouts/0503
+
+block header
+    link(rel='stylesheet', href='#{myPath}/stylesheets/pmcss.css')
+
+
+block contents   
+    .row 
+        .col-xs-10.col-sm-10
+            .panel.panel_default
+                .panel-body
+                    span#ranking_title 所有地总排名情况
+                table.table
+                    thead
+                        tr.box
+                            th.col_1 排 名
+                            th.col_2 日 期
+                            th.col_3 姓 名
+                            th.col_4 段 位
+                            th.col_5 羚锐币
+                    tbody
+                        unless allPmList.length
+                            each item,i in allPmList
+                                tr
+                                    td.col_1= item.PM
+                                    td.col_2= item.RQ
+                                    td.col_3= item.RYXM
+                                    td.col_4= item.DW
+                                    td.col_5= item.LRB
+
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/jquery.tablesorter.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/05030201.js")
+    
+block pageId
+    p(style="display:none") 05030201
+    

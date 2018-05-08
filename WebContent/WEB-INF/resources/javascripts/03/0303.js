@@ -1,11 +1,11 @@
 $(function(){
 	
 	/**
-	 * 查看当前终端点击事件
+	 * 查询未审核列表
 	 */
-	$("#receiveCurrents").on("click", function(){
+	$("#receiveUnchecks").on("click", function(){
 		
-		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/receiveUnchecks").attr("method", "GET").submit();
+		$("#controlForm").attr("action", baseUrl + "/sellPersonnel/support/receiveUnchecks").attr("method", "GET").submit();
 	})
 	
 	

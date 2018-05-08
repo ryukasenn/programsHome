@@ -1,32 +1,44 @@
 
 // 自动核销公共头部
-extends ../../personnelLayout
+extends ../../hxLayout
 
+block header
+    link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap-datetimepicker.min.css')
+    
 block layoutScripts
     script(language="javascript", src="#{myPath}/javascripts/04/0402.js")
+    script(language="javascript", src="#{myPath}/javascripts/bootstrap-datetimepicker.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/typeahead.min.js")
     
 block main
-    .col-xs-12.col-sm-12.main-header
-        h2 自动核销
-        form(role='form')
-            input(type='hidden', name='regionId')#regionId
-            input(type="hidden", name="regionUid") 
-            .form-group
-                .input-group
-                    .input-group-addon
-                        span 选择省份
-                    input.form-control(type="text",placeholder='请选择要核销省份', name='province')
-            .form-group
-                .input-group
-                    .input-group-addon
-                        span 回款截至
-                    input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的回款单', name='returnEnd')
-            .form-group
-                .input-group
-                    .input-group-addon
-                        span 发货截至
-                    input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的发货单', name='shipmentsEnd')
-            block extraButtons
-        hr
+    .row
+        .col-md-11.main-header
+            h2 自动核销
+            form(role='form')#zdhxByProvince
+                .form-group
+                    .row
+                        .col-md-5
+                            .input-group
+                                .input-group-addon
+                                    span 选择省份
+                                input.form-control(type="text",placeholder='请选择要核销省份', name='province')#province
+                .form-group
+                    .row
+                        .col-md-5
+                            .input-group
+                                .input-group-addon
+                                    span 回款截至
+                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的回款单', name='returnEnd')#timeEnd
+                .form-group
+                    .row
+                        .col-md-5
+                            .input-group
+                                .input-group-addon
+                                    span 发货截至
+                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的发货单', name='shipmentsEnd')#timeEnd2
+                        .col-md-4
+                            button(type='button').btn.btn-primary#confirm 确定
+                    
+            hr
     .main-body
         block contents

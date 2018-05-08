@@ -1,5 +1,5 @@
 
-// 终端管理:添加终端人员(地总)
+// 人员管理:查看详细信息(后勤)
 extends ./layouts/0304
 block buttons
     .form-group
@@ -9,15 +9,19 @@ block buttons
         button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
         |&nbsp&nbsp
     .form-group
-        a(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{areaUid}&regionUid=#{regionUid}').btn.btn-default#supportAdd 后退
+        a(href='#{myPath}/sellPersonnel/areaPersons?areaUid=#{areaUid}&regionUid=#{regionUid}').btn.btn-default 后退
+        |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-danger#deleteTerminal 删除该人员
+        a(href='#{myPath}/sellPersonnel/support/deleteTerminal?terminalPid=#{person.NBPT_SP_PERSON_PID}&areaUid=#{areaUid}&regionUid=#{regionUid}').hidden#deleteTerminalA
         |&nbsp&nbsp
 block contents
     if message
-        .col-xs-12.col-sm-12.placeholder
+        .col-xs-12.col-sm-12
             h3= message
     else
-        .col-xs-12.col-sm-12.placeholder
-            form.form-horizontal#addPersonForm
+        .col-xs-12.col-sm-12
+            .form-horizontal
                 input(type="hidden", name="NBPT_SP_PERSON_AREANO")
                 input(type="hidden", name="NBPT_SP_PERSON_PID", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
                 input(type="hidden", name="NBPT_SP_PERSON_ID", value='#{person.NBPT_SP_PERSON_ID}')#NBPT_SP_PERSON_ID

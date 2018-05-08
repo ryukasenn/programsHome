@@ -2,15 +2,11 @@ package com.cn.lingrui.hx.services.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.annotation.Resource;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSDD;
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSDDMX;
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSHK;
@@ -18,7 +14,6 @@ import com.cn.lingrui.hx.db.dbpojos.hx.Hx_insert_xsddhx;
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xsdd;
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xsddmx;
 import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xshk;
-import com.cn.lingrui.hx.db.dao.HxDao;
 import com.cn.lingrui.hx.services.ZdhxService;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;

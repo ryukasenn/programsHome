@@ -28,10 +28,16 @@ public class PersonManageServiceUtils {
 
 			// 注入原PID
 			person.setNBPT_SP_PERSON_PID(in.getNBPT_SP_PERSON_PID());
+
+			// 人员状态标志,
+			person.setNBPT_SP_PERSON_FLAG(person.getNBPT_SP_PERSON_FLAG());
+			
 		} else {
 
 			// 生成随机ID码
 			person.setNBPT_SP_PERSON_PID(CommonUtil.getUUID_32());
+			// 人员状态标志,
+			person.setNBPT_SP_PERSON_FLAG("1"); 
 		}
 
 		if(null != in.getNBPT_SP_PERSON_ID() && !"".equals(in.getNBPT_SP_PERSON_ID())) {
@@ -137,8 +143,6 @@ public class PersonManageServiceUtils {
 		// 保单类型
 		person.setNBPT_SP_PERSON_POLICYTYPE(in.getNBPT_SP_PERSON_POLICYTYPE());
 		
-		// 人员状态标志
-		person.setNBPT_SP_PERSON_FLAG("2"); // TODO ,当前版本设为在职状态
 		
 		person.setNBPT_SP_PERSON_ENTERINGTIME(CommonUtil.getYYYYMMDD()); // 设置系统录入时间
 		

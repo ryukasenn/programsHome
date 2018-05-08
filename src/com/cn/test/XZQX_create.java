@@ -19,6 +19,7 @@ import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 
 import jxl.CellType;
 import jxl.DateCell;
@@ -87,9 +88,60 @@ public class XZQX_create {
 		//this.checkIdnum();
 		
 		// 添加其他类别人员
-		this.addOtherType();
+		//this.addOtherType();
+		
+		// 修改性别
+		this.changMale();
 	}
 	
+	private void changMale() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_VIEW_CURRENTPERSON A WHERE A.NBPT_SP_PERSON_JOB IN ('25','23','24')");
+		ResultSet rs1 = ps1.executeQuery();
+		
+		// 查询所有地总
+		List<NBPT_VIEW_CURRENTPERSON> resultList = XZQX_create.rsToBean(NBPT_VIEW_CURRENTPERSON.class, rs1);
+		
+		List<String> sqls = new ArrayList<>();
+		
+		for(NBPT_VIEW_CURRENTPERSON person : resultList) {
+			
+			if(CommonUtil.idNumCheck(person.getNBPT_SP_PERSON_IDNUM())) {
+
+				// 身份证验证为男
+				if(1 == CommonUtil.getPersonMale(person.getNBPT_SP_PERSON_IDNUM())) {
+					
+					// 数据库中为女
+					if("0".equals(person.getNBPT_SP_PERSON_MALE())) {
+						
+						sqls.add("UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_MALE = '1' WHERE NBPT_SP_PERSON_PID = '" + person.getNBPT_SP_PERSON_PID() + "'");
+					}
+				} else {
+					
+					if("1".equals(person.getNBPT_SP_PERSON_MALE())) {
+						
+						sqls.add("UPDATE NBPT_SP_PERSON SET NBPT_SP_PERSON_MALE = '0' WHERE NBPT_SP_PERSON_PID = '" + person.getNBPT_SP_PERSON_PID() + "'");
+					}
+				}
+			} else {
+				
+				System.out.println(person.getNBPT_SP_PERSON_REGION_NAME() + "/t" + person.getNBPT_SP_PERSON_AREA_NAME() + "/t" + person.getNBPT_SP_PERSON_NAME() + " 的身份证有问题");
+			}
+			
+		}
+		Statement stmt;
+		stmt = conn.createStatement();
+
+
+		for(String sql : sqls) {
+			stmt.addBatch(sql);
+		}
+
+		//stmt.executeBatch();
+	}
+
 	private void addOtherType() throws ClassNotFoundException, SQLException {
 		
 		String fileNameTemp = GlobalParams.FILE_PATH + "qita.xls";

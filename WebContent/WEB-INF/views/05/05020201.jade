@@ -1,0 +1,84 @@
+
+extends ./layouts/0502
+
+block header
+    link(rel='stylesheet', href='#{myPath}/stylesheets/pmcss.css')
+    link(rel='stylesheet', href='#{myPath}/stylesheets/pmnormalize3.0.2.min.css')
+
+block contents   
+    .row 
+        .col-xs-10.col-sm-10
+            .panel.panel_default#ranking
+                .panel-body
+                    span#ranking_title #{grPm.RYXM}的排行：#{grPm.PM}, 段位：#{grPm.DW}
+                table.table
+                    tr.box
+                        th.col_1 排 名
+                        th.col_2 日 期
+                        th.col_3 姓 名
+                        th.col_4 段 位
+                        th.col_5 羚锐币
+                    unless sameDwPm.length
+                        each item,i in sameDwPm
+                            if item.RYXM == grPm.RYXM
+                                tr.cur
+                                    td.col_1= item.PM
+                                    td.col_2= item.RQ
+                                    td.col_3= item.RYXM
+                                    td.col_4= item.DW
+                                    td.col_5= item.LRB
+                            else
+                                tr.box
+                                    td.col_1= item.PM
+                                    td.col_2= item.RQ
+                                    td.col_3= item.RYXM
+                                    td.col_4= item.DW
+                                    td.col_5= item.LRB
+
+            .panel.panel_default#ranking
+                .panel-body
+                    span#ranking_title 历史战绩
+                #container
+
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/highcharts.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/05020201.js")
+    script
+        var chart = Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: '历史数据'
+            },
+            subtitle: {
+                text: '数据来源: 张政同志的计算'
+            },
+            xAxis: {
+                categories: #{rqStr}
+            },
+            yAxis: {
+                title: {
+                    text: '羚锐币越多越好，段位越小越好'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true          // 开启数据标签
+                    },
+                    enableMouseTracking: false // 关闭鼠标跟踪，对应的提示框、点击事件会失效
+                }
+            },
+            series: [{
+                name: '羚锐币',
+                data: #{lrbStr}
+            }, {
+                name: '段位',
+                data: #{dwStr}
+            }]
+        });
+        
+block pageId
+    p(style="display:none") 05020201
+    
