@@ -2,6 +2,8 @@ package com.cn.lingrui.sellPersonnel.service;
 
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
+
 public interface SupportSerivce {
 
 	/**
@@ -66,4 +68,25 @@ public interface SupportSerivce {
 	 * @throws Exception 
 	 */
 	public ModelAndView agreeUncheck(String uncheckPid, String type) throws Exception;
+
+	/**
+	 * 提交添加大区总地总
+	 * @param in
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView postSupportAdd(AddPersonPojoIn in) throws Exception;
+
+	/**
+	 * 获取调岗页面
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView getTransfer() throws Exception;
+
+	/**
+	 * 提交调岗请求
+	 * @return
+	 */
+	public ModelAndView postTransfer();
 }

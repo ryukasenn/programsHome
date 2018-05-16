@@ -30,6 +30,7 @@ public class AddPersonPojoIn {
 	private String NBPT_SP_PERSON_DEPT_ID; // 部门编号
 	private String NBPT_SP_PERSON_AREA_ID; // 区域编号
 	private String NBPT_SP_PERSON_REGION; // 所属部门
+	private String NBPT_SP_PERSON_OAPSWD; // 初始化登录密码
 	public String getNBPT_SP_PERSON_NAME() {
 		return NBPT_SP_PERSON_NAME;
 	}
@@ -197,6 +198,12 @@ public class AddPersonPojoIn {
 	}
 	public void setNBPT_SP_PERSON_ID(String nBPT_SP_PERSON_ID) {
 		NBPT_SP_PERSON_ID = nBPT_SP_PERSON_ID;
+	}
+	public String getNBPT_SP_PERSON_OAPSWD() {
+		return NBPT_SP_PERSON_OAPSWD;
+	}
+	public void setNBPT_SP_PERSON_OAPSWD(String nBPT_SP_PERSON_OAPSWD) {
+		NBPT_SP_PERSON_OAPSWD = nBPT_SP_PERSON_OAPSWD;
 	}
 	
 }

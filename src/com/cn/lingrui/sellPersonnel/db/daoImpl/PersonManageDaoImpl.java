@@ -13,6 +13,7 @@ import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 
 @Repository("personManageDao")
 public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements PersonManageDao{
@@ -162,6 +163,25 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 						"  ORDER BY B.NBPT_COMMON_XZQXHF_ID";
 			List<NBPT_COMMON_XZQXHF> placeInfo = this.queryForClaszs(sql, connection, NBPT_COMMON_XZQXHF.class);
 			return placeInfo;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receiveLoginId(String loginId, Connection connection) throws SQLException {
+		
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT * FROM NBPT_VIEW_CURRENTPERSON A ");
+			sql.append("WHERE A.NBPT_SP_PERSON_LOGINID = '" + loginId + "'");
+			
+			List<NBPT_VIEW_CURRENTPERSON> personInfos = this.queryForClaszs(sql, connection, NBPT_VIEW_CURRENTPERSON.class);
+			
+			return personInfos;
 		} catch (SQLException e) {
 			e.printStackTrace();
 			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));

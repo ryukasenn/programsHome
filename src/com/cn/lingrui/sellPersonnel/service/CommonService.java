@@ -44,4 +44,29 @@ public interface CommonService {
 	 * @throws Exception
 	 */
 	public String receiveTerminalPlace(String idNum) throws Exception;
+	
+	/**
+	 * AJAX根据身份证获取籍贯信息,到市
+	 * @param loginId 填写的登录ID
+	 * @return
+	 * @throws Exception
+	 */
+	public String receiveLoginId(String loginId) throws Exception;
+	
+	/**
+	 * 调岗人员查询
+	 * @param personName 调岗人员姓名
+	 * @param transferType 调岗类型
+	 * @return
+	 * @throws Exception
+	 */
+	public String transferSearchPerson(String personName, String transferType) throws Exception;
+
+	/**
+	 * 调岗地区查询
+	 * @param personName 调岗人员姓名
+	 * @return
+	 * @throws Exception
+	 */
+	public String transferSearchRegion(String regionName) throws Exception;
 }

@@ -29,7 +29,7 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @return
 	 * @throws SQLException
 	 */
-	public List<NBPT_VIEW_REGION> receiveRegion(String parentUid, String provinceId, Connection conn, Integer... type) throws SQLException;
+	public List<NBPT_VIEW_REGION> receiveRegion(String parentUid, String provinceId, Connection conn) throws SQLException;
 
 	/**
 	 * 获取指定部门信息
@@ -39,6 +39,18 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException
 	 */
 	public NBPT_VIEW_REGION receiveRegion(String regionUid, Connection conn) throws SQLException;
+
+
+	/**
+	 * 获取指定部门信息
+	 * @param regionName 指定部门名称
+	 * @param level 部门级别
+	 * @param provinceId 省份
+	 * @param conn
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_REGION> receiveRegion(String regionName, String level, String provinceId, Connection conn) throws SQLException;
 	
 	/**
 	 * 获取指定多部门信息
@@ -88,6 +100,39 @@ public interface SellPersonnelBaseDao extends BaseDao{
 	 * @throws SQLException
 	 */
 	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String[] personPids, Connection connection) throws SQLException;
+	
+	/**
+	 * 根据职位和类型查询人员信息
+	 * @param personJob 职位,如果为null,查所有职位
+	 * @param personName 人员姓名
+	 * @param personType 类型,如果为空,查所有类型
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String personJob, String personName, String personType, Connection connection) throws SQLException;
+	
+	/**
+	 * 根据多职位和类型查询人员信息
+	 * @param personJob 职位,如果为null,查所有职位
+	 * @param personName 人员姓名
+	 * @param personType 类型,如果为空,查所有类型
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String[] personJob, String personName, String personType, Connection connection) throws SQLException;
+	
+	/**
+	 * 根据多职位和类型查询人员信息
+	 * @param personJob 职位,如果为null,查所有职位
+	 * @param personName 人员姓名
+	 * @param personType 类型,如果为空,查所有类型
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(List<String> personJob, String personName, String personType, Connection connection) throws SQLException;
 	
 	/**
 	 * 获取终端人员负责区域

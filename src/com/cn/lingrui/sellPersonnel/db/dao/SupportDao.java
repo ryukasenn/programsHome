@@ -19,6 +19,13 @@ public interface SupportDao extends SellPersonnelBaseDao{
 	public List<NBPT_VIEW_CURRENTPERSON> receiveAllPersons(Connection conn) throws SQLException;
 	
 	/**
+	 * 添加大区总地总
+	 * @return
+	 * @throws SQLException 
+	 */
+	public void supportAddPerson(NBPT_SP_PERSON person, Connection conn) throws SQLException;
+	
+	/**
 	 * 查询考核报表
 	 * @param endTime 截止时间
 	 * @return

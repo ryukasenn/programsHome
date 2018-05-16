@@ -58,6 +58,7 @@ public class NBPT_VIEW_CURRENTPERSON {
 	private String NBPT_SP_PERSON_REGION_RESPONSIBLER_NAME; // 大区负责人名称
 	private String NBPT_SP_PERSON_REAL_MALE; // 大区负责人名称
 	private String NBPT_SP_PERSON_TYPENAME; // 所属类别汉字名称
+	private String NBPT_SP_PERSON_REALJOB; // 职位的中文名称
 	
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
@@ -370,6 +371,12 @@ public class NBPT_VIEW_CURRENTPERSON {
 	}
 	public void setNBPT_SP_PERSON_LEAVE_APPLY_DATA(String nBPT_SP_PERSON_LEAVE_APPLY_DATA) {
 		NBPT_SP_PERSON_LEAVE_APPLY_DATA = nBPT_SP_PERSON_LEAVE_APPLY_DATA;
+	}
+	public String getNBPT_SP_PERSON_REALJOB() {
+		return NBPT_SP_PERSON_REALJOB;
+	}
+	public void setNBPT_SP_PERSON_REALJOB(String nBPT_SP_PERSON_REALJOB) {
+		NBPT_SP_PERSON_REALJOB = nBPT_SP_PERSON_REALJOB;
 	}
 	
 	

@@ -127,7 +127,11 @@ public class XZQX_create {
 				}
 			} else {
 				
-				System.out.println(person.getNBPT_SP_PERSON_REGION_NAME() + "/t" + person.getNBPT_SP_PERSON_AREA_NAME() + "/t" + person.getNBPT_SP_PERSON_NAME() + " 的身份证有问题");
+				System.out.println(person.getNBPT_SP_PERSON_REGION_NAME() + "\t" 
+							+ person.getNBPT_SP_PERSON_AREA_NAME() + "\t" 
+							+ person.getNBPT_SP_PERSON_AREA_RESPONSIBLER_NAME() + "\t"
+							+ person.getNBPT_SP_PERSON_NAME() + "\t"
+							+ person.getNBPT_SP_PERSON_IDNUM());
 			}
 			
 		}

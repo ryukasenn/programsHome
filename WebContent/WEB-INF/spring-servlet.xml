@@ -65,7 +65,8 @@
         <mvc:interceptor>
             <!-- 对所有的请求拦截使用/** ,对某个模块下的请求拦截使用：/myPath/* -->
 	        <mvc:mapping path="/**" />                      
-	        <mvc:exclude-mapping path="/login" />  
+	        <mvc:exclude-mapping path="/login" />
+            <mvc:exclude-mapping path="/wx/**" />  
             <mvc:exclude-mapping path="/javascripts/**/*" />  
             <mvc:exclude-mapping path="/stylesheets/**/*" />  
 	        <mvc:exclude-mapping path="/images/*" />

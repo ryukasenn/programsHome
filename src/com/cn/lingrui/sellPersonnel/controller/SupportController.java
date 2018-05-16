@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.service.SupportSerivce;
 
 @Controller
@@ -17,6 +19,32 @@ public class SupportController {
 
 	@Resource(name = "supportSerivce")
 	private SupportSerivce supportSerivce;
+	
+	/**
+	 * 获取调岗页面
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transfer", method = RequestMethod.GET)
+	public ModelAndView getTransfer() throws Exception {
+
+		ModelAndView mv = supportSerivce.getTransfer();
+
+		return mv;
+	}
+	
+	/**
+	 * 提交调岗请求
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/transfer", method = RequestMethod.POST)
+	public ModelAndView postTransfer(String transferType, String personPid, String regionUid) throws Exception {
+
+		ModelAndView mv = supportSerivce.postTransfer();
+
+		return mv;
+	}
 	
 	/**
 	 * 生成考核列表
@@ -54,6 +82,19 @@ public class SupportController {
 	public ModelAndView getSupportAdd() throws Exception {
 
 		ModelAndView mv = supportSerivce.getSupportAdd();
+
+		return mv;
+	}
+	
+	/**
+	 * 后勤添加人员
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/supportAdd", method = RequestMethod.POST)
+	public ModelAndView postSupportAdd(AddPersonPojoIn in) throws Exception {
+
+		ModelAndView mv = supportSerivce.postSupportAdd(in);
 
 		return mv;
 	}

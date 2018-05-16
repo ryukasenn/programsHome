@@ -7,9 +7,18 @@ block buttons
         button(type="button").btn.btn-default#supportAdd 添加大区总地总
         |&nbsp&nbsp
     .form-group
+        button(type="button").btn.btn-default#transfer 人员调度
+        |&nbsp&nbsp
+    .form-group
         button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
         |&nbsp&nbsp
-    
+        
+
+block contents
+    if message
+        .col-xs-12.col-sm-12
+            h3= message
+        
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03040102.js")
 block pageId

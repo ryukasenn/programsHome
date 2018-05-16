@@ -6,6 +6,7 @@ import java.util.List;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 
 public interface PersonManageDao extends SellPersonnelBaseDao{
 
@@ -65,6 +66,15 @@ public interface PersonManageDao extends SellPersonnelBaseDao{
 	 * @throws SQLException
 	 */
 	public List<NBPT_COMMON_XZQXHF> checkPlace(String idNum, Connection connection) throws SQLException;
+
+	/**
+	 * 获取登录号为loginId的用户
+	 * @param loginId
+	 * @param connection
+	 * @return
+	 * @throws SQLException 
+	 */
+	public List<NBPT_VIEW_CURRENTPERSON> receiveLoginId(String loginId, Connection connection) throws SQLException;
 
 
 

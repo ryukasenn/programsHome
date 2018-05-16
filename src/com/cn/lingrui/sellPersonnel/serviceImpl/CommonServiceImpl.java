@@ -60,7 +60,8 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 				// 除信息专员外,获取所有人信息
 				List<NBPT_VIEW_CURRENTPERSON> persons = supportDao.receiveAllPersons(this.getConnection());
 				
-				List<NBPT_VIEW_REGION> regions = supportDao.receiveRegion(null, null, this.getConnection(),1);
+				// 查询所有部门
+				List<NBPT_VIEW_REGION> regions = supportDao.receiveRegion(null, null, this.getConnection());
 
 				// 合计信息
 				List<StatisticsTable> totalInfos = SupportServiceUtils.dealCurrentPerson_total(persons);
@@ -241,7 +242,72 @@ public class CommonServiceImpl extends SellPBaseService implements CommonService
 		}catch (SQLException e) {
 
 			this.closeException();
-			log.error("获取终端负责区县失败" + CommonUtil.getTrace(e));
+			log.error("获取终端户籍失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+
+	@Override
+	public String receiveLoginId(String loginId) throws Exception {
+		try {
+			this.before();
+			return this.after(JSONArray.fromObject(personManageDao.receiveLoginId(loginId, this.getConnection())).toString());
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.error("验证登录ID时候可用出错" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+
+	@Override
+	public String transferSearchPerson(String personName, String transferType) throws Exception {
+
+		try {
+
+			this.before();
+			
+			// 初始化查询结果
+			List<NBPT_VIEW_CURRENTPERSON> persons = new ArrayList<>();
+			
+			// 地总相关调职
+			if("2".equals(transferType)) {
+				
+				// 查地总
+				persons = personManageDao.receivePerson("22", personName, "2", this.getConnection());
+			} 
+			
+			// 区县总调职相关
+			else {
+				
+				// 查区县总
+				persons = personManageDao.receivePerson(new String[] {"23", "24", "25"}, personName, "2", this.getConnection());
+			}
+			return this.after(JSONArray.fromObject(persons).toString());
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.error("获取要调职的人员失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+
+	@Override
+	public String transferSearchRegion(String regionName) throws Exception {
+		try {
+
+			this.before();
+			
+			// 初始化查询结果
+			List<NBPT_VIEW_REGION> persons = new ArrayList<>();
+			
+			persons = personManageDao.receiveRegion(regionName, "2", null, this.getConnection());
+			
+			return this.after(JSONArray.fromObject(persons).toString());
+		}catch (SQLException e) {
+
+			this.closeException();
+			log.error("获取要调职的人员失败" + CommonUtil.getTrace(e));
 			throw new Exception();
 		}
 	}

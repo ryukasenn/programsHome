@@ -43,7 +43,7 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 	}
 
 	@Override
-	public List<NBPT_VIEW_REGION> receiveRegion(String parentUid, String provinceId,Connection conn, Integer... type) throws SQLException {
+	public List<NBPT_VIEW_REGION> receiveRegion(String parentUid, String provinceId,Connection conn) throws SQLException {
 		
 		StringBuffer sql = new StringBuffer("SELECT * "
 										  + "FROM NBPT_VIEW_REGION A "
@@ -51,18 +51,11 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 		if(null != parentUid) {
 			
 			sql.append("AND A.NBPT_SP_REGION_PARENT_UID = '" + parentUid + "' ");
-		}
+		} 
 		
 		if(null != provinceId) {
 
 			sql.append("AND A.NBPT_SP_REGION_PROVINCE_ID = '" + provinceId + "' ");
-		}
-		
-		if(type.length != 0 && 1 == type[0]) {
-			
-		} else {
-
-			sql.append("AND A.NBPT_SP_REGION_PARENT_UID <> '' AND A.NBPT_SP_REGION_PARENT_UID IS NOT NULL ");
 		}
 
 		sql.append("AND A.NBPT_SP_REGION_FLAG = '1' ");
@@ -397,6 +390,124 @@ public class SellPersonnelBaseDaoImpl extends BaseDaoImpl implements SellPersonn
 			log.error("查询指定人员出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String personJob, String personName, String personType, Connection connection)
+			throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM NBPT_VIEW_CURRENTPERSON A ");
+		sql.append("WHERE 1=1 ");
+
+		if(null != personName) {
+			sql.append("AND ( 1<>1 ");
+			sql.append("OR A.NBPT_SP_PERSON_NAME LIKE '%" + personName + "%' ");
+			sql.append("OR A.NBPT_SP_PERSON_LOGINID LIKE '%" + personName + "%' ");
+			sql.append(") ");
+		}
+		
+		if(null != personJob) {
+			sql.append("AND A.NBPT_SP_PERSON_JOB = '" + personJob + "'");
+		}
+		
+		if(null != personType) {
+			
+			sql.append("AND A.NBPT_SP_PERSON_TYPE = '" + personType + "'");
+		}
+		
+		try {
+			
+			List<NBPT_VIEW_CURRENTPERSON> persons = this.queryForClaszs(sql, connection, NBPT_VIEW_CURRENTPERSON.class);
+		
+			return persons;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定人员出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(String[] personJob, String personName, String personType, Connection connection)
+			throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM NBPT_VIEW_CURRENTPERSON A ");
+		sql.append("WHERE 1=1 ");
+		
+		if(null != personName) {
+			sql.append("AND ( 1<>1 ");
+			sql.append("OR A.NBPT_SP_PERSON_NAME LIKE '%" + personName + "%' ");
+			sql.append("OR A.NBPT_SP_PERSON_LOGINID LIKE '%" + personName + "%' ");
+			sql.append(") ");
+		}
+		
+		if(null != personJob) {
+			
+			sql.append("AND ( 1<>1 ");
+			for(String personjob : personJob) {
+
+				sql.append("OR A.NBPT_SP_PERSON_JOB = '" + personjob + "' ");
+			}
+
+			sql.append(") ");
+		}
+		
+		if(null != personType) {
+			
+			sql.append("AND A.NBPT_SP_PERSON_TYPE = '" + personType + "'");
+		}
+		
+		try {
+			
+			List<NBPT_VIEW_CURRENTPERSON> persons = this.queryForClaszs(sql, connection, NBPT_VIEW_CURRENTPERSON.class);
+		
+			return persons;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定人员出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receivePerson(List<String> personJob, String personName, String personType, Connection connection)
+			throws SQLException {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+	@Override
+	public List<NBPT_VIEW_REGION> receiveRegion(String regionName, String level, String provinceId, Connection conn) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT * FROM NBPT_VIEW_REGION A ");
+		sql.append("WHERE 1=1 ");
+		
+		if(null != level) {
+			
+			sql.append("AND A.NBPT_SP_REGION_LEVEL = '" + level + "'");
+		}
+		
+		if(null != provinceId) {
+			
+			sql.append("AND A.NBPT_SP_REGION_PROVINCE_ID = '" + provinceId + "'");
+		}
+		
+		sql.append("AND A.NBPT_SP_REGION_NAME LIKE '%" + regionName + "%'");
+		
+		try {
+			
+			List<NBPT_VIEW_REGION> regions = this.queryForClaszs(sql, conn, NBPT_VIEW_REGION.class);
+		
+			return regions;
+		
+		} catch (SQLException e) {
+		
+			log.error("查询指定地区出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}	
 	}
 
 }

@@ -5,21 +5,31 @@ extends ./layouts/0304
 
 block buttons
     .form-group
-        button(type="button").btn.btn-default#supportAdd 添加大区总地总
-        |&nbsp&nbsp
-    .form-group
         button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
         |&nbsp&nbsp
 block contents
     .row.placeholders
         .col-xs-12.col-sm-12.placeholder
-            form.form-horizontal#addPersonForm
+            form.form-horizontal#supportAddForm
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp姓名
                     .col-xs-4.col-sm-2
                         input.form-control(placeholder="例:张三", name="NBPT_SP_PERSON_NAME")
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbspOA账号
+                    .col-xs-4.col-sm-2
+                        input.form-control(placeholder="例:zhangsan", name="NBPT_SP_PERSON_LOGINID")
+                    .col-xs-2.col-sm-2.errorMessage
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbspOA密码
+                    .col-xs-4.col-sm-2
+                        input.form-control(placeholder="不填默认lingrui123", name="NBPT_SP_PERSON_OAPSWD")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -38,7 +48,7 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp性别
                     .col-xs-4.col-sm-4
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_MALE",value="1") 
+                            input(type="radio",name="NBPT_SP_PERSON_MALE",value="1", checked) 
                             |男
                         label.radio-inline
                             input(type="radio",name="NBPT_SP_PERSON_MALE",value="0") 
@@ -49,16 +59,16 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp人员类型
                     .col-xs-4.col-sm-4
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="1") 
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="1", disabled) 
                             |商务
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="2") 
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="2", checked) 
                             |OTC
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="3") 
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="3", disabled) 
                             |RX
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="4") 
+                            input(type="radio",name="NBPT_SP_PERSON_TYPE",value="4", disabled) 
                             |诊所
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
@@ -66,13 +76,13 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp职务
                     .col-xs-4.col-sm-4
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="1", checked) 
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="21", checked) 
                             |大区总
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="2") 
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="22") 
                             |地总
                         label.radio-inline
-                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="6") 
+                            input(type="radio",name="NBPT_SP_PERSON_JOB",value="26") 
                             |混合
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
@@ -91,7 +101,7 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp入职时间
                     .col-xs-4.col-sm-4
-                        input.form-control(name="NBPT_SP_PERSON_ENTRYDATA",placeholder="例:19981010")
+                        input.form-control(name="NBPT_SP_PERSON_ENTRYDATA",placeholder="例:1998-10-10")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -100,20 +110,20 @@ block contents
                         select.form-control(name="NBPT_SP_PERSON_POLICYTYPE")#policytypeSelect
                             each item in policytypeSelects
                                 option(value="#{item.NBPT_COMMON_DICTIONARY_KEY_VALUE}") #{item.NBPT_COMMON_DICTIONARY_KEY_NAME}
-                    .col-xs-2.col-sm-2
+                    .col-xs-3.col-sm-3
                         input.form-control(name="NBPT_SP_PERSON_POLICYNO",placeholder="例:NAN17AA06126A2")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp保单起始
                     .col-xs-4.col-sm-4
-                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA1",placeholder="例:19981010")
+                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA1",placeholder="例:1998-10-10")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp保单结束
                     .col-xs-4.col-sm-4
-                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2",placeholder="例:20001010")
+                        input.form-control(name="NBPT_SP_PERSON_POLICY_DATA2",placeholder="例:1998-10-10")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label QQ
                     .col-xs-4.col-sm-4
@@ -148,7 +158,7 @@ block contents
                         input.form-control(name="NBPT_SP_PERSON_TITLE")
                 .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
-                        button(type="button")#addPerson.btn.btn-primary 提交
+                        button(type="button")#supportAddConfirm.btn.btn-primary 提交
     
 block scripts
     script(language="javascript", src="#{myPath}/javascripts/03/03040302.js")

@@ -124,8 +124,6 @@ $(function(){
 			var d1 = new Date(beginDate.replace(/\-/g, "\/")); 
 			var d2 = new Date(now.replace(/\-/g, "\/")); 
 
-			console.log("d1:" + d1 );
-			console.log("d2:" + d2);
 			if(beginDate!="" && d1 < d2) 
 			{
 				new Confirm({

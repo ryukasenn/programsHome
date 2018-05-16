@@ -1,0 +1,60 @@
+
+// 人员管理:调岗(后勤)
+extends ./layouts/0304
+block buttons
+    .form-group
+        button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
+        |&nbsp&nbsp
+block contents
+    if message
+        .col-xs-12.col-sm-12
+            h3= message
+    else
+        .col-xs-12.col-sm-12
+            form.form-horizontal#transferForm
+                input(type="hidden", name="NBPT_SP_PERSON_AREANO")
+                input(type="hidden", name="NBPT_SP_PERSON_PID", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
+                input(type="hidden", name="NBPT_SP_PERSON_ID", value='#{person.NBPT_SP_PERSON_ID}')#NBPT_SP_PERSON_ID
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp调岗类别
+                    .col-xs-6.col-sm-6
+                        label.radio-inline
+                            input(type="radio",name="transferType",value="0", checked) 
+                            |区县总调地区
+                        label.radio-inline
+                            input(type="radio",name="transferType",value="1") 
+                            |区县总升地总
+                        label.radio-inline
+                            input(type="radio",name="transferType",value="2") 
+                            |地总升大区总
+                .form-group
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp确定人员
+                    .col-xs-3.col-sm-3
+                        input.form-control(placeholder='请输入人员姓名(支持模糊查询)')#personName
+                        input(type='hidden',name='personPid')#personNameHidden
+                    .col-xs-1.col-sm-1
+                        button(type="button").btn.btn-default#searchPerson 查询
+                .form-group.targetRegion
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp目标地区
+                    .col-xs-3.col-sm-3
+                        input.form-control(placeholder='请输入地区名称')#regionName
+                        input(type='hidden',name='regionUid')#regionNameHidden
+                    .col-xs-1.col-sm-1
+                        button(type="button").btn.btn-default#searchRegion 查询
+                .form-group
+                    .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
+                        button(type="button")#transferConfirm.btn.btn-primary 提交
+                
+    
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/03040802.js")
+    
+block pageId
+    p(style="display:none") 03040802
+    

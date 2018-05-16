@@ -11,12 +11,17 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cn.lingrui.common.db.dao.UserManageDao;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
+import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_USER;
+import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_U_R;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 import com.cn.lingrui.sellPersonnel.db.dao.SupportDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
+import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.support.AttendanceForm;
 import com.cn.lingrui.sellPersonnel.pojos.support.EvaluationForm;
 import com.cn.lingrui.sellPersonnel.service.SellPBaseService;
@@ -38,14 +43,15 @@ public class SupportServiceImpl extends SellPBaseService implements SupportSeriv
 	@Resource(name = "supportDao")
 	private SupportDao supportDao;
 
+	@Resource(name="userManageDao")
+	private UserManageDao userManageDao;
+	
 	@Override
 	protected String getFunNum() {
 		// TODO 自动生成的方法存根
 		return null;
 	}
 
-	
-	
 	/**
 	 * 获取后勤添加人员页面
 	 */
@@ -70,8 +76,52 @@ public class SupportServiceImpl extends SellPBaseService implements SupportSeriv
 		}
 	}
 
+	@Override
+	public ModelAndView postSupportAdd(AddPersonPojoIn in) throws Exception {
+		
+		try {
+			
+			this.before();
+			
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030401"));
+	
+			// 初始化人员信息
+			NBPT_SP_PERSON person = new NBPT_SP_PERSON();
+			
+			// 处理页面传入参数
+			SupportServiceUtils.checkDataIn(person,in);
+			
+			// 插入新的人员信息
+			supportDao.supportAddPerson(person, this.getConnection());
 
+			// 创建登录账号
+			NBPT_RSFZ_USER user = new NBPT_RSFZ_USER();
+			user.setNBPT_RSFZ_USER_ID(in.getNBPT_SP_PERSON_LOGINID());
+			user.setNBPT_RSFZ_USER_NAME(in.getNBPT_SP_PERSON_NAME());
+			user.setNBPT_RSFZ_USER_PHONE(in.getNBPT_SP_PERSON_MOB1());
+			user.setNBPT_RSFZ_USER_BZ(in.getNBPT_SP_PERSON_NOTE());
+			user.setNBPT_RSFZ_USER_EMALL(in.getNBPT_SP_PERSON_MAIL());
+			user.setNBPT_RSFZ_USER_PASSWORD("".equals(in.getNBPT_SP_PERSON_OAPSWD()) ? "lingrui123" : in.getNBPT_SP_PERSON_OAPSWD());
+			userManageDao.postAddUser(this.getConnection(), user);
 
+			// 插入权限信息
+			NBPT_RSFZ_U_R rsfz_U_R = new NBPT_RSFZ_U_R();
+			String role = "21".equals(in.getNBPT_SP_PERSON_JOB()) ? "600006" : "22".equals(in.getNBPT_SP_PERSON_JOB()) ? "600003" : "600008";
+			rsfz_U_R.setNBPT_RSFZ_U_R_RID(role);
+			rsfz_U_R.setNBPT_RSFZ_U_R_UID(in.getNBPT_SP_PERSON_LOGINID());
+			userManageDao.postAddU_R(this.getConnection(), rsfz_U_R);
+			
+			mv.addObject("message", "添加成功");
+			
+			return this.after(mv);
+		} catch (Exception e) {
+			
+			this.closeException();
+			log.error("提交添加地总大区总业务失败" + CommonUtil.getTrace(e));
+			throw new Exception();
+		}
+	}
+	
 	@Override
 	public ModelAndView createEvaluationForm(String endTime) throws Exception {
 
@@ -287,6 +337,38 @@ public class SupportServiceImpl extends SellPBaseService implements SupportSeriv
 
 		}
 	}
+
+	@Override
+	public ModelAndView getTransfer() throws Exception {
+
+		try {
+			
+			this.before();
+			
+			ModelAndView mv = HttpUtil.getModelAndView("03/" + this.getCheckPage("030408"));
+			
+			List<NBPT_VIEW_REGION> regions = supportDao.receiveRegion(null, null, this.getConnection());
+			
+			mv.addObject("regions", CommonUtil.getListInMapByKey(CommonUtil.classify(regions, "NBPT_SP_REGION_LEVEL", NBPT_VIEW_REGION.class), "1"));
+			
+			return this.after(mv);
+
+		} catch (Exception e) {
+
+			this.closeException();
+			log.error("查询当前所有人员出错");
+			throw new Exception();
+
+		}
+	}
+
+	@Override
+	public ModelAndView postTransfer() {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
+
 }
 
 

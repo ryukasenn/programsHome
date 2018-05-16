@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
 import com.cn.lingrui.common.utils.CommonUtil;
+import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.sellPersonnel.db.dao.SupportDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
@@ -133,6 +134,22 @@ public class SupportDaoImpl extends SellPersonnelBaseDaoImpl implements SupportD
 		} catch (SQLException e) {
 			
 			log.error("查询指定未审核人员信息出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void supportAddPerson(NBPT_SP_PERSON person, Connection conn) throws SQLException {
+
+		StringBuffer sql = new StringBuffer(DBUtils.beanToSql(NBPT_SP_PERSON.class, "insert", "NBPT_SP_PERSON", person));
+				
+		try {
+			
+			this.excuteUpdate(sql , conn);;
+			
+		} catch (SQLException e) {
+			
+			log.error("插入新的大区总地总出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

@@ -95,7 +95,6 @@ public class CommonController {
 		return jsonData;
 	}
 	
-
 	/**
 	 * 获取终端籍贯信息
 	 * @param parentId
@@ -107,6 +106,53 @@ public class CommonController {
 	public String receiveTerminalPlace(String idNum) throws Exception {
 		
 		String jsonData = commonService.receiveTerminalPlace(idNum);
+		
+		return jsonData;
+	}
+	
+	/**
+	 * 验证登录ID存在性
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/receiveLoginId")
+	public String receiveLoginId(String loginId) throws Exception {
+		
+		String jsonData = commonService.receiveLoginId(loginId);
+		
+		return jsonData;
+	}
+	
+	/**
+	 * 调岗人员查询
+	 * @param personName 调岗人员姓名
+	 * @param transferType 调岗类型
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/transferSearchPerson")
+	public String transferSearchPerson(String personName, String transferType) throws Exception {
+		
+		String jsonData = commonService.transferSearchPerson(personName, transferType);
+		
+		return jsonData;
+	}
+	
+	/**
+	 * 调岗地区查询
+	 * @param personName 调岗人员姓名
+	 * @param transferType 调岗类型
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody  
+    @RequestMapping("/transferSearchRegion")
+	public String transferSearchRegion(String regionName, String transferType) throws Exception {
+		
+		String jsonData = commonService.transferSearchRegion(regionName);
 		
 		return jsonData;
 	}
