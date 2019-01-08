@@ -96,4 +96,9 @@ public interface PageManageService {
 	 * @return
 	 */
 	public ModelAndView postDeletePage(PmPagePojoIn in) throws Exception;
+	/**
+	 * 获取页面管理树形菜单
+	 * @return
+	 */
+	public String receivePmTree();
 }

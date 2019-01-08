@@ -12,13 +12,17 @@ import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.sellPersonnel.db.dao.RegionManageDao;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_PROCEDURE_TREE;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.region.CurrentRegion;
 import com.cn.lingrui.sellPersonnel.pojos.region.Area_Xzqx_Info;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
+import com.sun.rowset.CachedRowSetImpl;
 
 /**
  * 部门管理相关数据库操作
@@ -379,7 +383,114 @@ public class RegionManageDaoImpl extends SellPersonnelBaseDaoImpl implements Reg
 		}
 	}
 
+	@Override
+	public NBPT_VIEW_XZQX receiveRegion_Xzqxs(String regionType, String xzqxId, String type, Connection connection)
+			throws SQLException {
 
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("SELECT * FROM NBPT_VIEW_XZQX A ");	
+			sql.append("WHERE 1=1 ");
+			sql.append("AND A.NBPT_SP_REGION_TYPE = '" + regionType + "' ");
+			sql.append("AND A.NBPT_COMMON_XZQXHF_ID = '" + xzqxId + "' ");
+			sql.append("AND A.NBPT_SP_REGION_XZQX_TYPE = '" + type + "' ");
+			return this.oneQueryForClasz(sql, connection, NBPT_VIEW_XZQX.class);
+		} catch (SQLException e) {
+			log.error("查询部门行政区县绑定关系出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void updateRegionXzqx_rp(String rpUid, String newUid, Connection connection)
+			throws SQLException {
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE NBPT_SP_REGION_XZQX SET NBPT_SP_REGION_XZQX_REGIONUID = '" + newUid + "' WHERE NBPT_SP_REGION_XZQX_UID = '" + rpUid + "'");
+		
+		try {
+			
+			this.excuteUpdate(sql, connection);
+		} catch (SQLException e) {
+			
+			log.error("查询部门行政区县绑定关系出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void addRegion(NBPT_SP_REGION newRegion, Connection connection) throws SQLException {
+		
+		try {
+			String sql = DBUtils.beanToSql(NBPT_SP_REGION.class, "insert", "NBPT_SP_REGION", newRegion);
+			this.excuteUpdate(sql, connection);
+		} catch (SQLException e) {
+			
+			log.error("添加新的大区或地区出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+		
+	}
+
+	@Override
+	public List<NBPT_PROCEDURE_TREE> receiveRegionTree(String pid, Connection conn) throws SQLException {
+		
+		try {
+			
+			List<CachedRowSetImpl> rss = this.callProcedureForMoreRs("NBPT_PROCEDURE_REGION_TREE", conn, new String[] {pid});
+			List<NBPT_PROCEDURE_TREE> result = DBUtils.rsToBean(NBPT_PROCEDURE_TREE.class
+					, rss.get(0));
+			result.addAll(DBUtils.rsToBean(NBPT_PROCEDURE_TREE.class
+					, rss.get(1)));
+			return result;
+		} catch (SQLException e) {
+			
+			log.error("获取部门选取树出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_PROCEDURE_TREE> receivePersonTree(Connection connection) throws SQLException {
+
+		try {
+			
+			List<CachedRowSetImpl> rss = this.callProcedureForMoreRs("NBPT_PROCEDURE_PERSON_TREE", connection);
+			List<NBPT_PROCEDURE_TREE> result = DBUtils.rsToBean(NBPT_PROCEDURE_TREE.class
+					, rss.get(0));
+			result.addAll(DBUtils.rsToBean(NBPT_PROCEDURE_TREE.class
+					, rss.get(1)));
+			return result;
+		} catch (SQLException e) {
+			
+			log.error("获取部门选取树出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public List<NBPT_VIEW_CURRENTPERSON> receiveAbleResper(String type, String personType, Connection connection) throws SQLException {
+
+		try {
+			StringBuffer sql = new StringBuffer();
+			
+			sql.append("SELECT * FROM NBPT_VIEW_PERSON A ");
+			sql.append("WHERE 1=1 ");
+			if("area".equals(type)) {
+				sql.append("AND (SUBSTRING(A.NBPT_SP_PERSON_JOB,2,1) = '2' OR SUBSTRING(A.NBPT_SP_PERSON_JOB,2,1) = '6') ");
+				sql.append("AND (A.NBPT_SP_PERSON_AREA_UID = '' OR A.NBPT_SP_PERSON_AREA_UID IS NULL) ");
+			}
+			if("region".equals(type)) {
+				sql.append("AND (SUBSTRING(A.NBPT_SP_PERSON_JOB,2,1) = '1' OR SUBSTRING(A.NBPT_SP_PERSON_JOB,2,1) = '6') ");
+				sql.append("AND (A.NBPT_SP_PERSON_REGION_UID = '' OR A.NBPT_SP_PERSON_REGION_UID IS NULL) ");
+			}
+			sql.append(" AND A.NBPT_SP_PERSON_TYPE = '" + personType + "' ");
+			List<NBPT_VIEW_CURRENTPERSON> result = this.queryForClaszs(sql, connection, NBPT_VIEW_CURRENTPERSON.class);
+			return result;
+		} catch (Exception e) {
+			log.error("获取可用负责人出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
 }
 
 

@@ -2,8 +2,6 @@
 // 部门管理:规划地区下辖市区县
 extends ./layouts/0302
 
-
-        
 block contents
     .col-xs-12.col-sm-12
         .form-horizontal#changeRegion
@@ -51,7 +49,7 @@ block contents
                                     td(style="vertical-align:middle") 
                                         |<button class="btn btn-link delete" value="#{item.NBPT_COMMON_XZQXHF_ID}">删除</button>
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03020501.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03020501.js#{randomJsVersion}")
     
 block modal
     include includes/030205Modal

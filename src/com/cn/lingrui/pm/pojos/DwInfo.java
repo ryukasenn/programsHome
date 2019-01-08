@@ -2,68 +2,69 @@ package com.cn.lingrui.pm.pojos;
 
 public class DwInfo {
 
-	private String id;//段位id
-	private String dwmc;//段位名称
-	private String dwbh;//段位编号
-	private String dwwc;//段位位次
-	private String dw;//段位
-	private String wcbh;//位次编号
-	public String getId() {
-		return id;
+	private String ID;//段位id
+	private String DWMC;//段位名称
+	private String DWBH;//段位编号
+	private String DWWC;//段位位次
+	private String DW;//段位
+	private String WCBH;//位次编号
+	public String getID() {
+		return ID;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setID(String iD) {
+		ID = iD;
 	}
-	public String getDwmc() {
-		return dwmc;
+	public String getDWMC() {
+		return DWMC;
 	}
-	public void setDwmc(String dwmc) {
-		this.dwmc = dwmc;
+	public void setDWMC(String dWMC) {
+		DWMC = dWMC;
 	}
-	public String getDwbh() {
-		return dwbh;
+	public String getDWBH() {
+		return DWBH;
 	}
-	public void setDwbh(String dwbh) {
-		this.dwbh = dwbh;
+	public void setDWBH(String dWBH) {
+		DWBH = dWBH;
 	}
-	public String getDwwc() {
-		return dwwc;
+	public String getDWWC() {
+		return DWWC;
 	}
-	public void setDwwc(String dwwc) {
-		this.dwwc = dwwc;
+	public void setDWWC(String dWWC) {
+		DWWC = dWWC;
 	}
-	public String getDw() {
-		return dw;
+	public String getDW() {
+		return DW;
 	}
-	public void setDw(String dw) {
-		this.dw = dw;
+	public void setDW(String dW) {
+		DW = dW;
 	}
-	public String getWcbh() {
-		return wcbh;
+	public String getWCBH() {
+		return WCBH;
 	}
-	public void setWcbh(String wcbh) {
-		this.wcbh = wcbh;
+	public void setWCBH(String wCBH) {
+		WCBH = wCBH;
 	}
-	
-	
 	public DwInfo() {
-		super();
-		// TODO Auto-generated constructor stub
+		
 	}
-	public DwInfo(String id, String dwmc, String dwbh, String dwwc, String dw, String wcbh) {
+	public DwInfo(String iD, String dWMC, String dWBH, String dWWC, String dW, String wCBH) {
 		super();
-		this.id = id;
-		this.dwmc = dwmc;
-		this.dwbh = dwbh;
-		this.dwwc = dwwc;
-		this.dw = dw;
-		this.wcbh = wcbh;
+		ID = iD;
+		DWMC = dWMC;
+		DWBH = dWBH;
+		DWWC = dWWC;
+		DW = dW;
+		WCBH = wCBH;
 	}
+	
 	@Override
 	public String toString() {
-		return "DwInfo [id=" + id + ", dwmc=" + dwmc + ", dwbh=" + dwbh + ", dwwc=" + dwwc + ", dw=" + dw + ", wcbh="
-				+ wcbh + "]";
+		return "DwInfo [ID=" + ID + ", DWMC=" + DWMC + ", DWBH=" + DWBH + ", DWWC=" + DWWC + ", DW=" + DW + ", WCBH="
+				+ WCBH + "]";
 	}
+	
+	
+	
 	
 	
 	

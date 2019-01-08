@@ -5,10 +5,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-
-import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
-import com.cn.lingrui.sellPersonnel.service.AreaHeadService;
+import org.springframework.web.bind.annotation.ResponseBody;
+import com.cn.lingrui.sellPersonnel.service.PersonManageService;
 
 /**
  * 地总权限管理
@@ -19,49 +17,8 @@ import com.cn.lingrui.sellPersonnel.service.AreaHeadService;
 @RequestMapping("/sellPersonnel")
 public class AreaHeadController {
 
-	@Resource(name = "areaHeadService")
-	private AreaHeadService areaHeadService;
-	
-	/**
-	 * 添加终端获取
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/addTerminal", method = RequestMethod.GET)
-	public ModelAndView getAddTerminal() throws Exception {
-
-		ModelAndView mv = areaHeadService.getAddTerminal();
-
-		return mv;
-	}
-
-	/**
-	 * 添加终端提交
-	 * @param in
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/addTerminal", method = RequestMethod.POST)
-	public ModelAndView postAddTerminal(AddPersonPojoIn in) throws Exception {
-
-		ModelAndView mv = areaHeadService.postAddTerminal(in);
-
-		return mv;
-	}
-	
-	/**
-	 * 修改终端页面获取
-	 * @param in
-	 * @return
-	 * @throws Exception
-	 */
-	@RequestMapping(value = "/changePerson", method = RequestMethod.POST)
-	public ModelAndView getChangePerson(String changePersonPid) throws Exception {
-
-		ModelAndView mv = areaHeadService.getChangePerson(changePersonPid);
-
-		return mv;
-	}
+	@Resource(name = "personManageService")
+	private PersonManageService personManageService;
 	
 	/**
 	 * 申请终端离职
@@ -69,11 +26,24 @@ public class AreaHeadController {
 	 * @return
 	 * @throws Exception
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/dimissTerminal", method = RequestMethod.POST)
-	public ModelAndView dimissTerminal(String dimissTerminalPid, String dimissTime) throws Exception {
-
-		ModelAndView mv = areaHeadService.dimissTerminal(dimissTerminalPid, dimissTime);
-
-		return mv;
+	public String getDimissTerminal(String dimissTerminalPid) throws Exception {
+		String result = personManageService.getDimissTerminal(dimissTerminalPid);
+		return result;
 	}
+	
+	/**
+	 * 提交终端离职
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/postDimissTerminal", method = RequestMethod.POST)
+	public String postDimissTerminal(String personPid, String personLeaveTime, String personLeaveReason) throws Exception {
+		String result = personManageService.postDimissTerminal(personPid,personLeaveTime,personLeaveReason);
+		return result;
+	}
+	
 }

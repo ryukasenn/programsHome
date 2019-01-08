@@ -1,26 +1,22 @@
 
-// 人员管理首页(后勤)
+// 人员统计页面(后勤)
 extends ./layouts/0304
-    
-block buttons
-    .form-group
-        button(type="button").btn.btn-default#supportAdd 添加大区总地总
-        |&nbsp&nbsp
-    .form-group
-        button(type="button").btn.btn-default#transfer 人员调度
-        |&nbsp&nbsp
-    .form-group
-        button(type="button").btn.btn-default#receiveAllPersons 查看所有人员信息
-        |&nbsp&nbsp
-        
 
-block contents
-    if message
-        .col-xs-12.col-sm-12
-            h3= message
+block main
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            h2 人员统计
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            .col-md-2.col-sm-2.select-info
+                .treeContent
+                    div.tree
+                        ul.ztree#treeMenu
+            .col-md-10.col-sm-10
+                .col-md-12.col-sm-12.select-info.ryuukasennTableContent
         
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040102.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040102.js#{randomJsVersion}")
 block pageId
     p(style="display:none") 03040102
     

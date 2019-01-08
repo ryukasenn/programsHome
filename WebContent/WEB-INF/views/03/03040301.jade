@@ -1,5 +1,5 @@
 
-// 终端管理:添加终端人员(地总)
+// 终端管理:终端人员驳回修改(地总)
 extends ./layouts/0304
     
 block buttons
@@ -20,6 +20,7 @@ block contents
                 input(type="hidden", name="NBPT_SP_PERSON_AREANO")
                 input(type="hidden", name="NBPT_SP_PERSON_PID", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
                 input(type="hidden", name="NBPT_SP_PERSON_ID", value='#{person.NBPT_SP_PERSON_ID}')#NBPT_SP_PERSON_ID
+                input(type="hidden", name="addPersonType")#addPersonType
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -92,7 +93,7 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp入职时间
                     .col-xs-4.col-sm-4
-                        input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_ENTRYDATA", required='true', value='#{person.NBPT_SP_PERSON_ENTRYDATA}')
+                        input.form-control.timeSelect(name="NBPT_SP_PERSON_ENTRYDATA",value='#{person.NBPT_SP_PERSON_ENTRYDATA}', readOnly)
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -121,13 +122,13 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp保单起始
                     .col-xs-4.col-sm-4
-                        input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}')
+                        input.form-control.timeSelect(name="NBPT_SP_PERSON_POLICY_DATA1", value='#{person.NBPT_SP_PERSON_POLICY_DATA1}', readOnly)
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp保单结束
                     .col-xs-4.col-sm-4
-                        input.form-control(placeholder='例:2018-03-03', type='date', name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}')
+                        input.form-control.timeSelect(, name="NBPT_SP_PERSON_POLICY_DATA2", value='#{person.NBPT_SP_PERSON_POLICY_DATA2}', readOnly)
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
@@ -176,7 +177,7 @@ block contents
                         button(type="button")#addPerson.btn.btn-primary 提交
     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040301.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040301.js#{randomJsVersion}")
     script
         var male = '#{person.NBPT_SP_PERSON_MALE}';
         var job = '#{person.NBPT_SP_PERSON_JOB}';

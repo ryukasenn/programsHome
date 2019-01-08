@@ -24,6 +24,7 @@ block contents
                             th(style="text-align:center") 所属地总
                             th(style="text-align:center") 所属大区
                             th(style="text-align:center") 联系电话
+                            th(style="text-align:center") 年龄
                             th(style="text-align:center") 操作
                             each item,i in newUncheckList
                                 tr(style="text-align:center;")
@@ -33,6 +34,7 @@ block contents
                                     td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME
                                     td(style="vertical-align:middle")= item.NBPT_SP_PERSON_REGION_NAME
                                     td(style="vertical-align:middle")= item.NBPT_SP_PERSON_MOB1
+                                    td(style="vertical-align:middle")= item.NBPT_SP_PERSON_AGE
                                     td(style="vertical-align:middle") 
                                         button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').passCheckOut 详细信息
                                         button.btn.btn-link.btn-xs(value='#{item.NBPT_SP_PERSON_PID}').passDirect 直接通过
@@ -47,9 +49,9 @@ block contents
                             th(style="text-align:center") 名称
                             th(style="text-align:center") 所属地区
                             th(style="text-align:center") 所属地总
+                            th(style="text-align:center") 所属大区
                             th(style="text-align:center") 离职提交时间
                             th(style="text-align:center") 离职实际时间
-                            th(style="text-align:center") 所属大区
                             th(style="text-align:center") 操作
                             each item,i in deleteUncheckList
                                 tr(style="text-align:center;")
@@ -66,7 +68,7 @@ block contents
             
                     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03030201.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03030201.js#{randomJsVersion}")
     
 block pageId
     p(style="display:none") 03030201

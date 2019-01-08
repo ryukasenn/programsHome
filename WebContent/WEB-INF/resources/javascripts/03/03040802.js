@@ -1,9 +1,85 @@
 $(function(){
 	
+	
 	$("#transferConfirm").on('click', function(){
+		
+		var $_personPid = $("#personNameHidden").val() && $("#personNameHidden").val().trim();
+		var $_regionUid = $("#regionNameHidden").val() && $("#regionNameHidden").val().trim();
+		var $_personLoginId = $("#personLoginId").val() && $("#personLoginId").val().trim();
+		var transferType = $("input[name='transferType']:checked").val() && $("input[name='transferType']:checked").val().trim();
+
+		
+		if(undefined == transferType) {
+			new Confirm({
+				message : '选择功能呀',
+				type : 'alter'
+			})
+			return;
+		}
+		
+		// 如果是区县调地区
+		else if('0' == transferType){
+			if ($_personPid && $_regionUid && $("#regionPanel")[0] && $("#personPanel")[0]){}
+			else {
+				new Confirm({
+					message : '看看啥不是选的',
+					type : 'alter'
+				});return;
+			}
+		} 
+		
+		// 如果是区县总升地总
+		else if('1' == transferType){
+			if ($_personPid && $_personLoginId && $("#personPanel")[0]){}
+			else {
+				new Confirm({
+					message : '选人啊',
+					type : 'alter'
+				})
+				return;
+			}
+		}
+		
+		// 如果是地总升大区总
+		else if('2' == transferType){
+			if ($_personPid && $("#personPanel")[0]){}
+			else {
+				new Confirm({
+					message : '选人啊',
+					type : 'alter'
+				})
+				return;
+			}
+		}
 		
 		$("#transferForm").attr("method", "POST").attr("action", baseUrl + "/sellPersonnel/support/transfer").submit();
 		
+	})
+	
+	// 登录ID验证
+	$("#personLoginId").on('focusout', function(){
+		
+		var $_this = $(this);
+		if($_this.val() == ''){
+
+			$_this.parents('.form-group').addClass('has-error');
+		} else {
+			
+			AjaxForGet(baseUrl + "/sellPersonnel/receiveLoginId", {loginId : $_this.val()},function(jsonData){
+				
+				if (jsonData.length > 0){
+
+					$_this.parents('.form-group').addClass('has-error');
+					$_this.parents('.form-group').find('.errorMessage').empty();
+					$_this.parents('.form-group').find('.errorMessage').append($("<font color='red' ><p>该OA账号已存在,请联系信息部确认</p></font>"))
+				} else{
+
+					$_this.parents('.form-group').removeClass('has-error');
+					$_this.parents('.form-group').find('.errorMessage').empty();
+					$_this.parents('.form-group').find('.errorMessage').append($("<font color='green' ><p>可用</p></font>"))
+				}
+			})
+		}
 	})
 	
 	$("#transferForm").on('click', 'input[type="radio"]', function(){
@@ -22,6 +98,7 @@ $(function(){
 			
 			$("#personName").val($_this.parent().next().html());
 			$("#personNameHidden").val($_this.val());
+			$("#personIdHidden").val($_this.parent().next().next().html());
 			return ;
 		}
 		
@@ -34,16 +111,19 @@ $(function(){
 			if('0' == $_this.val()){
 				
 				$(".targetRegion").css("display", "block");
+				$(".personLoginId").css("display", "none");
 			}
 			
 			else if ('1' == $_this.val()){
 
 				$(".targetRegion").css("display", "none");
+				$(".personLoginId").css("display", "block");
 			}
 			
 			else if('2' == $_this.val()){
 
 				$(".targetRegion").css("display", "none");
+				$(".personLoginId").css("display", "none");
 			}
 			return ;
 		}
@@ -64,6 +144,10 @@ $(function(){
 		AjaxForGet(baseUrl + "/sellPersonnel/transferSearchRegion", 
 				{regionName : $("#regionName").val().trim()}
 		,function(jsonData){
+			
+			$("#waitModal").modal({
+				backdrop:'static'
+			})
 			
 			$("#regionName").val("");
 			if(0 == jsonData.length){
@@ -99,11 +183,22 @@ $(function(){
 				
 				$("#personPanel")[0] && $("#personPanel").before($_panel) || $("#transferForm").append($_panel)
 			}
+			
+			$("#waitModal").modal('hide');
 		})
 	})
 	
 	// 人员查询按钮
 	$("#searchPerson").on('click', function(){
+		
+		if($("#personName").val().trim() == ''){
+			
+			new Confirm({
+				message : '请输入人员名称,支持模糊查询',
+				type : 'alert'
+			});
+			return ;
+		}
 		
 		// 验证通过后,同时如果能取到籍贯信息,添加籍贯信息
 		AjaxForGet(baseUrl + "/sellPersonnel/transferSearchPerson", 
@@ -138,6 +233,7 @@ $(function(){
 												"<input type='radio' name='personSelected' value='" + person.NBPT_SP_PERSON_PID + "'/>" +
 											"</th>" +
 											"<td style='vertical-align:middle'>" + person.NBPT_SP_PERSON_NAME + "</td>" +
+											"<td style='vertical-align:middle;display:none'>" + person.NBPT_SP_PERSON_ID + "</td>" +
 											"<td style='vertical-align:middle'>" + person.NBPT_SP_PERSON_REALJOB + "</td>" +
 											"<td style='vertical-align:middle'>" + person.NBPT_SP_PERSON_REGION_NAME + "</td>" +
 											"<td style='vertical-align:middle'>" + person.NBPT_SP_PERSON_AREA_NAME + "</td>" +

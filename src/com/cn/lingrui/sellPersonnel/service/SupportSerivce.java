@@ -2,7 +2,9 @@ package com.cn.lingrui.sellPersonnel.service;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.pojos.person.AddPersonPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.support.TransferPojoIn;
 
 public interface SupportSerivce {
 
@@ -87,6 +89,46 @@ public interface SupportSerivce {
 	/**
 	 * 提交调岗请求
 	 * @return
+	 * @throws Exception 
 	 */
-	public ModelAndView postTransfer();
+	public ModelAndView postTransfer(TransferPojoIn in) throws Exception;
+
+	/**
+	 * 驳回申请
+	 * @param uncheckPid
+	 * @return
+	 * @throws Exception
+	 */
+	public ModelAndView rejectUncheck(String uncheckPid) throws Exception;
+
+	/**
+	 * 后勤修改人员信息
+	 * @param terminal
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView changeTerminal(AddPersonPojoIn terminal) throws Exception;
+
+	/**
+	 * 生成考勤文件
+	 * @param fileName
+	 * @throws Exception 
+	 */
+	void createAttendanceFile(String fileName) throws Exception;
+
+	/**
+	 * 获取人员统计信息
+	 * @param type 类型 
+	 * @param id 编号
+	 * @return
+	 */
+	public String receivePerson(String type, String id, String typeValue);
+
+	/**
+	 * 获取人员管理信息
+	 * @param type 类型 
+	 * @param id 编号
+	 * @return
+	 */
+	public String receivePersonTable(String type, String id, String typeValue);
 }

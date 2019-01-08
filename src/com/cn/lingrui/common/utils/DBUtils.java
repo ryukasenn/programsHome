@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.cn.lingrui.common.db.DBConnect;
@@ -41,6 +40,11 @@ public class DBUtils {
 	 */
 	public static <T> List<T> rsToBean(Class<T> classz, ResultSet rs) throws SQLException {
 
+//		try {
+//			rs.getMetaData();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
 		// 初始化返回数据
 		List<T> list = new ArrayList<T>();
 
@@ -64,12 +68,12 @@ public class DBUtils {
 
 				for (Field f : fs) {
 
-					if (columnNames.contains(f.getName())) {
+					if (columnNames.contains(f.getName().toUpperCase())) {
 
 						// 如果属性包含该属性,则添加
 						boolean flag = f.isAccessible();
 						f.setAccessible(true);
-						f.set(entity, String.valueOf(null == rs.getObject(f.getName())?"":rs.getObject(f.getName())));
+						f.set(entity, String.valueOf(null == rs.getObject(f.getName().toUpperCase())?"":rs.getObject(f.getName().toUpperCase())));
 						f.setAccessible(flag);
 					}
 				}
@@ -86,7 +90,7 @@ public class DBUtils {
 		return list;
 	}
 	
-	public static List<String> rsToString(ResultSet rs) throws SQLException {
+	public static List<String> rsToStrings(ResultSet rs) throws SQLException {
 
 		// 初始化返回数据
 		List<String> resultStrings = new ArrayList<>();
@@ -101,7 +105,21 @@ public class DBUtils {
 
 		return resultStrings;
 	}
+	
+	public static String rsToString(ResultSet rs) throws SQLException {
 
+		// 初始化返回数据
+		String result = "";
+
+		String columnName = rs.getMetaData().getColumnName(1);
+		while (rs.next()) {
+			
+			// 
+			result = String.valueOf(null == rs.getObject(columnName) ? "" : rs.getObject(columnName));
+		}
+
+		return result;
+	}
 	/**
 	 * 将bean转化成sql语句
 	 * 
@@ -173,13 +191,20 @@ public class DBUtils {
 				for(Field f : fs) {
 
 					Object content = clasz.getMethod("get" + f.getName()).invoke(t[0]);
-					if(null == content) {
+					if(null == content || "".equals(content.toString())) {
 					
 					}else {
 						sb.append(f.getName().toUpperCase() + " = " + "'" + content.toString() + "',");
 					}
 				}
 				sb.deleteCharAt(sb.length() - 1);
+				if("NBPT_SP_PERSON".equals(tableName)) {
+					sb.append(" WHERE " + tableName + "_PID = '" + clasz.getMethod("get" + tableName +"_PID").invoke(t[0]).toString() + "'");
+				} else {
+
+					sb.append(" WHERE " + tableName + "_UID = '" + clasz.getMethod("get" + tableName +"_UID").invoke(t[0]).toString() + "'");
+				}
+				
 				break;
 			}
 		} catch (Exception e) {
@@ -256,8 +281,10 @@ public class DBUtils {
 	public static DBConnect getERPTGJDBC() {
 
 		try {
-			
-			return new DBConnect(GlobalParams.ERPTGJ_USERNAME, GlobalParams.ERPTGJ_PASSWORD, GlobalParams.ERPTGJ_DBNAME);
+			return new DBConnect(CommonUtil.getBasePropertieValue("ERPTGJ_USERNAME"),
+					 CommonUtil.getBasePropertieValue("ERPTGJ_PASSWORD"),
+					 CommonUtil.getBasePropertieValue("ERPTGJ_IP"),
+					 CommonUtil.getBasePropertieValue("ERPTGJ_DBNAME"));
 		} catch (SQLException e) {
 
 			log.info("业务操作异常" + e.getMessage());
@@ -265,6 +292,19 @@ public class DBUtils {
 		}
 	}
 
+	public static DBConnect getMobileDBC() {
+		try {
+			
+			return new DBConnect(CommonUtil.getBasePropertieValue("MOBILE_USERNAME"),
+					 CommonUtil.getBasePropertieValue("MOBILE_PASSWORD"),
+					 CommonUtil.getBasePropertieValue("MOBILE_IP"),
+					 CommonUtil.getBasePropertieValue("MOBILE_DBNAME"));
+		} catch (SQLException e) {
+
+			log.info("业务操作异常" + e.getMessage());
+			return null;
+		}
+	}
 	/**
 	 * 获取用户数据库连接
 	 * 
@@ -416,6 +456,20 @@ public class DBUtils {
 	public static void receiveGlobalParam(String key) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		
 		System.out.println(GlobalParams.class.getField(key).get(GlobalParams.class));
+	}
+	
+	public static <C> List<String> getClassPropertyNameList(Class<C> clasz) throws InstantiationException, IllegalAccessException{
+		
+		C c = clasz.newInstance();
+		List<String> titleList = new ArrayList<>();
+		Field[] fields = c.getClass().getDeclaredFields();
+		
+		for(int i=0; i<fields.length; i++){  
+            Field f = fields[i];  
+            f.setAccessible(true);  
+            titleList.add(f.getName());
+        }
+		return titleList;
 	}
 }
 

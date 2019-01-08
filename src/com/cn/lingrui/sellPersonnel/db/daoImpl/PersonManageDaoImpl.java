@@ -12,6 +12,7 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.sellPersonnel.db.dao.PersonManageDao;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 
@@ -66,7 +67,7 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 			String sql ="  SELECT D.*" + 
 						"  FROM NBPT_SP_REGION_XZQX A" + 
 						"  LEFT JOIN NBPT_SP_REGION B" + 
-						"  ON A.NBPT_SP_REGION_XZQX_REGIONID = B.NBPT_SP_REGION_ID" + 
+						"  ON A.NBPT_SP_REGION_XZQX_REGIONUID = B.NBPT_SP_REGION_UID" + 
 						"  LEFT JOIN NBPT_SP_PERSON C" + 
 						"  ON B.NBPT_SP_REGION_RESPONSIBLER = C.NBPT_SP_PERSON_PID" + 
 						"  LEFT JOIN NBPT_COMMON_XZQXHF D" + 
@@ -137,11 +138,8 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 			
 			// 更新人员信息
 			String updateSql = DBUtils.beanToSql(NBPT_SP_PERSON.class, "update", "NBPT_SP_PERSON", person);
-			this.excuteUpdate(updateSql + " WHERE NBPT_SP_PERSON_PID = '" + person.getNBPT_SP_PERSON_PID() + "'", connection);
+			this.excuteUpdate(updateSql, connection);
 			
-			// 删除原有负责区域
-			String deleteSql = "DELETE FROM NBPT_SP_PERSON_XZQX WHERE NBPT_SP_PERSON_XZQX_PID = '" + person.getNBPT_SP_PERSON_ID() + "'";
-			this.excuteUpdate(deleteSql, connection);	
 				
 			
 		} catch (SQLException e) {
@@ -184,6 +182,38 @@ public class PersonManageDaoImpl extends SellPersonnelBaseDaoImpl implements Per
 			return personInfos;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}
+	}
+
+
+	@Override
+	public void deleteTerminalAreas(String terminalId, Connection connection) throws SQLException {
+
+		try {
+
+			// 删除原有负责区域
+			String deleteSql = "DELETE FROM NBPT_SP_PERSON_XZQX WHERE NBPT_SP_PERSON_XZQX_PID = '" + terminalId + "'";
+			this.excuteUpdate(deleteSql, connection);
+			
+		} catch (SQLException e) {
+			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
+			throw new SQLException();
+		}	
+		
+	}
+
+
+	@Override
+	public void addPersonRegion(NBPT_SP_PERSON_REGION insertPersonRegion, Connection connection) throws SQLException {
+
+		try {
+
+			String insetSql = DBUtils.beanToSql(NBPT_SP_PERSON_REGION.class, "INSERT", "NBPT_SP_PERSON_REGION", insertPersonRegion);
+			this.excuteUpdate(insetSql, connection);
+			
+		} catch (SQLException e) {
 			log.error("更新终端人员信息出错" + CommonUtil.getTrace(e));
 			throw new SQLException();
 		}

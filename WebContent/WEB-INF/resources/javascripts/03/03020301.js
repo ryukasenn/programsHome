@@ -57,12 +57,9 @@ $(function(){
 	 * 规划下辖省份
 	 */
 	$("#checkProvince").on('click', function(){		
-		
-		new Confirm({
-			type:'alert',
-			message:'暂不提供该功能'
-		});
-		//window.location.href = baseUrl + "/sellPersonnel/regionController/checkProvince?regionUid=" + $("#updateRegion input[name='regionUid']").val();
+
+		// 获取地区编号		
+		window.location.href = baseUrl + "/sellPersonnel/regionController/checkProvince?regionUid=" + $("#updateRegion input[name='regionUid']").val();
 	})
 	
 	

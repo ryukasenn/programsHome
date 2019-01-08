@@ -3,10 +3,10 @@
 extends ../../personnelLayout
 
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0306.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0306.js#{randomJsVersion}")
     
 block main
-    .col-xs-12.col-sm-12.main-header
+    .col-md-12.col-sm-12.main-header
         h2 信息专员管理
         form.form-inline#controlForm
             .form-group

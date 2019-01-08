@@ -5,6 +5,8 @@ html(lang="en")
         title 人事管理辅助系统
         link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/css/bootstrap.css')
         link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap/layout.css')
+        block layoutHeader
+        block treeHeader
         block header
     body
         script
@@ -29,11 +31,15 @@ html(lang="en")
                             li: a(href="#{myPath}/sys/pmHome"): span 页面管理
                             li: a(href="#{myPath}/sys/ruHome"): span 用户管理
                             li: a(href="#{myPath}/sys/rmHome"): span 角色管理
+                            li: a(href="#{myPath}/sys/dicHome"): span 字典管理
                     .col-sm-9.col-sm-offset-3.col-md-11.col-md-offset-1.main
                         block main
     block modal
-    script(language="javascript", src="#{myPath}/javascripts/jquery.min.js")
-    script(language="javascript", src="#{myPath}/javascripts/bootstrap.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/jquery.min.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/bootstrap.min.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/common.js#{randomJsVersion}")
+    block layoutScripts
+    block treeScripts
     block scripts
     block pageId
         p(style="display:none") adminLayout

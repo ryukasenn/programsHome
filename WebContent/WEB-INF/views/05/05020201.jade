@@ -8,32 +8,58 @@ block header
 block contents   
     .row 
         .col-xs-10.col-sm-10
-            .panel.panel_default#ranking
+            .panel
+                span#ranking_title #{grPm.RYXM}的排行：#{grPm.PM}, 段位：#{grPm.DW},属于#{dwxx.DWMC}.
+            .panel.panel_default#ranking(style="overflow:auto")
                 .panel-body
-                    span#ranking_title #{grPm.RYXM}的排行：#{grPm.PM}, 段位：#{grPm.DW}
+                    
                 table.table
                     tr.box
-                        th.col_1 排 名
-                        th.col_2 日 期
-                        th.col_3 姓 名
-                        th.col_4 段 位
-                        th.col_5 羚锐币
+                        th.col_1 会计期间
+                            th.col_2 大区
+                            th.col_2 省区
+                            th.col_2 地区
+                            th.col_2 姓名
+                            th.col_2 累计达成率(%)
+                            th.col_2 累计排名
+                            th.col_2 累计羚锐币
+                            th.col_2 本月达成率(%)
+                            th.col_2 本月排名
+                            th.col_2 段位
+                            th.col_2 段位排名
+                            th.col_2 本月羚锐币
                     unless sameDwPm.length
                         each item,i in sameDwPm
                             if item.RYXM == grPm.RYXM
                                 tr.cur
-                                    td.col_1= item.PM
-                                    td.col_2= item.RQ
-                                    td.col_3= item.RYXM
-                                    td.col_4= item.DW
-                                    td.col_5= item.LRB
+                                    th.col_1 #{item.RQ}
+                                    th.col_2 #{item.DQMC}
+                                    th.col_2 #{item.FZDQ}
+                                    th.col_2 #{item.SQMC}
+                                    th.col_2 #{item.RYXM}
+                                    th.col_2 #{item.LJDCL}
+                                    th.col_2 #{item.LJPM}
+                                    th.col_2 #{item.LJLRB}
+                                    th.col_2 #{item.DCL}
+                                    th.col_2 #{item.PM}
+                                    th.col_2 #{item.DW}
+                                    th.col_2 #{item.DWPM}
+                                    th.col_2 #{item.LRB}
                             else
                                 tr.box
-                                    td.col_1= item.PM
-                                    td.col_2= item.RQ
-                                    td.col_3= item.RYXM
-                                    td.col_4= item.DW
-                                    td.col_5= item.LRB
+                                    th.col_1 #{item.RQ}
+                                    th.col_2 #{item.DQMC}
+                                    th.col_2 #{item.FZDQ}
+                                    th.col_2 #{item.SQMC}
+                                    th.col_2 #{item.RYXM}
+                                    th.col_2 #{item.LJDCL}
+                                    th.col_2 #{item.LJPM}
+                                    th.col_2 #{item.LJLRB}
+                                    th.col_2 #{item.DCL}
+                                    th.col_2 #{item.PM}
+                                    th.col_2 #{item.DW}
+                                    th.col_2 #{item.DWPM}
+                                    th.col_2 #{item.LRB}
 
             .panel.panel_default#ranking
                 .panel-body
@@ -41,8 +67,8 @@ block contents
                 #container
 
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/highcharts.js")
-    script(language="javascript", src="#{myPath}/javascripts/03/05020201.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/highcharts.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/03/05020201.js#{randomJsVersion}")
     script
         var chart = Highcharts.chart('container', {
             chart: {

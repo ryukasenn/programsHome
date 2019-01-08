@@ -19,7 +19,7 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp大区名称
                     .col-xs-4.col-sm-4
-                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', name="regionName")
+                        input.form-control(value='#{regionInfo.NBPT_SP_REGION_NAME}', name="regionName" ,autocomplete="off")
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 负责人
                     .col-xs-4.col-sm-4
@@ -50,7 +50,7 @@ block contents
 block modal
     include includes/0302Modal
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03020301.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03020301.js#{randomJsVersion}")
     
 block pageId
     p(style="display:none") 03020301

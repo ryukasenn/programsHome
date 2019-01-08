@@ -8,9 +8,10 @@ import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
-import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_XZQX;
 import com.cn.lingrui.sellPersonnel.pojos.SellPersonnelPojoOut;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
+import com.cn.lingrui.sellPersonnel.pojos.person.AddPersonPojoIn;
 
 public class PersonManageServiceUtils {
 	
@@ -28,10 +29,16 @@ public class PersonManageServiceUtils {
 
 			// 注入原PID
 			person.setNBPT_SP_PERSON_PID(in.getNBPT_SP_PERSON_PID());
-
-			// 人员状态标志,
-			person.setNBPT_SP_PERSON_FLAG(person.getNBPT_SP_PERSON_FLAG());
 			
+			if("3".equals(in.getAddPersonType())) {
+
+				person.setNBPT_SP_PERSON_FLAG("1");
+			} 
+			
+			else if("2".equals(in.getAddPersonType())) {
+
+				person.setNBPT_SP_PERSON_FLAG("2");
+			}
 		} else {
 
 			// 生成随机ID码
@@ -168,7 +175,7 @@ public class PersonManageServiceUtils {
 	}
 
 	/**
-	 * 处理处理大区下所有人信息
+	 * 处理省份下地区人员信息
 	 * @param person
 	 * @throws Exception
 	 */
@@ -200,7 +207,77 @@ public class PersonManageServiceUtils {
 			
 			resultList.add(table);
 		}
+
+		StatisticsTable table = new StatisticsTable();
+		table.setRegionName("合计");
 		
+		for(StatisticsTable info : resultList) {
+			table.setTotal(table.getTotal() + info.getTotal());
+			table.setXzquResper(table.getXzquResper() + info.getXzquResper());
+			table.setXzquResper_preparatory(table.getXzquResper_preparatory() + info.getXzquResper_preparatory());
+			table.setPromote(table.getPromote() + info.getPromote());
+			table.setNeed(table.getNeed() + info.getNeed());
+			table.setDismission(table.getDismission() + info.getDismission());
+		}
+		resultList.add(table);
+		CommonServiceUtils.otherCompute(resultList);
+		
+		return resultList;
+	}
+	
+	/**
+	 * 处理大区下省份人员信息
+	 * @param person
+	 * @throws NoSuchFieldException 
+	 * @throws Exception
+	 */
+	public static List<StatisticsTable> countClassifyList_byProvince(List<NBPT_VIEW_XZQX> provinces, Map<String, List<NBPT_VIEW_CURRENTPERSON>> classifyiedPersons
+			, List<NBPT_VIEW_REGION> areas) throws NoSuchFieldException{
+		
+		// 初始化返回结果
+		List<StatisticsTable> resultList = new ArrayList<>();
+		
+		Map<String, List<NBPT_VIEW_REGION>> classifyedArea = CommonUtil.classify(areas, "NBPT_SP_REGION_PROVINCE_ID", NBPT_VIEW_REGION.class);
+		
+		for(NBPT_VIEW_XZQX province : provinces) {
+			
+			StatisticsTable table = new StatisticsTable();
+			
+			table.setProvinceName(province.getNBPT_COMMON_XZQXHF_NAME());
+			
+			table.setAreaName(province.getNBPT_SP_REGION_NAME());
+			
+			for(NBPT_VIEW_REGION area : CommonUtil.getListInMapByKey(classifyedArea, province.getNBPT_COMMON_XZQXHF_ID())) {
+
+				table.setNeed(table.getNeed() + CommonUtil.objToInteger(area.getNBPT_SP_REGION_NEED()));
+			}
+			
+			table.setAreaUid(province.getNBPT_SP_REGION_UID());
+			
+			table.setAreaHeader(province.getNBPT_SP_PERSON_NAME());
+			
+			List<NBPT_VIEW_CURRENTPERSON> currentAreaPersons = CommonServiceUtils.getPersonsByKey(classifyiedPersons, province.getNBPT_COMMON_XZQXHF_ID());
+			
+			for(NBPT_VIEW_CURRENTPERSON person : currentAreaPersons) {
+				
+				CommonServiceUtils.count(table, person);
+			}
+			
+			resultList.add(table);
+		}
+
+		StatisticsTable table = new StatisticsTable();
+		table.setRegionName("合计");
+		
+		for(StatisticsTable info : resultList) {
+			table.setTotal(table.getTotal() + info.getTotal());
+			table.setXzquResper(table.getXzquResper() + info.getXzquResper());
+			table.setXzquResper_preparatory(table.getXzquResper_preparatory() + info.getXzquResper_preparatory());
+			table.setPromote(table.getPromote() + info.getPromote());
+			table.setNeed(table.getNeed() + info.getNeed());
+			table.setDismission(table.getDismission() + info.getDismission());
+		}
+		resultList.add(table);
 		CommonServiceUtils.otherCompute(resultList);
 		
 		return resultList;

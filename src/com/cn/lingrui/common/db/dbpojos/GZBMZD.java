@@ -1,11 +1,10 @@
 package com.cn.lingrui.common.db.dbpojos;
 
 public class GZBMZD {
-
 	private String GZBMZD_BMBH;
 	private String GZBMZD_BMMC;
 	private String GZBMZD_JS;
-	private Integer GZBMZD_MX;
+	private String GZBMZD_MX;
 	public String getGZBMZD_BMBH() {
 		return GZBMZD_BMBH;
 	}
@@ -24,11 +23,10 @@ public class GZBMZD {
 	public void setGZBMZD_JS(String gZBMZD_JS) {
 		GZBMZD_JS = gZBMZD_JS;
 	}
-	public Integer getGZBMZD_MX() {
+	public String getGZBMZD_MX() {
 		return GZBMZD_MX;
 	}
-	public void setGZBMZD_MX(Integer gZBMZD_MX) {
+	public void setGZBMZD_MX(String gZBMZD_MX) {
 		GZBMZD_MX = gZBMZD_MX;
 	}
-	
 }

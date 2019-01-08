@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.AddRegionPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 import com.cn.lingrui.sellPersonnel.service.RegionManageService;
@@ -261,6 +261,19 @@ public class RegionManageController {
 		String jsonData = regionManageService.receiveAreaContainSelects(parentId);
 		
 		return jsonData;
+	}
+	
+	/**
+	 * 进入大区下辖省份修改页面
+	 * @param regionUid
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/checkProvince", method = RequestMethod.GET)
+	public ModelAndView checkProvince(String regionUid) throws Exception {
+		
+		ModelAndView mv = regionManageService.getcheckProvince(regionUid);
+		return mv;
 	}
 	
 }

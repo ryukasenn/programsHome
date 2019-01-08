@@ -2,38 +2,39 @@ package com.cn.lingrui.sellPersonnel.db.dbpojos;
 
 public class NBPT_VIEW_CURRENTPERSON {
 
-	private String NBPT_SP_PERSON_PID = ""; //32位随机码
-	private String NBPT_SP_PERSON_ID = ""; // 用户编号
-	private String NBPT_SP_PERSON_DEPT_ID = ""; // 部门编号
-	private String NBPT_SP_PERSON_TYPE = ""; // 人员类型,RX,OTC,混合
-	private String NBPT_SP_PERSON_NAME = ""; // 姓名
-	private String NBPT_SP_PERSON_MALE = ""; // 性别
-	private String NBPT_SP_PERSON_BIRS = ""; // 生日
-	private String NBPT_SP_PERSON_IDNUM = ""; // 身份证号码
-	private String NBPT_SP_PERSON_MOB1 = ""; // 手机1
-	private String NBPT_SP_PERSON_MOB2 = ""; // 手机2
-	private String NBPT_SP_PERSON_QQ = ""; // 扣扣
-	private String NBPT_SP_PERSON_CHAT = ""; // 微信
-	private String NBPT_SP_PERSON_MAIL = ""; // 邮箱
-	private String NBPT_SP_PERSON_ENTRYDATA = ""; // 入职时间
-	private String NBPT_SP_PERSON_LEAVEDATA = ""; // 离职时间
+	private String NBPT_SP_PERSON_PID; //32位随机码
+	private String NBPT_SP_PERSON_ID; // 用户编号
+	private String NBPT_SP_PERSON_DEPT_ID; // 部门编号
+	private String NBPT_SP_PERSON_TYPE; // 人员类型,RX,OTC,混合
+	private String NBPT_SP_PERSON_NAME; // 姓名
+	private String NBPT_SP_PERSON_MALE; // 性别
+	private String NBPT_SP_PERSON_BIRS; // 生日
+	private String NBPT_SP_PERSON_IDNUM; // 身份证号码
+	private String NBPT_SP_PERSON_MOB1; // 手机1
+	private String NBPT_SP_PERSON_MOB2; // 手机2
+	private String NBPT_SP_PERSON_QQ; // 扣扣
+	private String NBPT_SP_PERSON_CHAT; // 微信
+	private String NBPT_SP_PERSON_MAIL; // 邮箱
+	private String NBPT_SP_PERSON_ENTRYDATA; // 入职时间
+	private String NBPT_SP_PERSON_LEAVEDATA; // 离职时间
 	private String NBPT_SP_PERSON_LEAVE_APPLY_DATA; // 离职申请时间
 	private String NBPT_SP_PERSON_LEAVE_REAL_DATA; // 实际离职时间
-	private String NBPT_SP_PERSON_DEGREE = ""; // 学历
-	private String NBPT_SP_PERSON_PLACE = ""; // 籍贯
-	private String NBPT_SP_PERSON_SCHOOL = ""; // 毕业学校
-	private String NBPT_SP_PERSON_PROFESS = ""; // 专业
-	private String NBPT_SP_PERSON_TITLE = ""; // 职称
-	private String NBPT_SP_PERSON_JOB = ""; // 职务
-	private String NBPT_SP_PERSON_POLICYNO = ""; // 保单编号
-	private String NBPT_SP_PERSON_POLICY_DATA1 = ""; // 保单开始日期
-	private String NBPT_SP_PERSON_POLICY_DATA2 = ""; // 保单结束日期
-	private String NBPT_SP_PERSON_AREANO = ""; // 负责区域区域编号
-	private String NBPT_SP_PERSON_LOGINID = ""; // 登录名
-	private String NBPT_SP_PERSON_NOTE = ""; // 备注
-	private String NBPT_SP_PERSON_FLAG = ""; // 离职标志
-	private String NBPT_SP_PERSON_POLICYTYPE = ""; // 保单类型
-	private String NBPT_SP_PERSON_ENTERINGTIME = ""; // 录入时间
+	private String NBPT_SP_PERSON_DEGREE; // 学历
+	private String NBPT_SP_PERSON_PLACE; // 籍贯
+	private String NBPT_SP_PERSON_SCHOOL; // 毕业学校
+	private String NBPT_SP_PERSON_PROFESS; // 专业
+	private String NBPT_SP_PERSON_TITLE; // 职称
+	private String NBPT_SP_PERSON_JOB; // 职务
+	private String NBPT_SP_PERSON_POLICYNO; // 保单编号
+	private String NBPT_SP_PERSON_POLICY_DATA1; // 保单开始日期
+	private String NBPT_SP_PERSON_POLICY_DATA2; // 保单结束日期
+	private String NBPT_SP_PERSON_AREANO; // 负责区域区域编号
+	private String NBPT_SP_PERSON_LOGINID; // 登录名
+	private String NBPT_SP_PERSON_NOTE; // 备注
+	private String NBPT_SP_PERSON_FLAG; // 离职标志
+	private String NBPT_SP_PERSON_POLICYTYPE; // 保单类型
+	private String NBPT_SP_PERSON_ENTERINGTIME; // 录入时间
+	private String NBPT_SP_PERSON_LEVEL; //等级
 	private String NBPT_SP_PERSON_AGE; // 年龄
 	private String NBPT_SP_PERSON_WORKAGE; // 工龄
 	
@@ -56,9 +57,11 @@ public class NBPT_VIEW_CURRENTPERSON {
 	
 	private String NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME; // 地区负责人名称
 	private String NBPT_SP_PERSON_REGION_RESPONSIBLER_NAME; // 大区负责人名称
-	private String NBPT_SP_PERSON_REAL_MALE; // 大区负责人名称
+	private String NBPT_SP_PERSON_REAL_MALE; // 性别中文
 	private String NBPT_SP_PERSON_TYPENAME; // 所属类别汉字名称
-	private String NBPT_SP_PERSON_REALJOB; // 职位的中文名称
+	private String NBPT_SP_PERSON_REALJOB; // 职位中文
+	private String NBPT_SP_PERSON_CHAT_OPENID; // 绑定的openid
+	private String NBPT_SP_PERSON_STATUS; // 用户当前状态,flag
 	
 	public String getNBPT_SP_PERSON_PID() {
 		return NBPT_SP_PERSON_PID;
@@ -377,6 +380,24 @@ public class NBPT_VIEW_CURRENTPERSON {
 	}
 	public void setNBPT_SP_PERSON_REALJOB(String nBPT_SP_PERSON_REALJOB) {
 		NBPT_SP_PERSON_REALJOB = nBPT_SP_PERSON_REALJOB;
+	}
+	public String getNBPT_SP_PERSON_CHAT_OPENID() {
+		return NBPT_SP_PERSON_CHAT_OPENID;
+	}
+	public void setNBPT_SP_PERSON_CHAT_OPENID(String nBPT_SP_PERSON_CHAT_OPENID) {
+		NBPT_SP_PERSON_CHAT_OPENID = nBPT_SP_PERSON_CHAT_OPENID;
+	}
+	public String getNBPT_SP_PERSON_STATUS() {
+		return NBPT_SP_PERSON_STATUS;
+	}
+	public void setNBPT_SP_PERSON_STATUS(String nBPT_SP_PERSON_STATUS) {
+		NBPT_SP_PERSON_STATUS = nBPT_SP_PERSON_STATUS;
+	}
+	public String getNBPT_SP_PERSON_LEVEL() {
+		return NBPT_SP_PERSON_LEVEL;
+	}
+	public void setNBPT_SP_PERSON_LEVEL(String nBPT_SP_PERSON_LEVEL) {
+		NBPT_SP_PERSON_LEVEL = nBPT_SP_PERSON_LEVEL;
 	}
 	
 	

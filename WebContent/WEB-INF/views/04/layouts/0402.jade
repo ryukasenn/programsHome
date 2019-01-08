@@ -3,12 +3,12 @@
 extends ../../hxLayout
 
 block header
-    link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap-datetimepicker.min.css')
+    link(rel='stylesheet', href='#{myPath}/stylesheets/bootstrap-datetimepicker.min.css#{randomJsVersion}')
     
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/04/0402.js")
-    script(language="javascript", src="#{myPath}/javascripts/bootstrap-datetimepicker.min.js")
-    script(language="javascript", src="#{myPath}/javascripts/typeahead.min.js")
+    script(language="javascript", src="#{myPath}/javascripts/04/0402.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/bootstrap-datetimepicker.min.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/typeahead.min.js#{randomJsVersion}")
     
 block main
     .row
@@ -17,26 +17,26 @@ block main
             form(role='form')#zdhxByProvince
                 .form-group
                     .row
-                        .col-md-5
+                        .col-sm-5.col-md-5
                             .input-group
                                 .input-group-addon
                                     span 选择省份
-                                input.form-control(type="text",placeholder='请选择要核销省份', name='province')#province
+                                input.form-control(type="text",placeholder='请选择要核销省份', name='province',autocomplete="off")#province
                 .form-group
                     .row
-                        .col-md-5
+                        .col-sm-5.col-md-5
                             .input-group
                                 .input-group-addon
                                     span 回款截至
-                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的回款单', name='returnEnd')#timeEnd
+                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的回款单', name='returnEnd',autocomplete="off",readOnly)#timeEnd
                 .form-group
                     .row
-                        .col-md-5
+                        .col-sm-5.col-md-5
                             .input-group
                                 .input-group-addon
                                     span 发货截至
-                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的发货单', name='shipmentsEnd')#timeEnd2
-                        .col-md-4
+                                input.form-control(type="text",placeholder='请选择截至时间,将核销该时间以前的发货单', name='shipmentsEnd',autocomplete="off",readOnly)#timeEnd2
+                        .col-sm-4.col-md-4
                             button(type='button').btn.btn-primary#confirm 确定
                     
             hr

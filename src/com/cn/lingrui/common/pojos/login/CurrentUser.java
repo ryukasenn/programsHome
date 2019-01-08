@@ -9,6 +9,7 @@ public class CurrentUser {
 	private String NBPT_RSFZ_USER_EMALL;
 	private String NBPT_RSFZ_USER_BZ;
 	private String NBPT_RSFZ_USER_PASSWORD;
+	private String NBPT_RSFZ_USER_FLAG;
 	
 	// 登录的角色信息
 	private String NBPT_RSFZ_U_R_UID;
@@ -60,6 +61,12 @@ public class CurrentUser {
 	}
 	public void setNBPT_RSFZ_U_R_RID(String nBPT_RSFZ_U_R_RID) {
 		NBPT_RSFZ_U_R_RID = nBPT_RSFZ_U_R_RID;
+	}
+	public String getNBPT_RSFZ_USER_FLAG() {
+		return NBPT_RSFZ_USER_FLAG;
+	}
+	public void setNBPT_RSFZ_USER_FLAG(String nBPT_RSFZ_USER_FLAG) {
+		NBPT_RSFZ_USER_FLAG = nBPT_RSFZ_USER_FLAG;
 	}
 	
 }

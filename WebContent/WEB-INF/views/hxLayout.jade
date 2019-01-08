@@ -6,5 +6,12 @@ block sidebar
             each item in rights.functionsRight
                 case item
                     when "0401": li: a(href="#{myPath}/module?module=0401"): span 首页
-                    when "0402": li: a(href="#{myPath}/module?module=0402"): span 自动核销
-                    when "0403": li: a(href="#{myPath}/module?module=0403"): span 自动考核
+                    when "0402": li: a(href="#{myPath}/module?module=0402"): span 自动核销(省份)
+                    when "0403": li: a(href="#{myPath}/module?module=0403"): span 自动考核(省份)
+                    when "0404": li: a(href="#{myPath}/module?module=0404"): span 核销特例
+                    when "0405": li: a(href="#{myPath}/module?module=0405"): span 自动核销(业务员)
+                    when "0406": li: a(href="#{myPath}/module?module=0406"): span 自动考核(业务员)
+                    
+                    
+block parentLayoutScripts
+        script(src="#{myPath}/javascripts/04/hxLayout.js#{randomJsVersion}")

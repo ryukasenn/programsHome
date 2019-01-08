@@ -5,11 +5,15 @@ import java.sql.SQLException;
 import java.util.List;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON_XZQX;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 
 public interface PersonManageDao extends SellPersonnelBaseDao{
 
+	/**
+	 * 获取国家行政区县划分列表,按层级划分
+	 */
 	public List<NBPT_COMMON_XZQXHF> getXzqxhfs(String parentId, Connection connection) throws SQLException ;
 
 	/**
@@ -76,7 +80,21 @@ public interface PersonManageDao extends SellPersonnelBaseDao{
 	 */
 	public List<NBPT_VIEW_CURRENTPERSON> receiveLoginId(String loginId, Connection connection) throws SQLException;
 
+	/**
+	 * 删除终端人员负责区域
+	 * @param terminalId 终端人员ID
+	 * @return
+	 * @throws SQLException 
+	 */
+	public void deleteTerminalAreas(String terminalId, Connection connection) throws SQLException;
 
+	/**
+	 * 添加人员部门绑定关系
+	 * @param insertPersonRegion
+	 * @param connection
+	 * @throws SQLException 
+	 */
+	public void addPersonRegion(NBPT_SP_PERSON_REGION insertPersonRegion, Connection connection) throws SQLException;
 
 
 

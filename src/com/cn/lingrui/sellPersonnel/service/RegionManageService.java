@@ -4,7 +4,12 @@ import java.sql.SQLException;
 
 import org.springframework.web.servlet.ModelAndView;
 
-import com.cn.lingrui.sellPersonnel.pojos.AddRegionPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.person.AddPersonIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.AddRegionPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.AddSectionIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.ChangeSectionIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.PostChangeSectionIn;
+import com.cn.lingrui.sellPersonnel.pojos.region.ReceiveSectionIn;
 import com.cn.lingrui.sellPersonnel.pojos.region.RegionsPojo;
 import com.cn.lingrui.sellPersonnel.pojos.region.UpdateRegionPojo;
 
@@ -98,4 +103,52 @@ public interface RegionManageService {
 	 */
 	public String checkRegion(String type, String provinceId) throws Exception;
 
+	/**
+	 * 获取修改下辖省份页面
+	 * @param regionUid
+	 * @return
+	 * @throws Exception 
+	 */
+	public ModelAndView getcheckProvince(String regionUid) throws Exception;
+
+
+	/**
+	 * 根据上级ID,获取下级数据
+	 * @param in
+	 * @return
+	 */
+	public String receiveAllSection(ReceiveSectionIn in);
+	
+	/**
+	 * 添加下级数据
+	 * @param in
+	 * @return
+	 */
+	public String postAddSection(AddSectionIn in);
+
+	/**
+	 * 获取添加下级数据页面
+	 * @param in
+	 * @return
+	 * @throws Exception 
+	 */
+	public String getAddSection(AddSectionIn in) throws Exception;
+
+	/**
+	 * 获取修改部门信息
+	 * @param in
+	 * @return
+	 * @throws Exception
+	 */
+	public String getChangeSection(ChangeSectionIn in) throws Exception;
+
+	/**
+	 * 执行修改部门信息
+	 * @param in
+	 * @return
+	 * @throws Exception 
+	 */
+	public String postChangeSection(PostChangeSectionIn in) throws Exception;
+
+	
 }

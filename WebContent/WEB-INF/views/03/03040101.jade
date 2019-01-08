@@ -2,13 +2,21 @@
 // 人员管理首页(地总)
 extends ./layouts/0304
     
-block buttons
-    .form-group
-        button(type="button").btn.btn-default#addTerminal 添加下级人员
-        |&nbsp&nbsp
+block main
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            h2 人员统计
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            .col-md-2.col-sm-2.select-info
+                .treeContent
+                    div.tree
+                        ul.ztree#treeMenu
+            .col-md-10.col-sm-10
+                .col-md-12.col-sm-12.select-info.ryuukasennTableContent
 
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040101.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040101.js#{randomJsVersion}")
 block pageId
     p(style="display:none") 03040101
     

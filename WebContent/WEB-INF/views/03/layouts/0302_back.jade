@@ -1,0 +1,49 @@
+
+// 部门管理公共头部
+extends ../../personnelLayout
+
+block layoutHeader
+    link(rel='stylesheet', href='#{myPath}/stylesheets/css/zTreeStyle.css')
+    
+block layoutScripts
+    script(language="javascript", src="#{myPath}/javascripts/typeahead.min.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/03/0302.js#{randomJsVersion}")
+    
+block main
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            h2 部门管理
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            .col-md-2.col-sm-2.select-info
+                .treeContent
+                    div.tree
+                        ul.ztree#treeMenu
+            .col-md-10.col-sm-10
+                .col-md-12.col-sm-12.select-info
+                    form.form-inline#controlForm(style='margin-top: 10px; ')
+                        input(type='hidden', name='regionId')#regionId
+                        input(type="hidden", name="regionUid") 
+                        .form-group
+                            input.form-control(type="text",placeholder='输入名称,默认全部', name='regionName' ,autocomplete="off")#regionsPickup
+                            |&nbsp&nbsp
+                        label.radio-inline
+                            input(type="radio",name="typeRadio", checked, value="1") 
+                            |大区
+                            |&nbsp&nbsp
+                        label.radio-inline
+                            input(type="radio",name="typeRadio", value="2") 
+                            |全部
+                            |&nbsp&nbsp
+                        .form-group
+                            button(type="button").btn.btn-default#receiveRegions 快速搜索
+                            |&nbsp&nbsp
+                        .form-group
+                            button(type="button").btn.btn-default#addSection 添加
+                            |&nbsp&nbsp
+                        .form-group
+                            button(type="button").btn.btn-default#changeSection 修改
+                            |&nbsp&nbsp
+                        block extraButtons
+                .col-md-12.col-sm-12.select-info.ryuukasennTableContent
+                    block contents

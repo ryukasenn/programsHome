@@ -14,24 +14,40 @@ block contents
                 table.table
                     thead
                         tr.box
-                            th.col_1 排 名
-                            th.col_2 日 期
-                            th.col_3 姓 名
-                            th.col_4 段 位
-                            th.col_5 羚锐币
+                            th.col_1 会计期间
+                            th.col_2 大区
+                            th.col_2 省区
+                            th.col_2 地区
+                            th.col_2 姓名
+                            th.col_2 累计达成率(%)
+                            th.col_2 累计排名
+                            th.col_2 累计羚锐币
+                            th.col_2 本月达成率(%)
+                            th.col_2 本月排名
+                            th.col_2 段位
+                            th.col_2 段位排名
+                            th.col_2 本月羚锐币
                     tbody
                         unless allPmList.length
                             each item,i in allPmList
                                 tr
-                                    td.col_1= item.PM
-                                    td.col_2= item.RQ
-                                    td.col_3= item.RYXM
-                                    td.col_4= item.DW
-                                    td.col_5= item.LRB
+                                    th.col_1 #{item.RQ}
+                                    th.col_2 #{item.DQMC}
+                                    th.col_2 #{item.FZDQ}
+                                    th.col_2 #{item.SQMC}
+                                    th.col_2 #{item.RYXM}
+                                    th.col_2 #{item.LJDCL}
+                                    th.col_2 #{item.LJPM}
+                                    th.col_2 #{item.LJLRB}
+                                    th.col_2 #{item.DCL}
+                                    th.col_2 #{item.PM}
+                                    th.col_2 #{item.DW}
+                                    th.col_2 #{item.DWPM}
+                                    th.col_2 #{item.LRB}
 
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/jquery.tablesorter.js")
-    script(language="javascript", src="#{myPath}/javascripts/03/05030201.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/jquery.tablesorter.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/03/05030201.js#{randomJsVersion}")
     
 block pageId
     p(style="display:none") 05030201

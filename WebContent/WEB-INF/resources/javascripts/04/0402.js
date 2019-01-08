@@ -6,8 +6,9 @@ $(function(){
 	 * 提交事件
 	 */
 	$('#confirm').on('click', function(){
-		
-		$('#zdhxByProvince').attr('action', baseUrl + "/hx/zdhxByProvince").attr('method', 'POST').submit()
+		if(data.indexOf($("#province").val()) == -1 || $("#timeEnd").val() == '' || $("#timeEnd2").val() == ''){$.nbptMsg.alert("请填写正确的省份并选择时间");}
+
+		else {$.nbptAjax.post(baseUrl + "/zdhx/zdhxByProvince", formItemsToParams($('#zdhxByProvince')), function(backData){});}
 	});
 	
 	// 自动补全提示
@@ -25,19 +26,7 @@ $(function(){
 		$("#province").typeahead("lookup")
 	});
 	
-	// 提交前触发覆盖层	
-	$("#confirmIn").on("click", function(){
-		
-		if(data.indexOf($("#province").val()) == -1 || $("#timeEnd") == ''){
-			alert("请输入正确省份信息或选择时间");
-			return false;
-		} else {			
-		  $("#mymodal").modal({
-				backdrop : "static"
-				});
-				
-		}  
-	})
+	
 	$("#timeEnd").datetimepicker({
 		autoclose: true,
 		language: 'zh',

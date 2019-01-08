@@ -1,11 +1,12 @@
 
-// 终端管理公共头部
+// 人员统计公共头部
 extends ../../personnelLayout
 
 block main
-    .col-xs-12.col-sm-12.main-header
-        h2 人员管理
+    .col-md-12.col-sm-12.main-header
+        h2 人员统计
         form.form-inline#controlForm
+            input(type='hidden', name='type')
             .form-group
                 button(type="button").btn.btn-default#receivePersons 查看当前人员信息
                 |&nbsp&nbsp
@@ -15,5 +16,5 @@ block main
         block contents
 
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0304.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0304.js#{randomJsVersion}")
     

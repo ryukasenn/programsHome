@@ -4,6 +4,7 @@ $(function(){
 
 		// 隐藏申请离职按钮
 		$("#dimissTerminal").css("display", "none");
+		
 	} 
 	
 	// 如果PID不为空,是修改,修改页面的初始化操作
@@ -31,10 +32,10 @@ $(function(){
 		})
 		
 		// 锁死部分项目
-		var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_PLACE","NBPT_SP_PERSON_ENTRYDATA");
+		var inputItems = new Array("NBPT_SP_PERSON_NAME","NBPT_SP_PERSON_IDNUM","NBPT_SP_PERSON_PLACE");
 		var radioItems = new Array("NBPT_SP_PERSON_JOB","NBPT_SP_PERSON_MALE");
 		
-		
+		$("input[name='NBPT_SP_PERSON_ENTRYDATA']").datetimepicker('remove');
 		setReadOnly({
 			inputItems : inputItems,
 			radioItems : radioItems
@@ -57,9 +58,6 @@ $(function(){
 	
 	// 需要验证的下拉框
 	var selectItems = new Array("NBPT_SP_PERSON_DEGREE");
-	
-	// 需要验证的时间格式
-	var timeItems = new Array("NBPT_SP_PERSON_ENTRYDATA");
 	
 	/**
 	 * 点击提交事件
@@ -95,6 +93,7 @@ $(function(){
 					} 
 				}
 
+				$("#NBPT_SP_PERSON_PID").val() && $("#addPersonType").val("2") || $("#addPersonType").val("1")				
 				$("input[name='NBPT_SP_PERSON_AREANO']").val(areanos);
 				$("#addPersonForm").attr("action", baseUrl + "/sellPersonnel/addTerminal").attr("method", "POST").submit();
 			}
@@ -136,6 +135,12 @@ $(function(){
 				$("#dimissTerminalPid").val($("#NBPT_SP_PERSON_PID").val());
 				$("#dimissForm").attr("method", "POST").attr("action", baseUrl + "/sellPersonnel/dimissTerminal").submit();
 			}
+		} else {
+
+			new Confirm({
+				message : '请填写离职日期',
+				type : 'alter'
+			});
 		}
 		
 	})
@@ -198,19 +203,6 @@ $(function(){
 						$_thisParent.addClass("has-error");
 						return;
 					}
-				}
-				
-				if (timeItems.indexOf($_this.attr('name')) >= 0 ){ // 如果是时间项目,要验证时间格式
-					
-					if(isTime($_this)){
-
-						$_thisParent.removeClass("has-error");
-					} else {
-
-						$_thisParent.addClass("has-error");
-						return;
-					}
-					
 				}
 				
 				$_thisParent.removeClass("has-error");

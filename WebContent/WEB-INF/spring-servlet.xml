@@ -64,9 +64,12 @@
     <mvc:interceptors>  
         <mvc:interceptor>
             <!-- 对所有的请求拦截使用/** ,对某个模块下的请求拦截使用：/myPath/* -->
-	        <mvc:mapping path="/**" />                      
+	        <mvc:mapping path="/**/*" />                      
 	        <mvc:exclude-mapping path="/login" />
-            <mvc:exclude-mapping path="/wx/**" />  
+            <mvc:exclude-mapping path="/wx/*" />
+            <mvc:exclude-mapping path="/mas/*" />
+            <mvc:exclude-mapping path="/ask/other/**/*" />
+            <mvc:exclude-mapping path="/messagebord/**/*" />
             <mvc:exclude-mapping path="/javascripts/**/*" />  
             <mvc:exclude-mapping path="/stylesheets/**/*" />  
 	        <mvc:exclude-mapping path="/images/*" />
@@ -74,9 +77,6 @@
         </mvc:interceptor>
     </mvc:interceptors>
     
-    <bean id="myExceptionResolver"
-        class="com.cn.lingrui.common.exception.ErrorExcepiton" />
-        
     <bean id="multipartResolver"  
             class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
 	    <!-- 上传文件大小上限，单位为字节（10MB） -->

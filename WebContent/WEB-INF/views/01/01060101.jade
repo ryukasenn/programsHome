@@ -46,8 +46,8 @@ block contents
                                                         td.col-xs-2.col-sm-2= page.NBPT_RSFZ_PAGE_ID
                                                         td.col-xs-3.col-sm-3= page.NBPT_RSFZ_PAGE_NAME
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/01/0106.js")
-    script(language="javascript", src="#{myPath}/javascripts/01/01060101.js")
+    script(language="javascript", src="#{myPath}/javascripts/01/0106.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/01/01060101.js#{randomJsVersion}")
 block pageId
     p(style="display:none") 01060101
 

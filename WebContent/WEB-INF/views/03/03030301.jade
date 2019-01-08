@@ -6,6 +6,9 @@ block buttons
     .form-group
         button(type="button").btn.btn-default.btn-danger#addTerminal 通过审核
         |&nbsp&nbsp
+    .form-group
+        button(type="button").btn.btn-default.btn-warning#rejectTerminal 驳回
+        |&nbsp&nbsp
 
 block contents
     if message
@@ -16,7 +19,7 @@ block contents
         .row
             .col-xs-12.col-sm-12
                 form.form-horizontal#addPersonForm
-                    input(type="hidden", name="uncheckPid", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
+                    input(type="hidden", name="terminalPid", value='#{person.NBPT_SP_PERSON_PID}')#NBPT_SP_PERSON_PID
                     input(type="hidden", name="type", value='#{type}')
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
@@ -24,6 +27,10 @@ block contents
                             |&nbsp&nbsp&nbsp&nbsp姓名
                         .col-xs-4.col-sm-2
                             input.form-control(value='#{person.NBPT_SP_PERSON_NAME}', readOnly)
+                        .col-xs-4.col-sm-2
+                            if note.NBPT_SP_RECORD_NOTE
+                                p 离职理由:
+                                    font(color="red") &nbsp&nbsp&nbsp#{note.NBPT_SP_RECORD_NOTE}
                     .form-group
                         label.col-xs-1.col-sm-1.control-label 
                             font(color="red") *
@@ -62,9 +69,7 @@ block contents
                             label.radio-inline
                                 input(type="radio",value="0", name='NBPT_SP_PERSON_MALE',disabled)
                                 |女
-                    
                     each item,i in controllAreas
-                    
                         .form-group
                             if i == 0
                                 label.col-xs-1.col-sm-1.control-label 
@@ -165,8 +170,8 @@ block contents
                             input.form-control(value='#{person.NBPT_SP_PERSON_TITLE}', readOnly)
     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/common.js")
-    script(language="javascript", src="#{myPath}/javascripts/03/03030301.js")
+    script(language="javascript", src="#{myPath}/javascripts/common.js#{randomJsVersion}")
+    script(language="javascript", src="#{myPath}/javascripts/03/03030301.js#{randomJsVersion}")
     script
         var male = '#{person.NBPT_SP_PERSON_MALE}';
         var job = '#{person.NBPT_SP_PERSON_JOB}';

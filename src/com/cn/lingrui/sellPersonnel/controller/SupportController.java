@@ -2,14 +2,16 @@ package com.cn.lingrui.sellPersonnel.controller;
 
 
 import javax.annotation.Resource;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
+import com.cn.lingrui.common.utils.DownloadUtil;
+import com.cn.lingrui.sellPersonnel.pojos.person.AddPersonPojoIn;
+import com.cn.lingrui.sellPersonnel.pojos.support.TransferPojoIn;
 import com.cn.lingrui.sellPersonnel.service.SupportSerivce;
 
 @Controller
@@ -39,9 +41,9 @@ public class SupportController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/transfer", method = RequestMethod.POST)
-	public ModelAndView postTransfer(String transferType, String personPid, String regionUid) throws Exception {
+	public ModelAndView postTransfer(TransferPojoIn in) throws Exception {
 
-		ModelAndView mv = supportSerivce.postTransfer();
+		ModelAndView mv = supportSerivce.postTransfer(in);
 
 		return mv;
 	}
@@ -105,11 +107,19 @@ public class SupportController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "/createAttendance", method = RequestMethod.GET)
-	public ModelAndView createAttendance() throws Exception {
+	public ModelAndView createAttendance(String type, HttpServletResponse response, HttpServletRequest req) throws Exception {
 
-		ModelAndView mv = supportSerivce.createAttendance();
+		if("download".equals(type)) {
+			
+			supportSerivce.createAttendanceFile("考勤");
+			DownloadUtil.writeDownloadFile("考勤.xls", response, req.getServletContext().getMimeType("考勤.xls"));
+			return null;
+		} else {
 
-		return mv;
+			ModelAndView mv = supportSerivce.createAttendance();
+
+			return mv;
+		}
 	}
 	
 	/**
@@ -164,4 +174,55 @@ public class SupportController {
 		return mv;
 	}
 	
+	/**
+	 * 驳回
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/rejectUncheck", method = RequestMethod.POST)
+	public ModelAndView rejectUncheck(String terminalPid) throws Exception {
+
+		ModelAndView mv = supportSerivce.rejectUncheck(terminalPid);
+
+		return mv;
+	}
+	
+	/**
+	 * 后勤直接修改
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/changeTerminal", method = RequestMethod.POST)
+	public ModelAndView changeTerminal(AddPersonPojoIn terminal) throws Exception {
+
+		ModelAndView mv = supportSerivce.changeTerminal(terminal);
+
+		return mv;
+	}
+
+	/**
+	 * 获取所有的人员统计信息
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody 
+	@RequestMapping(value = "/receivePersonStatisticsTable", method = RequestMethod.POST)
+	public String receivePersonStatisticsTable(String type, String id, String typeValue) {
+		
+		String back = supportSerivce.receivePerson(type, id, typeValue);
+		return back;
+	}
+	
+	/**
+	 * 获取所有的人员详细信息
+	 * @return
+	 * @throws Exception
+	 */
+	@ResponseBody 
+	@RequestMapping(value = "/receivePersonTable", method = RequestMethod.POST)
+	public String receivePersonTable(String type, String id, String typeValue) {
+		
+		String back = supportSerivce.receivePersonTable(type, id, typeValue);
+		return back;
+	}
 }

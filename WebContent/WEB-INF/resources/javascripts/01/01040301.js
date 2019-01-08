@@ -158,7 +158,9 @@ $(function(){
 				
 				if("01" == $_thisId.substring(2, 4)){
 					
-					// 如果是默认功能
+					// 如果是默认功能,同类页面取消
+					$("input[id^='" + $_thisId.substring(0, 6) + "']").prop("checked", false)
+					$_this.prop("checked", true);
 				} else {
 					
 					// 如果不是默认功能,还要选中默认功能
@@ -193,9 +195,6 @@ $(function(){
 				}
 			}
 		}
-		// 同类页面取消
-		$("input[id^='" + $_thisId.substring(0, 6) + "']").prop("checked", false)
-		$_this.prop("checked", true);
 	});
 	
 	

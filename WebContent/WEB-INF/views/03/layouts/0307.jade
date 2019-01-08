@@ -3,12 +3,13 @@
 extends ../../personnelLayout
 
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0307.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0307.js#{randomJsVersion}")
     
 block main
-    .col-xs-12.col-sm-12.main-header
+    .col-md-12.col-sm-12.main-header
         h2 考核管理
         form.form-inline#controlForm
+            input(type='hidden' ,name='type')
             .form-group
                 input(placeholder='截止日期,默认今天', name='endTime').form-control
                 |&nbsp&nbsp

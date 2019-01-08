@@ -22,4 +22,11 @@ public class AllpmController {
 
 		return mv;
 	}
+	@RequestMapping(value = "/pmcx", method = RequestMethod.GET)
+	public ModelAndView pmCx(String pmrq,String dqmc,String fzdq) throws Exception {
+
+		ModelAndView mv = allpmService.getPmCxView(pmrq,dqmc,fzdq);
+
+		return mv;
+	}
 }

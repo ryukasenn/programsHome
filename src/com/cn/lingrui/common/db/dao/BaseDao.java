@@ -7,7 +7,9 @@ import java.util.List;
 
 import com.cn.lingrui.common.db.dbpojos.BaseReport;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
+import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY_KEY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
+import com.cn.lingrui.common.db.dbpojos.NBPT_VIEW_DICTIONARY;
 
 public interface BaseDao {
 	
@@ -51,6 +53,33 @@ public interface BaseDao {
 	 * @return
 	 */
 	public <T> List<T> queryForClaszs(String sql, Connection conn, Class<T> classz) throws SQLException;
+
+	/**
+	 * 通用查询方法,根据对应的bean生成sql,查询单个
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException 执行查询是的异常
+	 */
+	public <T> T oneQueryForClasz(String sql, Connection connection, Class<T> classz) throws SQLException;
+	
+	/**
+	 * 通用查询方法,查询单个字段
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public String oneQueryForObject(String sql, Connection connection) throws SQLException;
+
+	/**
+	 * 通用查询方法,查询多列
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException 执行查询是的异常
+	 */
+	public List<String> queryForObjects(String sql, Connection connection) throws SQLException;
 	
 	/**
 	 * 调用存储过程
@@ -65,13 +94,14 @@ public interface BaseDao {
 	 * 获取表中ID最大数
 	 * @return
 	 */
-	public String receiveMaxId(Connection conn, String params) throws SQLException;
+	public String receiveMaxId(Connection conn, String tableName) throws SQLException;
 
 	/**
 	 * 获取表中ID最大数,带条件
 	 * @return
 	 */
 	public String receiveMaxId(Connection conn, String tableName, String where) throws SQLException;
+	
 	/**
 	 * 获取字典表数据
 	 * @param type 字典类型
@@ -98,6 +128,33 @@ public interface BaseDao {
 	 * @return
 	 */
 	public BaseReport dealReportData(BaseReport report, ResultSet rs);
+
+	/**
+	 * 获取字典值列表
+	 * @param type 字典类型
+	 * @param connection
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<NBPT_VIEW_DICTIONARY> receiveDictionarys(String[] types, Connection connection) throws SQLException;
 	
 
+	/**
+	 * 获取母字典数据
+	 * @param type 字典英文名称(类型)
+	 * @param conn
+	 * @return
+	 * @throws SQLException 
+	 */
+	public NBPT_COMMON_DICTIONARY_KEY receiveFatherDictionary(String type, Connection conn) throws SQLException;
+	
+	/**
+	 * 获取字典数据
+	 * @param type 字典类型(类型)
+	 * @param value 字典绑定值
+	 * @param conn
+	 * @return
+	 * @throws SQLException 
+	 */
+	public NBPT_COMMON_DICTIONARY receiveDictionary(String type, String value, Connection conn) throws SQLException;
 }

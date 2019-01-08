@@ -10,8 +10,8 @@ import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
-import com.cn.lingrui.sellPersonnel.pojos.AddPersonPojoIn;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
+import com.cn.lingrui.sellPersonnel.pojos.person.AddPersonPojoIn;
 
 public class SupportServiceUtils {
 
@@ -59,6 +59,13 @@ public class SupportServiceUtils {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param persons 该分类下人员信息
+	 * @param regions 该分类下部门信息
+	 * @return
+	 * @throws Exception
+	 */
 	public static List<StatisticsTable> dealCurrentPerson_otc(List<NBPT_VIEW_CURRENTPERSON> persons, List<NBPT_VIEW_REGION> regions) throws Exception{
 		
 		try {
@@ -81,13 +88,28 @@ public class SupportServiceUtils {
 				info.setRegionName(region.getNBPT_SP_REGION_NAME());
 				
 				// 统计数据
-				for(NBPT_VIEW_CURRENTPERSON otcType : classifyByRegions.get(region.getNBPT_SP_REGION_UID())) {
+				for(NBPT_VIEW_CURRENTPERSON otcType : CommonUtil.getListInMapByKey(classifyByRegions, region.getNBPT_SP_REGION_UID())) {
 					CommonServiceUtils.count(info, otcType);
 				}
 								
 				OTCInfos.add(info);
 			}
+			
+			StatisticsTable totalTable = new StatisticsTable();
+			totalTable.setRegionName("合计");
+			for(StatisticsTable info : OTCInfos) {
 
+				totalTable.setTotal(totalTable.getTotal() + info.getTotal());
+				totalTable.setXzquResper(totalTable.getXzquResper() + info.getXzquResper());
+				totalTable.setXzquResper_preparatory(totalTable.getXzquResper_preparatory() + info.getXzquResper_preparatory());
+				totalTable.setPromote(totalTable.getPromote() + info.getPromote());
+				totalTable.setNeed(totalTable.getNeed() + info.getNeed());
+				totalTable.setDismission(totalTable.getDismission() + info.getDismission());
+				
+				totalTable.setAreaResper(totalTable.getAreaResper() + info.getAreaResper());
+				totalTable.setRegionResper(totalTable.getRegionResper() + info.getRegionResper());
+			}
+			OTCInfos.add(totalTable);
 			CommonServiceUtils.otherCompute(OTCInfos);
 			return OTCInfos; 
 		}catch (NoSuchFieldException e) {

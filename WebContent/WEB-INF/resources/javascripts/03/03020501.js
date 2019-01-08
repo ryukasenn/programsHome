@@ -1,7 +1,7 @@
 $(function(){
 		
 	/**
-	 * 添加下辖市区县
+	 * 添加下辖省份
 	 */
 	$(".add").on("click", function(){
 		

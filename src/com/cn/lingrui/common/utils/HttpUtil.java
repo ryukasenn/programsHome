@@ -2,15 +2,11 @@ package com.cn.lingrui.common.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -131,6 +127,7 @@ public class HttpUtil {
 		// 定义静态资源路径
 		mv.addObject("myPath", CommonUtil.getBasePropertieValue("BASE_URL"));
 		mv.addObject("baseUrl", CommonUtil.getBasePropertieValue("BASE_URL"));
+		mv.addObject("randomJsVersion", "?v=" + CommonUtil.getUUID_32());
 		if(title.length != 0) {
 
 			mv.addObject("title", title[0]);
@@ -138,7 +135,20 @@ public class HttpUtil {
 		return mv;
 	}
 	
-
+	/**
+	 * 获取前台传递model,非过滤器页面
+	 * @param path 返回页面路径
+	 * @param title 页面标题
+	 * @return
+	 */
+	public static ModelAndView getUncheckModelAndView(String path) {
+		ModelAndView mv = new ModelAndView(path);
+		// 定义静态资源路径
+		mv.addObject("randomJsVersion", "?v=" + CommonUtil.getUUID_32());
+		mv.addObject("myPath", CommonUtil.getBasePropertieValue("BASE_URL"));
+		mv.addObject("baseUrl", CommonUtil.getBasePropertieValue("BASE_URL"));
+		return mv;
+	}
 	
 	/**
 	 * 返回post请求的json结果

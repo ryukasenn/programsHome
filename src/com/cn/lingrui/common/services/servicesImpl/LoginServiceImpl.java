@@ -1,18 +1,13 @@
 package com.cn.lingrui.common.services.servicesImpl;
 
 import java.sql.SQLException;
-import java.util.List;
-
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.cn.lingrui.common.db.dao.LoginDao;
-import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_USER;
-import com.cn.lingrui.common.db.dbpojos.NBPT_RSFZ_U_R;
 import com.cn.lingrui.common.pojos.login.CurrentUser;
 import com.cn.lingrui.common.pojos.login.LoginPojoIn;
 import com.cn.lingrui.common.pojos.login.LoginPojoOut;
@@ -45,7 +40,13 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 			// 执行登录验证操作
 			mv = this.loginConfirm(in, out, mv);
 			
-			log.info("用户 " + in.getUserId() + " 登录成功");
+			if(out.getFlag()) {
+
+				log.info("用户 " + in.getUserId() + " 登录成功");
+			} else {
+
+				log.info("用户 " + in.getUserId() + " 登录失败");
+			}
 			
 			// 执行结束操作
 			return this.after(mv, "login", out.getUserName(), out.getUserRole());
@@ -156,7 +157,6 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 	 */
 	private void getUserInfo(LoginPojoIn in, LoginPojoOut out) throws SQLException {
 
-
 		CurrentUser userinfo = loginDao.getUserInfo(in, this.getConnection());
 		
 		if (null == userinfo) {
@@ -165,7 +165,14 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 			out.setFlag(false);
 			out.getMessages().add("用户名或密码错误");
 			log.info("用户名为 " + in.getUserId() + " 的用户尝试登录不成功,因为用户不存在或密码错误");
-		} else {
+		} 
+		else if(!"1".equals(userinfo.getNBPT_RSFZ_USER_FLAG())) {
+
+			out.setFlag(false);
+			out.getMessages().add("无效的账户");
+			log.info("用户名为 " + in.getUserId() + " 的用户尝试登录无效,有可能是已经离职");
+		}
+		else {
 
 			out.setUserName(userinfo.getNBPT_RSFZ_USER_NAME());
 			out.setUserInfo(userinfo);
@@ -177,7 +184,6 @@ public class LoginServiceImpl extends BServiceLogic implements LoginService {
 				out.getMessages().add("该用户没有分配权限,请联系管理员");
 				out.setFlag(false);
 			} else {
-
 				out.setUserRole(role);
 				out.setFlag(true);
 			}

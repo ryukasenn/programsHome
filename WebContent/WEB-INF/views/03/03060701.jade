@@ -15,6 +15,9 @@ block contents
                     table.table#renyuanxinxi
                         tr
                             th(style="text-align:center") #
+                            th(style="text-align:center") 大区
+                            th(style="text-align:center") 地区
+                            th(style="text-align:center") 地总
                             th(style="text-align:center") 姓名
                             th(style="text-align:center") 性别
                             th(style="text-align:center") 职务
@@ -29,13 +32,12 @@ block contents
                         each person,i in personInfos
                             tr  
                                 th(style="vertical-align:middle;text-align:center;",scope="row")= i+1
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_REGION_NAME
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_AREA_NAME
+                                td(style="text-align:center;")= person.NBPT_SP_PERSON_AREA_RESPONSIBLER_NAME
                                 td(style="text-align:center;").col-xs-1.col-sm-1= person.NBPT_SP_PERSON_NAME
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_REAL_MALE
-                                td(style="text-align:center;")
-                                    case person.NBPT_SP_PERSON_JOB
-                                        when '23': 正式区县总
-                                        when '24': 预备区县总
-                                        when '25': 推广经理
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REALJOB
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_DEGREE
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_ENTRYDATA
                                 td(style="text-align:center;") #{person.NBPT_SP_PERSON_WORKAGE}年
@@ -43,15 +45,12 @@ block contents
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB1
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB2
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_AGE
-                                td(style="text-align:center;")
-                                    case person.NBPT_SP_PERSON_FLAG
-                                        when '2': 在职
-                                        when '3': 离职
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_STATUS
                         
                             
         
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js#{randomJsVersion}")
         
 block pageId
     p(style="display:none") 03060701

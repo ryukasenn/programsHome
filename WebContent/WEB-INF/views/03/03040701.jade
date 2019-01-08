@@ -13,10 +13,9 @@ block contents
             h3= message
     else 
         unless personInfos.length
-            .col-xs-10.col-sm-10
+            .col-xs-12.col-sm-12
                 .panel.panel-default
                     .panel-heading 名单列表
-                        button.btn.btn-link.downLoadCheckOut(value='renyuanxinxi') 导出
                     table.table#renyuanxinxi
                         tr
                             th(style="text-align:center") #
@@ -30,6 +29,10 @@ block contents
                             th(style="text-align:center") 联系电话
                             th(style="text-align:center") 紧急联系人
                             th(style="text-align:center") 年龄
+                            th(style="text-align:center") 身份证号
+                            th(style="text-align:center") 地区
+                            th(style="text-align:center") 大区
+                            th(style="text-align:center") 省份
                             th(style="text-align:center") 当前状态
                         each person,i in personInfos
                             tr  
@@ -48,15 +51,16 @@ block contents
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB1
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_MOB2
                                 td(style="text-align:center;")= person.NBPT_SP_PERSON_AGE
+                                td(style="vnd.ms-excel.numberformat:@;vertical-align:middle;")= person.NBPT_SP_PERSON_IDNUM
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_AREA_NAME
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_REGION_NAME
+                                td(style="vertical-align:middle")= person.NBPT_SP_PERSON_PROVINCE_NAME
                                 td(style="text-align:center;")
                                     case person.NBPT_SP_PERSON_FLAG
                                         when '2': 在职
                                         when '3': 离职
                         
-                            
-        
-block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040502.js")
+    
         
 block pageId
-    p(style="display:none") 03040502
+    p(style="display:none") 03040701

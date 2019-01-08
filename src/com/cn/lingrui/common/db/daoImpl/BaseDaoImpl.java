@@ -15,12 +15,14 @@ import org.apache.logging.log4j.Logger;
 import com.cn.lingrui.common.db.dao.BaseDao;
 import com.cn.lingrui.common.db.dbpojos.BaseReport;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY;
+import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_DICTIONARY_KEY;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
+import com.cn.lingrui.common.db.dbpojos.NBPT_VIEW_DICTIONARY;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
+import com.sun.rowset.CachedRowSetImpl;
 
 public class BaseDaoImpl implements BaseDao{
-
 
 	private static Logger log = LogManager.getLogger();
 	
@@ -32,16 +34,24 @@ public class BaseDaoImpl implements BaseDao{
 	 */
 	public void excuteUpdateGroups(List<String> sqls, Connection connection) throws SQLException {
 		
+		if(0 == sqls.size()) return;
 		Statement stmt;
 		stmt = connection.createStatement();
-	
-	
+
+		int count = 0;
 		for(String sql : sqls) {
 
+			count ++;
 			stmt.addBatch(sql);
+			if(count % 300 == 0) {
+
+				stmt.executeBatch();
+				stmt.clearBatch();
+			}
 		}
 
 		stmt.executeBatch();
+		stmt.clearBatch();
 	}
 	
 	/**
@@ -139,7 +149,7 @@ public class BaseDaoImpl implements BaseDao{
 				throw new SQLException();
 			}
 	}
-	
+
 	/**
 	 * 通用查询方法,根据对应的bean生成sql,查询单个
 	 * @param sql
@@ -163,7 +173,29 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	
 	/**
-	 * 通用查询方法,查询批量
+	 * 通用查询方法,根据对应的bean生成sql,查询单个
+	 * @param sql
+	 * @param connection
+	 * @return
+	 * @throws SQLException 执行查询是的异常
+	 */
+	public <T> T oneQueryForClasz(StringBuffer sql, Connection connection, Class<T> classz) throws SQLException {
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			ps = connection.prepareStatement(sql.toString());
+			rs = ps.executeQuery();
+			List<T> resultList = DBUtils.rsToBean(classz, rs);
+			return resultList.size() == 0 ? null : resultList.get(0);
+		} catch (Exception e) {
+	
+			log.error("通用查询出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		} 
+	}
+	
+	/**
+	 * 通用查询方法,查询批量单列
 	 * @param sql
 	 * @param connection
 	 * @return
@@ -176,7 +208,7 @@ public class BaseDaoImpl implements BaseDao{
 		try {
 			ps = connection.prepareStatement(sql);
 			rs = ps.executeQuery();
-			List<String> results = DBUtils.rsToString(rs);
+			List<String> results = DBUtils.rsToStrings(rs);
 			return results;
 		} catch (Exception e) {
 	
@@ -199,7 +231,7 @@ public class BaseDaoImpl implements BaseDao{
 		try {
 			ps = connection.prepareStatement(sql);
 			rs = ps.executeQuery();
-			List<String> results = DBUtils.rsToString(rs);
+			List<String> results = DBUtils.rsToStrings(rs);
 			return results.size() == 0 ? null : results.get(0);
 		} catch (Exception e) {
 	
@@ -258,7 +290,66 @@ public class BaseDaoImpl implements BaseDao{
 			throw new SQLException() ;
 		}	
 	}
+	
+	/**
+	 * 调用存储过程(多结果集)
+	 * @param procName 存储过程名称
+	 * @param connection 数据库连接
+	 * @return
+	 * @throws SQLException 
+	 */
+	public ArrayList<CachedRowSetImpl> callProcedureForMoreRs(String procName, Connection connection, String... params) throws SQLException {
+		
+		CallableStatement cs = null;
+		ArrayList<CachedRowSetImpl> rss = new ArrayList<CachedRowSetImpl>();
+		StringBuffer sql = new StringBuffer();
+		try {
+			
+			// 拼接执行语句
+			sql.append("{call " + procName + "(");
+			
+			if(0 == params.length) {
+				sql.append(")}");
+			} else {
+				for(int i = 0 ; i < params.length ; i++) {
+					
+					sql.append("?,");
+				}
+				sql.deleteCharAt(sql.length() - 1);
+				sql.append(")}");
+				
+			}
+			
+			// 预执行
+			cs = connection.prepareCall(sql.toString());
+			
+			// 如果有参数,则填入相关参数
+			if(0 != params.length) {
+				
+				for(int i = 0 ; i < params.length ; i++) {
+					
+					cs.setString(i + 1, params[i]);
+				}
+			} 
+			cs.executeQuery();
+			CachedRowSetImpl rsCached = new CachedRowSetImpl();
+			rsCached.populate(cs.getResultSet());
+			rss.add(rsCached);
+			
+			while (cs.getMoreResults()) {
 
+				CachedRowSetImpl otherRsCached = new CachedRowSetImpl();
+				otherRsCached.populate(cs.getResultSet());
+				rss.add(otherRsCached);
+			}
+			
+			return rss;
+		} catch (SQLException e) {
+			
+			log.error("调用存储过程: " + procName + "出错");
+			throw new SQLException() ;
+		}	
+	}
 	@Override
 	public String receiveMaxId(Connection connection, String tableName) throws SQLException {
 		
@@ -303,7 +394,7 @@ public class BaseDaoImpl implements BaseDao{
 		String sql = null;
 		if(0 == level.length) {
 			sql = "SELECT * FROM NBPT_COMMON_DICTIONARY WHERE NBPT_COMMON_DICTIONARY_KEY = '" + type + 
-					"' ORDER BY NBPT_COMMON_DICTIONARY_ID ASC";
+					"' ORDER BY NBPT_COMMON_DICTIONARY_KEY_VALUE ASC";
 		} else {
 			sql = "SELECT * FROM NBPT_COMMON_DICTIONARY WHERE NBPT_COMMON_DICTIONARY_KEY = '" + type + 
 					"' AND NBPT_COMMON_DICTIONARY_KEY_LEVEL = '" + level[0] + 
@@ -313,6 +404,31 @@ public class BaseDaoImpl implements BaseDao{
 		try {
 			
 			List<NBPT_COMMON_DICTIONARY> resultList = this.queryForClaszs(sql, connection, NBPT_COMMON_DICTIONARY.class);
+						
+			return resultList;
+		} catch (Exception e) {
+			
+			log.error("获取字典表出错");
+			throw new SQLException();
+		}
+	}
+	@Override
+	public List<NBPT_VIEW_DICTIONARY> receiveDictionarys(String[] types, Connection connection) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		
+			sql.append("SELECT * FROM NBPT_VIEW_DICTIONARY A ");
+			sql.append("WHERE NBPT_COMMON_DICTIONARY_KEY_ID IN ( ");
+			sql.append("'" + types[0] + "' ");
+			for(int i = 1; i < types.length; i++) {
+				sql.append(",'" + types[i] + "' ");
+			}
+			sql.append(") ");
+			sql.append("ORDER BY NBPT_COMMON_DICTIONARY_KEY_ID,NBPT_COMMON_DICTIONARY_KEY_VALUE+0");
+		
+		try {
+			
+			List<NBPT_VIEW_DICTIONARY> resultList = this.queryForClaszs(sql, connection, NBPT_VIEW_DICTIONARY.class);
 						
 			return resultList;
 		} catch (Exception e) {
@@ -434,4 +550,68 @@ public class BaseDaoImpl implements BaseDao{
 		}
 		return report;
 	}
+
+	@Override
+	public NBPT_COMMON_DICTIONARY_KEY receiveFatherDictionary(String type, Connection conn) throws SQLException {
+
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT * FROM NBPT_COMMON_DICTIONARY_KEY A ");
+		sql.append("WHERE A.NBPT_COMMON_DICTIONARY_KEY_ID = '" + type + "'");
+		try {
+			
+			
+			NBPT_COMMON_DICTIONARY_KEY result = new NBPT_COMMON_DICTIONARY_KEY();
+			result = this.oneQueryForClasz(sql, conn, NBPT_COMMON_DICTIONARY_KEY.class);
+			return result;
+		} catch (SQLException e) {
+
+			log.info("查询母字典出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public NBPT_COMMON_DICTIONARY receiveDictionary(String type, String value, Connection conn) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		
+		sql.append("SELECT * FROM NBPT_COMMON_DICTIONARY A ");
+		sql.append("WHERE A.NBPT_COMMON_DICTIONARY_KEY = '" + type + "' ");
+		sql.append("AND A.NBPT_COMMON_DICTIONARY_KEY_VALUE = '" + value + "' ");
+		try {
+			
+			
+			NBPT_COMMON_DICTIONARY result = new NBPT_COMMON_DICTIONARY();
+			result = this.oneQueryForClasz(sql, conn, NBPT_COMMON_DICTIONARY.class);
+			return result;
+		} catch (SQLException e) {
+
+			log.info("查询母字典出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

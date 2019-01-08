@@ -8,20 +8,36 @@ block contents
             .panel.panel-default
                 .panel-heading 名单列表
                 table.table
-                    tr 
+                    tr
                         th(style="text-align:center") #
-                        th(style="text-align:center") 排名
-                        th(style="text-align:center") 日期
+                        th(style="text-align:center") 会计期间
+                        th(style="text-align:center") 大区
+                        th(style="text-align:center") 省区
+                        th(style="text-align:center") 地区
                         th(style="text-align:center") 姓名
+                        th(style="text-align:center") 累计达成率(%)
+                        th(style="text-align:center") 累计排名
+                        th(style="text-align:center") 累计羚锐币
+                        th(style="text-align:center") 本月达成率(%)
+                        th(style="text-align:center") 本月排名
                         th(style="text-align:center") 段位
-                        th(style="text-align:center") 羚锐币
+                        th(style="text-align:center") 段位排名
+                        th(style="text-align:center") 本月羚锐币
                     tr 
                         th(style="text-align:center") #
-                        th(style="text-align:center") #{grPm.PM}
                         th(style="text-align:center") #{grPm.RQ}
+                        th(style="text-align:center") #{grPm.DQMC}
+                        th(style="text-align:center") #{grPm.FZDQ}
+                        th(style="text-align:center") #{grPm.SQMC}
                         th(style="text-align:center") #{grPm.RYXM}
+                        th(style="text-align:center") #{grPm.LJDCL}
+                        th(style="text-align:center") #{grPm.LJPM}
+                        th(style="text-align:center") #{grPm.LJLRB}
+                        th(style="text-align:center") #{grPm.DCL}
+                        th(style="text-align:center") #{grPm.PM}
                         th(style="text-align:center") #{grPm.DW}
-                        th(style="text-align:center") #{grPm.LRB}                            
+                        th(style="text-align:center") #{grPm.DWPM}
+                        th(style="text-align:center") #{grPm.LRB}
 block pageId
     p(style="display:none") 05020101
    

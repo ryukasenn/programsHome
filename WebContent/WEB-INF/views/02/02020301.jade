@@ -73,7 +73,7 @@ block reportContent
                                 td= item.PMBASE_ZGXM
                                 td= item.PMBASE_CHECKITEM
 block scripts
-    script(src="#{myPath}/javascripts/02/020202.js")
-    script(src="#{myPath}/javascripts/02/02020301.js")
+    script(src="#{myPath}/javascripts/02/020202.js#{randomJsVersion}")
+    script(src="#{myPath}/javascripts/02/02020301.js#{randomJsVersion}")
 block pageId
     p(style="display:none") 02020301

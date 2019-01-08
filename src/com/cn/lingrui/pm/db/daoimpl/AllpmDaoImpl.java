@@ -28,5 +28,22 @@ public class AllpmDaoImpl extends PmBaseDaoImpl implements AllpmDao {
 			
 		}
 	}
+
+	@Override
+	public List<PmInfo> getAllCxPm(Connection connection, String rqStr, String dqmcStr, String fzdqStr)
+			throws SQLException {
+		try {
+				String sql = "SELECT * FROM xszj_pm where rq like '%"+rqStr+"%' and dqmc like '%"+dqmcStr+"%' and fzdq like '%"+fzdqStr+"%' order by pm";
+				
+				List<PmInfo> allPmList =new ArrayList<>();
+				allPmList = this.queryForClaszs(sql, connection, PmInfo.class);
+					return allPmList;
+			} catch (SQLException e) {
+				//log.error("查询个人排名信息出错" + CommonUtil.getTraceInfo());
+				e.printStackTrace();
+				throw new SQLException();
+				
+			}
+	}
 	
 }

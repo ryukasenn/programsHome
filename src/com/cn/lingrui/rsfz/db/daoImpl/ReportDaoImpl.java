@@ -10,7 +10,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
-
 import com.cn.lingrui.common.db.daoImpl.BaseDaoImpl;
 import com.cn.lingrui.common.db.dbpojos.GZBMZD;
 import com.cn.lingrui.common.db.dbpojos.PMBASE;

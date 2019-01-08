@@ -1,514 +1,766 @@
 package com.cn.lingrui.hx.services.serviceImpl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSDD;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSDDMX;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_XSHK;
-import com.cn.lingrui.hx.db.dbpojos.hx.Hx_insert_xsddhx;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xsdd;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xsddmx;
-import com.cn.lingrui.hx.db.dbpojos.hx.Zdhx_update_xshk;
+import com.cn.lingrui.hx.db.dao.ZdhxDao;
+import com.cn.lingrui.hx.db.dbpojos.LSWLZD;
+import com.cn.lingrui.hx.db.dbpojos.NOHX_XSDDMX;
+import com.cn.lingrui.hx.db.dbpojos.NOHX_XSHK;
+import com.cn.lingrui.hx.db.dbpojos.XSDD;
+import com.cn.lingrui.hx.db.dbpojos.XSDDHX;
+import com.cn.lingrui.hx.db.dbpojos.XSDDMX;
+import com.cn.lingrui.hx.db.dbpojos.XSHK;
+import com.cn.lingrui.hx.db.dbpojos.ZWWLDW;
+import com.cn.lingrui.hx.db.dbpojos.hx.XSDD_XSDDMXS;
+import com.cn.lingrui.hx.services.HxBaseService;
 import com.cn.lingrui.hx.services.ZdhxService;
+import com.cn.lingrui.hx.utils.HxCommonUtil;
+import com.cn.lingrui.hx.utils.HxDbUtil;
+import com.cn.lingrui.sellPersonnel.pojos.JsonDataBack;
+
+import net.sf.json.JSONArray;
+
 import com.cn.lingrui.common.utils.CommonUtil;
-import com.cn.lingrui.common.utils.HttpUtil;
-import com.cn.lingrui.hx.pojos.province.ClassifyByshdkh_rybh;
-import com.cn.lingrui.hx.pojos.province.ProvincePojoIn;
-import com.cn.lingrui.hx.pojos.province.ProvincePojoOut;
+import com.cn.lingrui.hx.pojos.zdhx.HxProvincePojoIn;
+import com.cn.lingrui.hx.pojos.zdhx.Shdkh_detail;
+import com.cn.lingrui.hx.pojos.zdhx.Xsdd_detail;
+import com.cn.lingrui.hx.pojos.zdhx.HxYwyPojoIn;
+import com.cn.lingrui.hx.pojos.zdhx.Ywy_detail;
+import com.cn.lingrui.hx.pojos.zdhx.Zdhx_global;
 
-@Service
-@Transactional
-public class ZdhxServiceImpl implements ZdhxService {
+@Service("zdhxService")
+public class ZdhxServiceImpl extends HxBaseService implements ZdhxService {
 
-//	@Resource(name="hxDao")
-//	private ZdhxDao zdhxDao;
+	@Resource(name="zdhxDao")
+	private ZdhxDao zdhxDao;
 
 	private static Logger log = LogManager.getLogger();
 
 	@Override
-	public ModelAndView provinceSelected(ProvincePojoIn in) throws Exception {
+	public String hxByProvinceSelect(HxProvincePojoIn in) throws Exception {
 
-		// 初始化返回数据
-		ModelAndView mv = HttpUtil.getModelAndView("hx/provinceSel", "自动核销");
-		ProvincePojoOut out = new ProvincePojoOut();
-
-		// 销售订单处理
-		this.xsddsHandler(in, out);
-
-		// 销售订单相关回款单处理
-		this.xshksHandler(in, out);
-
-		// 销售订单明细处理
-		this.xsddmxHandler(in, out);
-
-		// 分类完毕,开始核销
-		this.hsHandler(in, out);
-		
-		// 核销完毕,生成其他sql
-		this.createSql(out);
-
-		// 执行数据库更新
-		this.updateDB(out);
-		
-		return mv;
-	}
-
-	private void updateDB(ProvincePojoOut out) {
-		
-		// 循环所有的sql参数
-		for(ClassifyByshdkh_rybh classifyByshdkh_rybh : out.getResults()) {
+		try {
+			this.before();
 			
+			// 初始化全局参数
+			Zdhx_global global = new Zdhx_global();
 			
-			if(0 != classifyByshdkh_rybh.getInsertXsddhxParams().size()) {
-
-				// xsddhx的插入
-//				zdhxDao.insertXSDDHX(classifyByshdkh_rybh.getInsertXsddhxParams());
-			}
-			if(0 != classifyByshdkh_rybh.getUpdateXsddParams().size()) {
-
-				// xsdd的更新
-//				zdhxDao.updateXSDD(classifyByshdkh_rybh.getUpdateXsddParams());
-			}
-			if(0 != classifyByshdkh_rybh.getUpdateXsddmxParams().size()) {
-
-				// xsddmx的更新
-//				zdhxDao.updateXSDDMX(classifyByshdkh_rybh.getUpdateXsddmxParams());
-			}
-			if(0 != classifyByshdkh_rybh.getUpdateXshkParams().size()) {
-
-				// xshk的更新
-//				zdhxDao.updateXSHK(classifyByshdkh_rybh.getUpdateXshkParams());
-			}
+			// 1.获取并按业务员和客户分类要核销的XSDD及XSDDMX
+			this.provinceXsddGet(in, global);
 			
+			// 2.获取可核销回款
+			this.xshkGet(in.getReturnEnd(), global);
 			
-		}
-		
+			// 3.处理数据
+			this.dealWithGlobalUpdateModel(global);
+			
+			// 4.执行插入和更新
+			this.excuteUpdateAndInsert(global);
+			
+			// 5.初始化返回结果
+			JsonDataBack back = new JsonDataBack();
+			
+			back.setStateOk("本次核销结束");
+			return this.after(back.toJsonString());
+		} catch (Exception e) {
+
+			log.error("按省份自动核销出错");
+			JsonDataBack back = new JsonDataBack();
+			back.setStateError("后台未知错误,请联系系统管理员");
+			return this.after(back.toJsonString());
+		} 
 	}
 	
+	@Override
+	public String hxByYwySelect(HxYwyPojoIn in) {
+		
+		try {
+			this.before();
+			
+			// 初始化全局参数
+			Zdhx_global global = new Zdhx_global();
+			
+			// 1.获取并按业务员和客户分类要核销的XSDD及XSDDMX
+			this.ywyXsddGet(in, global);
+			
+			// 2.获取可核销回款
+			this.xshkGet(in.getReturnEnd(), global);
+			
+			// 3.处理数据
+			this.dealWithGlobalUpdateModel(global);
+			
+			// 4.执行插入和更新
+			this.excuteUpdateAndInsert(global);
+			
+			// 5.初始化返回结果
+			JsonDataBack back = new JsonDataBack();
+			
+			back.setStateOk("本次核销结束");
+			
+			return this.after(back.toJsonString());
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			log.error("按业务员自动核销出错");
+			JsonDataBack back = new JsonDataBack();
+			back.setStateError("后台未知错误,请联系系统管理员");
+			return this.after(back.toJsonString());
+		} 
+	}
 	/**
-	 * 数据库更新相关参数设定
+	 * 执行更新
+	 * @param global
+	 * @throws SQLException
+	 */
+	private void excuteUpdateAndInsert(Zdhx_global global) throws SQLException {
+
+		// 执行xsddhx 的插入
+		zdhxDao.excuteInsertXsddhx(global.getResultSql().getInsertXsddhxSqls(), this.getConnection());
+		
+		// 执行xsddmx 的更新
+		zdhxDao.excuteUpdateXsddmx(global.getResultSql().getUpdateXsddmxSqls(), this.getConnection());
+		
+		// 执行xsdd 的更新
+		zdhxDao.excuteUpdateXsdd(global.getResultSql().getUpdateXsddSqls(), this.getConnection());
+
+		// 执行xshk 的更新
+		zdhxDao.excuteUpdateXshk(global.getResultSql().getUpdateXshkSqls(), this.getConnection());
+
+		for(String s : global.getResultSql().getInsertXsddhxSqls()) {
+			log.info("核销语句" + s);
+		}
+		for(String s : global.getResultSql().getUpdateXsddmxSqls()) {
+			log.info("订单明细更新语句" + s);
+		}
+		for(String s : global.getResultSql().getUpdateXsddSqls()) {
+			log.info("订单更新语句" + s);
+		}
+		for(String s : global.getResultSql().getUpdateXshkSqls()) {
+			log.info("回款更新语句" + s);
+		}
+	}
+
+	/**
+	 * 获取销售回款记录
 	 * @param in
-	 * @param out
+	 * @param global
+	 * @throws SQLException
+	 * @throws NoSuchFieldException
 	 */
-	private void createSql(ProvincePojoOut out) {
-		
-		// 1.生成xsdd更新参数
-		this.createSql_update_xsdd(out);
-		
-		// 2.生成xshk更新参数
-		this.createSql_update_xshk(out);
-		
-		// 3.生成XSDDMX更新参数
-		this.createSql_update_xsddmx(out);
-		
-		
-	}
-	
-	/**
-	 * 生成XSDDMX更新相关参数
-	 * @param out
-	 */	
-	private void createSql_update_xsddmx(ProvincePojoOut out) {
-		
-		// 遍历所有分类
-		for(ClassifyByshdkh_rybh classifyByshdkh_rybh : out.getResults()) {
-			
-			for(Zdhx_XSDDMX xsddmx : classifyByshdkh_rybh.getXsddmxs()) {
-				
-				if("1".equals(xsddmx.getChangeFlag())) {
+	private void xshkGet(String returnEnd, Zdhx_global global) throws SQLException, NoSuchFieldException {
 
-					// 确定核销语句后,确定XSDDMX的更新语句
-					Zdhx_update_xsddmx update_xsddmx = new Zdhx_update_xsddmx();
-					
-					update_xsddmx.setXSDDMX_DDLS(xsddmx.getXSDDMX_DDLS()); // 发货单流水
-					update_xsddmx.setXSDDMX_DDFL(xsddmx.getXSDDMX_DDFL()); // 发货单明细流水
-					update_xsddmx.setXSDDMX_HKHX(xsddmx.getXSDDMX_HKHX()); // 核销标志
-					update_xsddmx.setXSDDMX_HXSJHK(xsddmx.getXSDDMX_HXSJHK()); // 核销实际金额
-					update_xsddmx.setXSDDMX_YHXJE(xsddmx.getXSDDMX_YHXJE()); // 核销实际金额
-					
-					classifyByshdkh_rybh.getUpdateXsddmxParams().add(update_xsddmx);
-				}else {
-					
-					// do nothing
-				}
-			}
-		}
-	}
-	
-	/**
-	 * 生成XSHK更新相关参数
-	 * @param out
-	 */
-	private void createSql_update_xshk(ProvincePojoOut out) {
+		// 1.获取所有回款记录
+		List<XSHK> xshks = zdhxDao.receiveXshks_valid(returnEnd, this.getConnection());
 		
-		// 遍历所有分类
-		for(ClassifyByshdkh_rybh classifyByshdkh_rybh : out.getResults()) {
+		// 2.按业务员分类销售回款
+		Map<String, List<XSHK>> xshkYwyClassify = CommonUtil.classify(xshks, "XSHK_RYBH", XSHK.class);
+		
+		for(Ywy_detail ywyDetail : global.getYwy_details()) {
 			
-			for(Zdhx_XSHK xshk : classifyByshdkh_rybh.getXshks()) {
+			Map<String, List<XSHK>> xshkShdkhClassify = CommonUtil.classify(CommonUtil.getListInMapByKey(xshkYwyClassify, ywyDetail.getRybh()), "XSHK_SHDKH", XSHK.class); 
+			
+			for(Shdkh_detail shdkhDetail : ywyDetail.getShdkh_details()) {
 				
-				if("1".equals(xshk.getChangeFlag())) {
-					
-
-					Zdhx_update_xshk update_xshk = new Zdhx_update_xshk();
-					
-					update_xshk.setXSHK_DDHX(xshk.getXSHK_DDHX());
-					update_xshk.setXSHK_YDHSJHK(xshk.getXSHK_YDHSJHK());
-					update_xshk.setXSHK_YDHXE(xshk.getXSHK_YDHXE());
-					update_xshk.setXSHK_HKLS(xshk.getXSHK_HKLS());
-					classifyByshdkh_rybh.getUpdateXshkParams().add(update_xshk);
-				}else {
-					
-					 // do nothing
-				}
-				
+				shdkhDetail.setXshks(CommonUtil.getListInMapByKey(xshkShdkhClassify, shdkhDetail.getShdkh()));
 			}
 		}
 	}
 
-	
-	/**
-	 * 生成XSDD更新相关参数
-	 * @param out
-	 */
-	private void createSql_update_xsdd(ProvincePojoOut out) {
-				
-		// 遍历所有分类
-		for(ClassifyByshdkh_rybh classifyByshdkh_rybh : out.getResults()) {
+	private void dealWithGlobalUpdateModel(Zdhx_global global) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException, SQLException {
 
-			// 初始化当前分类下不处理的XSDD的ddls列表
-			List<String> undealXsddlss = new ArrayList<String>();
+		// 1.
+		
+		// 2.遍历global,生成更新,插入语句所需参数
+		for(Ywy_detail currentYwyDetail : global.getYwy_details()) {
 			
-			// 遍历当前分类下的xsddmx
-			for(Zdhx_XSDDMX xsddmx : classifyByshdkh_rybh.getXsddmxs()) {
-				
-				if("1".equals(xsddmx.getXSDDMX_HKHX())) { 
-					
-					// 如果当前发货单明细处理完毕,do nothing
-				} else{
-					
-					// 如果没有处理完毕,则将该订单流水放入数组中
-					if(undealXsddlss.contains(xsddmx.getXSDDMX_DDLS())) {
+			this.dealWithOneYwy(currentYwyDetail, global);
+		}
+		
+		// 3.生成insertXsddhx sql语句
+		global.getResultSql().getInsertXsddhxSqls().addAll(HxDbUtil.BeanToSql(XSDDHX.class, "INSERT", global.getNeedInsertXsddhx()));
+		
+		// 4.生成updateXsddmx sql语句
+		for (XSDDMX xsddmx : global.getNeedUpdateXsddmx()) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("UPDATE XSDDMX ");
+			sql.append("SET XSDDMX_HKHX = '"+ xsddmx.getXSDDMX_HKHX() +"', ");
+			sql.append("XSDDMX_YHXJE = '" + xsddmx.getXSDDMX_YHXJE() + "', ");
+			sql.append("XSDDMX_HXSJHK = '" + xsddmx.getXSDDMX_HXSJHK() + "' ");
+			sql.append("WHERE XSDDMX_DDLS = '" + xsddmx.getXSDDMX_DDLS() + "' AND XSDDMX_WLBH = '" + xsddmx.getXSDDMX_WLBH() + "' ");
+			global.getResultSql().getUpdateXsddmxSqls().add(sql.toString());
+		}
+		
+		// 5.生成updateXshk sql语句
+		for (XSHK xshk : global.getNeedUpdateXshk()) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("UPDATE XSHK ");
+			sql.append("SET XSHK_DDHX = '"+ xshk.getXSHK_DDHX() +"', ");
+			sql.append("XSHK_YDHSJHK = '" + xshk.getXSHK_YDHSJHK() + "', ");
+			sql.append("XSHK_YDHXE = '" + xshk.getXSHK_YDHXE() + "' ");
+			sql.append("WHERE XSHK_HKLS = '" + xshk.getXSHK_HKLS() + "' ");
+			global.getResultSql().getUpdateXshkSqls().add(sql.toString());
+		}
+		// 6.XSDD更新语句已在核销过程中加入了
+		
+	}
+	
+	private void dealWithOneYwy(Ywy_detail currentYwyDetail, Zdhx_global global){
+		for(Shdkh_detail currentKh : currentYwyDetail.getShdkh_details()) {
+			for(XSHK xshk : currentKh.getXshks()) {
+				int state = HxCommonUtil.compare(xshk.getXSHK_BHKE(),xshk.getXSHK_YDHSJHK());
+				switch (state) {
+				case -1: // 如果回款总数<已核销回款
+					log.error("回款单号为" + xshk.getXSHK_HKBH() + "的回款单,核销有问题");
+					break;
+				case 0: // 如果回款总数==已核销回款
+					log.info("回款单号为" + xshk.getXSHK_HKBH() + "的回款单,已经核销完毕,却仍然被拉取了,所以要更新改XSHK记录");
+					xshk.setXSHK_DDHX("1");
+					if(!global.getNeedUpdateXshk().contains(xshk)) {global.getNeedUpdateXshk().add(xshk);}
+					break;
+				case 1: // 如果回款总数>已核销回款
+					// 1.计算剩余可供核销回款
+					String remainAblehx = HxCommonUtil.subtract(xshk.getXSHK_YHKE(), xshk.getXSHK_YDHSJHK());
+					// 2.有未核销金额,直接循环所有xsdd和xsddmx组合
+					xsdddetailLoop : for(Xsdd_detail xsddDetail : currentKh.getXsddDetails()) {
+						xsddmxLoop : for(XSDDMX xsddmx : xsddDetail.getXsddmxs()) {
+							
+							// 如果剩余可核销金额为0,退出所有循环
+							if(0 == HxCommonUtil.compare(remainAblehx, "0")) {
+								if(!global.getNeedUpdateXshk().contains(xshk)) {xshk.setXSHK_DDHX("1");global.getNeedUpdateXshk().add(xshk);}
+								break xsdddetailLoop;
+							}
+							// 判断订单明细是否可以核销
+							int hxState = HxCommonUtil.compare(xsddmx.getXSDDMX_YYFE(), xsddmx.getXSDDMX_YHXJE());
+							// 无需核销
+							switch(hxState) {
+							case 0 :
+								// 如果核销标志为1,
+								if("1".equals(xsddmx.getXSDDMX_HKHX().trim())) {continue xsddmxLoop;
+								} else if(!global.getNeedUpdateXsddmx().contains(xsddmx)) { 
+									xsddmx.setXSDDMX_HKHX("1");global.getNeedUpdateXsddmx().add(xsddmx);}
+								continue xsddmxLoop;
+							case -1 :
+								log.error("订单流水为" + xsddmx.getXSDDMX_DDLS() + ",产品编号为" + xsddmx.getXSDDMX_WLBH() +"的订单明细核销有问题,请注意");
+								continue xsddmxLoop;
+							case 1 :
+								// 计算剩余需核销金额
+								String remainNeedHx = HxCommonUtil.subtract(xsddmx.getXSDDMX_YYFE(), xsddmx.getXSDDMX_YHXJE());
+								// 计算剩余需核销金额状态
+								int hxType = HxCommonUtil.compare(remainNeedHx, remainAblehx);
+								// 如果需要核销的金额>可核销的金额
+								if(1 == hxType) {
+									xsddmx.setXSDDMX_YHXJE(HxCommonUtil.add(xsddmx.getXSDDMX_YHXJE(), remainAblehx));
+									xsddmx.setXSDDMX_HXSJHK(HxCommonUtil.add(xsddmx.getXSDDMX_HXSJHK(), remainAblehx));
+									XSDDHX xsddhx = new XSDDHX();
+									xsddhx.setXSDDHX_DDLS(xsddmx.getXSDDMX_DDLS());
+									xsddhx.setXSDDHX_DDFL(xsddmx.getXSDDMX_DDFL());
+									xsddhx.setXSDDHX_HKLS(xshk.getXSHK_HKLS());
+									xsddhx.setXSDDHX_WLBH(xsddmx.getXSDDMX_WLBH());
+									xsddhx.setXSDDHX_HXSJHK(remainAblehx);
+									xsddhx.setXSDDHX_HXJE(remainAblehx);
+									xsddhx.setXSDDHX_HXXM(this.getUserName());
+									global.getNeedInsertXsddhx().add(xsddhx);
+									// 改变回款的记录
+									xshk.setXSHK_YDHSJHK(xshk.getXSHK_BHKE());
+									xshk.setXSHK_YDHXE(xshk.getXSHK_BHKE());
+									xshk.setXSHK_DDHX("1");
+									remainAblehx = "0";
+								}
+								// 如果需核销金额=可核销金额
+								if(0 == hxType) {
+									// 改变明细的记录
+									xsddmx.setXSDDMX_YHXJE(xsddmx.getXSDDMX_YYFE());
+									xsddmx.setXSDDMX_HXSJHK(xsddmx.getXSDDMX_YYFE());
+									xsddmx.setXSDDMX_HKHX("1");
+									// 生成订单核销记录
+									XSDDHX xsddhx = new XSDDHX();
+									xsddhx.setXSDDHX_DDLS(xsddmx.getXSDDMX_DDLS());
+									xsddhx.setXSDDHX_DDFL(xsddmx.getXSDDMX_DDFL());
+									xsddhx.setXSDDHX_HKLS(xshk.getXSHK_HKLS());
+									xsddhx.setXSDDHX_WLBH(xsddmx.getXSDDMX_WLBH());
+									xsddhx.setXSDDHX_HXSJHK(remainNeedHx);
+									xsddhx.setXSDDHX_HXJE(remainNeedHx);
+									xsddhx.setXSDDHX_HXXM(this.getUserName());
+									global.getNeedInsertXsddhx().add(xsddhx);
+									// 改变回款的记录
+									xshk.setXSHK_YDHSJHK(xshk.getXSHK_BHKE());
+									xshk.setXSHK_YDHXE(xshk.getXSHK_BHKE());
+									xshk.setXSHK_DDHX("1");
+									remainAblehx = "0";
+								}
+								// 如果应核销金额<可核销金额
+								if(-1 == hxType) {
+									// 改变明细的记录
+									xsddmx.setXSDDMX_YHXJE(xsddmx.getXSDDMX_YYFE());
+									xsddmx.setXSDDMX_HXSJHK(xsddmx.getXSDDMX_YYFE());
+									xsddmx.setXSDDMX_HKHX("1");
+									// 生成订单核销记录
+									XSDDHX xsddhx = new XSDDHX();
+									xsddhx.setXSDDHX_DDLS(xsddmx.getXSDDMX_DDLS());
+									xsddhx.setXSDDHX_DDFL(xsddmx.getXSDDMX_DDFL());
+									xsddhx.setXSDDHX_HKLS(xshk.getXSHK_HKLS());
+									xsddhx.setXSDDHX_WLBH(xsddmx.getXSDDMX_WLBH());
+									xsddhx.setXSDDHX_HXSJHK(remainNeedHx);
+									xsddhx.setXSDDHX_HXJE(remainNeedHx);
+									xsddhx.setXSDDHX_HXXM(this.getUserName());
+									global.getNeedInsertXsddhx().add(xsddhx);
+									// 改变回款的记录
+									xshk.setXSHK_YDHSJHK(HxCommonUtil.add(xshk.getXSHK_YDHSJHK(), remainNeedHx));
+									xshk.setXSHK_YDHXE(HxCommonUtil.add(xshk.getXSHK_YDHXE(), remainNeedHx));
+									remainAblehx = HxCommonUtil.subtract(remainAblehx, remainNeedHx);
+								}
+								if(!global.getNeedUpdateXsddmx().contains(xsddmx)) {global.getNeedUpdateXsddmx().add(xsddmx);}
+								if(!global.getNeedUpdateXshk().contains(xshk)) {global.getNeedUpdateXshk().add(xshk);}
+							}
+						}
 						
-						// 如果不处理列表中包含,则不继续添加
-					}else {
-						
-						// 如果不包含,则添加
-						undealXsddlss.add(xsddmx.getXSDDMX_DDLS());
+					}
+					break;
+				default:
+					break;
+				}
+			}
+			for(Xsdd_detail xsdd_detail : currentKh.getXsddDetails()) {
+				// 判断XSDD是否核销完毕
+				Boolean hxResult = true;
+				if(xsdd_detail.getXsddmxs().size() == 0) {
+					break;
+				}
+				for(XSDDMX xsddmx : xsdd_detail.getXsddmxs()) {
+					if(0 != HxCommonUtil.compare(xsddmx.getXSDDMX_YYFE(), xsddmx.getXSDDMX_YHXJE())) {
+						hxResult = false;
+						break;
 					}
 				}
-			}
-			
-			// 获得不处理列表后,从该分类的ddls数组去除这些
-			for(String ddls : undealXsddlss) {
-				
-				classifyByshdkh_rybh.getXsddlss().remove(ddls);
-			}
-			
-			for(String ddls : classifyByshdkh_rybh.getXsddlss()) {
-				
-				Zdhx_update_xsdd update_xsdd = new Zdhx_update_xsdd();
-				update_xsdd.setXSDD_DDLS(ddls);
-				update_xsdd.setXSDD_HKHX("1");
-				classifyByshdkh_rybh.getUpdateXsddParams().add(update_xsdd);
+				if(hxResult) {
+					global.getResultSql().getUpdateXsddSqls().add("UPDATE XSDD SET XSDD_HKHX = '1' WHERE XSDD_DDLS = '" + xsdd_detail.getDdls() + "'");
+				}
 			}
 		}
 	}
-	
+
 	/**
-	 * 自动核销核心方法
-	 * 
-	 * @param out
+	 * 按省份核销时,查询相应XSDD和XSDDMX
+	 * @param in
+	 * @param global
+	 * @throws SQLException
+	 * @throws NoSuchFieldException
 	 */
-	private void hsHandler(ProvincePojoIn in, ProvincePojoOut out) {
+	private void provinceXsddGet(HxProvincePojoIn in, Zdhx_global global) throws SQLException, NoSuchFieldException{
+		
+		// 1.根据省份信息,查询所有需要核销的XSDD及XSDDMX
+		XSDD_XSDDMXS xsdd_xsddmxs = zdhxDao.receiveXsdds_byProvince(in.getPrivinceId(), CommonUtil.formateTiemToBasic(in.getShipmentsEnd()) , this.getConnection());
 
-		// 获取所有分类
-		List<ClassifyByshdkh_rybh> list = out.getResults();
+		dealWithXsdd_xsddmx(xsdd_xsddmxs, global);
+		
+	}
+	
+	private void dealWithXsdd_xsddmx(XSDD_XSDDMXS xsdd_xsddmxs, Zdhx_global global) throws NoSuchFieldException {
+		List<XSDD> xsdds = xsdd_xsddmxs.getXsdds();
+		List<XSDDMX> xsddmxs = xsdd_xsddmxs.getXsddmxs();
+		
+		// 根据订单流水将xsddmx分类
+		Map<String, List<XSDDMX>> xsddmxs_classify = CommonUtil.classify(xsddmxs, "XSDDMX_DDLS", XSDDMX.class);
+		
+		// 2.根据业务员分类
+		Map<String, List<XSDD>> xsdd_classifyByYwy = CommonUtil.classify(xsdds, "XSDD_RYBH", XSDD.class);
+		
+		for(String ywykey : xsdd_classifyByYwy.keySet()) {
+			
+			// 2.1 分出业务员
+			Ywy_detail currentYwyDetail = new Ywy_detail();
+			
+			currentYwyDetail.setRybh(ywykey);
+			
+			// 2.2分出客户的订单
+			Map<String, List<XSDD>> xsdd_classifyByShdkh = CommonUtil.classify(CommonUtil.getListInMapByKey(xsdd_classifyByYwy, ywykey), "XSDD_SHDKH", XSDD.class);
+			
+			for(String khkey : xsdd_classifyByShdkh.keySet()) {
 
-		// 遍历所有分类进行处理
-		for (ClassifyByshdkh_rybh classifyByshdkh_rybh : list) {
-
-			// 获取XSDD
-			List<Zdhx_XSDD> xsdds = classifyByshdkh_rybh.getXsdds();
-
-			// 获取XSHK
-			List<Zdhx_XSHK> xshks = classifyByshdkh_rybh.getXshks();
-
-			// 获取XSDDMX
-			List<Zdhx_XSDDMX> xsddmxs = classifyByshdkh_rybh.getXsddmxs();
-
-			if (0 == xsdds.size() || 0 == xshks.size() || 0 == xsddmxs.size()) {
-				// 如果没有销售订单,则直接遍历下一个分类
-				continue;
+				Shdkh_detail currentShdkhDetail = new Shdkh_detail();
+				
+				currentShdkhDetail.setShdkh(khkey);
+				
+				// 获取该业务员下,该客户下的所有XSDD
+				List<XSDD> ywy_kh_xsdds = CommonUtil.getListInMapByKey(xsdd_classifyByShdkh, khkey);
+				
+				for(XSDD xsdd : ywy_kh_xsdds) {
+					
+					Xsdd_detail currentXsddDetail = new Xsdd_detail();
+					currentXsddDetail.setXsdd(xsdd);
+					currentXsddDetail.setDdls(xsdd.getXSDD_DDLS());
+					
+					// 从分类过的ddmx中找出该XSDD下的XSDDMX
+					currentXsddDetail.setXsddmxs(CommonUtil.getListInMapByKey(xsddmxs_classify, xsdd.getXSDD_DDLS()));
+					currentShdkhDetail.getXsddDetails().add(currentXsddDetail);
+				}
+				
+				currentYwyDetail.getShdkh_details().add(currentShdkhDetail);
 			}
-
-			// 确认结束,开始核销
-			for(Zdhx_XSHK xshk : xshks) {
-				
-				// 计算剩余可核销额
-				String remain = CommonUtil.subtract(xshk.getXSHK_YHKE(), xshk.getXSHK_YDHSJHK()).toString(); // XSHK_YHKE - XSHK_YDHSJHK, 原回款额-已核销金额
-				
-				if(0 == CommonUtil.compare(remain, "0")) { // 如果剩余可核销金额为0,是不应该的,因为回款单未核销,
-					
-					log.info("请检查HKLS编号为" + xshk.getXSHK_HKLS() + "的回款单据是否标记为已核销状态");
-					
-					// 继续下一条回款核销
-					continue;
-				}
-				
-				if(-1 == CommonUtil.compare(remain, "0")) {
-					
-					log.info("严重错误,请核实HKLS编号为" + xshk.getXSHK_HKLS() + "的回款单据是否处于异常状态");
-					
-					// 继续下一条回款核销
-					continue;
-				}
-				
-				// 如果还有剩余可核销金额,开始进行核销
-				remain = this.hs_start(remain, xshk, classifyByshdkh_rybh, in);
-				
-				// 设定已核销金额
-				Double yhxje = CommonUtil.subtract(xshk.getXSHK_YHKE(), remain).doubleValue();
-				
-				if(0 == CommonUtil.compare(remain, "0")) { // 当前回款单核销完毕,如果剩余可核销额为0
-					
-					xshk.setXSHK_DDHX("1");
-				}
-				
-				xshk.setXSHK_YDHSJHK(yhxje);
-				xshk.setXSHK_YDHXE(yhxje);
-
-				// 处理过该hk
-				xshk.setChangeFlag("1");
-			}
-
+			
+			global.getYwy_details().add(currentYwyDetail);
 		}
 	}
 
 	
-	/**
-	 * 对当前xshk开始核销
-	 * @param remain 当前xshk的剩余可核销额
-	 * @param xshk 当前xshk
-	 * @param classifyByshdkh_rybh 当前分类
-	 * @param in 前台传递参数
-	 * @return
-	 */
-	private String hs_start(String remain, Zdhx_XSHK xshk, ClassifyByshdkh_rybh classifyByshdkh_rybh, ProvincePojoIn in) {
-				
-		// 获取要处理xsddmxs
-		List<Zdhx_XSDDMX> xsddmxs = classifyByshdkh_rybh.getXsddmxs();
 
-		// 获取当前时间
-		String nowDate = CommonUtil.getYYYYMMDD();
-		
-		// 开始核销销售订单明细
-		for(Zdhx_XSDDMX xsddmx : xsddmxs) {
-			
-			if("1".equals(xsddmx.getXSDDMX_HKHX())) {// 如果该明细已核销完毕,则直接进行下一个循环
-				
-				continue;
-			}
-			
-			// 该明细剩余应核销金额
-			String remain_xsddmx = CommonUtil.subtract(xsddmx.getXSDDMX_YYFE(), xsddmx.getXSDDMX_YHXJE()).toString();
-			
-			if(0 == CommonUtil.compare(remain_xsddmx, "0")) {// 如果需要核销
-				
-				log.info("请检查DDLS为" + xsddmx.getXSDDMX_DDLS() + ", DDFL为" + xsddmx.getXSDDMX_DDFL() + "的订单明细,已核销完毕,没有修改标志");
-			}
-			if(0 <= CommonUtil.compare(remain, remain_xsddmx)) { // 如果剩余可核销额大于剩余应核销额
-				
-				// 注入InsertXsddhx参数
-				classifyByshdkh_rybh.getInsertXsddhxParams()
-					.add(this.hs_insert_xsddhx(xsddmx, xshk, nowDate, remain_xsddmx, in));
-				
-				// 该明细核销完毕,则将标志改为1
-				xsddmx.setXSDDMX_HKHX("1");
+	private void ywyXsddGet(HxYwyPojoIn in, Zdhx_global global) throws NoSuchFieldException, SQLException {
 
-				// 修改当前mx应核销额
-				xsddmx.setXSDDMX_YHXJE(CommonUtil.add(remain_xsddmx, xsddmx.getXSDDMX_YHXJE()).doubleValue());
-				xsddmx.setXSDDMX_HXSJHK(CommonUtil.add(remain_xsddmx, xsddmx.getXSDDMX_HXSJHK()).doubleValue());
-				
-				// 处理过该mx
-				xsddmx.setChangeFlag("1");
-				
-				// 正常核销后,修改可核销额
-				remain = CommonUtil.subtract(remain, remain_xsddmx).toString();
-				
-				// 如果剩余可回款额核销完毕,则退出循环
-				if(0 == CommonUtil.compare(remain, "0")) {
-					return remain;
-				}
-			} else { // 如果可核销额小于该明细的应核销额,则直接进行核销
-				
-				// 注入销售订单核销sql参数
-				classifyByshdkh_rybh.getInsertXsddhxParams()
-					.add(this.hs_insert_xsddhx(xsddmx, xshk, nowDate, remain, in));
-				
-				// 修改当前已应核销额
-				xsddmx.setXSDDMX_YHXJE(CommonUtil.add(remain, xsddmx.getXSDDMX_YHXJE()).doubleValue());
-				xsddmx.setXSDDMX_HXSJHK(CommonUtil.add(remain, xsddmx.getXSDDMX_HXSJHK()).doubleValue());
+		// 1.根据省份信息,查询所有需要核销的XSDD及XSDDMX
+		XSDD_XSDDMXS xsdd_xsddmxs = zdhxDao.receiveXsdds_byYwy(in.getYwyId(), in.getShipmentsEnd() , this.getConnection());
+		dealWithXsdd_xsddmx(xsdd_xsddmxs, global);
+	}
 
-				// 处理过该mx
-				xsddmx.setChangeFlag("1");
-				return "0";
-			}
+	@Override
+	public String addNotHx(String type, String dh, String cpbh) {
+
+		this.before();
+		JsonDataBack back = new JsonDataBack();		
+		switch(type) {
+		case "1":
+			back = this.addNotHxXsddmx(dh,cpbh);
+			break;
+		case "2":
+			back = addNotHxXshk(dh);
+			break;
+		case "3":
+			back = addPingzhangKh(dh);
+			break;
+		case "4":
+			back = addZhengce12(cpbh);
+			break;
+		default: break;
 		}
-		
-		return remain;
+		return this.after(back.toJsonString());
 	}
 	
+
+	private JsonDataBack addZhengce12(String cpbh) {
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 根据订单编号和产品编号,查询该订单明细是否已经核销
+			LSWLZD kh = zdhxDao.receiveCp(cpbh, this.getConnection());
+			
+			if(null == kh) {
+
+				back.setStateError("该产品不存在,无法加入本列表中");
+				return back;
+			}
+			
+			else {
+				back.setStateOk();
+				// 将该订单及产品加入表中,并重新查询一次
+				zdhxDao.addNotHxCp(cpbh, this.getConnection());
+				// 查询所有政策12产品
+				List<LSWLZD> cps = zdhxDao.receiveZhengce12(this.getConnection());
+				back.setData(JSONArray.fromObject(cps).toString());
+				return back;
+			}
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("添加政策12产品出错");
+			back.setStateError();
+			return back;
+		}
+	}
+
+	private JsonDataBack addPingzhangKh(String dh) {
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 根据订单编号和产品编号,查询该订单明细是否已经核销
+			ZWWLDW kh = zdhxDao.receiveKh(dh, this.getConnection());
+			
+			if(null == kh) {
+
+				back.setStateError("该客户不存在,无法加入本列表中");
+				return back;
+			}
+			
+			else {
+				back.setStateOk();
+				// 将该订单及产品加入表中,并重新查询一次
+				zdhxDao.addNotHxKh(dh, this.getConnection());
+				List<ZWWLDW> xskhs = zdhxDao.receivePingzhangKh(this.getConnection());
+				back.setData(JSONArray.fromObject(xskhs).toString());
+				return back;
+			}
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("添加平账客户出错");
+			back.setStateError();
+			return back;
+		}
+	}
+
+	private JsonDataBack addNotHxXshk(String dh) {
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 根据订单编号和产品编号,查询该订单明细是否已经核销
+			XSHK xshk = zdhxDao.receiveXshk(dh, this.getConnection());
+			
+			if(null == xshk) {
+
+				back.setStateError("该回款不存在,无法加入本列表中");
+				return back;
+			}
+			// 验证该XSHK是否参加过核销
+			if("1".equals(xshk.getXSHK_DDHX().trim()) || !("".equals(xshk.getXSHK_YDHXE()) || "0".equals(xshk.getXSHK_YDHXE()))) {
+				
+				back.setStateError("该回款已经参与核销,无法加入本列表中");
+				return back;
+			}
+			else {
+				back.setStateOk();
+				
+				// 将该订单及产品加入表中,并重新查询一次
+				zdhxDao.addNotHxXshk(dh, xshk.getXSHK_HKLS(), this.getConnection());
+				List<NOHX_XSHK> xsddmxs = zdhxDao.receiveNohxXshk(this.getConnection());
+				back.setData(JSONArray.fromObject(xsddmxs).toString());
+				return back;
+			}
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("添加不核销销售回款出错");
+			back.setStateError();
+			return back;
+		}
+	}
+
+	private JsonDataBack addNotHxXsddmx(String xsddDdbh, String xsddCpbh) {
+
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 根据订单编号和产品编号,查询该订单明细是否已经核销
+			XSDDMX xsddmx = zdhxDao.receiveXsddmx(xsddDdbh, xsddCpbh, this.getConnection());
+			
+			if(null == xsddmx) {
+
+				back.setStateError("该订单不存在,无法加入本列表中");
+				return back;
+			}
+			// 验证该xsddmx
+			if("1".equals(xsddmx.getXSDDMX_HKHX().trim()) || !("".equals(xsddmx.getXSDDMX_YHXJE().trim()) || "0".equals(xsddmx.getXSDDMX_YHXJE().trim()))) {
+				
+				back.setStateError("该订单中的指定产品已经参与核销,无法加入本列表中");
+				return back;
+			}
+			else {
+				back.setStateOk();
+				
+				// 将该订单及产品加入表中,并重新查询一次
+				zdhxDao.addNotHxXsddmx(xsddDdbh, xsddCpbh, xsddmx.getXSDDMX_DDLS(),this.getConnection());
+				List<NOHX_XSDDMX> xsddmxs = zdhxDao.receiveNohxXsddmxs(this.getConnection());
+				back.setData(JSONArray.fromObject(xsddmxs).toString());
+				return back;
+			}
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("添加不核销订单明细出错");
+			back.setStateError();
+			return back;
+		}
+	}
+	
+
+	@Override
+	public String receiveNoHx(String type) {
+		
+		this.before();
+		JsonDataBack back = new JsonDataBack();		
+		switch(type) {
+		case "1":
+			back = receiveNoHxXsddmxs();
+			break;
+		case "2":
+			back = receiveNoHxXshk();
+			break;
+		case "3":
+			back = receivePingzhangKh();
+			break;
+		case "4":
+			back = receiveZhengce12();
+			break;
+		default: break;
+		}
+		return this.after(back.toJsonString());
+	}
+	
+	private JsonDataBack receiveZhengce12() {
+		
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 查询所有政策12产品
+			List<LSWLZD> cps = zdhxDao.receiveZhengce12(this.getConnection());
+
+			back.setStateOk();
+			back.setData(JSONArray.fromObject(cps).toString());
+			
+			return back;
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("获取平账客户出错");
+			back.setStateError();
+			return back;
+		}
+	}
+
+	private JsonDataBack receivePingzhangKh() {
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 查询所有平账客户
+			List<ZWWLDW> xskhs = zdhxDao.receivePingzhangKh(this.getConnection());
+
+			back.setStateOk();
+			back.setData(JSONArray.fromObject(xskhs).toString());
+			
+			return back;
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("获取平账客户出错");
+			back.setStateError();
+			return back;
+		}
+	}
+
 	/**
-	 * 生成订单核销sql参数
-	 * @param xsddmx 订单明细
-	 * @param xshk 当前销售回款单
-	 * @param nowDate 当前时间
-	 * @param remain_xsddmx 当前明细的剩余应核销额
-	 * @param in 前台参数
+	 * 获取不核销回款
 	 * @return
 	 */
-	private Hx_insert_xsddhx hs_insert_xsddhx(Zdhx_XSDDMX xsddmx, Zdhx_XSHK xshk, String nowDate, String remain_xsddmx, ProvincePojoIn in) {
-		// 确定更新数据
-		Hx_insert_xsddhx insert_xsddhx = new Hx_insert_xsddhx();
-		insert_xsddhx.setXSDDHX_DDLS(xsddmx.getXSDDMX_DDLS()); // 订单流水
-		insert_xsddhx.setXSDDHX_DDFL(xsddmx.getXSDDMX_DDFL()); // 订单内流水
-		insert_xsddhx.setXSDDHX_HKLS(xshk.getXSHK_HKLS()); // 回款单流水
-		insert_xsddhx.setXSDDHX_WLBH(xsddmx.getXSDDMX_WLBH()); // 产品编号
-		insert_xsddhx.setXSDDHX_PCH(""); // PCH
-		insert_xsddhx.setXSDDHX_HXRQ(nowDate); // 核销时间
-		insert_xsddhx.setXSDDHX_HXSJHK(Double.valueOf(remain_xsddmx)); // 核销金额
-		insert_xsddhx.setXSDDHX_HXDKU1(Double.valueOf("0")); // XSDDHX_HXDKU1
-		insert_xsddhx.setXSDDHX_HXDKU2(Double.valueOf("0")); // XSDDHX_HXDKU2
-		insert_xsddhx.setXSDDHX_HXDKU3(Double.valueOf("0")); // XSDDHX_HXDKU3
-		insert_xsddhx.setXSDDHX_HXDKU4(Double.valueOf("0")); // XSDDHX_HXDKU4
-		insert_xsddhx.setXSDDHX_HXDKU5(Double.valueOf("0")); // XSDDHX_HXDKU5
-		insert_xsddhx.setXSDDHX_HXJE(Double.valueOf(remain_xsddmx)); // 核销金额
-		insert_xsddhx.setXSDDHX_HXXM(in.getUserName()); // 核销人姓名
-		
-		return insert_xsddhx;
+	private JsonDataBack receiveNoHxXshk() {
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
+
+			// 查询所有不参与核销订单明细
+			List<NOHX_XSHK> xshks = zdhxDao.receiveNohxXshk(this.getConnection());
+			List<NOHX_XSHK> deleteHks = new ArrayList<>();
+			List<String> delSqls = new ArrayList<>();
+			// 循环检测核销状态
+			for(NOHX_XSHK xshk : xshks) {
+
+				// 验证该xshk,如果参与了核销,从该列表中删除
+				if("1".equals(xshk.getXSHK_DDHX().trim()) || !("".equals(xshk.getXSHK_YDHXE().trim()) || "0".equals(xshk.getXSHK_YDHXE().trim()))) {
+					deleteHks.add(xshk);
+					String sql = "DELETE FROM NBPT_HX_NOHX WHERE NBPT_HX_NOHX_UID = '" + xshk.getNBPT_HX_NOHX_UID() + "'";
+					delSqls.add(sql);
+				}
+			}
+			
+			// 如有参与核销的,删除
+			if(0 != delSqls.size()) {
+				zdhxDao.excuteUpdateGroups(delSqls, this.getConnection());
+			}
+			for(NOHX_XSHK xshk : deleteHks) {
+				xshks.remove(xshk);
+			}
+			back.setStateOk();
+			back.setData(JSONArray.fromObject(xshks).toString());
+			
+			return back;
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("获取不核销回款单出错");
+			back.setStateError();
+			return back;
+		}
 	}
-	
-	
 	/**
-	 * 发货单处理方法
-	 * 该方法中,添加好所有的分类,并将所有的XSDD及XSDDLS添加至分类中,
-	 * 
-	 * @param mv
-	 * @param in
-	 * @param out
-	 */
-	private void xsddsHandler(ProvincePojoIn in, ProvincePojoOut out) {
-
-		// 1.获得要处理的所有订单
-//		List<Zdhx_XSDD> XSDDS = zdhxDao.getXSDDS(in.getPrivinceId());
-
-		// 2.将订单按照 "售达客户_业务员" 进行分类
-		List<String> checkList = out.getCheckList(); // 分类用checklist
-
-//		for (Zdhx_XSDD xsdd : XSDDS) {
-//
-//			String shdkh_rybh = xsdd.getXSDD_SHDKH() + "^" + xsdd.getXSDD_RYBH(); // 拼接字符串
-//
-//			// 遍历check数组
-//			if (checkList.contains(shdkh_rybh)) {
-//
-//				// 如果包含,则获取该分类,并将XSDD添加到该分类的XSDDS中,ddls添加到ddlss
-//				ClassifyByshdkh_rybh classifyByshdkh_rybh = out.getResults().get(checkList.indexOf(shdkh_rybh));
-//				classifyByshdkh_rybh.getXsdds().add(xsdd);
-//				classifyByshdkh_rybh.getXsddlss().add(xsdd.getXSDD_DDLS());
-//			} else {
-//
-//				// 如果不包含,则添加新的分类,并添加至checkList中
-//				out.getResults().add(this.addNewClassify(xsdd, shdkh_rybh));
-//				checkList.add(shdkh_rybh);
-//			}
-//		}
-	}
-
-	/**
-	 * 添加新分类
-	 * 
-	 * @param xsdd
-	 * @param shdkh_rybh
+	 * 获取不核销订单
 	 * @return
 	 */
-	private ClassifyByshdkh_rybh addNewClassify(Zdhx_XSDD xsdd, String shdkh_rybh) {
+	private JsonDataBack receiveNoHxXsddmxs() {
+		
+		// 初始化返回内容
+		JsonDataBack back = new JsonDataBack();
+		try {
 
-		ClassifyByshdkh_rybh classifyByshdkh_rybh = new ClassifyByshdkh_rybh();
-		classifyByshdkh_rybh.setRybh(xsdd.getXSDD_RYBH()); // 获取业务员
-		classifyByshdkh_rybh.setShdkh(xsdd.getXSDD_SHDKH()); // 获取客户
-		classifyByshdkh_rybh.setShdkh_rybh(shdkh_rybh); // 拼接字符串
-		classifyByshdkh_rybh.getXsdds().add(xsdd); // 添加订单
-		classifyByshdkh_rybh.getXsddlss().add(xsdd.getXSDD_DDLS()); // 添加订单流水
-		return classifyByshdkh_rybh;
+			// 查询所有不参与核销订单明细
+			List<NOHX_XSDDMX> xsddmxs = zdhxDao.receiveNohxXsddmxs(this.getConnection());
+			List<NOHX_XSDDMX> deleteMxs = new ArrayList<>();
+			List<String> delSqls = new ArrayList<>();
+			// 循环检测核销状态
+			for(NOHX_XSDDMX xsddmx : xsddmxs) {
+
+				// 验证该xsddmx,如果参与了核销,从该列表中删除
+				if("1".equals(xsddmx.getXSDDMX_HKHX().trim()) || !("".equals(xsddmx.getXSDDMX_YHXJE().trim()) || "0".equals(xsddmx.getXSDDMX_YHXJE().trim()))) {
+					deleteMxs.add(xsddmx);
+					String sql = "DELETE FROM NBPT_HX_NOHX WHERE NBPT_HX_NOHX_UID = '" + xsddmx.getNBPT_HX_NOHX_UID() + "'";
+					delSqls.add(sql);
+				}
+			}
+			
+			// 如有参与核销的,删除
+			if(0 != delSqls.size()) {
+				zdhxDao.excuteUpdateGroups(delSqls, this.getConnection());
+			}
+			for(NOHX_XSDDMX xsddmx : deleteMxs) {
+				xsddmxs.remove(xsddmx);
+			}
+			back.setStateOk();
+			back.setData(JSONArray.fromObject(xsddmxs).toString());
+			
+			return back;
+			// 根据订单编号和产品编号,将该明细加入列表中
+		} catch (SQLException e) {
+
+			log.error("获取不核销销售明细出错");
+			back.setStateError();
+			return back;
+		}
 	}
-
-	/**
-	 * 回款单处理方法
-	 * 该方法将所有的XSHK添加至相应的分类
-	 * @param mv
-	 * @param in
-	 * @param out
-	 */
-	private void xshksHandler(ProvincePojoIn in, ProvincePojoOut out) {
-
-		// 1.根据分类获取客户回款
-//		List<Zdhx_XSHK> xshks = zdhxDao.getXSHKS(in.getPrivinceId(), in.getTimeEnd());
-
-		// 2.将订单按照 "售达客户_业务员" 进行分类
-		List<String> checkList = out.getCheckList(); // 分类用checklist
-
-		// 将汇款添加至相应分类
-//		for (Zdhx_XSHK xshk : xshks) {
-//
-//			// 提取人员编号
-//			String shdkh_rybh = xshk.getXSHK_SHDKH() + "^" + xshk.getXSHK_RYBH(); // 拼接字符串
-//
-//			// 如果已存在该分类,则添加至该分类中
-//			if (checkList.contains(shdkh_rybh)) {
-//
-//				// 如果包含,则将XSDD添加到该分类的XSDDS中
-//				ClassifyByshdkh_rybh classifyByshdkh_rybh = out.getResults().get(checkList.indexOf(shdkh_rybh));
-//				classifyByshdkh_rybh.getXshks().add(xshk);
-//			} else {
-//
-//				// 如果不包含,则什么都不做
-//			}
-//		}
-
-	}
-
-	/**
-	 * 发货单明细处理方法
-	 * 该方法将所有的XSDDMX添加至相应的分类
-	 * @param mv
-	 * @param in
-	 * @param out
-	 */
-	private void xsddmxHandler(ProvincePojoIn in, ProvincePojoOut out) {
-
-//		// 1.获取所有XSDDMX
-//		List<Zdhx_XSDDMX> XSDDMXS = zdhxDao.getXSDDMXS(in.getPrivinceId());
-//
-//		// 2.将XSDDMX进行分类
-//		for (Zdhx_XSDDMX xsddmx : XSDDMXS) {
-//
-//			for (ClassifyByshdkh_rybh classifyByshdkh_rybh : out.getResults()) {
-//
-//				// 根据流水号,添加ddmx
-//				if (classifyByshdkh_rybh.getXsddlss().contains(xsddmx.getXSDDMX_DDLS())) {
-//
-//					// 如果包含该流水号,则添加至该分类中
-//					classifyByshdkh_rybh.getXsddmxs().add(xsddmx);
-//					continue;
-//				}
-//			}
-//		}
-	}
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

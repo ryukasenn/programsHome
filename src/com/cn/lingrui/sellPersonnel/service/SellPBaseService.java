@@ -12,12 +12,5 @@ public abstract class SellPBaseService extends BServiceLogic{
 		connection = dbc.getConnection();
 	}
 	
-	/**
-	 * 获取登录人员的id
-	 * @return
-	 */
-	protected String getLoginId() {
-		
-		return this.getRequest().getAttribute("userID").toString();
-	}
+
 }

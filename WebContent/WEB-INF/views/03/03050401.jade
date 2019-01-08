@@ -163,7 +163,7 @@ block contents
                         input.form-control(name="NBPT_SP_PERSON_TITLE", value='#{person.NBPT_SP_PERSON_TITLE}', readOnly)
 
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03050401.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03050401.js#{randomJsVersion}")
     script
         var male = '#{person.NBPT_SP_PERSON_MALE}';
         var job = '#{person.NBPT_SP_PERSON_JOB}';

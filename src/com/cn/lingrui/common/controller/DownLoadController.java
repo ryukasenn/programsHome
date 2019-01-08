@@ -71,8 +71,7 @@ public class DownLoadController {
 	@RequestMapping(value="", method=RequestMethod.POST)
     public void downloadFile(DownLoadIn in,
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
-		
-		
+
         if (in.getFileName() != null) {
     		String path = GlobalParams.FILE_PATH;
             File file = new File(path + in.getFileName());

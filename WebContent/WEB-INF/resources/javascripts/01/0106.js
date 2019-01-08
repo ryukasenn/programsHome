@@ -28,6 +28,24 @@ $(function(){
 		
 		$('#0106Modal').find("form").submit();
 	})
+	
+	AjaxForPost(baseUrl + "/sellPersonnel/khMana/treeMenu",{currentId:"", type:""},function(jsonData){
+		
+		var zNodes = jsonData;
+		var setting = {
+
+			callback: {
+				onExpand: function(event, treeId, treeNode){
+					if(zTreeAddNodes)
+						zTreeAddNodes(event, treeId, treeNode)
+				},
+				onClick : function(event, treeId, treeNode){
+					if(zTreeClickNode)
+						zTreeClickNode(event, treeId, treeNode)
+				}
+		}};
+		zTreeObj = $.fn.zTree.init($("#treeMenu"), setting, zNodes);
+	})
 })
 
 

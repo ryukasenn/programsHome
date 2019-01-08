@@ -8,4 +8,5 @@ import com.cn.lingrui.pm.pojos.PmInfo;
 
 public interface AllpmDao extends PmBaseDao {
 	public List<PmInfo> getAllPm(Connection connection) throws SQLException;
+	public List<PmInfo> getAllCxPm(Connection connection,String rqStr,String dqmcStr,String fzdqStr) throws SQLException;
 }

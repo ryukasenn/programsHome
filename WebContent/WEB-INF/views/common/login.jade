@@ -24,7 +24,7 @@ block body
                                 .errorMessage= item
                         
 block scripts
-    script(src="#{myPath}/javascripts/login.js")
+    script(src="#{myPath}/javascripts/login.js#{randomJsVersion}")
     script
         if(baseUrl == 'http://ekp.lingrui.com:9000/rsManage')
             $('.heading').html('这里是测试服务器,请从OA链接登录')

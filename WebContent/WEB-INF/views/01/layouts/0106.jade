@@ -1,17 +1,31 @@
 extends ../../adminLayout
 
+block layoutHeader
+    link(rel='stylesheet', href='#{myPath}/stylesheets/css/zTreeStyle.css')
+block layoutScripts
+    script(language="javascript", src="#{myPath}/javascripts/jquery.ztree.core.min.js#{randomJsVersion}")
+
 block main
-    h2.page-header 页面管理
-    form.form-inline(action="#{myPath}/pageManage", method="GET")#controlForm
-        .form-group
-            button(type="submit").btn.btn-default#moduleController 模块
-            |&nbsp&nbsp
-        .form-group
-            button(type="submit").btn.btn-default#funcController 功能
-            |&nbsp&nbsp
-        .form-group
-            button(type="submit").btn.btn-default#pageController 页面
-            |&nbsp&nbsp
-    .row.col-xs-6.col-sm-6
-        h2.page-header
-    block contents
+    .row
+        .col-xs-12.col-sm-12
+            h2.page-header 页面管理
+    .row
+        .col-xs-12.col-sm-12
+            .col-md-1
+                div.tree
+                    ul.ztree#treeMenu
+            .col-md-11
+                .row.col-md-12
+                    form.form-inline(action="#{myPath}/pageManage", method="GET")#controlForm
+                        .form-group
+                            button(type="submit").btn.btn-default#moduleController 模块
+                            |&nbsp&nbsp
+                        .form-group
+                            button(type="submit").btn.btn-default#funcController 功能
+                            |&nbsp&nbsp
+                        .form-group
+                            button(type="submit").btn.btn-default#pageController 页面
+                            |&nbsp&nbsp
+                .row.col-md-12
+                    h2.page-header
+                    block contents

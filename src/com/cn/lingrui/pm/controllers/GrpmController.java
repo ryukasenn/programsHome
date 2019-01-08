@@ -23,5 +23,26 @@ public class GrpmController {
 
 		return mv;
 	}
+	@RequestMapping(value = "/sameDqcx", method = RequestMethod.GET)
+	public ModelAndView getSameDqmcPM(String pmrq) throws Exception {
+
+		ModelAndView mv = grpmService.getSameDqPmView(pmrq);
+
+		return mv;
+	}
+	
+	@RequestMapping(value = "/slbcx", method = RequestMethod.GET)
+	public ModelAndView getslbPM(String pmrq,String mc) throws Exception {
+
+		ModelAndView mv = grpmService.getslbView(pmrq,mc);
+
+		return mv;
+	}
+	@RequestMapping(value = "/grxx", method = RequestMethod.GET)
+	public ModelAndView getgrxx(String rq,String xm,String dw) throws Exception {
+
+		ModelAndView mv = grpmService.getgrxxView(rq, xm, dw);		
+		return mv;
+	}
 	
 }

@@ -188,4 +188,16 @@ public class SysPmController {
 		ModelAndView mv = pageManage.postDeletePage(in);
 		return mv;
 	}
+	
+	/**
+	 * 获取页面管理树形菜单
+	 * 
+	 * @return
+	 */
+	@RequestMapping(value = "/receivePmTree", method = RequestMethod.POST)
+	public String receivePmTree() {
+		
+		String result = pageManage.receivePmTree();
+		return result;
+	}
 }

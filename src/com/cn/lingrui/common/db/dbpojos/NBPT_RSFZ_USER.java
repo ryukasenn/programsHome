@@ -8,6 +8,7 @@ public class NBPT_RSFZ_USER {
 	private String NBPT_RSFZ_USER_EMALL;
 	private String NBPT_RSFZ_USER_BZ;
 	private String NBPT_RSFZ_USER_PASSWORD;
+	private String NBPT_RSFZ_USER_FLAG;
 	public String getNBPT_RSFZ_USER_ID() {
 		return NBPT_RSFZ_USER_ID;
 	}
@@ -43,6 +44,12 @@ public class NBPT_RSFZ_USER {
 	}
 	public void setNBPT_RSFZ_USER_PASSWORD(String nBPT_RSFZ_USER_PASSWORD) {
 		NBPT_RSFZ_USER_PASSWORD = nBPT_RSFZ_USER_PASSWORD;
+	}
+	public String getNBPT_RSFZ_USER_FLAG() {
+		return NBPT_RSFZ_USER_FLAG;
+	}
+	public void setNBPT_RSFZ_USER_FLAG(String nBPT_RSFZ_USER_FLAG) {
+		NBPT_RSFZ_USER_FLAG = nBPT_RSFZ_USER_FLAG;
 	}
 	
 	

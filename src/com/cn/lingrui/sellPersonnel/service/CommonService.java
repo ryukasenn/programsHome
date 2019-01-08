@@ -2,7 +2,7 @@ package com.cn.lingrui.sellPersonnel.service;
 
 import org.springframework.web.servlet.ModelAndView;
 
-public interface CommonService {
+public interface CommonService{
 
 	/**
 	 * 查询当前所有人(根据不同权限,生成不同页面)
@@ -69,4 +69,66 @@ public interface CommonService {
 	 * @throws Exception
 	 */
 	public String transferSearchRegion(String regionName) throws Exception;
+
+	/**
+	 * 生成全国在职人数地图
+	 * @return
+	 * @throws Exception 
+	 */
+	public String createMap() throws Exception;
+
+	/**
+	 * 获取字典列表
+	 * @param params
+	 * @return
+	 * @throws Exception 
+	 */
+	public String receiveDictionaryList(String params) throws Exception;
+	
+	/**
+	 * AJAX通过地区ID,获取地区下辖行政区县列表
+	 * @param params
+	 * @return
+	 * @throws Exception 
+	 */
+	public String receiveXzqxs(String parentId) throws Exception;
+
+	/**
+	 * 创建所有人员名单文件.xls
+	 * @throws Exception 
+	 */
+	public String createAllCurrentTerminals(String fileName) throws Exception;
+
+	/**
+	 * 部门管理树
+	 * @param level 
+	 * @return
+	 */
+	public String createTreeRegion(String level);
+
+	/**
+	 * 获取行政区县
+	 * @param parentId
+	 * @return
+	 * @throws Exception
+	 */
+	public String receiveSelectPost(String parentId) throws Exception;
+	
+	/**
+	 * 生成部门树,选取用
+	 * @param level 
+	 * @return
+	 */
+	public String createRegionTree(String pid, String rank);
+
+	/**
+	 * 生成人员选择树
+	 * @param pid
+	 * @param rank
+	 * @return
+	 */
+	public String createPersonTree();
+
+	public String receiveRegionSelect(String parentUid);
+
 }

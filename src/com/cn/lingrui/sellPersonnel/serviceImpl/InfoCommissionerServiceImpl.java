@@ -67,6 +67,7 @@ public class InfoCommissionerServiceImpl extends SellPBaseService implements Inf
 				persons.addAll(infoCommissionerDao.receiveTerminal(regionUid, null, null, null, this.getConnection()));
 			}
 			
+			
 			// 分类人员信息
 			Map<String, List<NBPT_VIEW_CURRENTPERSON>> classfyedResults = CommonServiceUtils.dealPersonsByKey(persons, "NBPT_SP_PERSON_REGION_UID");
 			

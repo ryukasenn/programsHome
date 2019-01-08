@@ -1,7 +1,33 @@
 
-// 大区信息(大区总)
+// 人员管理页面(地总)
 extends ./layouts/0305
 
-
+block main
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            h2 人员管理
+    .row(style='background-color:#f3f3f4')
+        .col-md-12.col-sm-12
+            .col-md-12.col-sm-12.select-info
+                form.form-horizontal#controlForm
+                    .col-md-3.col-sm-3
+                        .row
+                            .form-group
+                                label.col-md-3.col-sm-3.control-label 公司配额
+                                .col-md-8.col-sm-8
+                                    input.form-control(readOnly)#need
+                    .col-md-3.col-sm-3
+                        .row
+                            .form-group
+                                label.col-md-3.col-sm-3.control-label 当前人员
+                                .col-md-8.col-sm-8
+                                    input.form-control(readOnly)#now
+                    .col-md-3.col-sm-3
+                        .form-group
+                            button(type="button").btn.btn-default#addPerson 添加人员
+                .col-md-12.col-sm-12.select-info.ryuukasennTableContent
+        
+block scripts
+    script(language="javascript", src="#{myPath}/javascripts/03/03050101.js#{randomJsVersion}")
 block pageId
     p(style="display:none") 03050101

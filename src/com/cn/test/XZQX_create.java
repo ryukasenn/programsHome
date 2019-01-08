@@ -12,10 +12,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.GlobalParams;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_KH;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_REGION_XZQX;
@@ -30,7 +32,7 @@ import jxl.read.biff.BiffException;
 public class XZQX_create {
 
 	@Test
-	public void init() throws ClassNotFoundException, SQLException {
+	public void init() throws ClassNotFoundException, SQLException, NoSuchFieldException {
 		
 		// 添加行政区域划分
 		//this.addXZQXHF();
@@ -91,7 +93,36 @@ public class XZQX_create {
 		//this.addOtherType();
 		
 		// 修改性别
-		this.changMale();
+		//this.changMale();
+		
+		// 回复
+
+		this.tianjiaPid();
+	}
+	
+	private void tianjiaPid()throws ClassNotFoundException, SQLException, NoSuchFieldException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		System.out.println("SELECT * FROM NBPT_SP_KH_BACK1 WHERE NBPT_SP_KH_PID IS NULL");
+		Connection conn = DriverManager.getConnection("jdbc:sqlserver://10.0.1.1:1433; DatabaseName=ekptest","xsrs", "Lrxsrs2018");
+		PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM NBPT_SP_KH_BACK1 WHERE NBPT_SP_KH_PID IS NULL" );
+		ResultSet rs1 = ps1.executeQuery();
+		List<NBPT_SP_KH> resultList = XZQX_create.rsToBean(NBPT_SP_KH.class, rs1);
+		conn.setAutoCommit(false);
+		PreparedStatement ps2 = conn.prepareStatement("UPDATE NBPT_SP_KH_BACK1 SET NBPT_SP_KH_PID = ? WHERE NBPT_SP_KH_ID = ?");
+		for(NBPT_SP_KH kh : resultList) {
+			
+			ps2.setString(1, CommonUtil.getUUID_32());
+			ps2.setInt(2, Integer.valueOf(kh.getNBPT_SP_KH_ID()));
+			ps2.addBatch();
+			
+		}
+		ps2.executeBatch();
+		rs1.close();
+		ps1.close();
+		ps2.close();
+		conn.commit();
+		conn.close();
 	}
 	
 	private void changMale() throws ClassNotFoundException, SQLException {

@@ -21,7 +21,7 @@ block contents
                         |&nbsp&nbsp&nbsp&nbsp调岗类别
                     .col-xs-6.col-sm-6
                         label.radio-inline
-                            input(type="radio",name="transferType",value="0", checked) 
+                            input(type="radio",name="transferType",value="0") 
                             |区县总调地区
                         label.radio-inline
                             input(type="radio",name="transferType",value="1") 
@@ -36,6 +36,7 @@ block contents
                     .col-xs-3.col-sm-3
                         input.form-control(placeholder='请输入人员姓名(支持模糊查询)')#personName
                         input(type='hidden',name='personPid')#personNameHidden
+                        input(type='hidden',name='personId')#personIdHidden
                     .col-xs-1.col-sm-1
                         button(type="button").btn.btn-default#searchPerson 查询
                 .form-group.targetRegion
@@ -43,17 +44,24 @@ block contents
                         font(color="red") *
                         |&nbsp&nbsp&nbsp&nbsp目标地区
                     .col-xs-3.col-sm-3
-                        input.form-control(placeholder='请输入地区名称')#regionName
+                        input.form-control(placeholder='请输入地区名称' ,autocomplete="off")#regionName
                         input(type='hidden',name='regionUid')#regionNameHidden
                     .col-xs-1.col-sm-1
                         button(type="button").btn.btn-default#searchRegion 查询
+                .form-group.personLoginId
+                    label.col-xs-1.col-sm-1.control-label 
+                        font(color="red") *
+                        |&nbsp&nbsp&nbsp&nbsp确定登录ID
+                    .col-xs-3.col-sm-3
+                        input.form-control(name='personLoginId', placeholder='请输入OA账号')#personLoginId
+                    .col-xs-1.col-sm-1.errorMessage
                 .form-group
                     .col-xs-offset-1.col-sm-offset-1.col-xs-4.col-sm-4
                         button(type="button")#transferConfirm.btn.btn-primary 提交
                 
     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040802.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040802.js#{randomJsVersion}")
     
 block pageId
     p(style="display:none") 03040802

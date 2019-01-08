@@ -2,7 +2,6 @@ package com.cn.lingrui.common.services;
 
 import java.sql.Connection;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.cn.lingrui.common.db.DBConnect;
 import com.cn.lingrui.common.pojos.RightsPojo;
 import com.cn.lingrui.common.utils.DBUtils;
@@ -70,11 +69,25 @@ public abstract class BServiceLogic extends BaseService {
 		}
 		return mv;
 	}
-	
 	/**
 	 * 必行方法,用于关闭数据库连接,提交数据变更,以及添加
 	 * @param mv 放回结果
 	 * @param user 用于区分管理员和普通用户
+	 * @return
+	 */
+	protected ModelAndView afterUncheck(ModelAndView mv) {
+
+		if (dbc == null) {
+
+		} else {
+			
+			dbc.closeConnection();
+		}
+		return mv;
+	}
+	/**
+	 * 必行方法,用于关闭数据库连接,提交数据变更,以及添加
+	 * @param result 放回结果
 	 * @return
 	 */
 	protected String after(String result) {
@@ -86,6 +99,18 @@ public abstract class BServiceLogic extends BaseService {
 			
 			dbc.closeConnection();
 		}
+		return result;
+	}
+	
+	/**
+	 * 必行方法,用于关闭数据库连接,提交数据变更,以及添加
+	 * @param result 放回结果
+	 * @return
+	 */
+	protected String afterException(String result) {
+
+
+		this.closeException();
 		return result;
 	}
 	
@@ -105,6 +130,14 @@ public abstract class BServiceLogic extends BaseService {
 	public void setConnection(Connection connection) {
 		this.connection = connection;
 	}
-
+	
+	/**
+	 * 获取登录人员的id
+	 * @return
+	 */
+	protected String getLoginId() {
+		
+		return this.getRequest().getAttribute("userID").toString();
+	}
 
 }

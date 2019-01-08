@@ -77,5 +77,15 @@ public class GlobalParams {
 	 * 上传文件所在路径
 	 */
 	public static final String FILE_PATH_UP = "D:\\content\\upLoad\\";
-	}
+	
+	/**
+	 * 调查问卷上传路径
+	 */
+	public static final String FILE_PATH_UP_ASK = "D:\\content\\upLoad\\ask\\";
+	
+	/**
+	 * echarts地图生成需要
+	 */
+	public static final String[] provinceMapNames = new String[]{"北京", "天津", "上海", "重庆", "河北", "河南", "云南", "辽宁", "黑龙江", "湖南", "安徽", "山东", "新疆", "江苏", "浙江", "江西", "湖北", "广西", "甘肃", "山西", "内蒙古", "陕西", "吉林", "福建", "贵州", "广东", "青海", "西藏", "四川", "宁夏", "海南", "台湾", "香港", "澳门"};
+}
 	

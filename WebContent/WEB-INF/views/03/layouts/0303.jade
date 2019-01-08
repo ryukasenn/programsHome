@@ -4,11 +4,11 @@ extends ../../personnelLayout
 
 
 block layoutScripts
-    script(language="javascript", src="#{myPath}/javascripts/03/0303.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/0303.js#{randomJsVersion}")
 
 
 block main
-    .col-xs-12.col-sm-12.main-header
+    .col-md-12.col-sm-12.main-header
         h2 审核管理
         form.form-inline#controlForm
             .form-group

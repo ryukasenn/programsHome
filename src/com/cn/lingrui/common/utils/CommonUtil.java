@@ -1,11 +1,14 @@
 package com.cn.lingrui.common.utils;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +20,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
-
-
 
 public class CommonUtil {
 
@@ -43,7 +44,6 @@ public class CommonUtil {
 	 * @return 如果为空返回true
 	 */
 	public static Boolean isEmpty(String checkString) {
-
 		if (null == checkString || "".equals(checkString.trim())) {
 			return true;
 		}
@@ -247,20 +247,46 @@ public class CommonUtil {
 		return a.compareTo(b);
 	}
 
+	public static String getYYYY() {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+		String resultDate = df.format(new Date());
+		
+		return resultDate.substring(0,4);
+	}
+	
+	public static String getMM() {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+		String resultDate = df.format(new Date());
+		
+		return resultDate.substring(4,6);
+	}
+	
+	public static String getDD() {
+
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+
+		String resultDate = df.format(new Date());
+		
+		return resultDate.substring(6,8);
+	}
+	
 	public static String getYYYYMMDD() {
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 
 		return df.format(new Date());
 	}
-	
+
 	public static String getYYYY_MM_DD() {
 
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 		return df.format(new Date());
 	}
-	
 
 	public static String getYYYYMMDDHHMMSS() {
 
@@ -268,23 +294,22 @@ public class CommonUtil {
 
 		return df.format(new Date());
 	}
-	
+
 	/**
 	 * 日期转换YYYYMMDD格式
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static String dateToYYYYMMDD(Date date) {
-		
+
 		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
 		return df.format(date);
 	}
-	
-	
-	
-	
+
 	/**
 	 * 浪潮系统密码解析
+	 * 
 	 * @param mima
 	 * @return
 	 */
@@ -329,9 +354,10 @@ public class CommonUtil {
 
 		return vspass;
 	}
-	
+
 	/**
 	 * 浪潮系统密码加密
+	 * 
 	 * @param mima
 	 * @return
 	 */
@@ -339,191 +365,202 @@ public class CommonUtil {
 
 		char head = CommonUtil.getRandomLetter(0);
 		char foot = CommonUtil.getRandomLetter(0);
-		
+
 		List<Character> ss = new ArrayList<>();
 		ss.add(foot);
 		int vinum = 0;
-		for(int i = 0; i < mima.length(); i++) {
+		for (int i = 0; i < mima.length(); i++) {
 
 			vinum += 1;
 			char currentLetter = mima.charAt(i);
 
-//			char temp = (char) (((int) first - firstAsc) * 26 + sec - 97 - vicz);
-			
+			// char temp = (char) (((int) first - firstAsc) * 26 + sec - 97 - vicz);
+
 			int indexNum = CommonUtil.getLetterIndex(head);
-			
+
 			char first = CommonUtil.getLetter(indexNum + new Random().nextInt(5));
-			
-//			System.out.println(sec);
-			int sec = (int) currentLetter - ((int) first - (int)head) * 26 + 97 + ((int)foot - (int)head) ;
-//			System.out.println((char) first);
-			
+
+			// System.out.println(sec);
+			int sec = (int) currentLetter - ((int) first - (int) head) * 26 + 97 + ((int) foot - (int) head);
+			// System.out.println((char) first);
 
 			if (vinum / 2 != (vinum + 1) / 2) {
 
-				ss.add((char)sec);
+				ss.add((char) sec);
 				ss.add(first);
 			} else {
 				ss.add(first);
-				ss.add((char)sec);
+				ss.add((char) sec);
 			}
 		}
 		ss.add(head);
 		Collections.reverse(ss);
 		String code = "";
-		for(char s : ss) {
-			
+		for (char s : ss) {
+
 			code += s;
 		}
 		return code;
 	}
-	
+
 	/**
 	 * 获取异常信息
+	 * 
 	 * @param t
 	 * @return
 	 */
-	public static String getTrace(Throwable t) {   
-		StringWriter stringWriter= new StringWriter();   
-		PrintWriter writer= new PrintWriter(stringWriter);   
-		t.printStackTrace(writer);   
-		StringBuffer buffer= stringWriter.getBuffer();   
-		return buffer.toString();   
+	public static String getTrace(Throwable t) {
+		StringWriter stringWriter = new StringWriter();
+		PrintWriter writer = new PrintWriter(stringWriter);
+		t.printStackTrace(writer);
+		StringBuffer buffer = stringWriter.getBuffer();
+		return buffer.toString();
 	}
-	
+
 	/**
 	 * 首字母变大写
+	 * 
 	 * @param word
 	 * @return
 	 */
 	public static String upFirstWord(String word) {
-		
+
 		StringBuffer sb = new StringBuffer(word.substring(0, 1));
-		
+
 		return sb.append(sb).toString();
 	}
 
 	/**
 	 * 获取32位随机码
+	 * 
 	 * @return
 	 */
 	public static String getUUID_32() {
-		
+
 		String rtnVal = Long.toHexString(System.currentTimeMillis());
 		rtnVal += UUID.randomUUID();
 		rtnVal = rtnVal.replaceAll("-", "");
 		return rtnVal.substring(0, 32);
 	}
-	
+
 	/**
 	 * 18位身份证真伪验证
+	 * 
 	 * @param idNum
 	 * @return
 	 */
 	public static Boolean idNumCheck(String idNum) {
-		 
-		if(18 != idNum.length()) {
+
+		if (18 != idNum.length()) {
 
 			return false;
 		}
-		
-		if(-1 != idNum.indexOf(" ")) {
+
+		if (-1 != idNum.indexOf(" ")) {
 
 			return false;
 		}
 		// 分界身份证数字
 		String[] nums = idNum.split("");
-		String[] checkNums = new String[] {"7","9","10","5","8","4","2","1","6","3","7","9","10","5","8","4","2"};
-		String[] realNums = new String[] {"1","0","X","9","8","7","6","5","4","3","2"};
+		String[] checkNums = new String[] { "7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7", "9", "10", "5", "8",
+				"4", "2" };
+		String[] realNums = new String[] { "1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2" };
 		Integer addResult = 0;
-		for(int i = 0; i < nums.length - 1; i++){
-			
+		for (int i = 0; i < nums.length - 1; i++) {
+
 			addResult += Integer.valueOf(nums[i]) * Integer.valueOf(checkNums[i]);
 		}
 		int result = addResult % 11;
-		
+
 		// 如果验证结果跟最后一位不匹配
-		if (!realNums[result].toUpperCase().equals(nums[17].toUpperCase())){
-			
+		if (!realNums[result].toUpperCase().equals(nums[17].toUpperCase())) {
+
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 根据身份证获取人员性别
-	 * @param idNum 身份证号
+	 * 
+	 * @param idNum
+	 *            身份证号
 	 * @return 1:男,0:女
 	 */
 	public static Integer getPersonMale(String idNum) {
-		
+
 		Integer theNum = Integer.valueOf(String.valueOf(idNum.charAt(16)));
-		if(theNum % 2 == 1) {
+		if (theNum % 2 == 1) {
 
 			return 1;
 		} else {
-			
+
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * 读取Properties文件中的配置
+	 * 
 	 * @param fileName
 	 * @param key
 	 * @return
 	 */
 	public static String readProperties(String fileName, String key) {
-		
-        Properties pps = new Properties();
-        try {
-            InputStream in = CommonUtil.class.getClassLoader().getResourceAsStream("com/cn/config/" + fileName);;
-            pps.load(in);
-            String value = pps.getProperty(key);
 
-            in.close();
-            return value;
-            
-        }catch (IOException e) {
-            e.printStackTrace();
-            return "";
-        }
+		Properties pps = new Properties();
+		try {
+			InputStreamReader in = new InputStreamReader(CommonUtil.class.getClassLoader().getResourceAsStream("com/cn/config/" + fileName), "UTF-8");
+			pps.load(in);
+			String value = pps.getProperty(key);
+
+			in.close();
+			return value;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return "";
+		}
 	}
-	
+
 	/**
 	 * 获取base.Propertie 文件中的值
+	 * 
 	 * @param key
 	 * @return
 	 */
 	public static String getBasePropertieValue(String key) {
-		
+
 		return readProperties("base.properties", key);
 	}
-	
+
 	/**
-	 * 从数据库取出的数据传到页面
+	 * 从数据库取出的时间传到页面
+	 * 
 	 * @param date
 	 * @return
 	 */
 	public static String formateTimeToPage(String date) {
-		
-		return "".equals(date)? getYYYY_MM_DD() : new StringBuffer().append(date.substring(0, 4)).append("-")
-																   .append(date.substring(4, 6)).append("-")
-																   .append(date.substring(6, 8)).toString();
+
+		return "".equals(date) ? getYYYY_MM_DD()
+				: new StringBuffer().append(date.substring(0, 4)).append("-").append(date.substring(4, 6)).append("-")
+						.append(date.substring(6, 8)).toString();
 	}
-	
+
 	/**
-	 * 从页面传进的数据到数据库
+	 * 从页面传进的时间到数据库
+	 * 
 	 * @param date
 	 * @return
 	 */
-	public static String formateTiemToBasic(String date){
-		
-		return "".equals(date) || null == date? "" : date.replaceAll("-", "").replaceAll("/", "");
+	public static String formateTiemToBasic(String date) {
+
+		return "".equals(date) || null == date ? "" : date.replaceAll("-", "").replaceAll("/", "");
 	}
-	
+
 	/**
 	 * 获取两数百分比 befor/after
+	 * 
 	 * @param before
 	 * @param after
 	 * @return
@@ -532,12 +569,13 @@ public class CommonUtil {
 
 		NumberFormat nt = NumberFormat.getPercentInstance();
 		nt.setMinimumFractionDigits(2);
-		Float result = before/after;
+		Float result = before / after;
 		return nt.format(result);
 	}
-	
+
 	/**
 	 * 获取两数百分比 befor/after
+	 * 
 	 * @param before
 	 * @param after
 	 * @return
@@ -546,29 +584,31 @@ public class CommonUtil {
 
 		NumberFormat nt = NumberFormat.getPercentInstance();
 		nt.setMinimumFractionDigits(2);
-		Float result = (float) before/after;
+		double result = (double)before / after;
 		return nt.format(result);
 	}
-	
+
 	/**
 	 * 字符串转数字
+	 * 
 	 * @param obj
 	 * @return
 	 */
 	public static Integer objToInteger(String obj) {
-		
+
 		try {
-			
+
 			Integer returnValue = Integer.valueOf(obj.trim());
 			return returnValue;
-		} catch(Exception e) {
-			
+		} catch (Exception e) {
+
 			return 0;
 		}
 	}
-	
+
 	/**
 	 * 获取随机字母
+	 * 
 	 * @return
 	 */
 	public static char getRandomLetter() {
@@ -577,18 +617,19 @@ public class CommonUtil {
 		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		return letters.charAt(new Random().nextInt(52));
 	}
-	
 
 	/**
 	 * 获取随机字母
-	 * @param type 0:小写字母,非0:大写字母
+	 * 
+	 * @param type
+	 *            0:小写字母,非0:大写字母
 	 * @return
 	 */
 	public static char getRandomLetter(int type) {
 
 		String letters = null;
 		// 定义随机字母
-		if(0 == type) {
+		if (0 == type) {
 
 			letters = "abcdefghijklmnopqrstuvwxyz";
 		} else {
@@ -596,10 +637,12 @@ public class CommonUtil {
 		}
 		return letters.charAt(new Random().nextInt(26));
 	}
-	
+
 	/**
 	 * 获取固定位置字母
-	 * @param type 0:小写字母,非0:大写字母
+	 * 
+	 * @param type
+	 *            0:小写字母,非0:大写字母
 	 * @return
 	 */
 	public static char getLetter(int index) {
@@ -607,10 +650,12 @@ public class CommonUtil {
 		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		return letters.charAt(index);
 	}
-	
+
 	/**
 	 * 获取字母的位置
-	 * @param type 0:小写字母,非0:大写字母
+	 * 
+	 * @param type
+	 *            0:小写字母,非0:大写字母
 	 * @return
 	 */
 	public static Integer getLetterIndex(Character s) {
@@ -618,71 +663,120 @@ public class CommonUtil {
 		String letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		return letters.indexOf(s);
 	}
-	
+
 	/**
 	 * 将一个列表,按某个属性值分类成多个列表
+	 * 
 	 * @param undealList
 	 * @param byKey
 	 * @param clasz
 	 * @return
 	 */
-	public static <T> Map<String, List<T>> classify(List<T> undealList, String byKey, Class<T> clasz) throws NoSuchFieldException{
-				
+	public static <T> Map<String, List<T>> classify(List<T> undealList, String byKey, Class<T> clasz)
+			throws NoSuchFieldException {
+
 		// 返回列表
 		Map<String, List<T>> resultMap = new LinkedHashMap<>();
-		
-		for(T t : undealList ) {
-			
+
+		for (T t : undealList) {
+
 			try {
 				Field field = t.getClass().getDeclaredField(byKey);
-				
+
 				// 如果属性包含该属性,则获取
 				boolean flag = field.isAccessible();
 				field.setAccessible(true);
-				
+
 				String key = (String) field.get(t);
-				
+
 				// 如果标志列表中,包含了该标志
-				if(resultMap.containsKey(key)) {
-					
+				if (resultMap.containsKey(key)) {
+
 					// 取得当前list
 					List<T> currentList = resultMap.get(key);
-					
+
 					// 添加至分类list中
 					currentList.add(t);
 				} else {
 
 					// 取得当前list
 					List<T> currentList = new ArrayList<>();
-					
+
 					// 添加至分类list中
 					currentList.add(t);
 					resultMap.put(key, currentList);
-					
+
 				}
 
 				field.setAccessible(flag);
 			} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				
+
 				e.printStackTrace();
-			} 
+			}
 		}
 		return resultMap;
 	}
-	
+
 	/**
 	 * 按key值将分类号的列表取出
+	 * 
 	 * @param classifyiedList
 	 * @param key
 	 * @return
 	 */
-	public static <T> List<T> getListInMapByKey(Map<String, List<T>> classifyiedList, String key){
-		
-		if(null == classifyiedList.get(key)) {
+	public static <T> List<T> getListInMapByKey(Map<String, List<T>> classifyiedList, String key) {
+
+		if (null == classifyiedList.get(key)) {
 			return new ArrayList<T>();
-		}else {
-			
+		} else {
+
 			return classifyiedList.get(key);
 		}
+	}
+
+	/**
+	 * 取MD5值(32位小写)
+	 * @param orgs
+	 * @return
+	 */
+	public static String MD5_LOW32(String orgs) {
+
+		try {
+
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(orgs.getBytes("UTF-8"));
+			byte b[] = md.digest();
+			int i;
+
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+
+			return buf.toString();
+
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+			return "";
+		}
+	}
+	
+	public static String birthDay_from_idCard(String idCard) {
+
+		String birthDay = "";
+		if(15 == idCard.length()) {
+			
+			birthDay = "19" + idCard.substring(6, 12);
+		} 
+
+		if(18 == idCard.length()) {
+			
+			birthDay = idCard.substring(6, 14);
+		}
+		return birthDay;
 	}
 }

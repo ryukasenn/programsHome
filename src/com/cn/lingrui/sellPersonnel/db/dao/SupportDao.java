@@ -65,6 +65,22 @@ public interface SupportDao extends SellPersonnelBaseDao{
 	 */
 	public NBPT_SP_PERSON receiveUncheck(String uncheckpid, Connection conn) throws SQLException;
 
+	/**
+	 * 修改人员职位
+	 * @param personPid 指定人员
+	 * @param targetJobType 目标职位
+	 * @throws SQLException 
+	 */
+	public void changePersonJob(String personPid, String personLogid, String targetJobType, Connection conn) throws SQLException;
+	
+	/**
+	 * 修改终端所属地区
+	 * @param personPid 指定人员
+	 * @param targetJobType 目标职位
+	 * @throws SQLException 
+	 */
+	public void changeTerminalArea(String personPid, String targetRegion, Connection conn) throws SQLException;
+
 
 }
 

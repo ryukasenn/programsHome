@@ -27,7 +27,7 @@ block contents
                 .form-group
                     label.col-xs-1.col-sm-1.control-label 
                         font(color="red") *
-                        |&nbsp&nbsp&nbsp&nbspOA密码
+                        |&nbsp&nbsp&nbsp&nbsp登录密码
                     .col-xs-4.col-sm-2
                         input.form-control(placeholder="不填默认lingrui123", name="NBPT_SP_PERSON_OAPSWD")
                 .form-group
@@ -161,7 +161,7 @@ block contents
                         button(type="button")#supportAddConfirm.btn.btn-primary 提交
     
 block scripts
-    script(language="javascript", src="#{myPath}/javascripts/03/03040302.js")
+    script(language="javascript", src="#{myPath}/javascripts/03/03040302.js#{randomJsVersion}")
     
 block pageId
     p(style="display:none") 03040302

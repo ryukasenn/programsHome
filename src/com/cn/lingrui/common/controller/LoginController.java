@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.python.jline.internal.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cn.lingrui.common.pojos.login.LoginPojoIn;
 import com.cn.lingrui.common.services.LoginService;
-import com.cn.lingrui.common.utils.GlobalParams;
+import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.HttpUtil;
 
 
@@ -33,19 +32,36 @@ public class LoginController {
 	@RequestMapping(value="", method=RequestMethod.GET)
 	public ModelAndView getLogin(HttpServletRequest req) throws Exception {
 		
-		String username = HttpUtil.decodeToken(HttpUtil.getCookieValue(req, "LtpaToken"));
-					
-		//String username = HttpUtil.decodeToken(token);
-		if(!"".equals(username)) {
-			
-			LoginPojoIn in = new LoginPojoIn();
-			in.setUserId(username);
-			in.setLoginModel("1");
-			ModelAndView mv = loginService.otherLogin(in);
-			return mv;
-		}
+		String referer = req.getHeader("referer");
 		
-		ModelAndView mv = HttpUtil.getModelAndView("common/login", "登录");
+		ModelAndView mv = null;
+		
+		if(CommonUtil.isEmpty(referer)) 
+		{
+			log.info("来自浏览器的直接访问");
+			mv = HttpUtil.getModelAndView("common/login", "登录");
+		} 
+		
+		else 
+		{
+			try {
+				log.info("来自OA的连接访问");
+				String username = HttpUtil.decodeToken(HttpUtil.getCookieValue(req, "LtpaToken"));
+				
+				if(!"".equals(username)) {
+					
+					LoginPojoIn in = new LoginPojoIn();
+					in.setUserId(username);
+					in.setLoginModel("1");
+					mv = loginService.otherLogin(in);
+				}
+			} catch (Exception e) {
+				
+				log.info("来自OA的连接访问登录失败,转至手动登录");
+				mv = HttpUtil.getModelAndView("common/login", "登录");
+			}
+			
+		}
 		return mv;
 	}
 	

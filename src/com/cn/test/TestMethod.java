@@ -1,6 +1,8 @@
 package com.cn.test;
 
+import java.security.MessageDigest;
 import java.sql.Connection;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,11 +15,20 @@ import java.util.ListIterator;
 import java.util.UUID;
 
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
+
 import com.cn.lingrui.common.db.dbpojos.GSDBZTXX;
 import com.cn.lingrui.common.db.dbpojos.NBPT_COMMON_XZQXHF;
 import com.cn.lingrui.common.utils.CommonUtil;
 import com.cn.lingrui.common.utils.DBUtils;
 import com.cn.lingrui.common.utils.GlobalParams;
+import com.cn.lingrui.hx.db.dbpojos.XSDD;
+import com.cn.lingrui.hx.utils.HxCommonUtil;
+import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_SP_PERSON;
+import com.cn.lingrui.sellPersonnel.pojos.JsonDataBack;
+import com.mysql.fabric.xmlrpc.base.Data;
+
+import net.sf.json.JSONObject;
 
 public class TestMethod {
 
@@ -150,11 +161,61 @@ public class TestMethod {
 	@Test
 	public void test6() {
 		
-		for(int i = 0 ; i < 34; i++) {
+		for(int i = 0 ; i < 5; i++) {
 			
 			System.out.println(CommonUtil.getUUID_32());
 		}
 	}
+	
+	@Test
+	public void test7() throws InterruptedException {
+		
+	}
+	
+	@Test
+	public void test8() {
+		
+		String s = "{flag : true, message : '验证成功'}";
+		JSONObject json = JSONObject.fromObject(s);
+		json.put("flag", false);
+		System.out.println(json.get("flag"));
+	}
+	
+	@Test
+	public void test9() {
+		
+		System.out.println(new Date().getTime());
+		System.out.println(new java.sql.Date(new Date().getTime()).getTime());
+	}
+	
+	@Test
+	public void test10() {
+		
+		NBPT_SP_PERSON a = new NBPT_SP_PERSON();
+		a.setNBPT_SP_PERSON_PID("123");
+		a.setNBPT_SP_PERSON_ID("222");
+		a.setNBPT_SP_PERSON_IDNUM("411523");
+		
+		NBPT_SP_PERSON b = new NBPT_SP_PERSON();
+		
+		BeanUtils.copyProperties(a, b);
+		
+		System.out.println(b.getNBPT_SP_PERSON_PID() + "  " + b.getNBPT_SP_PERSON_IDNUM() + "  " + b.getNBPT_SP_PERSON_ID());
+	}
+	
+	@Test
+	public void test11() {
+		
+		JsonDataBack back = new JsonDataBack();
+		back.setStateOk("你好");
+		System.out.println(back.toJsonString());
+		
+		
+		
+	}
+
+
+	
 }
 
 

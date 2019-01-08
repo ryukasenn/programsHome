@@ -11,4 +11,9 @@ $(function(){
 			}
 		});
 	})
+	
+	$("#changeTerminal").on('click', function(){
+		
+		$(".personInfo").attr('action', baseUrl + '/sellPersonnel/support/changeTerminal').attr('method', 'POST').submit();
+	})
 })

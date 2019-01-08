@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.cn.lingrui.common.utils.CommonUtil;
+import com.cn.lingrui.common.utils.GlobalParams;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_CURRENTPERSON;
 import com.cn.lingrui.sellPersonnel.db.dbpojos.NBPT_VIEW_REGION;
 import com.cn.lingrui.sellPersonnel.pojos.common.StatisticsTable;
@@ -176,6 +177,21 @@ public class CommonServiceUtils {
 	public static List<NBPT_VIEW_REGION> getRegionsByKey(Map<String, List<NBPT_VIEW_REGION>> classifyiedList, String key){
 
 		return getListInMapByKey(classifyiedList, key);
+	}
+	
+	public static String simplefiProvinceName(String provinceName) {
+		
+		String backName = provinceName;
+		String[] provinceNames = GlobalParams.provinceMapNames;
+		for(int i = 0; i < provinceNames.length; i++) {
+			
+			if(-1 < backName.indexOf(provinceNames[i])) {
+				
+				backName = provinceNames[i];
+				break;
+			}
+		}
+		return backName;
 	}
 }
 

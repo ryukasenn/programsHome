@@ -398,6 +398,12 @@ public class PageManageServiceImpl extends BServiceLogic implements PageManageSe
 		return this.after(mv, "admin");
 	}
 
+	@Override
+	public String receivePmTree() {
+		// TODO 自动生成的方法存根
+		return null;
+	}
+
 
 
 

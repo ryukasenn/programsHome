@@ -55,7 +55,7 @@ public class SupportDaoImpl extends SellPersonnelBaseDaoImpl implements SupportD
 			return resultList;
 		} catch (SQLException e) {
 	
-			log.error("后勤查询考勤出错" + CommonUtil.getTraceInfo());
+			log.error("查询人员配置考核出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -71,7 +71,7 @@ public class SupportDaoImpl extends SellPersonnelBaseDaoImpl implements SupportD
 			return resultList;
 		} catch (SQLException e) {
 	
-			log.error("后勤查询考勤出错" + CommonUtil.getTraceInfo());
+			log.error("查询考勤出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}
@@ -150,6 +150,46 @@ public class SupportDaoImpl extends SellPersonnelBaseDaoImpl implements SupportD
 		} catch (SQLException e) {
 			
 			log.error("插入新的大区总地总出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void changePersonJob(String personPid, String personLoginid, String targetJobType, Connection conn) throws SQLException {
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE NBPT_SP_PERSON ");
+		sql.append("SET NBPT_SP_PERSON_JOB = '" + targetJobType + "' ");
+		if("21".equals(targetJobType) || "22".equals(targetJobType) || "26".equals(targetJobType)) {
+			sql.append(", NBPT_SP_PERSON_DEPT_ID = '' ");
+			sql.append(", NBPT_SP_PERSON_LOGINID = '" + personLoginid + "' ");
+		}
+		sql.append("WHERE NBPT_SP_PERSON_PID = '" + personPid + "'");
+		try {
+			
+			this.excuteUpdate(sql , conn);;
+			
+		} catch (SQLException e) {
+			
+			log.error("修改人员职位出错" + CommonUtil.getTraceInfo());
+			throw new SQLException();
+		}
+	}
+
+	@Override
+	public void changeTerminalArea(String personPid, String targetRegionUid, Connection conn) throws SQLException {
+
+		StringBuffer sql = new StringBuffer();
+		sql.append("UPDATE NBPT_SP_PERSON ");
+		sql.append("SET NBPT_SP_PERSON_DEPT_ID = '" + targetRegionUid + "'");
+		sql.append("WHERE NBPT_SP_PERSON_PID = '" + personPid + "'");
+		try {
+			
+			this.excuteUpdate(sql , conn);;
+			
+		} catch (SQLException e) {
+			
+			log.error("修改终端人员部门出错" + CommonUtil.getTraceInfo());
 			throw new SQLException();
 		}
 	}

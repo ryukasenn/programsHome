@@ -307,7 +307,7 @@ public class ReportServiceImpl extends RSFZBaseService implements ReportService{
 
 			out.getItemsOut().setCheckItemsByAge(ageData);
 
-			ExcelUtil.listToExcel("证件有误", out.getItemsByAge(), "PMBASE_ZJHM");
+			//ExcelUtil.listToExcel("证件有误", out.getItemsByAge(), "PMBASE_ZJHM");
 		}
 		
 		// 处理学历相关数据
@@ -329,7 +329,7 @@ public class ReportServiceImpl extends RSFZBaseService implements ReportService{
 
 			out.getItemsOut().setCheckItemsByXl(xlData);
 
-			ExcelUtil.listToExcel("学历有误", out.getItemsByXl(), "PMBASE_XL");
+			//ExcelUtil.listToExcel("学历有误", out.getItemsByXl(), "PMBASE_XL");
 		}
 
 		// 处理工龄相关数据
@@ -351,7 +351,7 @@ public class ReportServiceImpl extends RSFZBaseService implements ReportService{
 
 			out.getItemsOut().setCheckItemsByWorkAge(workAgeData);
 
-			ExcelUtil.listToExcel("入职日期有误", out.getItemsByWorkAge(), "PMBASE_RZRQ");
+			//ExcelUtil.listToExcel("入职日期有误", out.getItemsByWorkAge(), "PMBASE_RZRQ");
 		}
 
 		// 处理职务级别相关数据
@@ -373,7 +373,7 @@ public class ReportServiceImpl extends RSFZBaseService implements ReportService{
 
 			out.getItemsOut().setCheckItemsByWorkLevel(WorkLevelData);
 
-			ExcelUtil.listToExcel("职务级别有误", out.getItemsByWorkLevel(), "PMBASE_FZ06");
+			//ExcelUtil.listToExcel("职务级别有误", out.getItemsByWorkLevel(), "PMBASE_FZ06");
 		}
 		
 	}

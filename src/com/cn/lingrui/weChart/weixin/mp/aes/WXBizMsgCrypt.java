@@ -222,7 +222,7 @@ public class WXBizMsgCrypt {
 
 		// System.out.println("发�?�给平台的签名是: " + signature[1].toString());
 		// 生成发�?�的xml
-		String result = XMLParse.generate(encrypt, signature, timeStamp, nonce);
+		String result = "";//XMLParse.generate(encrypt, signature, timeStamp, nonce);
 		return result;
 	}
 

@@ -13,6 +13,8 @@ public class NBPT_SP_REGION {
 	private String NBPT_SP_REGION_FLAG = "1"; // 废弃标志
 	private String NBPT_SP_REGION_PROVINCE_ID; // 所属省份
 	private String NBPT_SP_REGION_PARENT_UID; // 上级UID
+	private String NBPT_SP_REGION_CREATETIME; // 创建时间
+	private String NBPT_SP_REGION_TYPE; // 类型,OTC等
 	public String getNBPT_SP_REGION_ID() {
 		return NBPT_SP_REGION_ID;
 	}
@@ -72,6 +74,18 @@ public class NBPT_SP_REGION {
 	}
 	public void setNBPT_SP_REGION_PARENT_UID(String nBPT_SP_REGION_PARENT_UID) {
 		NBPT_SP_REGION_PARENT_UID = nBPT_SP_REGION_PARENT_UID;
+	}
+	public String getNBPT_SP_REGION_CREATETIME() {
+		return NBPT_SP_REGION_CREATETIME;
+	}
+	public void setNBPT_SP_REGION_CREATETIME(String nBPT_SP_REGION_CREATETIME) {
+		NBPT_SP_REGION_CREATETIME = nBPT_SP_REGION_CREATETIME;
+	}
+	public String getNBPT_SP_REGION_TYPE() {
+		return NBPT_SP_REGION_TYPE;
+	}
+	public void setNBPT_SP_REGION_TYPE(String nBPT_SP_REGION_TYPE) {
+		NBPT_SP_REGION_TYPE = nBPT_SP_REGION_TYPE;
 	}
 	
 	
